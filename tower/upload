@@ -1,0 +1,15 @@
+#!/bin/bash
+fatal(){
+	echo $1
+	exit 1
+}
+[[ -e tower.hex ]] || fatal "hex file doesn't exist!"
+[[ -e $1 ]] || fatal "$1 doesn't exist!"
+
+AVRDUDE="/Users/aaronmorrison/Arduino.app/Contents/Java/hardware/tools/avr/bin/avrdude"
+AVRDUDE_CONF="/Users/aaronmorrison/Arduino.app/Contents/Java/hardware/tools/avr/etc/avrdude.conf"
+
+[[ -e $AVRDUDE ]] || fatal "AVRDUDE not found!"
+[[ -e $AVRDUDE_CONF ]] || fatal "config not found!"
+
+$AVRDUDE -C$AVRDUDE_CONF -v -patmega2560 -cwiring -P$1 -b115200 -D -Uflash:w:tower.hex:i

@@ -1,0 +1,85 @@
+The first 90 percent of the code accounts for the first 90 percent of the development time. The remaining 10 percent of the code accounts for the other 90 percent of the development time.[1]
+- Tom Cargill, Bell Labs
+
+
+All the radio communication needs to do is synchronize states. That's it. That should be a solved problem, and it mostly is
+We have a working version of this from 2017, but it's kinda awful. It's all in one file, there are no tests, and there are
+way too many globals. The core working and main loops won't change much, but I'd like to clean up the code a lot and impose
+some more structure and testing. There is a little bit more added functionality for 2018, but not much, so this entire job
+is just going to be a refactor
+
+Let's draw a diagram for the software structure and looping and stuff
+
+Tower side!
+ ------
+ |Init|
+ ------
+   |
+   |<---------------------------
+   |                           |<-----------------------
+   \/                          |                       |
+-------------                  |else                   |<--------
+|Check for  | if there         |       if recv'd       |        |
+|inputs from| are any    ------------  full cmd  -------------  |
+|radio      |----------->|Update FSM|----------->|process cmd|  |
+-------------            ------------            -------------  |
+   |else                                                        |
+   \/                                                           |
+------------------                                              |
+|Get DAQ updates |                                              |
+|push into global|                                              |
+|state           |                                              |
+------------------                                              |
+   |                        if it's                             |
+   \/                       been too                            |
+-------------------------   long    -----------------           |
+|Check time last contact|---------->|go to safe mode|------------
+-------------------------           -----------------       /\
+   |                                                        |
+   ----------------------------------------------------------
+
+
+
+Client side!
+ ------
+ |Init|
+ ------
+   |<-------------------------------------------------
+   |                                                 |
+   \/                                                |<------------
+------------- if there               if recv'd       |            |
+|Check for  | are any  ------------  full cmd  -------------      |
+|inputs from|--------->|Update FSM|----------->|process cmd|      |
+|radio      |          ------------            -------------      |
+-------------                                                     |
+   |                                                              |
+   \/                                                             |
+----------                                                        |
+|Read all|                                                        |
+|buttons/|                                                        |
+|inputs  |                                                        |
+----------                                                        |
+   |                                                              |
+--------------if    ----------------                              |
+|Check if    |they  |how long has  | long    -------------        |
+|button state|don't |it been since | enough  |send change|        |
+|matches last|----->|we sent a     |-------->|command to |        |
+|recvd tower |      |change command|         |tower      |        |
+|state       |      |to tower      |         -------------        |
+--------------      ----------------            |                 |
+   |if they do           |not that              |                 |
+   |                     \/                     |                 |
+   |<--------------------------------------------                 |
+   \/                                                             |
+------------                                                      |
+|update LCD|   -------------------------------------------------->|
+------------   |if not             /\                             |
+   |           |long enough        |if not                        |
+   \/          |                   |long enough                   |
+------------------- if too  -------------------- long ---------------
+|Check how long   | long    |Check how long    |enough|request state|
+|since we received|-------->|since we asked the|----->|update from  |
+|tower state      |         |tower for state   |      |tower        |
+-------------------         --------------------      ---------------
+
+These are the
