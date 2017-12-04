@@ -1,0 +1,45 @@
+Let's have a meeting about User Interface
+
+We have a box for client side. Now let's talk about what it needs to do. It has 2 jobs:
+1) it needs to allow the operator to send messages to the following actuators:
+	- 2 Valves (needs to open and close independently)
+	- 1 ignition circuit (needs to pick one of 2 igniters and fire on it)
+	- 1 linear actuator (needs to pick direction)
+
+2) Relay information back from the tower to the operator. It needs the following information:
+	- state of both valves and actuator (are they open, closed, or moving)
+	- amount of current flowing to each actuator
+	- Readings from 4 daq sensors (pressure at 2 places in fill lines, pressure in rocket, and mass of rocket)
+
+In addition, we need safety features to make the nanny state happy:
+	- More than 1 action must be required to actuate any of the actuators
+	- There should be a way of locking out the actuators so they can't run while a person is on the pad
+
+We had all of these requirements (less from category 2) in v1, and we solved them in the following ways:
+	- The valves and linear actuator had a direction switch (open/close or extend/retract) and a power switch
+	- There was a switch to select primary or secondary ignition circuit, and a power switch
+	- We had a 16x2 character LCD which relayed information back (it only relayed pressure and mass data)
+	- there was a keyswitch which controlled all power to the system.
+	- The power switches all had flip-up missile covers, which counts as multiple actions
+
+Now let's talk about what needs to change in v2
+	- In order for the valve limit switches to work, power must be constantly applied.
+		So we just need a direction switch (open/closed), not a power switch. (Note that because of the
+		Limit switches, valves don't use power when open or closed, only while moving)
+	- The LCD has to display way more information. There are a couple of ways of doing this,
+		so it gets its own section later on
+	- The keyswitch should really only control power to the actuator switches. There should be
+		a separate power switch that allows you to read back daq values
+
+How to make the LCD more better
+There are a couple of ways to display more information. We could 
+1) use the same size LCD, and have it cycle through different screens of information. (either on a timer, or with a toggle switch)
+2) use a bigger LCD, and display all the information all at once (3 positions, 5 currents, 4 daq readings)
+3) use a graphical display (720p hdmi or something)
+
+I think that option 1) is bad because it hides information that may be needed at a moments notice.
+I think that option 2) is bad because it's a lot of information all at once, so it may take the operator longer to find what they're looking for
+I think that option 3) is bad because it requires way more circuitry, draw more power, and be way more finnicky and fragile and easier to break
+
+Of the three, I like option 2) the best, but that might be worth discussion. The largest character based LCD that you can get is 
+a 40x4 characters, 

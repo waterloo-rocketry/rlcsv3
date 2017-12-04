@@ -1,0 +1,108 @@
+Aright, let's talk about UI
+
+Background:
+RLCS client side is a box that the operator uses to fill the rocket with NOs, disconnect the NOs fill hose from the rocket, and trigger the ignition circuit. In order to do that, the operator needs to control 4 actuators:
+    - The remote fill valve: a ball valve placed between the NOs storage tank and the rocket fill hose. Opening this valve begins NOs flow into the rocket. Closing this valve isolates the storage tank from the rest of the system.
+    - The remote vent valve: a ball valve placed between the rocket fill hose and a hose that goes to atmosphere. Before we can disconnect the fill hose from the rocket, we need to depressurize the hose, which is accomplished by opening this valve. Note that there's a 1-way check valve inside the rocket that stops the rocket from depressurizing when the hose is disconnected
+    - The remote disconnect linear actuator: A linear actuator that pulls a pin that allows the fill hose to be pulled out of the rocket (using spring tension from bungee cords). By retracting this actuator, we remove the fill hose and make the rocket ready for launch.
+    - The ignition circuit: 2 nichrome coils that are cast into solid RNX (a rocket fuel) inside the combustion chamber. Passing enough current through these coils causes them to heat up, ignite the RNX, and start the rocket burn. The reason that there are 2 coils is for redundancy. If the first coil fails, the operator can switch to burning on the second coil, so we don't waste a launch attempt if one coil fails.
+In addition to these 4 actuators that we had last year, there is also a new solenoid valve inside the rocket to allow emptying of the run tank after filling, as well as 2 new valves in the same orientation as the remote fill and vent valve that are used to fill the rocket with Nitrogen, which will be used as a super pressurizing gas. It is highly unlikely that we'll need the two nitrogen valves for 2018, but provisions for them should be made now so that we don't have to redesign everything in future years. The solenoid valve will almost certainly be necessary for 2018.
+Beyond actuators, RLCS also has a set of sensors that relay information back to the operator that are necessary for knowing how the pre-launch procedures are going (whether the rocket is full of nos yet). In 2017, we had 2 sensors:
+    - A mass sensor (scale) under the rocket, which told the operator how much mass of fuel had been loaded into the rocket. When the mass reading levelled out, the operator knew that the amount of fuel in the rocket had stabilized, and it was full.
+    - A pressure transducer on the line between the nos supply tank and the remote fill valve, which told the operator A) that there were no leaks in the line before the remote fill valve was opened, and B) that the rocket had been filled once the pressure had stabilized
+For 2018, there are far more sensors, because the operator should really have way more information than they had in 2017. There are approximately 16 sensors (including the 2 above) that are planned for 2018
+    - A new pressure transducer on the rocket fill hose, so that the operator knows when that line has been depressurized.
+    - A new pressure transducer in the rocket, so that the operator knows how much NOs pressure there is in the rocket at any given time (instead of relying on a transducer on the fill line)
+    - Current sensors on every actuator power line (2 per valve and actuator (1 for opening/extending, 1 for closing/retracting), and 1 on each ignition circuit). 8 total, assuming no Nitrogen fill valves
+    - Limit switches on both ball valves (remote fill and remote vent) and on the linear actuator, so that the operator knows what position each of these three actuators are in at any given time. 6 total, assuming no Nitrogen fill valves.
+All of the information coming back from these sensors needs to be given to the operator. In 2017 with just 2 sensors it was easy to just give them raw values (mass and pressure readings) for each sensor, but with far more sensors this year, we might have to be more clever about it.
+
+Input constraints:
+Here's what the operator needs to be able to tell RLCS (through switches, buttons, dials, whatever)
+    - The desired position of 3 (remote fill, remote vent, and run tank vent solenoid) valves (open/closed), and the desired position of a linear actuator (extended/retracted)
+    - Which of 2 ignition circuits to fire on
+    - Whether or not we should currently be igniting
+
+Output constraints:
+Here's what information the operator should (very quickly) be able to get from RLCS:
+    - What position each valve is in (open/closed/changing)
+    - What position the linear actuator is in (extended/retracted/moving)
+    - How much current is currently flowing through each ignition coil (should usually be zero, but the operator should really know anyways)
+    - How heavy is the rocket/How much liquid oxidizer is in the rocket right now
+    - What is the pressure of NOs A) in the hose before the remote fill valve B) on the hose leading into the rocket C) inside the rocket run tank
+
+A note/rant on general usability, which isn't a constraint, but should be kept in mind
+This system should be really easy to use. The circumstances under which it will be used might not be the best, and the operator may not be in the best state of mind while using it, so screwing up should be actively difficult. In 2017, we got a launch opportunity on the 4th day of competition, so everyone involved was sleep deprived as all hell (we were averaging 4 or 5 hours of sleep each night, for 4 days straight) and quite possibly suffering from heat stroke and dehydration (the desert is hot, like 40 odd degrees hot).
+
+A note on safety:
+IREC has a set of safety requirements for systems like this one, which we do have to follow. The most relevant 2 of their requirements are:
+    - It should take more than 1 action from the operator for any dangerous operations (nitrous being pumped, ignition firing whatever) to occur.
+    - It should not be conceptually possible for anything dangerous to occur while any humans are at the rocket
+We operate by these 2 requirements in the following (respective ways):
+    - having missile switches for all actuators (the operator has to life the switch cover, then hit the switch before anything happens)
+    - having a key switch that needs to be in the client box before anything dangerous (moving any actuators) can happen. We give the key to people at the launchpad, so the operator at base camp can't do anything while they're there.
+
+
+Aright, now let's actually talk implementation. This is just my plan for how I think we should accomplish all of the above, it's absolutely open to criticism.
+Input:
+    - missile switches are great, I think we should use one for each actuator. Switch off means valve closed/actuator extended (default positions)
+    - For ignition, we need a momentary button, for safety reasons (the operator shouldn't be able to walk away from the box with ignition still firing, they should need a finger on the button at all times). However, just a momentary button would violate the "more than 1 action rule". So we could have an arming switch and a button (arming switch could be missile switch, so we're up to 3 actions, which is even better). We also need a way to select between primary and secondary ignition circuit. My proposal is to use 2 missile switches and a momentary button. Switching the left missile switch arms primary, switching the right missile switch arms secondary, and hitting the button applies power to the circuit. If both missile switches are thrown at once or if the button is pushed without either arming switch, there has clearly been an operator error, and the box should do nothing.
+
+Output:
+For 2017, we used a 16x2 character based LCD, because we had one on hand, and it was easy to interface with an Arduino. Now we have way more data to display to the operator, so that probably won't cut it. We could either use a bigger bitmapped screen that can show pretty colours and graphs and stuff, or we could use a bigger character based LCD. Using a bitmapped display would require way more circuitry (raspberry pi, HDMI interface board, and panel), be way more expensive, and be much harder to integrate (we'd need to write graphical programs and such). As such, I prefer the "bigger LCD" approach. The absolute biggest LCD you can get is 40 characters by 4 rows, but those are massive and expensive ($30 on Digikey). They also make 20x4 LCD's, which are much cheaper ($24 on Digikey, but only like $5 on Aliexpress (I ordered two off of there because they were hilariously cheap)) so my plan would be to go with one of those. I have a mock-up below of what the LCD output would look like at 20x4. Again, this is just my preliminary idea, I haven't drawn a decision matrix or anything, so this is open to criticism and questions.
+
+So, if we went with these ideas, here's what we'd need on the panel in the client side box:
+    - 4 missile switches for actuators, with room to add 2 more if we go for nitrogen super pressurization. These should be kept a bit of distance away from the 2 switches for ignition, just to reduce the possibility of mistakenly flipping the wrong switch
+    - 2 missile switches for ignition
+    - a big red momentary button for ignition
+    - a key switch for safety (should disable all actuator switches when key is not inserted)
+    - a power switch to cut the battery to save power (separate from the key switch. The operator should still be able to receive sensor values on the LCD without the key switch inserted)
+    - a 20x4 LCD
+    - a potentiometer for adjusting the contrast on that screen (didn't do this in 2017, made it hard to read the screen when the crystals got hot in the desert).
+    - 2 LEDs that display whether we are still in contact with the rocket. If radio communication is lost, a red LED should light up and tell the operator that it can't reach the rocket
+    - labels for all switches. If we do the panel out of laser cut wood, we can burn in the labels, which would be appreciably permanent, legible and would look sexy. Which is another important requirement I didn't write earlier 
+    - The rocketry logo. Because branding.
+
+Some mock-ups for what the LCD could look like:
+The LCD needs to display the position of all actuators. It can tell if they're open or closed based on limit switches, and it can tell if they're moving based on current flowing and no limit switches. If neither limit switch is thrown and no current is flowing, then something bad has happened (actuator disconnected, power failure, whatever). To make the display nice, each possible state for each actuator should have a three character label (for alignment and space issues). I've made a truth table to list all of these
+
+For valves:
+Limit switch 1 | Limit switch 2 |    current 1    |  current 2      | STATE NAME |
+(true if open) |(true if closed)|(high if opening)|(high if closing)|            |
+---------------|----------------|-----------------|-----------------|------------|
+   false       |   false        |  low            |   low           |   ER1      | (error 1)
+   false       |   false        |  low            |   high          |   MCL      | (Moving closed)
+   false       |   false        |  high           |   low           |   MOP      | (Moving open)
+   false       |   false        |  high           |   high          |   ER2      | (error 2)
+   false       |   true         |  low            |   low           |   CLS      | (closed)
+   false       |   true         |  low            |   high          |   ER3      | (error 3)
+   false       |   true         |  high           |   low           |   ER4      | (error 4)
+   false       |   true         |  high           |   high          |   ER5      | (error 5)
+   true        |   false        |  low            |   low           |   OPN      | (open)
+   true        |   false        |  low            |   high          |   ER6      | (error 6)
+   true        |   false        |  high           |   low           |   ER7      | (error 7)
+   true        |   false        |  high           |   high          |   ER8      | (error 8)
+   true        |   true         |  low            |   low           |   ER9      | (error 9)
+   true        |   true         |  low            |   high          |   ERA      | (error 10)
+   true        |   true         |  high           |   low           |   ERB      | (error 11)
+   true        |   true         |  high           |   high          |   ERC      | (error 12)
+---------------|----------------|-----------------|-----------------|------------|
+(did I really need to list all 12 error states? Probably not, but good for debugging and for making sure I wrote out every possibility)
+The actuator table is mostly the same, just with the following 4 substitutions
+OPN  -> EXT (extended)
+CLS  -> RET (retracted)
+MOP  -> MEX (moving extended)
+MCL  -> MRT (moving retracted)
+
+An example:
+Transducer 1 reads 700psi, transducer 2 reads 14psi, rocket reads 16psi
+0 amps of current flowing to ignition 1, 0 amps current flowing to ignition 2, rocket weighs 64.4 pounds
+Valve 1 (remote fill) is open, valve 2 (remote vent) is closed, valve 3 (rocket vent) is open
+the actuator is extended
+----------------------
+|P1:700 P2:014 P3:016|
+|I1:0.0 I2:0.0 M:65.4|
+|V1:OPN V2:CLS V3:OPN|
+|AC:EXT              |
+----------------------
+this just fits on a 20x4 LCD, with every sensor we care about getting a 2 character label and three characters of output. There's even just enough room to add in the two other valves if we move to nitrogen super pressurization.
