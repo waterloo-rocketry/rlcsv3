@@ -1,17 +1,16 @@
 #ifndef TOWER_PIN_DEFINES_H
 #define TOWER_PIN_DEFINES_H
 
-#ifdef __cplusplus
-//extern "C" {
-#endif
-
 #define PIN_REMOTEFILL_POWER 2
 #define PIN_REMOTEFILL_SELECT 3
+
 #define PIN_REMOTEVENT_POWER 4
 #define PIN_REMOTEVENT_SELECT 5
 
-#ifdef __cplusplus
-//}
-#endif
+#define PIN_LINACTUATOR_POWER 6
+#define PIN_LINACTUATOR_SELECT 7
+
+#define PIN_IGNITION_POWER 8
+#define PIN_IGNITION_SELECT 9
 
 #endif //ifndef TOWER_PIN_DEFINES_H
