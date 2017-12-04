@@ -22,11 +22,10 @@ VPATH += $(HARDWARE)/arduino/avr/cores/arduino/
 VPATH += $(HARDWARE)/arduino/cores/arduino/
 
 #our source files
-objects  =tower_globals.o
-objects +=tower_main.o
+objects = client_main.o
 objects +=radio_comms.o
 objects +=shared_types.o
-objects +=tower_fsm.o
+objects +=client_fsm.o
 
 #arduino source files: get compiled into core.a
 lib_objects  = wiring_pulse.o
@@ -54,12 +53,12 @@ lib_objects += abi.o
 lib_objects += main.o
 lib_objects += new.o
 
-all:  tower.hex
+all:  client.hex
 
-tower.hex: tower.elf
-	avr-objcopy -O ihex -R .eeprom tower.elf tower.hex
+client.hex: client.elf
+	avr-objcopy -O ihex -R .eeprom client.elf client.hex
 
-tower.elf: $(objects) core.a 
+client.elf: $(objects) core.a 
 	$(CC) $(ELFFLAGS) -o $@ $(objects) core.a -lm
 
 core.a: $(lib_objects)
@@ -76,6 +75,5 @@ core.a: $(lib_objects)
 clean:
 	-rm *.o
 	-rm core.a
-	-rm tower.elf
-	-rm tower.hex
-
+	-rm client.elf
+	-rm client.hex
