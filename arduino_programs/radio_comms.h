@@ -16,6 +16,9 @@
 #define RADIO_DAQ_REQ '}'
 #define RADIO_STATE_ASSIGN ';'
 
+int xbee_bytes_available();
+char xbee_get_byte();
+
 //return 1 on success, 0 on failure (serial overrun, or sending before timeout)
 int client_request_state();
 int client_request_daq();

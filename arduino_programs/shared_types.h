@@ -29,6 +29,7 @@ int convert_state_to_radio(actuator_state_t* state, char* binary);
 int actuator_compare(actuator_state_t* s, actuator_state_t* q);
 
 typedef struct {
+
     uint16_t pressure1;                 //between 0 and 999
     uint16_t pressure2;                 //between 0 and 999
     uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
