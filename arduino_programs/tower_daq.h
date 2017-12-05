@@ -2,8 +2,9 @@
 #define TOWER_DAQ_H
 
 #include"shared_types.h"
-#include"tower_pin_defines.h"
 
+//how many samples to hold in our sliding window average
+#define WINDOW_WIDTH 10;
 
 //call at startup. Sets pin modes, allocates space, whatever
 void init_daq_pins();
