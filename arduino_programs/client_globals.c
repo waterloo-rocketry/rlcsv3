@@ -1,4 +1,5 @@
 #include "client_globals.h"
+#include "client_pin_defines.h"
 #include "shared_types.h"
 #include "Arduino.h"
 
@@ -15,7 +16,7 @@ static struct {
     button_t ignition_sec;
     button_t ignition_fire;
 } button_debounce[DEBOUNCE_WIDTH];
-static uint8_t button_debounce_index = 0; 
+static uint8_t button_debounce_index = 0;
 
 //boolean to track whether we need to recalculate global button state before
 //handing it back to the caller
@@ -45,13 +46,13 @@ actuator_state_t* get_button_state(){
         }
 
         //now decode the debounced button states into an actuator_state_t
-        global_button_state.remote_fill_valve = 
+        global_button_state.remote_fill_valve =
             remotefill ? 1 : 0;
-        global_button_state.remote_vent_valve = 
+        global_button_state.remote_vent_valve =
             remotevent ? 1 : 0;
-        global_button_state.run_tank_valve = 
+        global_button_state.run_tank_valve =
             rocketvalve ? 1 : 0;
-        global_button_state.linear_actuator = 
+        global_button_state.linear_actuator =
             linactuator ? 1 : 0;
 
         //by default, ignition relays are both off
@@ -73,7 +74,7 @@ actuator_state_t* get_button_state(){
     return &global_button_state;
 }
 
-actuator_state_t* get_tower_sate(){
+actuator_state_t* get_tower_state(){
     return &global_tower_state;
 }
 
@@ -83,25 +84,25 @@ daq_holder_t* get_tower_daq(){
 
 
 void read_all_buttons(){
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_REMOTEFILL);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_REMOTEVENT);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_ROCKETVALVE);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_LINACTUATOR);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_IGNITION_PRI);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_IGNITION_SEC);
-    button_debounce[button_debounce_index] = 
-        digitalRead(PIN_SWITCH_IGNITION_FIRE);
+    button_debounce[button_debounce_index].remotefill =
+        digitalRead(PIN_SWITCH_REMOTEFILL) == HIGH;
+    button_debounce[button_debounce_index].remotevent =
+        digitalRead(PIN_SWITCH_REMOTEVENT) == HIGH;
+    button_debounce[button_debounce_index].rocketvalve =
+        digitalRead(PIN_SWITCH_ROCKETVALVE) == HIGH;
+    button_debounce[button_debounce_index].linactuator =
+        digitalRead(PIN_SWITCH_LINACTUATOR) == HIGH;
+    button_debounce[button_debounce_index].ignition_pri =
+        digitalRead(PIN_SWITCH_IGNITION_PRI) == HIGH;
+    button_debounce[button_debounce_index].ignition_sec =
+        digitalRead(PIN_SWITCH_IGNITION_SEC) == HIGH;
+    button_debounce[button_debounce_index].ignition_fire =
+        digitalRead(PIN_SWITCH_IGNITION_FIRE) == HIGH;
 
     if( (++button_debounce_index) >= DEBOUNCE_WIDTH )
         button_debounce_index = 0;
 
-    //mark boolean to 
+    //mark boolean to
     global_button_state_tainted = 1;
 }
 
@@ -117,3 +118,10 @@ void init_buttons(){
     //zero out all the buttonsk
     memcpy(0,&button_debounce, sizeof(button_debounce));
 }
+
+//globals for how long it's been since we've made requests to the tower
+unsigned long global_time_last_tower_state_req = 0;
+const unsigned long global_tower_update_interval = 3000; //request every 3 seconds
+unsigned long global_time_last_tower_daq_req = 0;
+unsigned long global_tower_daq_update_interval = 3000; //request daq every 3 seconds
+

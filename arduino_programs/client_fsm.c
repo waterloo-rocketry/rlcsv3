@@ -1,6 +1,8 @@
 #include "client_fsm.h"
 #include "shared_types.h"
 #include "radio_comms.h"
+#include "Arduino.h"
+#include "client_globals.h"
 
 //we need to receive ack requests, we need to receive state updates,
 //and we need to receive daq updates. Those should be the only things
@@ -10,10 +12,10 @@ char buffer[DAQ_RADIO_LEN]; //the daq radio input should be the longest thing we
 unsigned short buffer_index = 0;
 unsigned short data_len = 0;
 enum {
-    REC_NOTHING;
-    REC_STATE;
-    REC_DAQ;
-    REC_ACK;
+    REC_NOTHING,
+    REC_STATE,
+    REC_DAQ,
+    REC_ACK
 } state;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
@@ -29,14 +31,16 @@ int valid_data_byte(char data) {
     return 0;
 }
 
+extern unsigned long global_time_last_tower_state_req;
 void handle_state_update(char* buffer, actuator_state_t* state){
     //unpack buffer, copy values into state
-
+    global_time_last_tower_state_req = millis();
 }
 
+extern unsigned long global_time_last_tower_daq_req;
 void handle_daq_update(char* buffer, daq_holder_t* daq){
     //unpack buffer, copy values into daq
-
+    global_time_last_tower_daq_req = millis();
 }
 
 void handle_ack_request(char* buffer, actuator_state_t* state){
@@ -47,17 +51,17 @@ void handle_ack_request(char* buffer, actuator_state_t* state){
 
 void push_radio_char(char input){
     switch (input) {
-        case RADIO_STATE_HEADER:
+        case RADIO_STATE_REQ:
             state = REC_STATE;
             buffer_index = 0;
             data_len = 1; //only one byte in a state update
             return;
-        case RADIO_DAQ_HEADER:
+        case RADIO_DAQ_REQ:
             state = REC_DAQ;
             buffer_index = 0;
             data_len = DAQ_RADIO_LEN; //takes this many bytes for a daq update
             return;
-        case RADIO_ACK_HEADER:
+        case RADIO_ACK_BYTE:
             state = REC_ACK;
             buffer_index = 0;
             data_len = 1; //only one byte in an ack request. It's a state byte
@@ -81,10 +85,10 @@ void push_radio_char(char input){
     //so now we just call the appropriate handler
     switch(state){
         case REC_STATE:
-            handle_state_update(buffer, &tower_state);
+            handle_state_update(buffer, get_tower_state());
             break;
         case REC_DAQ:
-            handle_daq_update(buffer, &tower_daq);
+            handle_daq_update(buffer, get_tower_daq());
             break;
         case REC_ACK:
             handle_ack_request(buffer, get_button_state());

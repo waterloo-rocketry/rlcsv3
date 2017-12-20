@@ -2,7 +2,7 @@
 #define SHARED_TYPES_H
 
 #ifdef __cplusplus
-//extern "C" {
+extern "C" {
 #endif
 
 #include<stdint.h>
@@ -59,7 +59,7 @@ int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio);
 int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio);
 
 #ifdef __cplusplus
-//}
+}
 #endif
 
 #endif //ifndef SHARED_TYPES_H

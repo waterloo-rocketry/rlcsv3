@@ -9,7 +9,7 @@
 
 
 //returns the global button state
-acutator_state_t* get_button_state();
+actuator_state_t* get_button_state();
 
 //returns the global last received tower state
 actuator_state_t* get_tower_state();
@@ -21,7 +21,7 @@ daq_holder_t* get_tower_daq();
 //in client_pin_defines.h
 void read_all_buttons();
 
-//sets the pin mode for 
+//sets the pin mode for all the button pins to input
 void init_buttons();
 
 #endif //ifndef CLIENT_GLOBALS_H

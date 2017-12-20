@@ -1,5 +1,5 @@
 #ifndef CLIENT_PIN_DEFINES_H
-#ifndef CLIENT_PIN_DEFINES_H
+#define CLIENT_PIN_DEFINES_H
 
 //right now the pins are assigned arbitrary numbers
 //TODO, assign the actual pin numbers to these

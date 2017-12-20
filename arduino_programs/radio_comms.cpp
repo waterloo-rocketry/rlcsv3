@@ -6,6 +6,16 @@ void write_to_xbee(char out)
     Serial.write(out);
 }
 
+int xbee_bytes_available()
+{
+    return Serial.available();
+}
+
+char xbee_get_byte()
+{
+    return Serial.read();
+}
+
 //maximimum rate of state requests is twice every second
 unsigned long time_last_state_req_sent = 0;
 const unsigned long millis_between_state_req = 500;
@@ -15,6 +25,7 @@ int client_request_state()
         //called too soon, don't saturate xbee
         return 0;
     write_to_xbee(RADIO_STATE_REQ);
+    time_last_state_req_sent = millis();
     return 1;
 }
 
@@ -121,3 +132,4 @@ int tower_send_daq(daq_holder_t* daq)
     time_last_tower_send_daq = millis();
     return 1;
 }
+

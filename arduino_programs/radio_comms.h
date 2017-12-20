@@ -2,7 +2,7 @@
 #define RADIO_COMMS_H_
 
 #ifdef __cplusplus
-//extern "C" {
+extern "C" {
 #endif
 
 #include "shared_types.h"
@@ -31,7 +31,7 @@ int tower_send_state(actuator_state_t* state);
 int tower_send_daq(daq_holder_t* daq);
 
 #ifdef __cplusplus
-//}
+}
 #endif
 
 #endif //ifndef RADIO_COMMS_H_

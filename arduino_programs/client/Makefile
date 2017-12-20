@@ -1,7 +1,7 @@
 CC = avr-gcc
 CXX = avr-g++
 HARDWARE = /Users/aaronmorrison/Arduino.app/Contents/Java/hardware
-HARDWARE = /usr/share/arduino/hardware
+#HARDWARE = /usr/share/arduino/hardware
 DEFINES = -DF_CPU=16000000L -DARDUINO=10612 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR
 MICRO = -mmcu=atmega2560
 CFLAGS = -std=gnu11 $(MICRO) $(DEFINES)
@@ -23,6 +23,7 @@ VPATH += $(HARDWARE)/arduino/cores/arduino/
 
 #our source files
 objects = client_main.o
+objects +=client_globals.o
 objects +=radio_comms.o
 objects +=shared_types.o
 objects +=client_fsm.o
