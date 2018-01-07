@@ -17,12 +17,18 @@ static const char *digitCodeMap[] = {
   "1110000", // 7   "7"
   "1111111", // 8   "8"
   "1111011", // 9   "9"
-  "0000000", // 32  ' '  BLANK
-  "0000001" // 45  '-'  DASH
+  "1110111", // A "A"
+  "0011111", // b "b"
+  "1001110", // C "C"
+  "0111101", // d "d"
+  "1001111", // E "E"
+  "1000111" // F "F"
+  //"0000000", // 32  ' '  BLANK
+  //"0000001", // 45  '-'  DASH
 };
 static const long powersOf10[] = {
   1, // 10^0
-  10,
+  16,
 };
 
 //functions
@@ -86,7 +92,7 @@ void setNewNum (long numToShow, struct SevSeg* sevSegDisplay) {//sets the number
 
 void findDigits(long numToShow, int digits[], struct SevSeg* sevSegDisplay) { //gets the numToShow, and store each individual digit into the digits array //help on pass by reference for digits
   const long * powersOfBase = powersOf10;
-  const long maxNum = 99;
+  const long maxNum = 255;
   const long minNum = 0;
   if (numToShow > maxNum || numToShow < minNum) {
     numToShow = 0;
