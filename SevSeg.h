@@ -19,6 +19,7 @@ struct SevSeg {
 	char digitPins[MAXNUMDIGITS];//INPUT/OUTPUT
 	char segmentPins[8];//SEGMENT PIN (ON/OFF)
 	char digitCodes[MAXNUMDIGITS][7]; //Array of bytes needed to display the number
+ int digits[2];
 };
 
 void start (int numDigitsIn, char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[MAXNUMDIGITS], struct SevSeg* sevSegDisplay);//function that runs at the beginning. this sets up the display
@@ -27,6 +28,6 @@ void setSegments(char segs[], struct SevSeg* sevSegDisplay);
 void setNewNum (long numToShow, struct SevSeg* sevSegDisplay);//sets desired integer
 void blank(struct SevSeg* sevSegDisplay); //displays a blank seg
 void clearSeg(char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[MAXNUMDIGITS], struct SevSeg* sevSegDisplay);//clears the pins at the end of the program.
-void setDigitCodes(char digits[], struct SevSeg* sevSegDisplay); //sets'digitcodes' that is required to display the input number.
-void findDigits(long numToShow, char digits[], struct SevSeg* sevSegDisplay);
+void setDigitCodes(int digits[], struct SevSeg* sevSegDisplay); //sets'digitcodes' that is required to display the input number.
+void findDigits(long numToShow, int digits[], struct SevSeg* sevSegDisplay);
 #endif
