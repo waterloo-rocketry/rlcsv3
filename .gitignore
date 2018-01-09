@@ -2,3 +2,7 @@
 *.a
 *.hex
 *.elf
+
+*.bak
+*.dwl
+*.dwl2
