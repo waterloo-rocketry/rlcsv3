@@ -6,3 +6,6 @@
 *.bak
 *.dwl
 *.dwl2
+
+#My mac keeps putting these files everywhere
+.DS_Store
