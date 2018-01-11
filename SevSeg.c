@@ -33,15 +33,10 @@ static const long powersOf10[] = {
 
 //functions
 
-void start (int numDigitsIn, char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[2],  struct SevSeg* sevSegDisplay) {//sets the values of the digitpin and segment pins in the struct, pinmode all of the pins, and turns them all off
-  sevSegDisplay->numDigits = numDigitsIn;
-
-  if (sevSegDisplay->numDigits > 2) {//maxDigit = 2 or 1
-    sevSegDisplay->numDigits = 2;
-  }
+void start (char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[2],  struct SevSeg* sevSegDisplay) {//sets the values of the digitpin and segment pins in the struct, pinmode all of the pins, and turns them all off
 
   //loops through all pins
-  for (int x = 0 ; x < sevSegDisplay->numDigits ; x++) {
+  for (int x = 0 ; x < 2 ; x++) {
     sevSegDisplay->digitPins[x] = digitPinsIn[x];				//sets digits pins to the value inputted;
     pinMode(sevSegDisplay->digitPins[x], OUTPUT);				//set sdigit pins as outputs
     digitalWrite(sevSegDisplay->digitPins[x], HIGH);		//turns digit pins off
@@ -54,16 +49,10 @@ void start (int numDigitsIn, char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[
 }
 
 void refresh(struct SevSeg* sevSegDisplay) {//refreshes display and lights up the segments
-  for (int i = 0; i < sevSegDisplay->numDigits; i++) { //goes throught each digit code and lights up appriopriate segment for each one
-  if(i == 0){
-       //write to digit 1
-     digitalWrite(sevSegDisplay->digitPins[0], LOW);//turns first segment pin on
-     digitalWrite(sevSegDisplay->digitPins[1], HIGH);//turns off second digit
-   }
-   else if (i == 1){
-       digitalWrite(sevSegDisplay->digitPins[0], HIGH);//turns off first digit
-       digitalWrite(sevSegDisplay->digitPins[1], LOW);//turns on second digit
-   }
+  //write to pin 1
+  digitalWrite(sevSegDisplay->digitPins[0], LOW);//turns first segment pin on
+  digitalWrite(sevSegDisplay->digitPins[1], HIGH);//turns off second digit
+  for (int i = 0; i < 2; i++) { //goes throught each digit code and lights up appriopriate segment for each one
     for (int j = 0; j < 7; j++) {
       if (sevSegDisplay->digitCodes[i][j] == '1') {//brackets?
         digitalWrite(sevSegDisplay->segmentPins[j], HIGH); //goes throught each number of the digitCode (0111101) and if its a '1' then light up the appropriate segment. EG:0111101 would light up f, e, d, c, and a
@@ -72,11 +61,13 @@ void refresh(struct SevSeg* sevSegDisplay) {//refreshes display and lights up th
       }
     }
     delay(10);//this is so that 2 numbers can be displayed instantaneously
+    digitalWrite(sevSegDisplay->digitPins[0], HIGH);//turns off first digit
+    digitalWrite(sevSegDisplay->digitPins[1], LOW);//turns on second digit
   }
 }
 
 void clearSeg(char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[MAXNUMDIGITS], struct SevSeg* sevSegDisplay) {//turns pin off
-  for (int x = 0 ; x < sevSegDisplay->numDigits ; x++) {
+  for (int x = 0 ; x < 2 ; x++) {
     digitalWrite(sevSegDisplay->digitPins[x], LOW);    //turns segment pins off
   }
   for (char segmentNum = 0 ; segmentNum < 7 ; segmentNum++) {
@@ -97,7 +88,7 @@ void findDigits(uint8_t numToShow, struct SevSeg* sevSegDisplay) {
 
 void setDigitCodes(uint8_t digits[], struct SevSeg* sevSegDisplay) { //this function gets the digit code of each number in the 'digit' array
   // Set the digitCode for each digit in the display(digit array)
-  for (char digitNum = 0 ; digitNum < sevSegDisplay->numDigits ; digitNum++) {
+  for (char digitNum = 0 ; digitNum < 2 ; digitNum++) {
     for (int x = 0; x < 7; x++) {
       sevSegDisplay -> digitCodes[digitNum][x] = digitCodeMap[digits[digitNum]][x];//eg: 0 would be "1111110"
     }
