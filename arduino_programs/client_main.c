@@ -2,10 +2,11 @@
 #include "client_fsm.h"
 #include "client_globals.h"
 #include "radio_comms.h"
+#include "SevSeg.h"
 #include "Arduino.h"
 
 void setup(){
-
+    start_SevSeg();
 }
 
 extern unsigned long global_time_last_tower_state_req, global_time_last_tower_daq_req;
@@ -38,4 +39,12 @@ void loop(){
 	if (millis() - global_time_last_tower_daq_req > global_tower_daq_update_interval){
 		client_request_daq();
 	}
+
+    //put the last received tower state on seven seg
+    char to_put_on_sevseg;
+    if( convert_state_to_radio(get_tower_state(), &to_put_on_sevseg) ) {
+        setNewNum_SevSeg( (uint8_t) to_put_on_sevseg );
+    }
+    refresh_SevSeg();
+    
 }

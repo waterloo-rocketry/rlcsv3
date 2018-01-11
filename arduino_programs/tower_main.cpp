@@ -3,6 +3,7 @@
 #include "tower_globals.h"
 #include "radio_comms.h"
 #include "shared_types.h"
+#include "SevSeg.h"
 #include "Arduino.h"
 
 void setup() {
@@ -34,6 +35,13 @@ void loop() {
     //then request an acknowledgement for 
     if(!actuator_compare(get_requested_state(), get_current_state()))
         tower_request_ack(get_requested_state());
+
+    //put the current state on the the seven segment display
+    char to_put_on_sevenseg;
+    if( convert_state_to_radio(get_current_state(), &to_put_on_sevenseg) ) {
+        setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg );
+    }
+    refresh_SevSeg();
 
     delay(100);
 }

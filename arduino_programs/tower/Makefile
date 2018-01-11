@@ -27,6 +27,7 @@ objects +=tower_main.o
 objects +=radio_comms.o
 objects +=shared_types.o
 objects +=tower_fsm.o
+objects +=SevSeg.o
 
 #arduino source files: get compiled into core.a
 lib_objects  = wiring_pulse.o
