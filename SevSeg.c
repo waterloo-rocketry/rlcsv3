@@ -84,32 +84,18 @@ void clearSeg(char digitPinsIn[MAXNUMDIGITS], char segmentPinsIn[MAXNUMDIGITS], 
   }
 }
 
-void setNewNum (long numToShow, struct SevSeg* sevSegDisplay) {//sets the number the use wants
-  int digits[sevSegDisplay->numDigits];
-  findDigits(numToShow, sevSegDisplay->digits, sevSegDisplay);//digits is the array of digits that need to be displayed
+void setNewNum (uint8_t numToShow, struct SevSeg* sevSegDisplay) {//sets the number the user wants
+  findDigits(numToShow, sevSegDisplay); //modifies sevSegDisplay
   setDigitCodes(sevSegDisplay->digits, sevSegDisplay);
 }
 
-void findDigits(long numToShow, int digits[], struct SevSeg* sevSegDisplay) { //gets the numToShow, and store each individual digit into the digits array //help on pass by reference for digits
-  const long * powersOfBase = powersOf10;
-  const long maxNum = 255;
-  const long minNum = 0;
-  if (numToShow > maxNum || numToShow < minNum) {
-    numToShow = 0;
-  }
-  if (numToShow < 10) {//if nubmer is between 0 and 9, replace first digit with a 0
-    digits[0] = (long) 0;
-    digits[1] = numToShow;
-  } else {
-    for (char digitNum = 0; digitNum < sevSegDisplay->numDigits ; digitNum++) { // otherwise store the 2 digit number into the digits array
-      long factor = powersOfBase[sevSegDisplay->numDigits - 1 - digitNum]; //10 or 1
-      digits[digitNum] = numToShow / factor; // store numbers from 0-9 only in the respective position. Eg: 23, 2 would be stored in digits[0] and 3 would be stored in digits[1]
-      numToShow -= digits[digitNum] * factor; // if num to show was 23 at first, it would be 3 after this line.
-    }
-  }
+void findDigits(uint8_t numToShow, struct SevSeg* sevSegDisplay) {
+    //stores nibbles of numToShow in sevSegDisplay->digits
+    sevSegDisplay->digits[0] = numToShow & 0x0F; //bottom nibble
+    sevSegDisplay->digits[1] = (numToShow & 0xF0) >> 4; //top nibble, right shifted down
 }
 
-void setDigitCodes(int digits[], struct SevSeg* sevSegDisplay) { //this function gets the digit code of each number in the 'digit' array
+void setDigitCodes(uint8_t digits[], struct SevSeg* sevSegDisplay) { //this function gets the digit code of each number in the 'digit' array
   // Set the digitCode for each digit in the display(digit array)
   for (char digitNum = 0 ; digitNum < sevSegDisplay->numDigits ; digitNum++) {
     for (int x = 0; x < 7; x++) {
