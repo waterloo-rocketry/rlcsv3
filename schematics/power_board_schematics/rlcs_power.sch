@@ -34,7 +34,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 5
+Sheet 1 2
 Title "RLCS power board"
 Date "2017-09-24"
 Rev "A"
@@ -209,30 +209,6 @@ F 3 "" H 10475 3200 50  0001 C CNN
 	1    10475 3200
 	1    0    0    -1  
 $EndComp
-$Sheet
-S 2750 1750 650  350 
-U 59B5D8D3
-F0 "MOSI" 60
-F1 "logiclevel.sch" 60
-F2 "3v3side" B R 3400 2000 60 
-F3 "5vside" B L 2750 1850 60 
-$EndSheet
-$Sheet
-S 2750 2300 650  350 
-U 59B5E10D
-F0 "SCL" 60
-F1 "logiclevel.sch" 60
-F2 "3v3side" B R 3400 2550 60 
-F3 "5vside" B L 2750 2400 60 
-$EndSheet
-$Sheet
-S 2750 2850 650  350 
-U 59B5E16A
-F0 "MISO" 60
-F1 "logiclevel.sch" 60
-F2 "3v3side" B R 3400 3100 60 
-F3 "5vside" B L 2750 2950 60 
-$EndSheet
 $Comp
 L GND #PWR010
 U 1 1 59B5E570
@@ -555,11 +531,11 @@ F1 "ardconn.sch" 60
 $EndSheet
 Text GLabel 1950 1250 0    60   Input ~ 0
 ARD_CON_SD_SS
-Text GLabel 1950 1850 0    60   Input ~ 0
+Text GLabel 1950 2000 0    60   Input ~ 0
 ARD_CON_SD_MOSI
-Text GLabel 1950 2400 0    60   Input ~ 0
+Text GLabel 1950 2550 0    60   Input ~ 0
 ARD_CON_SD_SCL
-Text GLabel 1950 2950 0    60   Input ~ 0
+Text GLabel 1950 3100 0    60   Input ~ 0
 ARD_CON_SD_MISO
 Text GLabel 1950 3900 0    60   Input ~ 0
 ARD_CON_7SEG_D1
@@ -830,14 +806,14 @@ Wire Wire Line
 Wire Wire Line
 	3850 2000 3850 2200
 Wire Wire Line
-	3850 2000 3400 2000
+	3050 2000 3850 2000
 Wire Wire Line
 	4300 2300 4850 2300
 Connection ~ 4300 2600
 Wire Wire Line
 	3850 2200 4850 2200
 Wire Wire Line
-	3400 2550 3850 2550
+	3050 2550 3850 2550
 Wire Wire Line
 	3850 2550 3850 2500
 Wire Wire Line
@@ -845,9 +821,9 @@ Wire Wire Line
 Wire Wire Line
 	3950 2700 4850 2700
 Wire Wire Line
-	3950 2700 3950 3100
+	3950 3100 3950 2700
 Wire Wire Line
-	3950 3100 3400 3100
+	1950 3100 3950 3100
 Wire Wire Line
 	4450 1000 4450 2400
 Wire Wire Line
@@ -865,11 +841,9 @@ Wire Wire Line
 Wire Wire Line
 	3500 1500 3500 1350
 Wire Wire Line
-	1950 1850 2750 1850
+	1950 2000 2750 2000
 Wire Wire Line
-	1950 2400 2750 2400
-Wire Wire Line
-	1950 2950 2750 2950
+	1950 2550 2750 2550
 Wire Wire Line
 	2000 4900 3350 4900
 Wire Wire Line
@@ -1049,4 +1023,74 @@ F 3 "" H 9900 6150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 9575 3450
+$Comp
+L R R15
+U 1 1 5A5952A0
+P 3225 2150
+F 0 "R15" V 3305 2150 50  0000 C CNN
+F 1 "20K" V 3225 2150 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 3155 2150 50  0001 C CNN
+F 3 "" H 3225 2150 50  0001 C CNN
+	1    3225 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R14
+U 1 1 5A595360
+P 3200 2725
+F 0 "R14" V 3280 2725 50  0000 C CNN
+F 1 "20K" V 3200 2725 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 3130 2725 50  0001 C CNN
+F 3 "" H 3200 2725 50  0001 C CNN
+	1    3200 2725
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR027
+U 1 1 5A595401
+P 3200 2875
+F 0 "#PWR027" H 3200 2625 50  0001 C CNN
+F 1 "GND" H 3200 2725 50  0000 C CNN
+F 2 "" H 3200 2875 50  0001 C CNN
+F 3 "" H 3200 2875 50  0001 C CNN
+	1    3200 2875
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR028
+U 1 1 5A59548A
+P 3225 2300
+F 0 "#PWR028" H 3225 2050 50  0001 C CNN
+F 1 "GND" H 3225 2150 50  0000 C CNN
+F 2 "" H 3225 2300 50  0001 C CNN
+F 3 "" H 3225 2300 50  0001 C CNN
+	1    3225 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 2550 3200 2575
+$Comp
+L R R12
+U 1 1 5A596C23
+P 2900 2000
+F 0 "R12" V 2980 2000 50  0000 C CNN
+F 1 "10K" V 2900 2000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 2830 2000 50  0001 C CNN
+F 3 "" H 2900 2000 50  0001 C CNN
+	1    2900 2000
+	0    1    1    0   
+$EndComp
+$Comp
+L R R13
+U 1 1 5A596E89
+P 2900 2550
+F 0 "R13" V 2980 2550 50  0000 C CNN
+F 1 "10K" V 2900 2550 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 2830 2550 50  0001 C CNN
+F 3 "" H 2900 2550 50  0001 C CNN
+	1    2900 2550
+	0    1    1    0   
+$EndComp
+Connection ~ 3225 2000
+Connection ~ 3200 2550
 $EndSCHEMATC
