@@ -84,7 +84,7 @@ U 1 1 59C7785C
 P 7300 3750
 F 0 "J7" H 7300 4600 50  0000 C CNN
 F 1 "CONN_01X16" V 7400 3750 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_2x08_Pitch2.00mm" H 7300 3750 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x08_Pitch2.54mm" H 7300 3750 50  0001 C CNN
 F 3 "" H 7300 3750 50  0001 C CNN
 	1    7300 3750
 	1    0    0    -1  
