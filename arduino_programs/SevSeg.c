@@ -52,30 +52,30 @@ void start_SevSeg () {//sets the values of the digitpin and segment pins in the 
   for (int x = 0 ; x < 2 ; x++) {
     sevSegDisplay.digitPins[x] = digitPinsIn[x];				//sets digits pins to the value inputted;
     pinMode(sevSegDisplay.digitPins[x], OUTPUT);				//set sdigit pins as outputs
-    digitalWrite(sevSegDisplay.digitPins[x], HIGH);		//turns digit pins off
+    digitalWrite(sevSegDisplay.digitPins[x], LOW);		//turns digit pins off
   }
   for (int x = 0; x < 7; x++) {
     sevSegDisplay.segmentPins[x] = segmentPinsIn[x];			//sets segment pins to the value inputted;
     pinMode(sevSegDisplay.segmentPins[x], OUTPUT);			//sets digits pins as outputs
-    digitalWrite(sevSegDisplay.segmentPins[x], LOW);	//turns segment pins off
+    digitalWrite(sevSegDisplay.segmentPins[x], HIGH);	//turns segment pins off
   }
 }
 
 void refresh_SevSeg() {//refreshes display and lights up the segments
   //write to pin 1
-  digitalWrite(sevSegDisplay.digitPins[0], LOW);//turns first segment pin on
-  digitalWrite(sevSegDisplay.digitPins[1], HIGH);//turns off second digit
+  digitalWrite(sevSegDisplay.digitPins[0], HIGH);//turns first segment pin on
+  digitalWrite(sevSegDisplay.digitPins[1], LOW);//turns off second digit
   for (int i = 0; i < 2; i++) { //goes throught each digit code and lights up appriopriate segment for each one
     for (int j = 0; j < 7; j++) {
       if (sevSegDisplay.digitCodes[i][j] == '1') {//brackets?
-        digitalWrite(sevSegDisplay.segmentPins[j], HIGH); //goes throught each number of the digitCode (0111101) and if its a '1' then light up the appropriate segment. EG:0111101 would light up f, e, d, c, and a
+        digitalWrite(sevSegDisplay.segmentPins[j], LOW); //goes throught each number of the digitCode (0111101) and if its a '1' then light up the appropriate segment. EG:0111101 would light up f, e, d, c, and a
       } else {
-        digitalWrite(sevSegDisplay.segmentPins[j], LOW);
+        digitalWrite(sevSegDisplay.segmentPins[j], HIGH);
       }
     }
     delay(10);//this is so that 2 numbers can be displayed instantaneously
-    digitalWrite(sevSegDisplay.digitPins[0], HIGH);//turns off first digit
-    digitalWrite(sevSegDisplay.digitPins[1], LOW);//turns on second digit
+    digitalWrite(sevSegDisplay.digitPins[0], LOW);//turns off first digit
+    digitalWrite(sevSegDisplay.digitPins[1], HIGH);//turns on second digit
   }
 }
 
