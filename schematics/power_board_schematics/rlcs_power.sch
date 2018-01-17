@@ -91,12 +91,12 @@ $EndComp
 $Comp
 L Fuse_Small F1
 U 1 1 59B5BFB2
-P 9200 2050
-F 0 "F1" H 9200 1990 50  0000 C CNN
-F 1 "Fuse_Small" H 9200 2110 50  0000 C CNN
-F 2 "Fuse_Holders_and_Fuses:Fuseholder5x20_horiz_open_inline_Type-I" H 9200 2050 50  0001 C CNN
-F 3 "" H 9200 2050 50  0001 C CNN
-	1    9200 2050
+P 9150 1850
+F 0 "F1" H 9150 1790 50  0000 C CNN
+F 1 "Fuse_Small" H 9150 1910 50  0000 C CNN
+F 2 "Fuse_Holders_and_Fuses:Fuseholder5x20_horiz_open_inline_Type-I" H 9150 1850 50  0001 C CNN
+F 3 "" H 9150 1850 50  0001 C CNN
+	1    9150 1850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -787,8 +787,6 @@ Wire Wire Line
 	10050 1850 10050 2150
 Connection ~ 10050 2050
 Wire Wire Line
-	9050 1850 9900 1850
-Wire Wire Line
 	9050 1850 9050 1950
 Wire Wire Line
 	8300 3150 8300 3450
@@ -971,9 +969,7 @@ Wire Wire Line
 	2650 1250 2650 1300
 Connection ~ 2650 1250
 Wire Wire Line
-	9050 2050 9100 2050
-Wire Wire Line
-	9300 2050 10450 2050
+	9050 2050 10450 2050
 Wire Wire Line
 	9225 3250 9500 3250
 Wire Wire Line
@@ -1093,4 +1089,6 @@ F 3 "" H 2900 2550 50  0001 C CNN
 $EndComp
 Connection ~ 3225 2000
 Connection ~ 3200 2550
+Wire Wire Line
+	9250 1850 9900 1850
 $EndSCHEMATC
