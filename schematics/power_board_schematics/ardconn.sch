@@ -34,7 +34,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 2
+Sheet 2 2
 Title "RLCS power board"
 Date "2017-09-24"
 Rev "A"
@@ -44,37 +44,37 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text GLabel 5100 2850 0    60   Input ~ 0
+Text GLabel 5100 3000 0    60   Input ~ 0
 ARD_CON_SD_MOSI
 Text GLabel 5100 3150 0    60   Input ~ 0
 ARD_CON_SD_SCL
-Text GLabel 5100 3750 0    60   Input ~ 0
-ARD_CON_SD_SS
 Text GLabel 5100 2700 0    60   Input ~ 0
+ARD_CON_SD_SS
+Text GLabel 5100 3450 0    60   Input ~ 0
 ARD_CON_SD_WP
-Text GLabel 5100 3000 0    60   Input ~ 0
+Text GLabel 5100 3300 0    60   Input ~ 0
 ARD_CON_SD_CD
-Text GLabel 5100 4050 0    60   Input ~ 0
-ARD_CON_7SEG_A
-Text GLabel 5100 4950 0    60   Input ~ 0
-ARD_CON_7SEG_B
 Text GLabel 5100 4800 0    60   Input ~ 0
-ARD_CON_7SEG_C
-Text GLabel 5100 4200 0    60   Input ~ 0
-ARD_CON_7SEG_D
-Text GLabel 5100 4500 0    60   Input ~ 0
-ARD_CON_7SEG_E
+ARD_CON_7SEG_A
 Text GLabel 5100 4650 0    60   Input ~ 0
-ARD_CON_7SEG_F
-Text GLabel 5100 4350 0    60   Input ~ 0
-ARD_CON_7SEG_G
+ARD_CON_7SEG_B
+Text GLabel 5100 4200 0    60   Input ~ 0
+ARD_CON_7SEG_C
 Text GLabel 5100 3900 0    60   Input ~ 0
+ARD_CON_7SEG_D
+Text GLabel 5100 4350 0    60   Input ~ 0
+ARD_CON_7SEG_E
+Text GLabel 5100 4500 0    60   Input ~ 0
+ARD_CON_7SEG_F
+Text GLabel 5100 4950 0    60   Input ~ 0
+ARD_CON_7SEG_G
+Text GLabel 5100 4050 0    60   Input ~ 0
 ARD_CON_7SEG_DP
 Text GLabel 5100 3600 0    60   Input ~ 0
 ARD_CON_7SEG_D1
-Text GLabel 5100 3300 0    60   Input ~ 0
+Text GLabel 5100 3750 0    60   Input ~ 0
 ARD_CON_7SEG_D2
-Text GLabel 5100 3450 0    60   Input ~ 0
+Text GLabel 5100 2850 0    60   Input ~ 0
 ARD_CON_SD_MISO
 Text Notes 1850 3850 0    60   ~ 0
 All Arduino connections put on this sheet\nso they can be reordered without screwing\nup the main sheet\n\n(this doesn't include power out)
