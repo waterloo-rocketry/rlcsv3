@@ -16,16 +16,18 @@ void lcd_init(LiquidCrystal lcd)
     last_daq->rocket_mass         = 0;
     last_daq->ign_pri_current     = 0;
     last_daq->ign_sec_current     = 0;
+   
     last_daq->rfill_current_open  = 0;
     last_daq->rfill_current_close = 0;
     last_daq->rvent_current_open  = 0;
     last_daq->rvent_current_close = 0;
-    last_daq->linac_current_open  = 0;
-    last_daq->linac_current_close = 0;
     last_daq->rfill_lsw_open      = 0;
     last_daq->rfill_lsw_closed    = 0;
     last_daq->rvent_lsw_open      = 0;
     last_daq->rvent_lsw_closed    = 0;
+    
+    last_daq->linac_current_open  = 0;
+    last_daq->linac_current_close = 0;
     last_daq->linac_lsw_extend    = 0;
     last_daq->linac_lsw_retract   = 0;
 //set labels
@@ -119,6 +121,114 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         char* temp6 = "0001";
         lcd.setCursor(17 + moveCursor(daq->rocket_mass), 1);
         lcd.write(strcpy(temp6, convert(daq->rocket_mass)));        
+    }
+    lcd.setCursor(3, 2); 
+
+    switch(daq->rfill_lsw_open) { //switch 1
+      case 0 : 
+        switch(daq->rvent_lsw_open) {//switch 2
+          case 0:
+            switch(daq->rfill_current_open) {//current 1
+              case 0:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("ER1");
+                    break;
+                  case 1:
+                    lcd.write("MCL");
+                    break;
+                }
+                break;
+              case 1:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("MOP");
+                    break;
+                  case 1:
+                    lcd.write("ER2");
+                    break;
+                }
+                break;              
+            }
+            break;
+          case 1:
+             switch(daq->rfill_current_open) {//current 1
+              case 0:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("CLS");
+                    break;
+                  case 1:
+                    lcd.write("ER3");
+                    break;
+                }
+                break;
+              case 1:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("ER4");
+                    break;
+                  case 1:
+                    lcd.write("ER5");
+                    break;
+                }
+                break;              
+            }
+            break;
+        }
+        break;
+      case 1 :
+        switch(daq->rvent_lsw_open) {//switch 2
+          case 0:
+            switch(daq->rfill_current_open) {//current 1
+              case 0:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("OPN");
+                    break;
+                  case 1:
+                    lcd.write("ER6");
+                    break;
+                }
+                break;
+              case 1:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("ER7");
+                    break;
+                  case 1:
+                    lcd.write("ER8");
+                    break;
+                }
+                break;              
+            }
+            break;
+          case 1:
+             switch(daq->rfill_current_open) {//current 1
+              case 0:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("ER9");
+                    break;
+                  case 1:
+                    lcd.write("ERA");
+                    break;
+                }
+                break;
+              case 1:
+                switch(daq->rvent_current_open) {//current 2
+                  case 0:
+                    lcd.write("ERB");
+                    break;
+                  case 1:
+                    lcd.write("ERC");
+                    break;
+                }
+                break;              
+            }
+            break;
+        }
+        break;
     }
 }
 
