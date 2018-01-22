@@ -9,40 +9,18 @@ static daq_holder_t last_daq;
 
 void lcd_init(LiquidCrystal lcd)
 {
-//just put in some default values to the buffered holders
-    last_daq.pressure1           = 0;
-    last_daq.pressure2           = 0;
-    last_daq.pressure3           = 0;
-    last_daq.pressure2           = 0;
-    last_daq.rocket_mass         = 0;
-    last_daq.ign_pri_current     = 0;
-    last_daq.ign_sec_current     = 0;
-   
-    last_daq.rfill_current_open  = 0;
-    last_daq.rfill_current_close = 0;
-    last_daq.rvent_current_open  = 0;
-    last_daq.rvent_current_close = 0;
-    last_daq.rfill_lsw_open      = 0;
-    last_daq.rfill_lsw_closed    = 0;
-    last_daq.rvent_lsw_open      = 0;
-    last_daq.rvent_lsw_closed    = 0;
-    
-    last_daq.linac_current_open  = 0;
-    last_daq.linac_current_close = 0;
-    last_daq.linac_lsw_extend    = 0;
-    last_daq.linac_lsw_retract   = 0;
-//set labels
-    // loop over the columns:
-    const char* labels[] = {"P1:000 P2:000 P3:000", "I1:000 I2:000 M:0000", "V1:CLS V2:CLS V3:CLS", "AC:EXT                 "};
-    for (int  thisRow = 0; thisRow < 4; thisRow++) {
-      for (int thisCol = 0; thisCol < 20; thisCol++) {
-        // set the cursor position:
-        lcd.setCursor(thisCol, thisRow);
-        lcd.write(labels[thisRow][thisCol]);
-        //delay(20);
-      }
-    }
-    lcd_update(last_daq, lcd);
+    //sets every single bit in last_daq to 0 (which should be the default)
+    //TODO aidan can you check that this works? I'm not sure if arduino
+    //supports memset
+    memset(&last_daq, 0, sizeof(last_daq));
+
+    //lcd.print should wrap properly
+    //TODO aidan can you check that this
+    //properly writes the defaults when called?
+    lcd.print("P1:000 P2:000 P3:000"
+              "I1:000 I2:000 M:0000"
+              "V1:CLS V2:CLS V3:CLS"
+              "AC:EXT              "};
 }
 
 /*  ----------------------
