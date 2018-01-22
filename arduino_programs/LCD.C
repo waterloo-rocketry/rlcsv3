@@ -32,7 +32,7 @@ void lcd_init(LiquidCrystal lcd)
     last_daq->linac_lsw_retract   = 0;
 //set labels
     // loop over the columns:
-    char* labels[] = {"P1:000 P2:000 P3:000", "I1:000 I2:000 M:0000", "V1:CLS V2:CLS V3:CLS", "AC:EXT                 "};
+    const char* labels[] = {"P1:000 P2:000 P3:000", "I1:000 I2:000 M:0000", "V1:CLS V2:CLS V3:CLS", "AC:EXT                 "};
     for (int  thisRow = 0; thisRow < 4; thisRow++) {
       for (int thisCol = 0; thisCol < 20; thisCol++) {
         // set the cursor position:
@@ -77,7 +77,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
       //last_daq->pressure1 = daq->pressure1;
         lcd.setCursor(3, 0);
         lcd.write("000");
-        char* temp1 = "001";
+        char temp1[] = "001";
         lcd.setCursor(3+moveCursor(daq->pressure1), 0);
         lcd.write(strcpy(temp1, convert(daq->pressure1)));     
     }
@@ -86,7 +86,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         //last_daq->pressure2 = daq->pressure2;
         lcd.setCursor(10, 0);
         lcd.write("000");
-        char* temp2 = "001";
+        char temp2[] = "001";
         lcd.setCursor(10+moveCursor(daq->pressure2), 0);
         lcd.write(strcpy(temp2, convert(daq->pressure2))); 
     }
@@ -94,7 +94,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
       //last_daq->pressure3 = daq->pressure3;
         lcd.setCursor(17, 0);
         lcd.write("000");      
-        char* temp3 = "111";
+        char temp3[] = "111";
         lcd.setCursor(17+moveCursor(daq->pressure3), 0);
         lcd.write(strcpy(temp3, convert(daq->pressure3))); 
     }
@@ -102,7 +102,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         //last_daq->pressure2 = daq->pressure2;
         lcd.setCursor(3, 1);
         lcd.write("000");
-        char* temp4 = "001";
+        char temp4[] = "001";
         lcd.setCursor(3+moveCursor(daq->ign_pri_current), 1);
         lcd.write(strcpy(temp4, convert(daq->ign_pri_current))); 
     }
@@ -110,7 +110,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         //last_daq->pressure2 = daq->pressure2;
         lcd.setCursor(10, 1);
         lcd.write("000");
-        char* temp5 = "001";
+        char temp5[] = "001";
         lcd.setCursor(10 + moveCursor(daq->ign_sec_current), 1);
         lcd.write(strcpy(temp5, convert(daq->ign_sec_current))); 
     }
@@ -118,31 +118,37 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
     if(daq->rocket_mass != last_daq->rocket_mass) {
         lcd.setCursor(16, 1);
         lcd.write("0000");
-        char* temp6 = "0001";
+        char temp6[] = "0001";
         lcd.setCursor(17 + moveCursor(daq->rocket_mass), 1);
         lcd.write(strcpy(temp6, convert(daq->rocket_mass)));        
     }
-    lcd.setCursor(3, 2); 
-
-    switch(daq->rfill_lsw_open) { //switch 1
+    lcd.setCursor(3, 2);
+    lcd_update_valve(daq->rfill_lsw_open, daq->rfill_lsw_closed, daq->rfill_current_open, daq->rfill_current_close, "MCL", "MOP", "CLS", "OPN", lcd);//rfill
+    lcd.setCursor(10, 2);
+    lcd_update_valve(daq->rvent_lsw_open,  daq->rvent_lsw_closed, daq->rvent_current_open, daq->rvent_current_close, "MCL", "MOP", "CLS", "OPN", lcd);//rvent 
+    //you can do the same for v3 here
+    lcd.setCursor(3, 3);
+    //IF YOU REMOVE THE LINE BELOW THEN EVERYTHING WORKS FINE, BUT THAT DOESNT MAKE SENSE!!! FOR SOME REASON IF YOU CALL THE lcd_update_valve FUNCTION WITH THE LINAC, IT DOESNT UPDATE ON LCD. THUS YOU HAVE TO MANUALLY COPY PASTE THE SAME FUNCTION FOR THE LINAC
+    //lcd_update_valve(daq->linac_lsw_extend,  daq->linac_lsw_retract, daq->linac_current_open, daq->linac_current_close, "MRT", "MEX", "RET", "EXT", lcd);//linac where ls_extended is ls 1 on truth table
+     switch(daq->linac_lsw_extend) { //switch 1
       case 0 : 
-        switch(daq->rvent_lsw_open) {//switch 2
+        switch(daq->linac_lsw_retract) {//switch 2
           case 0:
-            switch(daq->rfill_current_open) {//current 1
+            switch(daq->linac_current_open) {//current 1
               case 0:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
                     lcd.write("ER1");
                     break;
                   case 1:
-                    lcd.write("MCL");
+                    lcd.write("MRT");
                     break;
                 }
                 break;
               case 1:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
-                    lcd.write("MOP");
+                    lcd.write("MXT");
                     break;
                   case 1:
                     lcd.write("ER2");
@@ -152,11 +158,11 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
             }
             break;
           case 1:
-             switch(daq->rfill_current_open) {//current 1
+             switch(daq->linac_current_open) {//current 1
               case 0:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
-                    lcd.write("CLS");
+                    lcd.write("RET");
                     break;
                   case 1:
                     lcd.write("ER3");
@@ -164,7 +170,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
                 }
                 break;
               case 1:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
                     lcd.write("ER4");
                     break;
@@ -178,13 +184,13 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         }
         break;
       case 1 :
-        switch(daq->rvent_lsw_open) {//switch 2
+        switch(daq->linac_lsw_retract) {//switch 2
           case 0:
-            switch(daq->rfill_current_open) {//current 1
+            switch(daq->linac_current_open) {//current 1
               case 0:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
-                    lcd.write("OPN");
+                    lcd.write("EXT");
                     break;
                   case 1:
                     lcd.write("ER6");
@@ -192,7 +198,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
                 }
                 break;
               case 1:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
                     lcd.write("ER7");
                     break;
@@ -204,9 +210,9 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
             }
             break;
           case 1:
-             switch(daq->rfill_current_open) {//current 1
+             switch(daq->linac_current_open) {//current 1
               case 0:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
                     lcd.write("ER9");
                     break;
@@ -216,7 +222,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
                 }
                 break;
               case 1:
-                switch(daq->rvent_current_open) {//current 2
+                switch(daq->linac_current_close) {//current 2
                   case 0:
                     lcd.write("ERB");
                     break;
@@ -229,6 +235,115 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
             break;
         }
         break;
-    }
+    }  
+}
+
+void lcd_update_valve(unsigned char state1, unsigned char state2, unsigned char state3, unsigned char state4, const char* msg1, const char* msg2, const char* msg3, const char* msg4, LiquidCrystal lcd) {
+ switch(state1) { //switch 1
+      case 0 : 
+        switch(state2) {//switch 2
+          case 0:
+            switch(state3) {//current 1
+              case 0:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write("ER1");
+                    break;
+                  case 1:
+                    lcd.write(msg1);
+                    break;
+                }
+                break;
+              case 1:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write(msg2);
+                    break;
+                  case 1:
+                    lcd.write("ER2");
+                    break;
+                }
+                break;              
+            }
+            break;
+          case 1:
+             switch(state3) {//current 1
+              case 0:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write(msg3);
+                    break;
+                  case 1:
+                    lcd.write("ER3");
+                    break;
+                }
+                break;
+              case 1:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write("ER4");
+                    break;
+                  case 1:
+                    lcd.write("ER5");
+                    break;
+                }
+                break;              
+            }
+            break;
+        }
+        break;
+      case 1 :
+        switch(state2) {//switch 2
+          case 0:
+            switch(state3) {//current 1
+              case 0:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write(msg4);
+                    break;
+                  case 1:
+                    lcd.write("ER6");
+                    break;
+                }
+                break;
+              case 1:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write("ER7");
+                    break;
+                  case 1:
+                    lcd.write("ER8");
+                    break;
+                }
+                break;              
+            }
+            break;
+          case 1:
+             switch(state3) {//current 1
+              case 0:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write("ER9");
+                    break;
+                  case 1:
+                    lcd.write("ERA");
+                    break;
+                }
+                break;
+              case 1:
+                switch(state4) {//current 2
+                  case 0:
+                    lcd.write("ERB");
+                    break;
+                  case 1:
+                    lcd.write("ERC");
+                    break;
+                }
+                break;              
+            }
+            break;
+        }
+        break;
+    }  
 }
 
