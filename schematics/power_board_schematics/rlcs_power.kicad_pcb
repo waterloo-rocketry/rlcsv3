@@ -14,8 +14,8 @@
 
   (page A4)
   (layers
-    (0 F.Cu signal)
-    (31 B.Cu signal)
+    (0 F.Cu signal hide)
+    (31 B.Cu signal hide)
     (32 B.Adhes user hide)
     (33 F.Adhes user hide)
     (34 B.Paste user hide)
@@ -64,7 +64,7 @@
     (aux_axis_origin 0 0)
     (visible_elements FFFFFFA9)
     (pcbplotparams
-      (layerselection 0x010e0_80000001)
+      (layerselection 0x00020_00000000)
       (usegerberextensions false)
       (excludeedgelayer true)
       (linewidth 0.100000)
@@ -2299,8 +2299,8 @@
   (gr_text "RLCSv2\nPower Board r2\n2018-01-12" (at 128.95 138.65) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text "+\n\n\n\n-" (at 109.1 109.05) (layer F.SilkS)
-    (effects (font (size 1 1) (thickness 0.15)))
+  (gr_text "BATT\n+\n\n\n\n-" (at 108.8 135.325) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.15)) (justify left))
   )
   (gr_text +5v- (at 132.35 83.3) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
