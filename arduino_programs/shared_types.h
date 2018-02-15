@@ -17,6 +17,7 @@ typedef struct {
     unsigned char remote_fill_valve;    //1 = open, 0 = closed
     unsigned char remote_vent_valve;    //1 = open, 0 = closed
     unsigned char run_tank_valve;       //1 = open, 0 = closed
+    unsigned char injector_valve;       //1 = open, 0 = closed
     unsigned char linear_actuator;      //1 = retracted, 0 = extended
     unsigned char ignition_power;       //1 = firing, 0 = not firing
     unsigned char ignition_select;      //1 = secondary; 0 = primary
@@ -32,6 +33,7 @@ typedef struct {
 
     uint16_t pressure1;                 //between 0 and 999
     uint16_t pressure2;                 //between 0 and 999
+    uint16_t pressure3;
     uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
     uint16_t ign_pri_current;           //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
     uint16_t ign_sec_current;           //between 0 and 999 (measured in centiamps)

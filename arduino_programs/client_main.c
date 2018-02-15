@@ -45,10 +45,12 @@ void loop(){
 	}
 
     //put the last received tower state on seven seg
+    /*
     char to_put_on_sevseg;
     if( convert_state_to_radio(get_tower_state(), &to_put_on_sevseg) ) {
         setNewNum_SevSeg( (uint8_t) to_put_on_sevseg );
     }
     refresh_SevSeg();
+    */
     
 }

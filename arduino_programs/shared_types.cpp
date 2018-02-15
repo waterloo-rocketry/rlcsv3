@@ -53,12 +53,12 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
     if ( (binary = fromBase64(binary)) < 0)
         //we did not receive a valid state. So return 0
         return 0;
-    state->remote_fill_valve = binary & 1;
-    state->remote_vent_valve = binary & 2;
-    state->run_tank_valve = binary & 4;
-    state->linear_actuator = binary & 8;
-    state->ignition_power = binary & 16;
-    state->ignition_select = binary & 32;
+    state->remote_fill_valve = ((binary & 1) != 0);
+    state->remote_vent_valve = ((binary & 2) != 0);
+    state->run_tank_valve    = ((binary & 4) != 0);
+    state->linear_actuator   = ((binary & 8) != 0);
+    state->ignition_power    = ((binary & 16) != 0);
+    state->ignition_select   = ((binary & 32) != 0);
     return 1;
 }
 
@@ -82,6 +82,7 @@ int actuator_compare(actuator_state_t* s, actuator_state_t* q)
     return  s->remote_fill_valve == q->remote_fill_valve &&
             s->remote_vent_valve == q->remote_vent_valve &&
             s->run_tank_valve == q->run_tank_valve &&
+            //s->injector_valve == q->injector_valve &&
             s->linear_actuator == q->linear_actuator &&
             s->ignition_power == q->ignition_power &&
             s->ignition_select == q->ignition_select;
