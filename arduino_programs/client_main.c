@@ -13,7 +13,9 @@ void setup(){
     init_buttons();
 }
 
-extern unsigned long global_time_last_tower_state_req, global_time_last_tower_daq_req;
+extern unsigned long global_time_last_tower_state_req,
+        global_time_last_tower_daq_req,
+        global_radio_timeout;
 extern const unsigned long global_tower_update_interval, global_tower_daq_update_interval;
 void loop(){
 	//check for inputs from radio
@@ -35,12 +37,12 @@ void loop(){
 
 	//check how long since we received tower state
 
-	if (millis() - global_time_last_tower_state_req > global_tower_update_interval){
+	if (millis_offset() - global_time_last_tower_state_req > global_tower_update_interval){
 		client_request_state();
 	}
 
 	//check how long since we received tower daq information
-	if (millis() - global_time_last_tower_daq_req > global_tower_daq_update_interval){
+	if (millis_offset() - global_time_last_tower_daq_req > global_tower_daq_update_interval){
 		client_request_daq();
 	}
 
@@ -52,5 +54,12 @@ void loop(){
     }
     refresh_SevSeg();
     */
+
+    //if it's been longer than some defined amount of time,
+    //turn on the red led to say that it's been too long
+    if (millis_offset() - global_time_last_tower_state_req > global_radio_timeout)
+        set_radio_status(0);
+    else
+        set_radio_status(1);
     
 }

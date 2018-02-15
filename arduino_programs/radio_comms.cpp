@@ -1,6 +1,13 @@
 #include "radio_comms.h"
 #include "Arduino.h"
 
+#ifdef CLIENT
+#include "client_globals.h"
+#endif
+#ifdef TOWER
+#include "tower_globals.h"
+#endif
+
 const unsigned long millis_between_state_req = 200;
 const unsigned long millis_between_daq_req = 1000;
 const unsigned long millis_between_state_push = 200;
@@ -34,11 +41,11 @@ char xbee_get_byte()
 unsigned long time_last_state_req_sent = 0;
 int client_request_state()
 {
-    if (millis() - time_last_state_req_sent < millis_between_state_req)
+    if (millis_offset() - time_last_state_req_sent < millis_between_state_req)
         //called too soon, don't saturate xbee
         return 0;
     write_to_xbee(RADIO_STATE_REQ);
-    time_last_state_req_sent = millis();
+    time_last_state_req_sent = millis_offset();
     return 1;
 }
 
@@ -46,11 +53,11 @@ int client_request_state()
 unsigned long time_last_daq_req_sent = 0;
 int client_request_daq()
 {
-    if (millis() - time_last_daq_req_sent < millis_between_daq_req) 
+    if (millis_offset() - time_last_daq_req_sent < millis_between_daq_req) 
         //called too soon, so don't send anything
         return 0;
     write_to_xbee(RADIO_DAQ_REQ);
-    time_last_daq_req_sent = millis();
+    time_last_daq_req_sent = millis_offset();
     return 1;
 }
 
@@ -58,10 +65,10 @@ int client_request_daq()
 unsigned long time_last_state_push_sent = 0;
 int client_push_state(actuator_state_t* state)
 {
-    if (millis() - time_last_state_push_sent < millis_between_state_push) 
+    if (millis_offset() - time_last_state_push_sent < millis_between_state_push) 
         //called too soon, so don't send anything
         return 0;
-    time_last_state_push_sent = millis();
+    time_last_state_push_sent = millis_offset();
     char binary;
     if (!convert_state_to_radio(state, &binary))
         return 0;
@@ -74,10 +81,10 @@ int client_push_state(actuator_state_t* state)
 unsigned long time_last_client_ack_sent = 0;
 int client_ack()
 {
-    if (millis() - time_last_client_ack_sent < millis_between_client_ack)
+    if (millis_offset() - time_last_client_ack_sent < millis_between_client_ack)
         return 0;
     write_to_xbee(RADIO_ACK_BYTE);
-    time_last_client_ack_sent = millis();
+    time_last_client_ack_sent = millis_offset();
     return 1;
 }
 
@@ -85,10 +92,10 @@ int client_ack()
 unsigned long time_last_client_nack_sent = 0;
 int client_nack()
 {
-    if (millis() - time_last_client_nack_sent < millis_between_client_nack)
+    if (millis_offset() - time_last_client_nack_sent < millis_between_client_nack)
         return 0;
     write_to_xbee(RADIO_NACK_BYTE);
-    time_last_client_nack_sent = millis();
+    time_last_client_nack_sent = millis_offset();
     return 1;
 }
 
@@ -99,35 +106,35 @@ int client_nack()
 unsigned long time_last_tower_ack_req = 0;
 int tower_request_ack(actuator_state_t* state)
 {
-    if (millis() - time_last_tower_ack_req < millis_between_tower_ack_req)
+    if (millis_offset() - time_last_tower_ack_req < millis_between_tower_ack_req)
         return 0;
     char binary;
     if (!convert_state_to_radio(state, &binary))
         return 0;
     write_to_xbee(RADIO_ACK_BYTE);
     write_to_xbee(binary);
-    time_last_tower_ack_req = millis();
+    time_last_tower_ack_req = millis_offset();
     return 1;
 }
 
 unsigned long time_last_tower_send_state = 0;
 int tower_send_state(actuator_state_t* state)
 {
-    if (millis() - time_last_tower_send_state < millis_between_tower_send_state)
+    if (millis_offset() - time_last_tower_send_state < millis_between_tower_send_state)
         return 0;
     char binary;
     if (!convert_state_to_radio(state, &binary))
         return 0;
     write_to_xbee(RADIO_STATE_REQ);
     write_to_xbee(binary);
-    time_last_tower_send_state = millis();
+    time_last_tower_send_state = millis_offset();
     return 1;
 }
 
 unsigned long time_last_tower_send_daq = 0;
 int tower_send_daq(daq_holder_t* daq)
 {
-    if (millis() - time_last_tower_send_daq < millis_between_tower_send_daq)
+    if (millis_offset() - time_last_tower_send_daq < millis_between_tower_send_daq)
         return 0;
     daq_radio_value_t output;
     if (!convert_daq_to_radio(daq, &output))
@@ -135,7 +142,7 @@ int tower_send_daq(daq_holder_t* daq)
     write_to_xbee(RADIO_DAQ_REQ);
     for (int i = 0; i < DAQ_RADIO_LEN; i++)
         write_to_xbee(output.data[i]);
-    time_last_tower_send_daq = millis();
+    time_last_tower_send_daq = millis_offset();
     return 1;
 }
 

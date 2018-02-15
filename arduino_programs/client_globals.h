@@ -7,6 +7,7 @@
 //in a row before it is seen as "on"
 #define DEBOUNCE_WIDTH 3
 
+#define millis_offset() (millis() + 5000)
 
 //returns the global button state
 actuator_state_t* get_button_state();
@@ -23,5 +24,11 @@ void read_all_buttons();
 
 //sets the pin mode for all the button pins to input
 void init_buttons();
+
+//state = 0, turn red led on
+//else, turn green led on
+void set_radio_status(int state);
+
+
 
 #endif //ifndef CLIENT_GLOBALS_H

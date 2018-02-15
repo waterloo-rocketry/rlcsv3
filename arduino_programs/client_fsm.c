@@ -35,13 +35,13 @@ extern unsigned long global_time_last_tower_state_req;
 void handle_state_update(char* buffer, actuator_state_t* state){
     //unpack buffer, copy values into state
     convert_radio_to_state(state,*buffer);
-    global_time_last_tower_state_req = millis();
+    global_time_last_tower_state_req = millis_offset();
 }
 
 extern unsigned long global_time_last_tower_daq_req;
 void handle_daq_update(char* buffer, daq_holder_t* daq){
     //unpack buffer, copy values into daq
-    global_time_last_tower_daq_req = millis();
+    global_time_last_tower_daq_req = millis_offset();
 }
 
 void handle_ack_request(char* buffer, actuator_state_t* state){

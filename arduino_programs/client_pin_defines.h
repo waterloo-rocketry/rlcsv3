@@ -25,8 +25,8 @@
 #define PIN_LCD_D7 39
 
 //pins for the status LEDs
-#define PIN_LED_GREEN 18
-#define PIN_LED_RED   19
+#define PIN_LED_GREEN 48
+#define PIN_LED_RED   49
 
 //pins for the seven segment display
 #define PIN_SEVENSEG_D1 28

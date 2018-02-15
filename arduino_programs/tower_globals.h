@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+#define millis_offset millis
 
 //state that the client last asked us to do
 actuator_state_t* get_requested_state();

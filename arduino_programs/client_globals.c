@@ -124,13 +124,38 @@ void init_buttons(){
     pinMode(PIN_SWITCH_IGNITION_SEC, INPUT);
     pinMode(PIN_SWITCH_IGNITION_FIRE, INPUT_PULLUP);
 
-    //zero out all the buttonsk
-    memcpy(0,&button_debounce, sizeof(button_debounce));
+    //zero out all the buttons
+    memset(&button_debounce, 0, sizeof(button_debounce));
+
+    //LEDs. Turn on the red one first
+    pinMode(PIN_LED_RED, OUTPUT);
+    pinMode(PIN_LED_GREEN, OUTPUT);
+    digitalWrite(PIN_LED_RED, HIGH);
+    digitalWrite(PIN_LED_GREEN, LOW);
 }
+
+static int led_state = 0;
+void set_radio_status(int state){
+
+    if(state == led_state)
+        return;
+    //If state is true, then turn on green led
+    if((led_state = state)) {
+        digitalWrite(PIN_LED_GREEN, HIGH);
+        digitalWrite(PIN_LED_RED, LOW);
+    } else {
+        digitalWrite(PIN_LED_GREEN, LOW);
+        digitalWrite(PIN_LED_RED, HIGH);
+    }
+    //update led_state
+    led_state = state;
+}
+
 
 //globals for how long it's been since we've made requests to the tower
 unsigned long global_time_last_tower_state_req = 0;
 const unsigned long global_tower_update_interval = 1000; //request every second
+const unsigned long global_radio_timeout = 5000; //we've lost radio contact
 unsigned long global_time_last_tower_daq_req = 0;
 unsigned long global_tower_daq_update_interval = 3000; //request daq every 3 seconds
 

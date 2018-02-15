@@ -26,7 +26,7 @@ void loop() {
     //this here's a TODO
     
     //check time last contact
-    if (millis() - time_last_contact > global_min_time_between_contacts) {
+    if (millis_offset() - time_last_contact > global_min_time_between_contacts) {
         //goto safe mode
         //this here's another TODO
     }

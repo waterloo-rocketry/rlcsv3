@@ -2,7 +2,7 @@ CC = avr-gcc
 CXX = avr-g++
 HARDWARE = /Users/aaronmorrison/Arduino.app/Contents/Java/hardware
 # HARDWARE = /usr/share/arduino/hardware
-DEFINES = -DF_CPU=16000000L -DARDUINO=10612 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR
+DEFINES = -DF_CPU=16000000L -DARDUINO=10612 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR -DTOWER
 MICRO = -mmcu=atmega2560
 CFLAGS = -std=gnu11 $(MICRO) $(DEFINES)
 CXXFLAGS = -std=gnu++11 $(MICRO) $(DEFINES)
