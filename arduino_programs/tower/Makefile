@@ -29,6 +29,16 @@ objects +=shared_types.o
 objects +=tower_fsm.o
 objects +=SevSeg.o
 
+#header files - always recompile everything whenever a header changes
+headers =LCD.h
+headers +=SevSeg.h
+headers +=radio_comms.h
+headers +=shared_types.h
+headers +=tower_daq.h
+headers +=tower_fsm.h
+headers +=tower_globals.h
+headers +=tower_pin_defines.h
+
 #arduino source files: get compiled into core.a
 lib_objects  = wiring_pulse.o
 lib_objects += WInterrupts.o
@@ -67,10 +77,10 @@ core.a: $(lib_objects)
 	-rm core.a
 	avr-ar rcs core.a $^
 
-%.o: %.c
+%.o: %.c $(headers)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-%.o: %.cpp
+%.o: %.cpp $(headers)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: clean

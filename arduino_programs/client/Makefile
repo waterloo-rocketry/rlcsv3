@@ -14,12 +14,14 @@ INCLUDES += -I$(HARDWARE)/arduino/variants/mega
 #my mac _does_ put the /avr/ in there
 INCLUDES += -I$(HARDWARE)/arduino/avr/cores/arduino
 INCLUDES += -I$(HARDWARE)/arduino/avr/variants/mega
+INCLUDES += -I$(HARDWARE)/../libraries/LiquidCrystal/src
 
 #our source files are in the parent directory
 VPATH += ..
 #the arduino sources are in one of these two
 VPATH += $(HARDWARE)/arduino/avr/cores/arduino/
 VPATH += $(HARDWARE)/arduino/cores/arduino/
+VPATH += $(HARDWARE)/../libraries/LiquidCrystal/src
 
 #our source files
 objects = client_main.o
@@ -28,6 +30,16 @@ objects +=radio_comms.o
 objects +=shared_types.o
 objects +=client_fsm.o
 objects +=SevSeg.o
+objects +=LCD.o
+
+#header files - always recompile everything whenever a header changes
+headers =LCD.h
+headers +=SevSeg.h
+headers +=client_fsm.h
+headers +=client_globals.h
+headers +=client_pin_defines.h
+headers +=radio_comms.h
+headers +=shared_types.h
 
 #arduino source files: get compiled into core.a
 lib_objects  = wiring_pulse.o
@@ -54,6 +66,7 @@ lib_objects += WString.o
 lib_objects += abi.o
 lib_objects += main.o
 lib_objects += new.o
+lib_objects +=LiquidCrystal.o
 
 all:  client.hex
 
@@ -67,10 +80,10 @@ core.a: $(lib_objects)
 	-rm core.a
 	avr-ar rcs core.a $^
 
-%.o: %.c
+%.o: %.c $(headers)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-%.o: %.cpp
+%.o: %.cpp $(headers)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: clean
