@@ -16,6 +16,8 @@ extern "C" {
 #define RADIO_DAQ_REQ '}'
 #define RADIO_STATE_ASSIGN ';'
 
+void radio_init();
+
 int xbee_bytes_available();
 char xbee_get_byte();
 

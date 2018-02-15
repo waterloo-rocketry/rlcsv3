@@ -1,6 +1,20 @@
 #include "radio_comms.h"
 #include "Arduino.h"
 
+const unsigned long millis_between_state_req = 200;
+const unsigned long millis_between_daq_req = 1000;
+const unsigned long millis_between_state_push = 200;
+const unsigned long millis_between_client_ack = 200;
+const unsigned long millis_between_client_nack = 200;
+const unsigned long millis_between_tower_ack_req = 200;
+const unsigned long millis_between_tower_send_state = 200;
+const unsigned long millis_between_tower_send_daq = 1000;
+
+void radio_init(){
+    while(!Serial);
+    Serial.begin(9600);
+}
+
 void write_to_xbee(char out)
 {
     Serial.write(out);
@@ -18,7 +32,6 @@ char xbee_get_byte()
 
 //maximimum rate of state requests is twice every second
 unsigned long time_last_state_req_sent = 0;
-const unsigned long millis_between_state_req = 500;
 int client_request_state()
 {
     if (millis() - time_last_state_req_sent < millis_between_state_req)
@@ -31,7 +44,6 @@ int client_request_state()
 
 //don't request daq updates more often than every second
 unsigned long time_last_daq_req_sent = 0;
-const unsigned long millis_between_daq_req = 1000;
 int client_request_daq()
 {
     if (millis() - time_last_daq_req_sent < millis_between_daq_req) 
@@ -44,7 +56,6 @@ int client_request_daq()
 
 //don't push state more than twice every second
 unsigned long time_last_state_push_sent = 0;
-const unsigned long millis_between_state_push = 500;
 int client_push_state(actuator_state_t* state)
 {
     if (millis() - time_last_state_push_sent < millis_between_state_push) 
@@ -61,7 +72,6 @@ int client_push_state(actuator_state_t* state)
 
 //don't send acknowledgements more than twice per second
 unsigned long time_last_client_ack_sent = 0;
-const unsigned long millis_between_client_ack = 500;
 int client_ack()
 {
     if (millis() - time_last_client_ack_sent < millis_between_client_ack)
@@ -73,7 +83,6 @@ int client_ack()
 
 //don't send nacknowledgements more than twice per second
 unsigned long time_last_client_nack_sent = 0;
-const unsigned long millis_between_client_nack = 500;
 int client_nack()
 {
     if (millis() - time_last_client_nack_sent < millis_between_client_nack)
@@ -88,7 +97,6 @@ int client_nack()
 //now for the tower side radio sending functions
 
 unsigned long time_last_tower_ack_req = 0;
-const unsigned long millis_between_tower_ack_req = 500;
 int tower_request_ack(actuator_state_t* state)
 {
     if (millis() - time_last_tower_ack_req < millis_between_tower_ack_req)
@@ -103,7 +111,6 @@ int tower_request_ack(actuator_state_t* state)
 }
 
 unsigned long time_last_tower_send_state = 0;
-const unsigned long millis_between_tower_send_state = 500;
 int tower_send_state(actuator_state_t* state)
 {
     if (millis() - time_last_tower_send_state < millis_between_tower_send_state)
@@ -118,7 +125,6 @@ int tower_send_state(actuator_state_t* state)
 }
 
 unsigned long time_last_tower_send_daq = 0;
-const unsigned long millis_between_tower_send_daq = 1000;
 int tower_send_daq(daq_holder_t* daq)
 {
     if (millis() - time_last_tower_send_daq < millis_between_tower_send_daq)

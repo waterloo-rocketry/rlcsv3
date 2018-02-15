@@ -9,7 +9,7 @@
 void setup() {
     //initialize all outputs
     init_outputs();
-    Serial.begin(9600);
+    radio_init();
 }
 
 unsigned long time_last_contact = 0;
@@ -18,9 +18,9 @@ const unsigned long global_min_time_between_contacts = 5000;
 
 void loop() {
     //check for inputs from radio
-    while(Serial.available()){
+    while(xbee_bytes_available()){
         //update FSM, which will deal with command processing
-        push_radio_char(Serial.read());
+        push_radio_char(xbee_get_byte());
     }
     //get all the daq updates
     //this here's a TODO
