@@ -3,10 +3,14 @@
 #include "client_globals.h"
 #include "radio_comms.h"
 #include "SevSeg.h"
+#include "LCD.h"
 #include "Arduino.h"
 
 void setup(){
-    start_SevSeg();
+    lcd_init();
+    //start_SevSeg();
+    radio_init();
+    init_buttons();
 }
 
 extern unsigned long global_time_last_tower_state_req, global_time_last_tower_daq_req;

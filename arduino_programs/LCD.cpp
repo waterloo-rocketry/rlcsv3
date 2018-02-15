@@ -1,4 +1,6 @@
 #include "LCD.h"
+#include "LiquidCrystal.h"
+#include "client_pin_defines.h"
 //note this does not do formatting, so do that yourself
 void lcd_nprint(int x, int y, int length, char *str);
 void lcd_print(int x, int y, char c);
@@ -6,9 +8,17 @@ void output_labels();
 #include <string.h> 
 
 static daq_holder_t last_daq;
+static LiquidCrystal lcd(
+    PIN_LCD_RS,
+    PIN_LCD_EN,
+    PIN_LCD_D4,
+    PIN_LCD_D5,
+    PIN_LCD_D6,
+    PIN_LCD_D7);
 
-void lcd_init(LiquidCrystal lcd)
+void lcd_init()
 {
+    lcd.begin(40,4);
     //sets every single bit in last_daq to 0 (which should be the default)
     //TODO aidan can you check that this works? I'm not sure if arduino
     //supports memset
@@ -20,7 +30,7 @@ void lcd_init(LiquidCrystal lcd)
     lcd.print("P1:000 P2:000 P3:000"
               "I1:000 I2:000 M:0000"
               "V1:CLS V2:CLS V3:CLS"
-              "AC:EXT              "};
+              "AC:EXT              ");
 }
 
 /*  ----------------------
@@ -46,7 +56,7 @@ int moveCursor(uint16_t value) {
   }
 }
 
-void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
+void lcd_update(daq_holder_t* daq){
     //pressures first
     if(daq->pressure1 > 999) daq->pressure1 = 999;
     if(daq->pressure2 > 999) daq->pressure1 = 999;
@@ -102,9 +112,9 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
         lcd.write(strcpy(temp6, convert(daq->rocket_mass)));        
     }
     lcd.setCursor(3, 2);
-    lcd_update_valve(daq->rfill_lsw_open, daq->rfill_lsw_closed, daq->rfill_current_open, daq->rfill_current_close, "MCL", "MOP", "CLS", "OPN", lcd);//rfill
+    lcd_update_valve(daq->rfill_lsw_open, daq->rfill_lsw_closed, daq->rfill_current_open, daq->rfill_current_close, "MCL", "MOP", "CLS", "OPN");//rfill
     lcd.setCursor(10, 2);
-    lcd_update_valve(daq->rvent_lsw_open,  daq->rvent_lsw_closed, daq->rvent_current_open, daq->rvent_current_close, "MCL", "MOP", "CLS", "OPN", lcd);//rvent 
+    lcd_update_valve(daq->rvent_lsw_open,  daq->rvent_lsw_closed, daq->rvent_current_open, daq->rvent_current_close, "MCL", "MOP", "CLS", "OPN");//rvent 
     //you can do the same for v3 here
     lcd.setCursor(3, 3);
     //IF YOU REMOVE THE LINE BELOW THEN EVERYTHING WORKS FINE, BUT THAT DOESNT MAKE SENSE!!! FOR SOME REASON IF YOU CALL THE lcd_update_valve FUNCTION WITH THE LINAC, IT DOESNT UPDATE ON LCD. THUS YOU HAVE TO MANUALLY COPY PASTE THE SAME FUNCTION FOR THE LINAC
@@ -217,7 +227,7 @@ void lcd_update(daq_holder_t* daq, LiquidCrystal lcd){
     }  
 }
 
-void lcd_update_valve(unsigned char state1, unsigned char state2, unsigned char state3, unsigned char state4, const char* msg1, const char* msg2, const char* msg3, const char* msg4, LiquidCrystal lcd) {
+void lcd_update_valve(unsigned char state1, unsigned char state2, unsigned char state3, unsigned char state4, const char* msg1, const char* msg2, const char* msg3, const char* msg4) {
  switch(state1) { //switch 1
       case 0 : 
         switch(state2) {//switch 2
