@@ -32,6 +32,11 @@ int tower_request_ack(actuator_state_t* state);
 int tower_send_state(actuator_state_t* state);
 int tower_send_daq(daq_holder_t* daq);
 
+//for debug only
+void radio_print(const char* msg);
+void radio_println(const char* msg);
+void radio_print_char(char b);
+
 #ifdef __cplusplus
 }
 #endif

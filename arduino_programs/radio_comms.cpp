@@ -139,3 +139,15 @@ int tower_send_daq(daq_holder_t* daq)
     return 1;
 }
 
+void radio_print(const char* msg){
+    Serial.print(msg);
+}
+
+void radio_println(const char* msg){
+    Serial.println(msg);
+}
+
+void radio_print_char(char b){
+    Serial.write(b);
+}
+

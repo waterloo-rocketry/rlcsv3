@@ -34,6 +34,7 @@ int valid_data_byte(char data) {
 extern unsigned long global_time_last_tower_state_req;
 void handle_state_update(char* buffer, actuator_state_t* state){
     //unpack buffer, copy values into state
+    convert_radio_to_state(state,*buffer);
     global_time_last_tower_state_req = millis();
 }
 
@@ -46,7 +47,62 @@ void handle_daq_update(char* buffer, daq_holder_t* daq){
 void handle_ack_request(char* buffer, actuator_state_t* state){
     //if the decoded state from buffer[0] is the same as state, then send an ack over the radio
     //if they aren't the same, send a nack
+    actuator_state_t received;
+    convert_radio_to_state(&received, *buffer);
+#ifdef RLCS_DEBUG
+    radio_println("");
+    radio_print("received byte ");
+    radio_print_char(*buffer);
+    radio_println("");
+    char temp;
+    convert_state_to_radio(state, &temp);
+    radio_print("current byte ");
+    radio_print_char(temp);
+    radio_println("");
+    radio_print("received: ");
+    radio_println(received.remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
+    radio_println(received.remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
+    radio_println(received.run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
+    radio_println(received.injector_valve ? "injector_valve open" : "injector_valve closed");
+    radio_println(received.linear_actuator ? "linear_actuator open" : "linear_actuator closed");
+    radio_println(received.ignition_power ? "ignition_power open" : "ignition_power closed");
+    radio_println(received.ignition_select ? "ignition_select open" : "ignition_select closed");
+    radio_print("button: ");
+    radio_println(state->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
+    radio_println(state->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
+    radio_println(state->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
+    radio_println(state->injector_valve ? "injector_valve open" : "injector_valve closed");
+    radio_println(state->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
+    radio_println(state->ignition_power ? "ignition_power open" : "ignition_power closed");
+    radio_println(state->ignition_select ? "ignition_select open" : "ignition_select closed");
 
+    //now a full comparison
+    radio_println(state->remote_fill_valve == received.remote_fill_valve ? "remote_fill_valve matches" : "remote_fill_valve doesn't match");
+    radio_println(state->remote_vent_valve == received.remote_vent_valve ? "remote_vent_valve matches" : "remote_vent_valve doesn't match");
+    radio_println(state->run_tank_valve == received.run_tank_valve ? "run_tank_valve matches" : "run_tank_valve doesn't match");
+    radio_println(state->linear_actuator == received.linear_actuator ? "linear_actuator matches" : "linear_actuator doesn't match");
+    radio_println(state->ignition_power == received.ignition_power ? "ignition_power matches" : "ignition_power doesn't match");
+    radio_println(state->ignition_select == received.ignition_select ? "ignition_select matches" : "ignition_select doesn't match");
+
+    radio_println("");
+    radio_print("button remote_vent_valve: ");
+    radio_print_char(state->remote_vent_valve + '0');
+    radio_print(", received remote_vent_valve: ");
+    radio_print_char(received.remote_vent_valve + '0');
+    radio_println("");
+#endif
+    if(actuator_compare(state, &received)) {
+#ifdef RLCS_DEBUG
+        radio_println("they match");
+#endif
+        client_ack();
+    }
+    else{
+#ifdef RLCS_DEBUG
+        radio_println("they don't match");
+#endif
+        client_nack();
+    }
 }
 
 void push_radio_char(char input){
@@ -66,6 +122,19 @@ void push_radio_char(char input){
             buffer_index = 0;
             data_len = 1; //only one byte in an ack request. It's a state byte
             return;
+#ifdef RLCS_DEBUG
+        case '!':
+            radio_println("");
+            radio_print("button: ");
+            radio_println(get_button_state()->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
+            radio_println(get_button_state()->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
+            radio_println(get_button_state()->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
+            radio_println(get_button_state()->injector_valve ? "injector_valve open" : "injector_valve closed");
+            radio_println(get_button_state()->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
+            radio_println(get_button_state()->ignition_power ? "ignition_power open" : "ignition_power closed");
+            radio_println(get_button_state()->ignition_select ? "ignition_select open" : "ignition_select closed");
+            break;
+#endif
         default:
             break;
     }

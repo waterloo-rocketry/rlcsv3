@@ -51,6 +51,19 @@ void push_radio_char(char input){
 		case RADIO_NACK_BYTE:
 			reset_request();
 			return;
+#ifdef RLCS_DEBUG
+        case '!':
+            radio_println("");
+            radio_print("button: ");
+            radio_println(get_current_state()->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
+            radio_println(get_current_state()->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
+            radio_println(get_current_state()->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
+            radio_println(get_current_state()->injector_valve ? "injector_valve open" : "injector_valve closed");
+            radio_println(get_current_state()->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
+            radio_println(get_current_state()->ignition_power ? "ignition_power open" : "ignition_power closed");
+            radio_println(get_current_state()->ignition_select ? "ignition_select open" : "ignition_select closed");
+            break;
+#endif
         default:
             break;
     }
