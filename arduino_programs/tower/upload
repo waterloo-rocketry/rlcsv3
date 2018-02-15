@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HARDWARE="/Users/amorrison/Arduino.app/Contents/Java/hardware"
+HARDWARE="/Users/aaronmorrison/Arduino.app/Contents/Java/hardware"
 HEXFILE="tower.hex"
 AVRDUDE="$HARDWARE/tools/avr/bin/avrdude"
 AVRDUDE_CONF="$HARDWARE/tools/avr/etc/avrdude.conf"
