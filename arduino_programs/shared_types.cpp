@@ -53,24 +53,38 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
     if ( (binary = fromBase64(binary)) < 0)
         //we did not receive a valid state. So return 0
         return 0;
-    state->remote_fill_valve = ((binary & 1) != 0);
+    //if ignition power is on, then bit 7 is ignition select
+    //if ignition power is off, then bit 7 is remote fill valve
+    //if ignition is running, then remote fill valve must be closed
+    state->injector_valve = ((binary & 1) != 0);
     state->remote_vent_valve = ((binary & 2) != 0);
     state->run_tank_valve    = ((binary & 4) != 0);
     state->linear_actuator   = ((binary & 8) != 0);
     state->ignition_power    = ((binary & 16) != 0);
-    state->ignition_select   = ((binary & 32) != 0);
+    if(state->ignition_power){
+        state->ignition_select   = ((binary & 32) != 0);
+        state->remote_fill_valve = 0;
+    } else {
+        state->ignition_select = 0;
+        state->remote_fill_valve = ((binary & 32) != 0);
+    }
     return 1;
 }
 
 int convert_state_to_radio(actuator_state_t* state, char* binary) 
 {
     *binary = 0;
-    *binary += state->remote_fill_valve ? 1 : 0;
+    *binary += state->injector_valve ? 1 : 0;
     *binary += state->remote_vent_valve ? 2 : 0;
     *binary += state->run_tank_valve    ? 4 : 0;
     *binary += state->linear_actuator   ? 8 : 0;
     *binary += state->ignition_power    ? 16 : 0;
-    *binary += state->ignition_select   ? 32 : 0;
+    if(state->ignition_power){
+        *binary += state->ignition_select   ? 32 : 0;
+    } else {
+        *binary += state->remote_fill_valve ? 32 : 0;
+    }
+
     if ( (*binary = toBase64(*binary)) < 0)
         return 0; //we do this on failure
     return 1;
@@ -82,7 +96,7 @@ int actuator_compare(actuator_state_t* s, actuator_state_t* q)
     return  s->remote_fill_valve == q->remote_fill_valve &&
             s->remote_vent_valve == q->remote_vent_valve &&
             s->run_tank_valve == q->run_tank_valve &&
-            //s->injector_valve == q->injector_valve &&
+            s->injector_valve == q->injector_valve &&
             s->linear_actuator == q->linear_actuator &&
             s->ignition_power == q->ignition_power &&
             s->ignition_select == q->ignition_select;

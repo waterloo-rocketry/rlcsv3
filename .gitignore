@@ -10,3 +10,6 @@
 
 #My mac keeps putting these files everywhere
 .DS_Store
+
+#test executables shouldn't be tracked
+shared_type_tests
