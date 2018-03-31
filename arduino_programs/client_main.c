@@ -8,7 +8,7 @@
 
 void setup(){
     lcd_init();
-    //start_SevSeg();
+    start_SevSeg();
     radio_init();
     init_buttons();
 }
@@ -62,4 +62,9 @@ void loop(){
     else
         set_radio_status(1);
     
+    //refresh the seven segment display
+    char button_for_sevseg;
+    convert_state_to_radio(get_button_state(), &button_for_sevseg);
+    setNewNum_SevSeg(fromBase64(button_for_sevseg));
+    refresh_SevSeg();
 }

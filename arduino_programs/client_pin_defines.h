@@ -29,15 +29,15 @@
 #define PIN_LED_RED   22
 
 //pins for the seven segment display
-#define PIN_SEVENSEG_D1 28
-#define PIN_SEVENSEG_D2 29
-#define PIN_SEVENSEG_A  30
-#define PIN_SEVENSEG_B  31
-#define PIN_SEVENSEG_C  32
-#define PIN_SEVENSEG_D  33
-#define PIN_SEVENSEG_E  34
-#define PIN_SEVENSEG_F  35
-#define PIN_SEVENSEG_G  36
-#define PIN_SEVENSEG_DP 37
+#define PIN_SEVENSEG_D1 47
+#define PIN_SEVENSEG_D2 46
+#define PIN_SEVENSEG_A  39
+#define PIN_SEVENSEG_B  40
+#define PIN_SEVENSEG_C  42
+#define PIN_SEVENSEG_D  44
+#define PIN_SEVENSEG_E  43
+#define PIN_SEVENSEG_F  41
+#define PIN_SEVENSEG_G  38
+#define PIN_SEVENSEG_DP 45
 
 #endif //ifndef CLIENT_PIN_DEFINES_H
