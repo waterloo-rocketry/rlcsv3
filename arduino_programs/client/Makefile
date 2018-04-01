@@ -15,13 +15,18 @@ INCLUDES += -I$(HARDWARE)/arduino/variants/mega
 INCLUDES += -I$(HARDWARE)/arduino/avr/cores/arduino
 INCLUDES += -I$(HARDWARE)/arduino/avr/variants/mega
 INCLUDES += -I$(HARDWARE)/../libraries/LiquidCrystal/src
+INCLUDES += -I$(HARDWARE)/../libraries/SD/src
+INCLUDES += -I$(HARDWARE)/arduino/avr/libraries/SPI/src
 
 #our source files are in the parent directory
 VPATH += ..
 #the arduino sources are in one of these two
 VPATH += $(HARDWARE)/arduino/avr/cores/arduino/
 VPATH += $(HARDWARE)/arduino/cores/arduino/
+VPATH += $(HARDWARE)/arduino/avr/libraries/SPI/src
 VPATH += $(HARDWARE)/../libraries/LiquidCrystal/src
+VPATH += $(HARDWARE)/../libraries/SD/src
+VPATH += $(HARDWARE)/../libraries/SD/src/utility
 
 #our source files
 objects = client_main.o
@@ -31,6 +36,7 @@ objects +=shared_types.o
 objects +=client_fsm.o
 objects +=SevSeg.o
 objects +=LCD.o
+objects +=sd_handler.o
 
 #header files - always recompile everything whenever a header changes
 headers =LCD.h
@@ -67,6 +73,12 @@ lib_objects += abi.o
 lib_objects += main.o
 lib_objects += new.o
 lib_objects +=LiquidCrystal.o
+lib_objects +=SPI.o
+lib_objects +=SD.o
+lib_objects +=SdFile.o
+lib_objects +=Sd2Card.o
+lib_objects +=SdVolume.o
+lib_objects +=File.o
 
 all:  client.hex
 

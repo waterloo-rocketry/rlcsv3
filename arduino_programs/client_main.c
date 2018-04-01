@@ -5,12 +5,17 @@
 #include "SevSeg.h"
 #include "LCD.h"
 #include "Arduino.h"
+#include "sd_handler.h"
 
 void setup(){
     lcd_init();
     start_SevSeg();
     radio_init();
     init_buttons();
+    sd_init();
+    if(sd_active){
+        rlcslog("start of operations");
+    }
 }
 
 extern unsigned long global_time_last_tower_state_req,

@@ -40,4 +40,7 @@
 #define PIN_SEVENSEG_G  38
 #define PIN_SEVENSEG_DP 45
 
+//pins for the SD card
+#define PIN_SD_SS 53
+
 #endif //ifndef CLIENT_PIN_DEFINES_H
