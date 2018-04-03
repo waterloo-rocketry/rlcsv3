@@ -1,6 +1,7 @@
 #include "LCD.h"
 #include "LiquidCrystal.h"
 #include "client_pin_defines.h"
+#include "sd_handler.h"
 //note this does not do formatting, so do that yourself
 void lcd_nprint(int x, int y, int length, char *str);
 void lcd_print(int x, int y, char c);
@@ -18,7 +19,7 @@ static LiquidCrystal lcd(
 
 void lcd_init()
 {
-    lcd.begin(40,4);
+    lcd.begin(20,4);
     //sets every single bit in last_daq to 0 (which should be the default)
     //TODO aidan can you check that this works? I'm not sure if arduino
     //supports memset
@@ -27,10 +28,10 @@ void lcd_init()
     //lcd.print should wrap properly
     //TODO aidan can you check that this
     //properly writes the defaults when called?
-    lcd.print("P1:000 P2:000 P3:000"
-              "I1:000 I2:000 M:0000"
-              "V1:CLS V2:CLS V3:CLS"
-              "AC:EXT              ");
+    lcd.print("P1:    P2:    P3:   "
+              "V1:    V2:    V3:   "
+              "I1:    I2:    M:    "
+              "AC:           LOG:NO");
 }
 
 /*  ----------------------
@@ -40,77 +41,64 @@ void lcd_init()
  *  |AC:EXT              |
  *  ----------------------
  */
-char* convert(uint16_t value) {
-  char tempx[3];
-  sprintf(tempx, "%u", value); 
-  return (tempx);
+
+void convert(uint16_t value, char* tempx) {
+  sprintf(tempx, "%03u", value); 
  }
  
-int moveCursor(uint16_t value) {
-  if(value < 10) {
-    return 2;
-  } else if (value < 100) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
 void lcd_update(daq_holder_t* daq){
+
     //pressures first
     if(daq->pressure1 > 999) daq->pressure1 = 999;
     if(daq->pressure2 > 999) daq->pressure1 = 999;
     if(daq->pressure3 > 999) daq->pressure1 = 999;
     
+    char temp[10];
     if(daq->pressure1 != last_daq.pressure1) {
         last_daq.pressure1 = daq->pressure1;
+        convert(daq->pressure1, temp);
         lcd.setCursor(3, 0);
-        lcd.write("000");
-        char temp1[] = "001";
-        lcd.setCursor(3+moveCursor(daq->pressure1), 0);
-        lcd.write(strcpy(temp1, convert(daq->pressure1)));     
+        lcd.write(temp);     
     }
 
     if(daq->pressure2 != last_daq.pressure2) {
         last_daq.pressure2 = daq->pressure2;
         lcd.setCursor(10, 0);
-        lcd.write("000");
-        char temp2[] = "001";
-        lcd.setCursor(10+moveCursor(daq->pressure2), 0);
-        lcd.write(strcpy(temp2, convert(daq->pressure2))); 
+        convert(daq->pressure2, temp);
+        lcd.write(temp); 
     }
     if(daq->pressure3 != last_daq.pressure3) {
         last_daq.pressure3 = daq->pressure3;
         lcd.setCursor(17, 0);
-        lcd.write("000");      
-        char temp3[] = "111";
-        lcd.setCursor(17+moveCursor(daq->pressure3), 0);
-        lcd.write(strcpy(temp3, convert(daq->pressure3))); 
+        convert(daq->pressure3, temp);
+        lcd.write(temp); 
     }
     if(daq->ign_pri_current != last_daq.ign_pri_current) {
-        last_daq.pressure2 = daq->pressure2;
+        last_daq.ign_pri_current = daq->ign_pri_current;
         lcd.setCursor(3, 1);
-        lcd.write("000");
-        char temp4[] = "001";
-        lcd.setCursor(3+moveCursor(daq->ign_pri_current), 1);
-        lcd.write(strcpy(temp4, convert(daq->ign_pri_current))); 
+        convert(daq->ign_pri_current, temp);
+        lcd.write(temp); 
     }
     if(daq->ign_sec_current != last_daq.ign_sec_current) {
-        last_daq.pressure2 = daq->pressure2;
+        last_daq.ign_sec_current = daq->ign_sec_current;
         lcd.setCursor(10, 1);
-        lcd.write("000");
-        char temp5[] = "001";
-        lcd.setCursor(10 + moveCursor(daq->ign_sec_current), 1);
-        lcd.write(strcpy(temp5, convert(daq->ign_sec_current))); 
+        convert(daq->ign_sec_current, temp);
+        lcd.write(temp); 
     }
     
     if(daq->rocket_mass != last_daq.rocket_mass) {
         lcd.setCursor(16, 1);
-        lcd.write("0000");
-        char temp6[] = "0001";
-        lcd.setCursor(17 + moveCursor(daq->rocket_mass), 1);
-        lcd.write(strcpy(temp6, convert(daq->rocket_mass)));        
+        lcd.setCursor(17, 1);
+        convert(daq->rocket_mass, temp);
+        lcd.write(temp);        
     }
+
+    //handle whether the SD card is working
+    if(sd_active()){
+        lcd.setCursor(18,3);
+        lcd.write(sd_buffer_dirty() ? "DI" : "OK");
+    }
+    /*
     lcd.setCursor(3, 2);
     lcd_update_valve(daq->rfill_lsw_open, daq->rfill_lsw_closed, daq->rfill_current_open, daq->rfill_current_close, "MCL", "MOP", "CLS", "OPN");//rfill
     lcd.setCursor(10, 2);
@@ -225,6 +213,7 @@ void lcd_update(daq_holder_t* daq){
         }
         break;
     }  
+    */
 }
 
 void lcd_update_valve(unsigned char state1, unsigned char state2, unsigned char state3, unsigned char state4, const char* msg1, const char* msg2, const char* msg3, const char* msg4) {
@@ -334,5 +323,5 @@ void lcd_update_valve(unsigned char state1, unsigned char state2, unsigned char 
         }
         break;
     }  
+ 
 }
-
