@@ -34,4 +34,16 @@
 #define PIN_LIMITSW_LINAC_EXT 35
 #define PIN_LIMITSW_LINAC_RET 34
 
+//pins for the seven segment display
+#define PIN_SEVENSEG_D1 47
+#define PIN_SEVENSEG_D2 46
+#define PIN_SEVENSEG_A  39
+#define PIN_SEVENSEG_B  40
+#define PIN_SEVENSEG_C  43
+#define PIN_SEVENSEG_D  45
+#define PIN_SEVENSEG_E  42
+#define PIN_SEVENSEG_F  41
+#define PIN_SEVENSEG_G  38
+#define PIN_SEVENSEG_DP 44
+
 #endif //ifndef TOWER_PIN_DEFINES_H

@@ -10,6 +10,7 @@ void setup() {
     //initialize all outputs
     init_outputs();
     radio_init();
+    start_SevSeg();
 }
 
 unsigned long time_last_contact = 0;
@@ -42,6 +43,4 @@ void loop() {
         setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg );
     }
     refresh_SevSeg();
-
-    delay(100);
 }

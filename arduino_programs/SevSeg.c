@@ -1,5 +1,9 @@
 #include "SevSeg.h"
+#ifdef CLIENT
 #include "client_pin_defines.h"
+#else
+#include "tower_pin_defines.h"
+#endif
 //#include <avr/io.h>
 #include<Stdint.h>
 #define BLANK_IDX 11 // Must match with 'digitCodeMap'
