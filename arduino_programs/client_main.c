@@ -20,8 +20,11 @@ void setup(){
 
 extern unsigned long global_time_last_tower_state_req,
         global_time_last_tower_daq_req,
-        global_radio_timeout;
-extern const unsigned long global_tower_update_interval, global_tower_daq_update_interval;
+        global_time_last_output_flush;
+extern const unsigned long global_tower_update_interval,
+       global_tower_daq_update_interval,
+       global_radio_timeout,
+       global_output_flush_interval;
 void loop(){
 	//check for inputs from radio
 	while(xbee_bytes_available()){
@@ -38,7 +41,7 @@ void loop(){
 	}
 
 	//update the LCD
-	//update_lcd(get_tower_daq());
+	lcd_update(get_tower_daq());
 
 	//check how long since we received tower state
 
@@ -51,14 +54,6 @@ void loop(){
 		client_request_daq();
 	}
 
-    //put the last received tower state on seven seg
-    /*
-    char to_put_on_sevseg;
-    if( convert_state_to_radio(get_tower_state(), &to_put_on_sevseg) ) {
-        setNewNum_SevSeg( (uint8_t) to_put_on_sevseg );
-    }
-    refresh_SevSeg();
-    */
 
     //if it's been longer than some defined amount of time,
     //turn on the red led to say that it's been too long
@@ -72,4 +67,14 @@ void loop(){
     convert_state_to_radio(get_button_state(), &button_for_sevseg);
     setNewNum_SevSeg(fromBase64(button_for_sevseg));
     refresh_SevSeg();
+
+    //log the current button state - doesn't write if no change
+    if(sd_active){
+       rlcslog_client_button(get_button_state());
+    }
+
+    //check how long it's been since we flushed the log
+    if(millis() - global_time_last_output_flush > global_output_flush_interval){
+        flush();
+    }
 }

@@ -3,7 +3,7 @@
 #include <SPI.h>
 #include <SD.h>
 
-#define SD_SERIAL_LOG
+//#define SD_SERIAL_LOG
 
 // set up variables using the SD utility library functions:
 File output_log;
@@ -93,12 +93,11 @@ void sd_init() {
 }
 
 uint8_t sd_active(){
-#ifdef SD_SERIAL_LOG
-    Serial.print("call to sd_active: ");
-    Serial.println(working);
-    Serial.flush();
-#endif
     return working;
+}
+
+uint8_t sd_buffer_dirty(){
+    return buffer_index != 0;
 }
 
 
@@ -117,20 +116,16 @@ void rlcslog(const char* message){
     sprintf(header,"\n%010lu -\t\t", millis());
     buffer_index += sprintf(buffer + buffer_index, header);
     buffer_index += sprintf(buffer + buffer_index, message);
-#ifdef SD_SERIAL_LOG
-    Serial.println("end of rlcslog function");
-    Serial.print(buffer);
-    Serial.println(" is the current buffer");
-    Serial.flush();
-#endif
 }
 
+extern unsigned long global_time_last_output_flush;
 void flush(){
+    global_time_last_output_flush = millis();
 #ifdef SD_SERIAL_LOG
     Serial.println("Call to flush");
     Serial.flush();
 #endif
-    if(!working) return;
+    if(!working || !buffer_index) return;
     output_log = SD.open(output_filename, FILE_WRITE);
     if(output_log){
         output_log.write(buffer);
@@ -140,3 +135,42 @@ void flush(){
         working = 0;
     }
 }
+
+#ifdef CLIENT
+#define BUTTON_HEADER "buttons - "
+static actuator_state_t last_buttons;
+void rlcslog_client_button(actuator_state_t* buttons){
+    if(!actuator_compare(&last_buttons, buttons)){
+        //buttons have changed - log it
+        char message[sizeof(BUTTON_HEADER) + 2] = BUTTON_HEADER;
+        convert_state_to_radio(buttons, message + sizeof(BUTTON_HEADER) - 1);
+        message[sizeof(BUTTON_HEADER) + 1] = 0;
+#ifdef SD_SERIAL_LOG
+        Serial.print("buttons changed: ");
+        Serial.println(message);
+        Serial.flush();
+#endif
+        rlcslog(message);
+        //copy what we just received to the last_buttons
+        memcpy(&last_buttons, buttons, sizeof(last_buttons));
+    }
+}
+
+#define TOWER_STATE_HEADER "tstate - "
+static char last_tower_state = 'A';
+void rlcslog_client_tower_state(char input){
+    if(last_tower_state != input){
+#ifdef SD_SERIAL_LOG
+        Serial.print("call to rlcslog_client_tower_state  (");
+        Serial.print(input,HEX);
+        Serial.print(TOWER_STATE_HEADER);
+        Serial.println(sizeof(TOWER_STATE_HEADER));
+#endif
+        last_tower_state = input;
+        char message[sizeof(TOWER_STATE_HEADER) + 1] = TOWER_STATE_HEADER;
+        message[sizeof(TOWER_STATE_HEADER)-1] = input;
+        message[sizeof(TOWER_STATE_HEADER)] = 0;
+        rlcslog(message);
+    }
+}
+#endif

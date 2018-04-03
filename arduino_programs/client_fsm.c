@@ -32,9 +32,13 @@ int valid_data_byte(char data) {
 }
 
 extern unsigned long global_time_last_tower_state_req;
-void handle_state_update(char* buffer, actuator_state_t* state){
+void handle_state_update(char* state_buffer, actuator_state_t* state){
+    //log the last received tower state
+    if(sd_active()){
+        rlcslog_client_tower_state(state_buffer[0]);
+    }
     //unpack buffer, copy values into state
-    convert_radio_to_state(state,*buffer);
+    convert_radio_to_state(state,*state_buffer);
     global_time_last_tower_state_req = millis_offset();
 }
 
