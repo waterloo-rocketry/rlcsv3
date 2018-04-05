@@ -7,6 +7,7 @@
 int checkBase64(void);
 int checkActuatorCompare(void);
 int randomActuatorCompare(void);
+int randomDaqCompare(void);
 
 int main(int argc, char* argv[]){
     srand(time(NULL));   // should only be called once
@@ -20,6 +21,10 @@ int main(int argc, char* argv[]){
     }
     if(checkActuatorCompare()) {
         printf("Error on test checkActuatorCompare(), bailing\n");
+        exit(1);
+    }
+    if(randomDaqCompare()){
+        printf("Error on test randomDaqCompare(), bailing\n");
         exit(1);
     }
     printf("test %s passed successfully\n", argv[0]);
@@ -91,6 +96,100 @@ int randomActuatorCompare(){
             printf("q.ignition_power: %i\n",q.ignition_power);
             printf("q.ignition_select: %i\n",q.ignition_select);
             printf("failure random actuator compare\n");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void generateRandomDaqState(daq_holder_t* s){
+    s->pressure1 = rand() % 999;
+    s->pressure2 = rand() % 999;
+    s->pressure3 = rand() % 999;
+    s->rocket_mass = rand() % 999;
+    s->ign_pri_current = rand() % 999;
+    s->ign_sec_current = rand() % 999;
+    s->rfill_current_open = rand() & 1;
+    s->rfill_current_close = rand() & 1;
+    s->rvent_current_open = rand() & 1;
+    s->rvent_current_close = rand() & 1;
+    s->linac_current_open = rand() & 1;
+    s->linac_current_close = rand() & 1;
+    s->rfill_lsw_open = rand() & 1;
+    s->rfill_lsw_closed = rand() & 1;
+    s->rvent_lsw_open = rand() & 1;
+    s->rvent_lsw_closed = rand() & 1;
+    s->linac_lsw_extend = rand() & 1;
+    s->linac_lsw_retract = rand() & 1;
+}
+
+int randomDaqCompare(){
+    daq_holder_t s,q;
+    daq_radio_value_t radio;
+    for(int i = 0; i < 100000; i++){
+        generateRandomDaqState(&s);
+        convert_daq_to_radio(&s, &radio);
+        convert_radio_to_daq(&q, &radio);
+        if(!(
+            s.pressure1 == q.pressure1 &&
+            s.pressure2 == q.pressure2 &&
+            s.pressure3 == q.pressure3 &&
+            s.rocket_mass == q.rocket_mass &&
+            s.ign_pri_current == q.ign_pri_current &&
+            s.ign_sec_current == q.ign_sec_current &&
+            s.rfill_current_open == q.rfill_current_open &&
+            s.rfill_current_close == q.rfill_current_close &&
+            s.rvent_current_open == q.rvent_current_open &&
+            s.rvent_current_close == q.rvent_current_close &&
+            s.linac_current_open == q.linac_current_open &&
+            s.linac_current_close == q.linac_current_close &&
+            s.rfill_lsw_open == q.rfill_lsw_open &&
+            s.rfill_lsw_closed == q.rfill_lsw_closed &&
+            s.rvent_lsw_open == q.rvent_lsw_open &&
+            s.rvent_lsw_closed == q.rvent_lsw_closed &&
+            s.linac_lsw_extend == q.linac_lsw_extend &&
+            s.linac_lsw_retract == q.linac_lsw_retract
+        )){
+            printf("s.pressure1: %u\n",s.pressure1);
+            printf("s.pressure2: %u\n",s.pressure2);
+            printf("s.pressure3: %u\n",s.pressure3);
+            printf("s.rocket_mass: %u\n",s.rocket_mass);
+            printf("s.ign_pri_current: %u\n",s.ign_pri_current);
+            printf("s.ign_sec_current: %u\n",s.ign_sec_current);
+            printf("s.rfill_current_open: %u\n",s.rfill_current_open);
+            printf("s.rfill_current_close: %u\n",s.rfill_current_close);
+            printf("s.rvent_current_open: %u\n",s.rvent_current_open);
+            printf("s.rvent_current_close: %u\n",s.rvent_current_close);
+            printf("s.linac_current_open: %u\n",s.linac_current_open);
+            printf("s.linac_current_close: %u\n",s.linac_current_close);
+            printf("s.rfill_lsw_open: %u\n",s.rfill_lsw_open);
+            printf("s.rfill_lsw_closed: %u\n",s.rfill_lsw_closed);
+            printf("s.rvent_lsw_open: %u\n",s.rvent_lsw_open);
+            printf("s.rvent_lsw_closed: %u\n",s.rvent_lsw_closed);
+            printf("s.linac_lsw_extend: %u\n",s.linac_lsw_extend);
+            printf("s.linac_lsw_retract: %u\n",s.linac_lsw_retract);
+
+            printf("q.pressure1: %u\n",q.pressure1);
+            printf("q.pressure2: %u\n",q.pressure2);
+            printf("q.pressure3: %u\n",q.pressure3);
+            printf("q.rocket_mass: %u\n",q.rocket_mass);
+            printf("q.ign_pri_current: %u\n",q.ign_pri_current);
+            printf("q.ign_sec_current: %u\n",q.ign_sec_current);
+            printf("q.rfill_current_open: %u\n",q.rfill_current_open);
+            printf("q.rfill_current_close: %u\n",q.rfill_current_close);
+            printf("q.rvent_current_open: %u\n",q.rvent_current_open);
+            printf("q.rvent_current_close: %u\n",q.rvent_current_close);
+            printf("q.linac_current_open: %u\n",q.linac_current_open);
+            printf("q.linac_current_close: %u\n",q.linac_current_close);
+            printf("q.rfill_lsw_open: %u\n",q.rfill_lsw_open);
+            printf("q.rfill_lsw_closed: %u\n",q.rfill_lsw_closed);
+            printf("q.rvent_lsw_open: %u\n",q.rvent_lsw_open);
+            printf("q.rvent_lsw_closed: %u\n",q.rvent_lsw_closed);
+            printf("q.linac_lsw_extend: %u\n",q.linac_lsw_extend);
+            printf("q.linac_lsw_retract: %u\n",q.linac_lsw_retract);
+
+
+            printf("failure random daq compare\n");
             return 1;
         }
     }

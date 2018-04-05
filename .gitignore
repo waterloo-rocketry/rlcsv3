@@ -12,5 +12,4 @@
 .DS_Store
 
 #test executables shouldn't be tracked
-shared_type_tests
-
+/arduino_programs/tests/shared_type_tests

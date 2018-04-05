@@ -106,89 +106,63 @@ int actuator_compare(actuator_state_t* s, actuator_state_t* q)
 //TODO I'm pretty sure you can decrease DAQ_RADIO_LEN from 17 to 10 by packing the three-digit values down
 //That involves some bit level fuckery, so I'll leave that as an exercise for later
 int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio){
-    //step 1: convert the first three bytes from radio to pressure1
-    daq->pressure1 = 0;
-    for(int i = 0; i < 3; i++) {
-        if( radio->data[i] < '0' || radio->data[i] > '9' )
-            //failure, first three bytes should be digits
-            return 0;
-        daq->pressure1 *= 10;
-        daq->pressure1 += radio->data[i] - '0';
-    }
-    //step 2, do the second three bytes into pressure2
-    daq->pressure2 = 0;
-    for(int i = 3; i < 6; i++) {
-        if( radio->data[i] < '0' || radio->data[i] > '9' )
-            //failure, these three bytes should be digits
-            return 0;
-        daq->pressure2 *= 10;
-        daq->pressure2 += radio->data[i] - '0';
-    }
-    //step 3, that same thing but for rocket_mass
-    daq->rocket_mass = 0;
-    for(int i = 6; i < 9; i++) {
-        if( radio->data[i] < '0' || radio->data[i] > '9' )
-            //failure, these three bytes should be digits
-            return 0;
-        daq->rocket_mass *= 10;
-        daq->rocket_mass += radio->data[i] - '0';
-    }
-    //step 4, now for ign_pri_current
-    daq->ign_pri_current = 0;
-    for(int i = 9; i < 12; i++) {
-        if( radio->data[i] < '0' || radio->data[i] > '9' )
-            //failure, these three bytes should be digits
-            return 0;
-        daq->ign_pri_current *= 10;
-        daq->ign_pri_current += radio->data[i] - '0';
-    }
-    //step 5: now for ign_sec_current
-    daq->ign_sec_current = 0;
-    for(int i = 12; i < 15; i++) {
-        if( radio->data[i] < '0' || radio->data[i] > '9' )
-            //failure, these three bytes should be digits
-            return 0;
-        daq->ign_sec_current *= 10;
-        daq->ign_sec_current += radio->data[i] - '0';
-    }
+    //step 1: convert the first two bytes from radio to pressure1
+    daq->pressure1 = fromBase64(radio->data[1]) << 5 |
+        fromBase64(radio->data[0]);
+    //step 2, do the second two bytes into pressure2
+    daq->pressure2 = fromBase64(radio->data[3]) << 5 |
+        fromBase64(radio->data[2]);
+    //step 3, do the third two bytes into pressure3
+    daq->pressure3 = fromBase64(radio->data[5]) << 5 |
+        fromBase64(radio->data[4]);
+    //step 4, that same thing but for rocket_mass
+    daq->rocket_mass = fromBase64(radio->data[7]) << 5|
+        fromBase64(radio->data[6]);
+    //step 5, now for ign_pri_current
+    daq->ign_pri_current = fromBase64(radio->data[9]) << 5 |
+        fromBase64(radio->data[8]);
+    //step 6: now for ign_sec_current
+    daq->ign_sec_current = fromBase64(radio->data[11]) << 5 |
+        fromBase64(radio->data[10]);
     //step 6: now let's do some binary stuff. convert byte 15 from base64
-    char first_bitfield = fromBase64(radio->data[15]);
-    char second_bitfield = fromBase64(radio->data[16]);
+    char first_bitfield = fromBase64(radio->data[12]);
+    char second_bitfield = fromBase64(radio->data[13]);
     if (first_bitfield < 0 || second_bitfield < 0)
         return 0; //we received an incorrect state
-    daq->rfill_current_open  =   first_bitfield & 32;
-    daq->rfill_current_close =   first_bitfield & 16;
-    daq->rvent_current_open  =   first_bitfield & 8;
-    daq->rvent_current_close =   first_bitfield & 4;
-    daq->linac_current_open  =   first_bitfield & 2;
-    daq->linac_current_close =   first_bitfield & 1;
+    daq->rfill_current_open  =   (first_bitfield & 32) != 0;
+    daq->rfill_current_close =   (first_bitfield & 16) != 0;
+    daq->rvent_current_open  =   (first_bitfield & 8) != 0;
+    daq->rvent_current_close =   (first_bitfield & 4) != 0;
+    daq->linac_current_open  =   (first_bitfield & 2) != 0;
+    daq->linac_current_close =   (first_bitfield & 1) != 0;
 
-    daq->rfill_lsw_open      =   second_bitfield & 32;
-    daq->rfill_lsw_closed    =   second_bitfield & 16;
-    daq->rvent_lsw_open      =   second_bitfield & 8;
-    daq->rvent_lsw_closed    =   second_bitfield & 4;
-    daq->linac_lsw_extend    =   second_bitfield & 2;
-    daq->linac_lsw_retract   =   second_bitfield & 1;
+    daq->rfill_lsw_open      =   (second_bitfield & 32) != 0;
+    daq->rfill_lsw_closed    =   (second_bitfield & 16) != 0;
+    daq->rvent_lsw_open      =   (second_bitfield & 8) != 0;
+    daq->rvent_lsw_closed    =   (second_bitfield & 4) != 0;
+    daq->linac_lsw_extend    =   (second_bitfield & 2) != 0;
+    daq->linac_lsw_retract   =   (second_bitfield & 1) != 0;
 
     return 1;
 }
 
 //this does not check array length, so please pay attention to what you pass this
-void convert_uint16_to_3dig(uint16_t input, char* output){
+void convert_uint16_to_2dig(uint16_t input, char* output){
     if (input > 999)
         input = 999;
-    output[0] = (input / 100) + '0';
-    output[1] = ((input / 10) % 10) + '0';
-    output[2] = (input % 10) + '0';
+    //it's impossible for input to be more than 10 bits
+    output[0] = toBase64(input & 0b11111);
+    output[1] = toBase64((input >> 5) & 0b11111);
 }
 
 int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio){
     //this probably isn't safe, TODO, do some sanity checking here
-    convert_uint16_to_3dig(daq->pressure1, radio->data);
-    convert_uint16_to_3dig(daq->pressure2, radio->data + 3);
-    convert_uint16_to_3dig(daq->rocket_mass, radio->data + 6);
-    convert_uint16_to_3dig(daq->ign_pri_current, radio->data + 9);
-    convert_uint16_to_3dig(daq->ign_sec_current, radio->data + 12);
+    convert_uint16_to_2dig(daq->pressure1, radio->data);
+    convert_uint16_to_2dig(daq->pressure2, radio->data + 2);
+    convert_uint16_to_2dig(daq->pressure3, radio->data + 4);
+    convert_uint16_to_2dig(daq->rocket_mass, radio->data + 6);
+    convert_uint16_to_2dig(daq->ign_pri_current, radio->data + 8);
+    convert_uint16_to_2dig(daq->ign_sec_current, radio->data + 10);
 
     char first_bitfield = 0, second_bitfield = 0;
     first_bitfield += daq->rfill_current_open ? 32 : 0;
@@ -209,7 +183,7 @@ int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio){
     second_bitfield = toBase64(second_bitfield);
     if(first_bitfield < 0 || second_bitfield < 0)
         return 0;
-    radio->data[15] = first_bitfield;
-    radio->data[16] = second_bitfield;
+    radio->data[12] = first_bitfield;
+    radio->data[13] = second_bitfield;
     return 1;
 }

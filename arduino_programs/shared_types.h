@@ -52,7 +52,7 @@ typedef struct {
 
 } daq_holder_t;
 
-#define DAQ_RADIO_LEN 17
+#define DAQ_RADIO_LEN 14
 typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;
