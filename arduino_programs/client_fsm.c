@@ -2,6 +2,7 @@
 #include "shared_types.h"
 #include "radio_comms.h"
 #include "Arduino.h"
+#include "sd_handler.h"
 #include "client_globals.h"
 
 //we need to receive ack requests, we need to receive state updates,
@@ -45,6 +46,13 @@ void handle_state_update(char* state_buffer, actuator_state_t* state){
 extern unsigned long global_time_last_tower_daq_req;
 void handle_daq_update(char* buffer, daq_holder_t* daq){
     //unpack buffer, copy values into daq
+    daq_radio_value_t s;
+    for(int i = 0; i < DAQ_RADIO_LEN; i++){
+        if(fromBase64(buffer[i]) < 0)
+            return;
+    }
+    strncpy(s.data, buffer, DAQ_RADIO_LEN);
+    convert_radio_to_daq(daq, &s);
     global_time_last_tower_daq_req = millis_offset();
 }
 
