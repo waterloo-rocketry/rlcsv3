@@ -1,11 +1,6 @@
 #ifndef CLIENT_PIN_DEFINES_H
 #define CLIENT_PIN_DEFINES_H
 
-//right now the pins are assigned arbitrary numbers
-//TODO, assign the actual pin numbers to these
-//(this can't be done until we've actually got the thing
-//layed out)
-
 //pins for the switches
 #define PIN_SWITCH_REMOTEFILL    33
 #define PIN_SWITCH_REMOTEVENT    35

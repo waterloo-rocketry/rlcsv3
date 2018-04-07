@@ -35,6 +35,7 @@ void apply_state(){
 			digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH);
 		}
 	}
+
 	if(global_requested_state.remote_vent_valve != global_current_state.remote_vent_valve){
 		//we need to change the remote_vent_valve to what requested wants
 		global_current_state.remote_vent_valve = global_requested_state.remote_vent_valve;
@@ -56,6 +57,10 @@ void apply_state(){
 		//Likely to involve a radio link to the rocket maybe?
 	}
 
+    if(global_requested_state.injector_valve != global_current_state.injector_valve){
+        global_current_state.injector_valve = global_requested_state.injector_valve;
+    }
+
 	if(global_requested_state.linear_actuator != global_current_state.linear_actuator){
 		//we need to change the linear_actuator to what requested wants
 		global_current_state.linear_actuator = global_requested_state.linear_actuator;
@@ -69,6 +74,7 @@ void apply_state(){
 			digitalWrite((uint8_t) PIN_LINACTUATOR_SELECT, HIGH);
 		}
 	}
+
 	if(global_requested_state.ignition_power != global_current_state.ignition_power){
 		//we need to change the ignition_power to what requested wants
 		global_current_state.ignition_power = global_requested_state.ignition_power;
@@ -80,6 +86,7 @@ void apply_state(){
 			digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
 		}
 	}
+
 	if(global_requested_state.ignition_select != global_current_state.ignition_select){
 		//we need to change the ignition_select to what requested wants
 		global_current_state.ignition_select = global_requested_state.ignition_select;

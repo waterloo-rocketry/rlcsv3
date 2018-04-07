@@ -21,13 +21,9 @@ void lcd_init()
 {
     lcd.begin(20,4);
     //sets every single bit in last_daq to 0 (which should be the default)
-    //TODO aidan can you check that this works? I'm not sure if arduino
-    //supports memset
     memset(&last_daq, 0, sizeof(last_daq));
 
     //lcd.print should wrap properly
-    //TODO aidan can you check that this
-    //properly writes the defaults when called?
     lcd.print("P1:    P2:    P3:   "
               "V1:    V2:    V3:   "
               "I1:    I2:    M:    "
