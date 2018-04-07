@@ -1,6 +1,7 @@
 #include "tower_pin_defines.h"
 #include "tower_fsm.h"
 #include "tower_globals.h"
+#include "tower_daq.h"
 #include "radio_comms.h"
 #include "shared_types.h"
 #include "SevSeg.h"
@@ -23,8 +24,9 @@ void loop() {
         //update FSM, which will deal with command processing
         push_radio_char(xbee_get_byte());
     }
+
     //get all the daq updates
-    //this here's a TODO
+    read_daq_pins();
     
     //check time last contact
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {

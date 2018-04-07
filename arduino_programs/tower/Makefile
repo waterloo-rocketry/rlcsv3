@@ -24,6 +24,7 @@ VPATH += $(HARDWARE)/arduino/cores/arduino/
 #our source files
 objects  =tower_globals.o
 objects +=tower_main.o
+objects +=tower_daq.o
 objects +=radio_comms.o
 objects +=shared_types.o
 objects +=tower_fsm.o

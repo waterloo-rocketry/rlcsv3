@@ -1,4 +1,5 @@
 #include "tower_globals.h"
+#include "tower_daq.h"
 #include "tower_pin_defines.h"
 #include "Arduino.h"
 
@@ -14,6 +15,7 @@ actuator_state_t* get_current_state(){
 }
 
 daq_holder_t* get_global_current_daq(){
+    compute_daq_values(&global_current_daq);
 	return &global_current_daq;
 }
 
