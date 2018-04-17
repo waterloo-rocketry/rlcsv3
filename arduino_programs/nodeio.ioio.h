@@ -27,6 +27,7 @@ extern "C" {
  */
 
 #define NUM_THERMISTORS 4
+#define SENSOR_DATA_LENGTH (2+(NUM_THERMISTORS))
 typedef struct{
     uint16_t pressure;
     uint8_t valve_limitswitch_open;
@@ -56,6 +57,7 @@ uint8_t nio_current_valve_state();
 //or NODE_GROUND defined (and only one of these). This changes how different
 //functions are defined
 
+#ifndef NODE_TEST //test file gets special treatment
 //Yes, I know it's ugly. Yes, there's probably a better way. No, I'm
 //not changing it.
 #if !defined(NODE_INJ) && !defined(NODE_VENT) && !defined(NODE_GROUND)
@@ -82,6 +84,13 @@ uint8_t nio_current_valve_state();
 #endif
 #define NODEIO_IOIO_DESIGNATOR
 #endif
+
+#else
+//need to delcare these here so they're generated as c symbols,
+//not c++ symbols. Only matters while testing
+int pack_sensor_data(char *,sensor_data_t*);
+int unpack_sensor_data(char*, sensor_data_t*, sensor_data_t*);
+#endif //ifndef NODE_TEST
 
 #ifdef __cplusplus
 }

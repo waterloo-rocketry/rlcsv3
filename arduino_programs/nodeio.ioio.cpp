@@ -43,7 +43,8 @@ enum actuator_state{
 #ifdef NODE_VENT
 //if the rocket doesn't know what to do, it should _open_ the vent valve
 actuator_state current_state = VALVE_OPEN;
-#elif defined(NODE_INJ)
+#elif defined(NODE_INJ) || defined(NODE_TEST)
+
 //there's no good default here. If the system resets during launch,
 //we need the valve open. if it resets during fill, that valve needs
 //to be closed. So just do nothing at startup
@@ -324,10 +325,11 @@ int pack_sensor_data(char *output, sensor_data_t* data){
 
 //returns 1 on success. This function doesn't do anything,
 //so please don't call it
-int unpack_sensor_data(char *input){
+int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
     //take first byte of input, convert from Base 64,
     //and 
 
+    vent->pressure = inj->pressure = 993;
     //TODO, fix this
     return 4;
 }
