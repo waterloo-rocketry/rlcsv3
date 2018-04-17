@@ -62,6 +62,8 @@ void slave_request_ack(actuator_state s);
 //stuff that only applies to master, in this case RLCS tower side
 //it currently uses the Serial1 interface
 #define RADIO_UART Serial1
+char sensor_buffer[SENSOR_DATA_LENGTH + 1];
+int sensor_buffer_index = 0;
 #endif //ifndef NODE_GROUND
 
 
@@ -139,27 +141,81 @@ void nio_refresh(){
                 }
 #endif
                 break;
+
+            //the code for both of these cases is nigh on identical to the
+            //code for the vent valve section. Just with NODE_INJ subbed in
+            //so read thos comments if you want. Is this DRY? No. No it is
+            //not.
             case NIO_INJ_OPEN:
-                break;
-            case NIO_INJ_CLOSE:
-                break;
-            case NIO_ACK_HEADER:
 #ifdef NODE_GROUND
-#elif defined(NODE_VENT)
-                current_fsm_state = STATE_ACK_RECEIVE;
+#elif defined(NODE_INJ)
+                if(current_fsm_state == STATE_ACK_RECEIVE){
+                    //we asked them to ack this, and they are
+                    if(current_requested_state == VALVE_OPEN){
+                        apply_state(VALVE_OPEN);
+                    } else {
+                        current_requested_state = current_state;
+                    }
+                    current_fsm_state = STATE_NONE;
+                } else {
+                    current_requested_state = VALVE_OPEN;
+                }
 #endif
                 break;
+            case NIO_INJ_CLOSE:
+#ifdef NODE_GROUND
+#elif defined(NODE_INJ)
+                if(current_fsm_state == STATE_ACK_RECEIVE){
+                    if(current_requested_state == VALVE_CLOSED){
+                        apply_state(VALVE_CLOSED);
+                    } else {
+                        current_requested_state = current_state;
+                    }
+                    current_fsm_state = STATE_NONE;
+                } else {
+                    current_requested_state = VALVE_CLOSED;
+                }
+#endif
+                break;
+            case NIO_ACK_HEADER:
+                //the next byte _should_ be whatever is wanting
+                //an acknowledgement, so this just needs to
+                //set the FSM state so we're ready for the next
+                current_fsm_state = STATE_ACK_RECEIVE;
+                break;
             case NIO_NACK_HEADER:
+                //this is the tower refusing an ack. So assume
+                //the last unacknowledged command we received
+                //was mangled and wrong. The tower should never
+                //receive this packet.
 #if defined(NODE_VENT) || defined(NODE_INJ)
                 current_fsm_state = STATE_NONE;
                 current_requested_state = current_state;
 #endif
                 break;
             case NIO_SENSOR_HEADER:
-                //we'll deal with this later
+#ifdef NODE_GROUND
+                //one of the slaves is sending a sensor
+                //data packet. The next few bytes should be 
+                //sensor data. So shove those into a buffer
+                //and deal with them later.
                 current_fsm_state = STATE_SENSOR_RECEIVE;
+                sensor_buffer_index = 0;
+#endif
                 break;
             default:
+#ifdef NODE_GROUND
+                if(current_fsm_state == STATE_SENSOR_RECEIVE){
+                    char temp = fromBase64(x);
+                    if(temp < 0) //it's not a base64 number
+                        break;
+                    sensor_buffer[sensor_buffer_index++] = temp;
+                    if(sensor_buffer_index == SENSOR_DATA_LENGTH){
+                        //we've received a full data update. Process that.
+                        unpack_sensor_data(sensor_buffer);
+                    }
+                }
+#endif
                 break;
         }
         if(current_fsm_state == STATE_SENSOR_RECEIVE){
@@ -268,7 +324,7 @@ int pack_sensor_data(char *output, sensor_data_t* data){
 
 //returns 1 on success. This function doesn't do anything,
 //so please don't call it
-int unpack_sensor_data(char *input, sensor_data_t* output){
+int unpack_sensor_data(char *input){
     //take first byte of input, convert from Base 64,
     //and 
 
