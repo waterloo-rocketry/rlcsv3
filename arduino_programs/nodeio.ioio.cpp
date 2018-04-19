@@ -1,5 +1,8 @@
 #include "nodeio.ioio.h"
 #include "Arduino.h"
+#ifdef NODE_TEST
+#include <stdlib.h>
+#endif
 
 //packets that can be sent over the radio
 //their meanings are better understood if
@@ -284,8 +287,9 @@ char toBase64(char binary){
     return binary;
 }
 
-//returns 1 on success. If it doesn't return 1, then
-//we for some reason couldn't generate a proper output
+//returns nonzero on success (1 in vent section, -1 in injector section)
+//the difference is for testing.
+// If it returns 0, we for some reason couldn't generate a proper output
 //radio string, so don't send output.
 int pack_sensor_data(char *output, sensor_data_t* data){
     //we're packing this into a base 64 character string,
@@ -293,13 +297,19 @@ int pack_sensor_data(char *output, sensor_data_t* data){
     //shove ID information, the two limit switches, and first 3 bits
     //of pressure into the first char
     char temp;
+    int ret_success;
 #ifdef NODE_INJ
     //injector section puts a 0 in leading bit
     temp = 0;
-#endif
-#ifdef NODE_VENT
+    ret_success = -1;
+#elif defined(NODE_VENT)
     //vent valve puts a 1 in the leading bit
     temp = 0b100000;
+    ret_success = 1;
+#elif defined(NODE_TEST)
+    //decide which section we are randomly
+    temp = ((rand() & 1) << 5);
+    ret_success = temp ? 1 : -1;
 #endif
     //valve limitswitch open gets the 4th bit
     temp |= ((data->valve_limitswitch_open != 0) << 4);
@@ -307,9 +317,10 @@ int pack_sensor_data(char *output, sensor_data_t* data){
     temp |= ((data->valve_limitswitch_closed != 0) << 3);
     //top three bits of pressure value into temp
     uint16_t pressure_holder = data->pressure;
-    //turn pressure into a 9 bit number by left shiting and
+    //turn pressure into a 9 bit number by right shiting and
     //taking only those 9 bits (if it was more than a 10 bit number,
     //how the hell did you get so much precision out of a 10bit adc?)
+
     pressure_holder = ((pressure_holder >> 1) & 0x1FF);
     temp |= ((pressure_holder >> 6) & 0b111);
     //convert temp to base 64, pu into first char of output
@@ -318,20 +329,50 @@ int pack_sensor_data(char *output, sensor_data_t* data){
     //put bottom 6 bits of pressure into output[1]
     output[1] = toBase64(pressure_holder & 0x3F);
 
-    //TODO, if we want thermistors, that'll have to go here
+    //put thermistor data here
+    for(int i = 0; i < NUM_THERMISTORS; i++){
+        output[i+2] = toBase64(data->thermistor_data[i] >> 4);
+    }
 
-    return 1;
+    return ret_success;
 }
 
-//returns 1 on success. This function doesn't do anything,
-//so please don't call it
+//returns nonzero on success.
+//returning 1 means that the packet came from the vent section, and
+//the output was written to *vent
+//returning -1 means that the packet came from the injector section, and
+//the output was written to *inj
 int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
     //take first byte of input, convert from Base 64,
-    //and 
+    char decoded[SENSOR_DATA_LENGTH];
+    for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
+        if( (decoded[i] = fromBase64(input[i])) < 0 ){
+            //fromBase64 returns -1 on failure. If it fails, we fail
+            return 0;
+        }
+    //and then the bit order is
+    //5-> 0 if injector section, 1 if the vent section
+    bool out_flag; //if true, we output to the vent sensor_data_t. Else inj.
+    out_flag = ((decoded[0] & (1 << 5)) ? true : false);
+    sensor_data_t* output = out_flag ? vent : inj;
+    //4-> valve_limitswitch_open
+    output->valve_limitswitch_open = ((decoded[0] & (1<<4)) != 0);
+    //3-> valve_limitswitch_closed
+    output->valve_limitswitch_closed=((decoded[0] & (1<<3)) != 0);
+    //2:0-> bits 9:7 of pressure
+    output->pressure = 0;
+    output->pressure |= ((decoded[0] & 0b111) << 7);
 
-    vent->pressure = inj->pressure = 993;
-    //TODO, fix this
-    return 4;
+    //second byte, when out of base 64, has bits 6:1 of pressure
+    output->pressure |= (decoded[1] << 1);
+
+    //remaining bytes are bytes 9:4 of thermistor data
+    for(int i = 0; i < NUM_THERMISTORS; i++)
+        output->thermistor_data[i] = (decoded[i+2] << 4);
+
+    if(out_flag)
+        return 1;
+    return -1;
 }
 
 //TODO, this

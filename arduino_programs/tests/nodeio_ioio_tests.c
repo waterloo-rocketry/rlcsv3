@@ -28,12 +28,47 @@ void generateRandomSensorState(sensor_data_t* s){
 int unpack_sensor_data(char *, sensor_data_t*, sensor_data_t*);
 int pack_sensor_data(char*, sensor_data_t*);
 int randomSensorCompare(){
-    sensor_data_t s,q;
+    sensor_data_t s;
+    sensor_data_t q;
+    //we randomly select a node, if this is 1 it's vent,
+    //otherwise we selected injector
+    int node = 0;
+    //this is the node that unpack_sensor_data returned
+    int other_node;
     char c[SENSOR_DATA_LENGTH];
     for(int i = 0; i < 100000; i++){
         generateRandomSensorState(&s);
-        pack_sensor_data(c, &s);
-        unpack_sensor_data(c, &q, &q);
+        if(!(node = pack_sensor_data(c, &s))){
+            printf("failure in pack_sensor_data\n");
+            return 1;
+        }
+        if(node == 1){
+            //we generated a vent sensor packet. So test that
+            if(!(other_node = unpack_sensor_data(c, &q, NULL))){
+                printf("failure in unpack_sensor_data\n");
+                return 1;
+            }
+        } else if (node == -1) {
+            //we generated an injector sensor packet. So test that
+            if(!(other_node = unpack_sensor_data(c, NULL, &q))){
+                printf("failure in unpack_sensor_data\n");
+                return 1;
+            }
+        } else {
+            //this should never happen
+            printf("wtf pack_sensor data returned an invalid value\n");
+            return 1;
+        }
+        if(node != other_node){
+            printf("failure in determining sensor data source\n");
+            printf("generated data was from %s\n", (node == 1) ? "VENT" : "INJ");
+            printf("recovered data was from %s\n", (other_node == 1)? "VENT" : "INJ");
+            printf("data string was: ");
+            for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
+                printf("%c", c[i]);
+            printf("\n");
+            return 1;
+        }
         if(q.pressure != s.pressure){
             printf("q.pressure: %u, s.pressure: %u\n", q.pressure, s.pressure);
             return 1;
