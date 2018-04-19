@@ -375,8 +375,23 @@ int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
     return -1;
 }
 
-//TODO, this
+//this converts your sensor data into a proper radio format and sends it
+//to the tower over the xbee. Please call this function every 2 or 3 seconds.
 void nio_send_sensor_data(sensor_data_t* data){
+    //temporary string to hold the outputted data
+    char radio_output[SENSOR_DATA_LENGTH];
+    //we believe in lots of checks and balances
+    if(!pack_sensor_data(radio_output, data))
+        return;
+    //at this point, assume string is ok to put over the wire
+    //write the header character
+    RADIO_UART.write(NIO_SENSOR_HEADER);
+    //loop through output characters. we can't just print it because
+    //it's not null terminated. Aren't c-strings fun kids?
+    for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
+        RADIO_UART.write(radio_output[i]);
+
+    //and we're done
 }
 
 //returns 1 if open, 0 if other.
