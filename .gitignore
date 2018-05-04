@@ -11,6 +11,10 @@
 #My mac keeps putting these files everywhere
 .DS_Store
 
+#now that we have LaTeX files, ignore all intermediates
+*.aux
+*.log
+
 #test executables shouldn't be tracked
 /arduino_programs/tests/shared_type_tests
 /arduino_programs/tests/nodeio_ioio_tests
