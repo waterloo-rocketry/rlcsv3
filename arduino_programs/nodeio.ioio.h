@@ -35,6 +35,9 @@ typedef struct{
     uint8_t thermistor_data[NUM_THERMISTORS];
 } sensor_data_t;
 
+//amount of time between driving unused mosfets low and used mosfets high
+//this is what for not shorting 50 amps through your board
+#define MOSFET_SWITCH_TIME_MS 150
 //initialization function. Sets up Serial communication, and actuator pins
 void nio_init(int pin_valve_closed, int pin_valve_opened);
 
