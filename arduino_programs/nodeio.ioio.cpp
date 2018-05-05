@@ -410,10 +410,12 @@ void apply_state(actuator_state s){
     if(s == VALVE_OPEN){
         //write high to the "open pin", and low to the "close" pin
         digitalWrite(pin_close, LOW);
+        delay(MOSFET_SWITCH_TIME_MS);
         digitalWrite(pin_open, HIGH);
     } else if(s == VALVE_CLOSED){
         //the opposite of that one
         digitalWrite(pin_open, LOW);
+        delay(MOSFET_SWITCH_TIME_MS);
         digitalWrite(pin_close, HIGH);
     } else {
         //write them both low. TODO alex confirm that this is how
