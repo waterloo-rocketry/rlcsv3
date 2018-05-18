@@ -274,12 +274,20 @@ to 5v, which can be used by the microcontroller.
 \caption{Tower side block-level diagram}
 \end{figure}
 
+The tower side box controls external actuators through relay boards, which are
+cutomed designed PCBs that feature a DPDT relay, for changing direction of valves
+or swapping between ignition circuits, and an SPST relay, for interrupting current
+to the actuator when it is set to off. The boards also feature current sensors on
+all actuator outputs, and logic level shifting for the limit switch signals coming
+off of the valve, dropping the signal from 12 volts to 5, which the microcontroller
+can read. The batteries in this box (as well as all other batteries the system uses)
+are fused to prevent a fire in the event of power ever being shorted to ground.
 % end Diagrams -- }}}
 
 % begin Functionality -- {{{
-\section{Functionality}
+%\section{Functionality}
 
-This system works by a bunch of black magic fuckery.
+%This system works by a bunch of black magic fuckery.
 % end Functionality -- }}}
 
 % begin Tradeoffs -- {{{
@@ -488,68 +496,5 @@ The order of operations:
 
 End of Operations.
 % end Checklists -- }}}
-
-% begin failure analysis -- {{{
-\section{DFMEA}
-%Let's look at every single component in our ignition system and beat this horse
-%until it's \_definitely\_ dead. And then keep going for a while
-%Components:
-%Ignition cable
-%    If the ignition cable fails short, no current will be able to pass through
-%the nichrome ignition cables, and our ignition system will not be able to
-%actuate.
-%
-%Power signal wire
-%    If the power signal wire fails open (breaks), the power relay mosfet will
-%not conduct, since its gate is pulled down by a mosfet pulldown resistor. This
-%will make us unable to actuate the relay, which is safer than the relay
-%actuating without our signal
-%
-%Direction signal wire
-%    See power signal wire. Same considerations apply.
-%
-%Relay control mosfets
-%    If a relay control mosfet fails short (conducting), the relay will
-%constantly be closed, and this will be discovered during our prefill electrical
-%checks. If it fails short between the time we perform prefill electrical checks
-%and launch time, we'll be fine, since both relays are required to close before
-%current is sent to the rocket
-%
-%Current sensing shunt resistor
-%    If the current sensing shunt resistor fails open, no current will be sent to
-%our ignition coils, and ignition will not actuate. If if fails closed, the
-%operator will not see any current reading on the display, and may not realize
-%the ignition has actuate. In this case, the operator would not open the injector
-%valve, and our fuel grain would not ignite.
-%
-%Current sensing amplifier
-%    If the current sensing amplifier fails shorting the signal input to ground,
-%no current will be sent to the ignition coils. If it fails in another way, the
-%operator will not see a current reading on the display and will not continue
-%with launch proceudres.
-%
-%Current sensing power rail bypass capacitor
-%    If these capacitors fail, they won't immediately harm the system, but may
-%shorten the life of the current sensing amplifiers. Since those can die without
-%compromising the safety of our system, we aren't worried about them failing.
-%
-%Fuse
-%    The fuse is designed to fail open if too much current is drawn. If it fails
-%open before ignition, no current will be sent ot our ignition coils, and nothing
-%unsafe will happen.
-%
-%Flyback Diodes
-%    If the flyback diodes fail short, no current will go through the 
-%
-%Limit switch resistors
-%
-%Mosfet pulldown resistors
-%
-%Mosfet gate series resistors
-%
-%Direction Relay (DPDT)
-%
-%Power Relay (SPST)
-% end failure analysis -- }}}
 
 \end{document}
