@@ -112,6 +112,38 @@ launch our rocket.
 
 % begin Design Constraints -- {{{
 \section{Design Constraints}
+The system was designed to satisfy the following constraints:
+\begin{enumerate}
+    \item The system must be operated from a minimum safe distance of 1km
+    Once RLCS takes control of the launch operations, no human intervention
+    should be required (in any possible error state) that requires a human
+    to approach the system. In event of total failure, the system must safe
+    all rocket components so that personnel can approach the rocket without
+    placing themselves in any danger
+    \item The system should integrate with our preexisting fill system, and control the following actuators
+    \begin{itemize}
+        \item A ball valve that connects to the supply cylinder (Remote Fill valve)
+        \item A ball valve that opens the fill line to atmosphere to vent it (Remote Vent valve)
+        \item A linear actuator that pulls a pin to disconnect the fill line from the rocket's oxidizer tank
+        \item Two nichrome coils that are used (in conjunction with the Injector valve) to actuate ignition
+        \item A ball valve that connects the rocket's oxidizer tank to the combustion chamber,
+           allowing the propellant to ignite (Injector valve)
+        \item A ball valve that connects the rocket's oxidizer tank to atmosphere, allowing us to vent
+           the tank in event of a launch abort
+    \end{itemize}
+    The latter two valves are actuated by a separate system (Flight Instrumentation), but they are
+    under the control of RLCS, which is why they are mentioned here
+    \item The system must use sensors to collect the following data, and report that data back to the operator
+    \begin{itemize}
+        \item The current state of all valves (open/closed)
+        \item The amount of current flowing through the nichrome coils
+        \item The mass of the rocket, loaded on the rail
+        \item The pressure of oxidizer in the rocket's oxidizer tank
+        \item The pressure of oxidizer in the fill lines
+    \end{itemize}
+    In addition to showing this information to the user, the system should also log all of this
+    data so that it can be used for post-flight analysis
+\end{enumerate}
 % end Design Constraints -- }}}
 
 % begin Diagrams -- {{{
