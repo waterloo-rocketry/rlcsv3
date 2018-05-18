@@ -153,76 +153,26 @@ launch our rocket.
 
     \draw[->](IGN) -| (kismet);
 
-%--{{{
-%\draw
-	% Drawing the blocks of first filter :
-	%node at (0,0)[right=-3mm]{\Large \textopenbullet}
-	%node [input, name=input1] {} 
-	%node [sum, right of=input1] (suma1) {\suma}
-	%node [block, right of=suma1] (inte1) {\inte}
-         %node at (6.8,0)[block] (Q1) {}
-         %node [block, below of=inte1] (ret1) {};
-    % Joining blocks. 
-    % Commands \draw with options like [->] must be written individually
-	%\draw[->](input1) -- node {$X(Z)$}(suma1);
- 	%\draw[->](suma1) -- node {} (inte1);
-	%\draw[->](inte1) -- node {} (Q1);
-	%\draw[->](ret1) -| node[near end]{} (suma1);
-	% Adder
-%\draw
-	%node at (5.4,-4) [sum, name=suma2] {\suma}
-    	% Second stage of filter 
-	%node at  (1,-6) [sum, name=suma3] {\suma}
-	%node [block, right of=suma3] (inte2) {\inte}
-	%node [sum, right of=inte2] (suma4) {\suma}
-	%node [block, right of=suma4] (inte3) {\inte}
-	%node [block, right of=inte3] (Q2) {}
-	%node at (9,-8) [block, name=ret2] {}
-%;
-	% Joining the blocks of second filter
-	%\draw[->] (suma3) -- node {} (inte2);
-	%\draw[->] (inte2) -- node {} (suma4);
-	%\draw[->] (suma4) -- node {} (inte3);
-	%\draw[->] (inte3) -- node {} (Q2);
-	%\draw[->] (ret2) -| (suma3);
-	%\draw[->] (ret2) -| (suma4);
-         % Third stage of filter:
-	% Defining nodes:
-%\draw
-	%node at (11.5, 0) [sum, name=suma5]{\suma}
-	%node [output, right of=suma5]{}
-	%node [block, below of=suma5] (deriv1){\derv}
-	%node [output, right of=suma5] (sal2){}
-%;
-	% Joining the blocks:
-	%\draw[->] (suma2) -| node {}(suma3);
-	%\draw[->] (Q1) -- (8,0) |- node {}(ret1);
-	%\draw[->] (8,0) |- (suma2);
-	%\draw[->] (5.4,0) -- (suma2);
-	%\draw[->] (Q1) -- node {}(suma5);
-	%\draw[->] (deriv1) -- node {}(suma5);
-	%\draw[->] (Q2) -| node {}(deriv1);
-    	%\draw[<->] (ret2) -| node {}(deriv1);
-    	%\draw[->] (suma5) -- node {$Y(Z)$}(sal2);
-    	% Drawing nodes with \textbullet
-%\draw
-	%node at (8,0) {\textbullet} 
-	%node at (8,-2){\textbullet}
-	%node at (5.4,0){\textbullet}
-    	%node at (5,-8){\textbullet}
-    	%node at (11.5,-6){\textbullet}
-    	%;
-	% Boxing and labelling noise shapers
-	%\draw [color=gray,thick](-0.5,-3) rectangle (9,1);
-	%\node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
-	%\draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
-	%\node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
-%--}}}
 \end{tikzpicture}
 % end first diagram -- }}}
 }
 \caption{High-level System Overview}
 \end{figure}
+
+RLCS is composed of two parts, the client side box and the tower side box.
+The client side box interfaces with the operator through a bunch of switches
+and a big LCD that displays sensor data. The tower side box controls all of
+the actuators necessary to launch the rocket (2 valves, nichrome coils, and 
+the disconnect linear actuator). In addition to controlling the actuators, the
+tower box communicates with two other components in the rocket in order to 
+control the two ball valves mounted in the rocket (see documentation of the
+flight instrumentation system for more details).
+
+The client box and tower box communicate over a pair of XBEE Pro S3B
+transceivers both using half dipole antennas with a gain of 3dBi each. The
+tower box communicates with flight instrumentation using XBEE series 1
+transceivers all of which have a small whip antenna. The XBEE Pro's operate
+at 900MHz, while the series 1's communicate at 2.4GHz.
 
 \begin{figure}[H]
 \centering
@@ -270,6 +220,16 @@ launch our rocket.
 \caption{Client side block-level diagram}
 \end{figure}
 
+The client side box is composed of a number of switches connected to a 
+microcontroller (in this case, an Arduino Mega), which is in turn connected
+to an LCD (to relay information to the user) and the radio transceiver. All
+switches are connected in series with a keyswitch to allow the system to be
+disabled whenever personnel are nearby the rocket. The ignition switch is in
+series with a momentary pushbutton to remove the possibility of a switch being
+left in the the "fire" position when the system is first started. The "power
+regulation" board is a switching regulator which drops the 11.1v from the battery
+to 5v, which can be used by the microcontroller.
+
 \begin{figure}[H]
 \centering
 \scalebox{.8}{
@@ -280,13 +240,33 @@ launch our rocket.
     node at(0,-1)[draw,name=reg]{Power regulation}
     node at(2,-2)[draw,name=ard]{Microcontroller}
 
-    node at (5,1)[draw,name=fill]{Relay board}
-    node at (5,0)[draw,name=fill]{Relay board}
-    node at (5,-1)[draw,name=fill]{Relay board}
-    node at (5,-2)[draw,name=fill]{Relay board}
-    node at (4,-3)[draw,name=fill]{Radio}
+    node at (5,1)[draw,name=cb1]{Relay board}
+    node at (5,0)[draw,name=cb2]{Relay board}
+    node at (5,-1)[draw,name=cb3]{Relay board}
+    node at (5,-2)[draw,name=cb4]{Relay board}
+    node at (4,-3)[draw,name=rad]{Radio}
+
+    node at (8,1)[draw,name=rvv]{Vent Valve}
+    node at (8,0)[draw,name=rfv]{Fill Valve}
+    node at (8,-1)[draw,name=dis,text width=2cm]{Fill arm disconnect}
+    node at (11,0.5)[minimum height=4cm,draw,name=kismet]{Rocket}
+    node at (1,1.5)[]{\Large Tower Side Box}
 ;
-    \draw [color=black,thick](7,-4) rectangle (9,2);
+
+    \draw [color=black,thick](-1.5,-2.5) rectangle (6.5,2);
+    \draw[->](batt) -- (reg);
+    \draw[->](reg) |- (ard);
+    \draw[->](ard) |- (rad);
+    \draw[->](ard) |- (cb1);
+    \draw[->](ard) |- (cb2);
+    \draw[->](ard) |- (cb3);
+    \draw[->](ard) |- (cb4);
+
+    \draw[->](cb1) -- (rvv);
+    \draw[->](cb2) -- (rfv);
+    \draw[->](cb3) -- (dis);
+    \draw[->](cb4) -| (kismet);
+
 	%\draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
 \end{tikzpicture}
 % end third diagram -- }}}
