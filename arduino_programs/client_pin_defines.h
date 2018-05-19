@@ -3,10 +3,10 @@
 
 //pins for the switches
 #define PIN_SWITCH_REMOTEFILL    33
-#define PIN_SWITCH_REMOTEVENT    35
-#define PIN_SWITCH_ROCKETVALVE   4
-#define PIN_SWITCH_LINACTUATOR   34 //for cf, this will be injector valve
-#define PIN_SWITCH_INJECTOR      3
+#define PIN_SWITCH_REMOTEVENT    37
+#define PIN_SWITCH_ROCKETVALVE   35
+#define PIN_SWITCH_LINACTUATOR   36
+#define PIN_SWITCH_INJECTOR      34
 #define PIN_SWITCH_IGNITION_PRI  32
 #define PIN_SWITCH_IGNITION_SEC  31
 #define PIN_SWITCH_IGNITION_FIRE 30
