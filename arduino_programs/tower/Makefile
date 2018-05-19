@@ -2,7 +2,7 @@ CC = avr-gcc
 CXX = avr-g++
 HARDWARE = /Users/aaronmorrison/Arduino.app/Contents/Java/hardware
 # HARDWARE = /usr/share/arduino/hardware
-DEFINES = -DF_CPU=16000000L -DARDUINO=10612 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR -DTOWER
+DEFINES = -DF_CPU=16000000L -DARDUINO=10612 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR -DTOWER -DNODE_GROUND
 MICRO = -mmcu=atmega2560
 CFLAGS = -std=gnu11 $(MICRO) $(DEFINES)
 CXXFLAGS = -std=gnu++11 $(MICRO) $(DEFINES)
@@ -29,6 +29,7 @@ objects +=radio_comms.o
 objects +=shared_types.o
 objects +=tower_fsm.o
 objects +=SevSeg.o
+objects +=nodeio.ioio.o
 
 #header files - always recompile everything whenever a header changes
 headers =LCD.h

@@ -3,6 +3,7 @@
 #include "tower_globals.h"
 #include "tower_daq.h"
 #include "radio_comms.h"
+#include "nodeio.ioio.h"
 #include "shared_types.h"
 #include "SevSeg.h"
 #include "Arduino.h"
@@ -11,6 +12,7 @@ void setup() {
     //initialize all outputs
     init_outputs();
     radio_init();
+    nio_init(NULL, NULL);
     start_SevSeg();
 }
 
@@ -38,6 +40,9 @@ void loop() {
     //then request an acknowledgement for 
     if(!actuator_compare(get_requested_state(), get_current_state()))
         tower_request_ack(get_requested_state());
+
+    //deal with the nodeio.ioio stuff
+    nio_refresh();
 
     //put the current state on the the seven segment display
     char to_put_on_sevenseg;

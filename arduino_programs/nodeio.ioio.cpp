@@ -1,5 +1,6 @@
 #include "nodeio.ioio.h"
 #include "Arduino.h"
+
 #ifdef NODE_TEST
 #include <stdlib.h>
 #endif
@@ -33,43 +34,59 @@
 //wires high results in getting eaten by a velociraptor)
 static int pin_close, pin_open;
 
-//different states that the valve can be in. This is for
-//writing, not reading. So this holds the "desired" valve
-//state, reading the limit switches is what tells you the
-//actual state of the valve
-enum actuator_state{
-    NOTHING,
-    VALVE_OPEN,
-    VALVE_CLOSED
-};
 //default states for maximum safety.
 #ifdef NODE_VENT
 //if the rocket doesn't know what to do, it should _open_ the vent valve
-actuator_state current_state = VALVE_OPEN;
+nio_actuator_state current_state = VALVE_OPEN;
 #elif defined(NODE_INJ) || defined(NODE_TEST)
 
 //there's no good default here. If the system resets during launch,
 //we need the valve open. if it resets during fill, that valve needs
 //to be closed. So just do nothing at startup
-actuator_state current_state = NOTHING;
+nio_actuator_state current_state = NOTHING;
+
 #endif //ifdef NODE_VENT
+
 //if these two states are different, the slave will be constantly
 //requesting an acknowledgement. So setting them equal at startup
 //stops them from crowding the bandwidth
-actuator_state current_requested_state = current_state;
+nio_actuator_state current_requested_state = current_state;
 
 //helper functions
-void apply_state(actuator_state s);
-void slave_request_ack(actuator_state s);
+void apply_state(nio_actuator_state s);
+void slave_request_ack(nio_actuator_state s);
 
 #else
 //stuff that only applies to master, in this case RLCS tower side
+
+//internal function declarations
+void tower_send_ack(char);
+void tower_send_nack();
+void tower_tell_vent(nio_actuator_state);
+void tower_tell_inj(nio_actuator_state);
+char fromBase64(char);
+int unpack_sensor_data(char *, sensor_data_t*);
+
 //it currently uses the Serial1 interface
 #define RADIO_UART Serial1
 char sensor_buffer[SENSOR_DATA_LENGTH + 1];
 int sensor_buffer_index = 0;
-#endif //ifndef NODE_GROUND
 
+//these hold the last received states from the slaves
+//set to default since that's the assumed value
+static nio_actuator_state vent_received = VALVE_OPEN;
+static nio_actuator_state inj_received = NOTHING;
+
+//these hold the state that we want the slaves to be in
+static nio_actuator_state vent_desired = VALVE_OPEN;
+static nio_actuator_state inj_desired = NOTHING;
+
+//helper functions for setting those states
+//called from tower fsm loop
+void nio_set_vent_desired(nio_actuator_state s) { vent_desired = s; }
+void nio_set_inj_desired(nio_actuator_state s) { inj_desired = s; }
+
+#endif //ifndef NODE_GROUND
 
 //init function. Called at startup
 void nio_init(int pin_valve_close, int pin_valve_open){
@@ -108,6 +125,14 @@ void nio_refresh(){
             case NIO_VENT_OPEN:
 #ifdef NODE_GROUND
                 //this should only happen if the vent slave is requesting an ack
+                //if we want vent to be open, ack that
+                if(vent_desired == VALVE_OPEN){
+                    //send an acknowledge byte, followed
+                    //by the signal for vent open
+                    tower_send_ack(NIO_VENT_OPEN);
+                } else {
+                    tower_send_nack();
+                }
 #elif defined(NODE_VENT)
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     //we asked them to ack this, and they are
@@ -126,10 +151,19 @@ void nio_refresh(){
                     //that's done outside this switch.
                     current_requested_state = VALVE_OPEN;
                 }
+#elif defined(NODE_INJ)
+                current_requested_state = STATE_NONE;
 #endif
                 break;
             case NIO_VENT_CLOSE:
 #ifdef NODE_GROUND
+                //this code is identical to the code for valve open,
+                //just... you know... for closing
+                if(vent_desired == VALVE_CLOSED){
+                    tower_send_ack(NIO_VENT_CLOSE);
+                } else {
+                    tower_send_nack();
+                }
 #elif defined(NODE_VENT)
                 //this code is identical to the code for valve open,
                 //just... you know... for closing
@@ -143,15 +177,22 @@ void nio_refresh(){
                 } else {
                     current_requested_state = VALVE_CLOSED;
                 }
+#elif defined(NODE_INJ)
+                current_requested_state = STATE_NONE;
 #endif
                 break;
 
             //the code for both of these cases is nigh on identical to the
             //code for the vent valve section. Just with NODE_INJ subbed in
-            //so read thos comments if you want. Is this DRY? No. No it is
+            //so read those comments if you want. Is this DRY? No. No it is
             //not.
             case NIO_INJ_OPEN:
 #ifdef NODE_GROUND
+                if(inj_desired == VALVE_OPEN){
+                    tower_send_ack(NIO_INJ_OPEN);
+                } else {
+                    tower_send_nack();
+                }
 #elif defined(NODE_INJ)
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     //we asked them to ack this, and they are
@@ -164,10 +205,17 @@ void nio_refresh(){
                 } else {
                     current_requested_state = VALVE_OPEN;
                 }
+#elif defined(NODE_VENT)
+                current_requested_state = STATE_NONE;
 #endif
                 break;
             case NIO_INJ_CLOSE:
 #ifdef NODE_GROUND
+                if(inj_desired == VALVE_CLOSED){
+                    tower_send_ack(NIO_INJ_CLOSE);
+                } else {
+                    tower_send_nack();
+                }
 #elif defined(NODE_INJ)
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     if(current_requested_state == VALVE_CLOSED){
@@ -179,8 +227,11 @@ void nio_refresh(){
                 } else {
                     current_requested_state = VALVE_CLOSED;
                 }
+#elif defined(NODE_VENT)
+                current_requested_state = STATE_NONE;
 #endif
                 break;
+#if defined(NODE_VENT) || defined(NODE_INJ)
             case NIO_ACK_HEADER:
                 //the next byte _should_ be whatever is wanting
                 //an acknowledgement, so this just needs to
@@ -192,21 +243,22 @@ void nio_refresh(){
                 //the last unacknowledged command we received
                 //was mangled and wrong. The tower should never
                 //receive this packet.
-#if defined(NODE_VENT) || defined(NODE_INJ)
                 current_fsm_state = STATE_NONE;
                 current_requested_state = current_state;
-#endif
                 break;
-            case NIO_SENSOR_HEADER:
+#endif
+
+//only the tower node cares about a sensor header
 #ifdef NODE_GROUND
+            case NIO_SENSOR_HEADER:
                 //one of the slaves is sending a sensor
                 //data packet. The next few bytes should be 
                 //sensor data. So shove those into a buffer
                 //and deal with them later.
                 current_fsm_state = STATE_SENSOR_RECEIVE;
                 sensor_buffer_index = 0;
-#endif
                 break;
+#endif
             default:
 #ifdef NODE_GROUND
                 if(current_fsm_state == STATE_SENSOR_RECEIVE){
@@ -216,19 +268,20 @@ void nio_refresh(){
                     sensor_buffer[sensor_buffer_index++] = temp;
                     if(sensor_buffer_index == SENSOR_DATA_LENGTH){
                         //we've received a full data update. Process that.
-                        unpack_sensor_data(sensor_buffer);
+                        //temporary variable to hold output
+                        sensor_data_t temp;
+                        //flag to tell us which slave it came from
+                        int ret = unpack_sensor_data(sensor_buffer, &temp);
                     }
                 }
 #endif
                 break;
         }
-        if(current_fsm_state == STATE_SENSOR_RECEIVE){
-#ifdef NODE_GROUND
-            //we have received a sensor update
-#endif
-        }
     }
     //now some housekeeping
+
+#ifndef NODE_GROUND //only housekeeping done by slaves
+
     //if we need to request an ACK, request an ACK.
     if(current_requested_state != current_state){
         //this function handles its own time handling
@@ -236,6 +289,19 @@ void nio_refresh(){
         //as humanly (avr-ly) possible. Which is bad.
         slave_request_ack(current_requested_state);
     }
+
+#else //only housekeeping done by tower
+    
+    //if our most recently received state doesn't match our desired
+    //state for either slave, tell them to change it
+    if( vent_received != vent_desired ){
+        tower_tell_vent(vent_desired);
+    }
+    if( inj_received != inj_desired ){
+        tower_tell_inj(inj_desired);
+    }
+
+#endif //ifndef NODE_GROUND
 }
 
 //using rfc 4648 base 64. Yes there's probably a library for this.
@@ -342,7 +408,7 @@ int pack_sensor_data(char *output, sensor_data_t* data){
 //the output was written to *vent
 //returning -1 means that the packet came from the injector section, and
 //the output was written to *inj
-int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
+int unpack_sensor_data(char *input, sensor_data_t* output){
     //take first byte of input, convert from Base 64,
     char decoded[SENSOR_DATA_LENGTH];
     for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
@@ -354,7 +420,6 @@ int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
     //5-> 0 if injector section, 1 if the vent section
     bool out_flag; //if true, we output to the vent sensor_data_t. Else inj.
     out_flag = ((decoded[0] & (1 << 5)) ? true : false);
-    sensor_data_t* output = out_flag ? vent : inj;
     //4-> valve_limitswitch_open
     output->valve_limitswitch_open = ((decoded[0] & (1<<4)) != 0);
     //3-> valve_limitswitch_closed
@@ -374,6 +439,9 @@ int unpack_sensor_data(char *input, sensor_data_t* vent, sensor_data_t* inj){
         return 1;
     return -1;
 }
+
+
+#ifndef NODE_GROUND //code that only applies to slave
 
 //this converts your sensor data into a proper radio format and sends it
 //to the tower over the xbee. Please call this function every 2 or 3 seconds.
@@ -406,7 +474,7 @@ uint8_t nio_current_valve_state(){
 }
 
 //write the output pins. update the current_state variable.
-void apply_state(actuator_state s){
+void apply_state(nio_actuator_state s){
     if(s == VALVE_OPEN){
         //write high to the "open pin", and low to the "close" pin
         digitalWrite(pin_close, LOW);
@@ -429,7 +497,7 @@ void apply_state(actuator_state s){
 unsigned long time_last_ack_sent = 0;
 //send, at max, one ack request every 500 milliseconds
 const unsigned long min_time_between_acks = 500;
-void slave_request_ack(actuator_state s){
+void slave_request_ack(nio_actuator_state s){
     if((millis() - time_last_ack_sent) < min_time_between_acks)
         //don't spam the channel
         return;
@@ -451,3 +519,44 @@ void slave_request_ack(actuator_state s){
         time_last_ack_sent = millis();
     }
 }
+
+#else //code only applies to ground
+
+unsigned long time_last_ack_sent = 0;
+//send, at max, one ack response every 50 milliseconds
+const unsigned long min_time_between_acks = 50;
+//ack symbol is either NIO_INJ_OPEN or NIO_VENT_CLOSE or whatever
+void tower_send_ack(char ack_symbol){
+    if((millis() - time_last_ack_sent) < min_time_between_acks)
+        return;
+    RADIO_UART.write(NIO_ACK_HEADER);
+    RADIO_UART.write(ack_symbol);
+    time_last_ack_sent = millis();
+}
+
+void tower_send_nack(){
+    RADIO_UART.write(NIO_NACK_HEADER);
+}
+
+unsigned long time_last_told_vent = 0;
+const unsigned long min_time_between_tell_vent = 100;
+void tower_tell_vent(nio_actuator_state s){
+    if((millis() - time_last_told_vent) < min_time_between_tell_vent)
+        return;
+    if(s == VALVE_OPEN)
+        RADIO_UART.write(NIO_VENT_OPEN);
+    else if(s == VALVE_CLOSED)
+        RADIO_UART.write(NIO_VENT_CLOSE);
+}
+
+unsigned long time_last_told_inj = 0;
+const unsigned long min_time_between_tell_inj = 100;
+void tower_tell_inj(nio_actuator_state s){
+    if((millis() - time_last_told_inj) < min_time_between_tell_inj)
+        return;
+    if(s == VALVE_OPEN)
+        RADIO_UART.write(NIO_INJ_OPEN);
+    else if(s == VALVE_CLOSED)
+        RADIO_UART.write(NIO_INJ_CLOSE);
+}
+#endif //ifndef NODE_GROUND

@@ -35,6 +35,16 @@ typedef struct{
     uint8_t thermistor_data[NUM_THERMISTORS];
 } sensor_data_t;
 
+//different states that the valve can be in. This is for
+//writing, not reading. So this holds the "desired" valve
+//state, reading the limit switches is what tells you the
+//actual state of the valve
+enum nio_actuator_state{
+    NOTHING,
+    VALVE_OPEN,
+    VALVE_CLOSED
+};
+
 //amount of time between driving unused mosfets low and used mosfets high
 //this is what for not shorting 50 amps through your board
 #define MOSFET_SWITCH_TIME_MS 150
@@ -92,7 +102,7 @@ uint8_t nio_current_valve_state();
 //need to delcare these here so they're generated as c symbols,
 //not c++ symbols. Only matters while testing
 int pack_sensor_data(char *,sensor_data_t*);
-int unpack_sensor_data(char*, sensor_data_t*, sensor_data_t*);
+int unpack_sensor_data(char*, sensor_data_t*);
 #endif //ifndef NODE_TEST
 
 #ifdef __cplusplus
