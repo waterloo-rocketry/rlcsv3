@@ -152,7 +152,7 @@ void nio_refresh(){
                     current_requested_state = VALVE_OPEN;
                 }
 #elif defined(NODE_INJ)
-                current_requested_state = STATE_NONE;
+                current_fsm_state = STATE_NONE;
 #endif
                 break;
             case NIO_VENT_CLOSE:
@@ -178,7 +178,7 @@ void nio_refresh(){
                     current_requested_state = VALVE_CLOSED;
                 }
 #elif defined(NODE_INJ)
-                current_requested_state = STATE_NONE;
+                current_fsm_state = STATE_NONE;
 #endif
                 break;
 
@@ -206,7 +206,7 @@ void nio_refresh(){
                     current_requested_state = VALVE_OPEN;
                 }
 #elif defined(NODE_VENT)
-                current_requested_state = STATE_NONE;
+                current_fsm_state = STATE_NONE;
 #endif
                 break;
             case NIO_INJ_CLOSE:
@@ -228,7 +228,7 @@ void nio_refresh(){
                     current_requested_state = VALVE_CLOSED;
                 }
 #elif defined(NODE_VENT)
-                current_requested_state = STATE_NONE;
+                current_fsm_state = STATE_NONE;
 #endif
                 break;
 #if defined(NODE_VENT) || defined(NODE_INJ)
