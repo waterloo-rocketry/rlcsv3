@@ -16,9 +16,10 @@ void setup() {
     start_SevSeg();
 }
 
+//updated by the FSM whenever the client requests state or daq
 unsigned long time_last_contact = 0;
-//goto safe mode after 5 seconds of radio silence
-const unsigned long global_min_time_between_contacts = 5000;
+//goto safe mode after 10 seconds of radio silence
+const unsigned long global_min_time_between_contacts = 10000;
 
 void loop() {
     //check for inputs from radio
@@ -33,7 +34,7 @@ void loop() {
     //check time last contact
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {
         //goto safe mode
-        //this here's another TODO
+        goto_safe_mode();
     }
 
     //if the requested state and the current state aren't the same,

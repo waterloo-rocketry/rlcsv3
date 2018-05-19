@@ -141,3 +141,34 @@ void init_outputs(){
 	digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
 	digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
 }
+
+//called when client hasn't told us to do anything for a while
+//assume comms are entirely lost, close all the valves (except the
+//rocket tank vent valve)
+void goto_safe_mode()
+{
+    //take the current requested state, set it to the safest possible
+    //state, and then call apply_state
+    actuator_state_t* requested = get_requested_state();
+
+    //close both valves we have direct control over
+    requested->remote_fill_valve = 0;
+    requested->remote_vent_valve = 0;
+
+    //open the rocket vent valve
+    requested->run_tank_valve = 1;
+
+    //do not touch the injector valve. Keep it where it is
+    requested->injector_valve = get_current_state()->injector_valve;
+
+    //don't move the linear actuator
+    requested->linear_actuator = get_current_state()->linear_actuator;
+
+    //turn off ignition
+    requested->ignition_power = 0;
+    requested->ignition_select = 0;
+
+
+    //apply that state
+    apply_state();
+}

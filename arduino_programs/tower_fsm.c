@@ -32,12 +32,16 @@ void handle_state_command(char buffer, actuator_state_t* state){
     convert_radio_to_state(state, buffer);
 }
 
+extern unsigned long time_last_contact;
+
 void push_radio_char(char input){
     switch (input) {
 		case RADIO_STATE_ASSIGN:
+            time_last_contact = millis_offset();
 			state = REC_STATE;
 			return;
         case RADIO_STATE_REQ:
+            time_last_contact = millis_offset();
             tower_send_state(get_current_state());
             return;
         case RADIO_DAQ_REQ:

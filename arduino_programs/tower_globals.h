@@ -21,6 +21,7 @@ void reset_request();
 
 //global functions that we just need
 void init_outputs();
+void goto_safe_mode();
 
 #ifdef __cplusplus
 }
