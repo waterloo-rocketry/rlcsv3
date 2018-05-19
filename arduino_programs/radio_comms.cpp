@@ -2,9 +2,11 @@
 #include "Arduino.h"
 
 #ifdef CLIENT
+#define XBEE_INTERFACE Serial
 #include "client_globals.h"
 #endif
 #ifdef TOWER
+#define XBEE_INTERFACE Serial1
 #include "tower_globals.h"
 #endif
 
@@ -18,23 +20,23 @@ const unsigned long millis_between_tower_send_state = 200;
 const unsigned long millis_between_tower_send_daq = 1000;
 
 void radio_init(){
-    while(!Serial);
-    Serial.begin(9600);
+    while(!XBEE_INTERFACE);
+    XBEE_INTERFACE.begin(9600);
 }
 
 void write_to_xbee(char out)
 {
-    Serial.write(out);
+    XBEE_INTERFACE.write(out);
 }
 
 int xbee_bytes_available()
 {
-    return Serial.available();
+    return XBEE_INTERFACE.available();
 }
 
 char xbee_get_byte()
 {
-    return Serial.read();
+    return XBEE_INTERFACE.read();
 }
 
 //maximimum rate of state requests is twice every second
@@ -147,14 +149,14 @@ int tower_send_daq(daq_holder_t* daq)
 }
 
 void radio_print(const char* msg){
-    Serial.print(msg);
+    XBEE_INTERFACE.print(msg);
 }
 
 void radio_println(const char* msg){
-    Serial.println(msg);
+    XBEE_INTERFACE.println(msg);
 }
 
 void radio_print_char(char b){
-    Serial.write(b);
+    XBEE_INTERFACE.write(b);
 }
 

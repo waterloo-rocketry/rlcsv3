@@ -67,8 +67,8 @@ void tower_tell_inj(nio_actuator_state);
 char fromBase64(char);
 int unpack_sensor_data(char *, sensor_data_t*);
 
-//it currently uses the Serial1 interface
-#define RADIO_UART Serial1
+//it currently uses the Serial2 interface
+#define RADIO_UART Serial2
 char sensor_buffer[SENSOR_DATA_LENGTH + 1];
 int sensor_buffer_index = 0;
 
