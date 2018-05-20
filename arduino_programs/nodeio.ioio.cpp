@@ -480,6 +480,7 @@ uint8_t nio_current_valve_state(){
 
 //write the output pins. update the current_state variable.
 void apply_state(nio_actuator_state s){
+#if defined(NODE_VENT) || defined(NODE_INJ)
     if(s == VALVE_OPEN){
         //write high to the "open pin", and low to the "close" pin
         digitalWrite(pin_close, LOW);
@@ -496,6 +497,7 @@ void apply_state(nio_actuator_state s){
         digitalWrite(pin_close, LOW);
         digitalWrite(pin_open,  LOW);
     }
+#endif
     current_state = s;
 }
 

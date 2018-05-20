@@ -25,7 +25,7 @@ void generateRandomSensorState(sensor_data_t* s){
         s->thermistor_data[i] = (rand() & 0x3F0);
 }
 
-int unpack_sensor_data(char *, sensor_data_t*, sensor_data_t*);
+int unpack_sensor_data(char *, sensor_data_t*);
 int pack_sensor_data(char*, sensor_data_t*);
 int randomSensorCompare(){
     sensor_data_t s;
@@ -44,13 +44,13 @@ int randomSensorCompare(){
         }
         if(node == 1){
             //we generated a vent sensor packet. So test that
-            if(!(other_node = unpack_sensor_data(c, &q, NULL))){
+            if(!(other_node = unpack_sensor_data(c, &q))){
                 printf("failure in unpack_sensor_data\n");
                 return 1;
             }
         } else if (node == -1) {
             //we generated an injector sensor packet. So test that
-            if(!(other_node = unpack_sensor_data(c, NULL, &q))){
+            if(!(other_node = unpack_sensor_data(c, &q))){
                 printf("failure in unpack_sensor_data\n");
                 return 1;
             }
