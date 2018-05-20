@@ -119,6 +119,10 @@ void generateRandomDaqState(daq_holder_t* s){
     s->rfill_lsw_closed = rand() & 1;
     s->rvent_lsw_open = rand() & 1;
     s->rvent_lsw_closed = rand() & 1;
+    s->rocketvent_lsw_open = rand() & 1;
+    s->rocketvent_lsw_closed = rand() & 1;
+    s->injectorvalve_lsw_open = rand() & 1;
+    s->injectorvalve_lsw_closed = rand() & 1;
     s->linac_lsw_extend = rand() & 1;
     s->linac_lsw_retract = rand() & 1;
 }
@@ -147,6 +151,10 @@ int randomDaqCompare(){
             s.rfill_lsw_closed == q.rfill_lsw_closed &&
             s.rvent_lsw_open == q.rvent_lsw_open &&
             s.rvent_lsw_closed == q.rvent_lsw_closed &&
+            s.rocketvent_lsw_open == q.rocketvent_lsw_open &&
+            s.rocketvent_lsw_closed == q.rocketvent_lsw_closed &&
+            s.injectorvalve_lsw_open == q.injectorvalve_lsw_open &&
+            s.injectorvalve_lsw_closed == q.injectorvalve_lsw_closed &&
             s.linac_lsw_extend == q.linac_lsw_extend &&
             s.linac_lsw_retract == q.linac_lsw_retract
         )){

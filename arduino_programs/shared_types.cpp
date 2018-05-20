@@ -127,7 +127,8 @@ int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio){
     //step 6: now let's do some binary stuff. convert byte 15 from base64
     char first_bitfield = fromBase64(radio->data[12]);
     char second_bitfield = fromBase64(radio->data[13]);
-    if (first_bitfield < 0 || second_bitfield < 0)
+    char third_bitfield = fromBase64(radio->data[14]);
+    if (first_bitfield < 0 || second_bitfield < 0 || third_bitfield < 0)
         return 0; //we received an incorrect state
     daq->rfill_current_open  =   (first_bitfield & 32) != 0;
     daq->rfill_current_close =   (first_bitfield & 16) != 0;
@@ -142,6 +143,11 @@ int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio){
     daq->rvent_lsw_closed    =   (second_bitfield & 4) != 0;
     daq->linac_lsw_extend    =   (second_bitfield & 2) != 0;
     daq->linac_lsw_retract   =   (second_bitfield & 1) != 0;
+
+    daq->rocketvent_lsw_open      = (third_bitfield & 32) != 0;
+    daq->rocketvent_lsw_closed    = (third_bitfield & 16) != 0;
+    daq->injectorvalve_lsw_open   = (third_bitfield &  8) != 0;
+    daq->injectorvalve_lsw_closed = (third_bitfield &  4) != 0;
 
     return 1;
 }
@@ -164,7 +170,7 @@ int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio){
     convert_uint16_to_2dig(daq->ign_pri_current, radio->data + 8);
     convert_uint16_to_2dig(daq->ign_sec_current, radio->data + 10);
 
-    char first_bitfield = 0, second_bitfield = 0;
+    char first_bitfield = 0, second_bitfield = 0, third_bitfield = 0;
     first_bitfield += daq->rfill_current_open ? 32 : 0;
     first_bitfield += daq->rfill_current_close ? 16 : 0;
     first_bitfield += daq->rvent_current_open ? 8 : 0;
@@ -179,11 +185,18 @@ int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio){
     second_bitfield += daq->linac_lsw_extend? 2 : 0;
     second_bitfield += daq->linac_lsw_retract ? 1 : 0;
 
+    third_bitfield += daq->rocketvent_lsw_open ? 32 : 0;
+    third_bitfield += daq->rocketvent_lsw_closed ? 16 : 0;
+    third_bitfield += daq->injectorvalve_lsw_open ? 8 : 0;
+    third_bitfield += daq->injectorvalve_lsw_closed ? 4 : 0;
+
     first_bitfield = toBase64(first_bitfield);
     second_bitfield = toBase64(second_bitfield);
-    if(first_bitfield < 0 || second_bitfield < 0)
+    third_bitfield = toBase64(third_bitfield);
+    if(first_bitfield < 0 || second_bitfield < 0 || third_bitfield < 0)
         return 0;
     radio->data[12] = first_bitfield;
     radio->data[13] = second_bitfield;
+    radio->data[14] = third_bitfield;
     return 1;
 }

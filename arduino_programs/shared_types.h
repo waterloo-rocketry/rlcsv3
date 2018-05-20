@@ -47,12 +47,16 @@ typedef struct {
     unsigned char rfill_lsw_closed;     //0 when low, 1 when high (which means remote fill is closed)
     unsigned char rvent_lsw_open;       //0 when low, 1 when high (which means remote vent is open)
     unsigned char rvent_lsw_closed;     //0 when low, 1 when high (which means remote vent is closed)
+    unsigned char rocketvent_lsw_open;
+    unsigned char rocketvent_lsw_closed; //same as other valve limit switches
+    unsigned char injectorvalve_lsw_open;
+    unsigned char injectorvalve_lsw_closed;
     unsigned char linac_lsw_extend;     //0 when low, 1 when high (which means the actuator is extended)
     unsigned char linac_lsw_retract;    //0 when low, 1 when high (which means the actuator is retracted)
 
 } daq_holder_t;
 
-#define DAQ_RADIO_LEN 14
+#define DAQ_RADIO_LEN 15
 typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;
