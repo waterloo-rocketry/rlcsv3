@@ -59,6 +59,10 @@ void slave_request_ack(nio_actuator_state s);
 #else
 //stuff that only applies to master, in this case RLCS tower side
 
+//housekeeping for time between last commands
+unsigned long time_last_told_vent = 0;
+unsigned long time_last_told_inj = 0;
+
 //internal function declarations
 void tower_send_ack(char);
 void tower_send_nack();
@@ -293,11 +297,12 @@ void nio_refresh(){
 #else //only housekeeping done by tower
     
     //if our most recently received state doesn't match our desired
-    //state for either slave, tell them to change it
-    if( vent_received != vent_desired ){
+    //state for either slave, tell them to change it (alternatively, tell
+    //them every 3 seconds)
+    if( vent_received != vent_desired || ((millis() - time_last_told_vent) > 3000)){
         tower_tell_vent(vent_desired);
     }
-    if( inj_received != inj_desired ){
+    if( inj_received != inj_desired || ((millis() - time_last_told_vent) > 3000)){
         tower_tell_inj(inj_desired);
     }
 
@@ -538,22 +543,22 @@ void tower_send_nack(){
     RADIO_UART.write(NIO_NACK_HEADER);
 }
 
-unsigned long time_last_told_vent = 0;
 const unsigned long min_time_between_tell_vent = 100;
 void tower_tell_vent(nio_actuator_state s){
     if((millis() - time_last_told_vent) < min_time_between_tell_vent)
         return;
+    time_last_told_vent = millis();
     if(s == VALVE_OPEN)
         RADIO_UART.write(NIO_VENT_OPEN);
     else if(s == VALVE_CLOSED)
         RADIO_UART.write(NIO_VENT_CLOSE);
 }
 
-unsigned long time_last_told_inj = 0;
 const unsigned long min_time_between_tell_inj = 100;
 void tower_tell_inj(nio_actuator_state s){
     if((millis() - time_last_told_inj) < min_time_between_tell_inj)
         return;
+    time_last_told_inj = millis();
     if(s == VALVE_OPEN)
         RADIO_UART.write(NIO_INJ_OPEN);
     else if(s == VALVE_CLOSED)

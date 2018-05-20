@@ -39,11 +39,11 @@ typedef struct{
 //writing, not reading. So this holds the "desired" valve
 //state, reading the limit switches is what tells you the
 //actual state of the valve
-enum nio_actuator_state{
+typedef enum {
     NOTHING,
     VALVE_OPEN,
     VALVE_CLOSED
-};
+} nio_actuator_state;
 
 //amount of time between driving unused mosfets low and used mosfets high
 //this is what for not shorting 50 amps through your board
@@ -65,6 +65,10 @@ void nio_send_sensor_data(sensor_data_t*);
 //when the valve opens or closes. This is based off desired state, not
 //the actual valve state. Read your limit switches for that
 uint8_t nio_current_valve_state();
+
+//helpers that are only needed by ground node
+void nio_set_vent_desired(nio_actuator_state);
+void nio_set_inj_desired(nio_actuator_state);
 
 //compile guards, you need to compile this with either NODE_INJ, NODE_VENT,
 //or NODE_GROUND defined (and only one of these). This changes how different
