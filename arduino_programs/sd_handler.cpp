@@ -10,7 +10,7 @@ File output_log;
 
 uint8_t working = 0;
 
-static char buffer[SD_BUFFER_SIZE];
+static char buffer[SD_BUFFER_SIZE + 10];
 static size_t buffer_index = 0;
 
 char output_filename[13];
@@ -59,7 +59,7 @@ void sd_init() {
 #endif
         return;
     }
- 
+
 #ifdef SD_SERIAL_LOG
     Serial.print("found ");
     Serial.print(file_count);
@@ -173,4 +173,58 @@ void rlcslog_client_tower_state(char input){
         rlcslog(message);
     }
 }
+#endif
+
+#ifdef TOWER
+#define APPLY_HEADER "app state - "
+void rlcslog_tower_apply_state(char input){
+#ifdef SD_SERIAL_LOG
+    Serial.print("call to rlcslog_tower_apply_state (");
+    Serial.print(input, HEX);
+    Serial.print(APPLY_HEADER);
+    Serial.println(sizeof(APPLY_HEADER));
+#endif
+    char message[sizeof(APPLY_HEADER) + 1] = APPLY_HEADER;
+    message[sizeof(APPLY_HEADER) - 1] = input;
+    message[sizeof(APPLY_HEADER)] = 0;
+    rlcslog(message);
+}
+
+
+#define DAQ_HEADER "daq values - "
+static unsigned long time_last_daq_logged = 0;
+//log all daq values every 100 ms
+static const unsigned long daq_log_interval = 100;
+void rlcslog_tower_daq(uint16_t mass,
+                       uint16_t pressure1,
+                       uint16_t pressure2,
+                       uint16_t primary_current,
+                       uint16_t secondary_current){
+    if( (millis() - time_last_daq_logged) < daq_log_interval)
+        return;
+    time_last_daq_logged = millis();
+
+    //we only log the mass, pressures, and ignition currents
+    //that's 5 values, each is 4 characters plus two prefixes
+    char message[sizeof(DAQ_HEADER) + (5 * (4 + 2))] = DAQ_HEADER;
+
+    //tack the mass onto the end
+    snprintf(message + sizeof(DAQ_HEADER) + 6*0 - 1, 7, "MA%04u", mass);
+
+    //tack the first pressure on. I'm sorry for the magic numbers. Here's hoping it works!
+    snprintf(message + sizeof(DAQ_HEADER) + 6*1 - 1, 7, "P1%04u", pressure1);
+
+    //tack the second pressure on
+    snprintf(message + sizeof(DAQ_HEADER) + 6*2 - 1, 7, "P2%04u", pressure2);
+
+    //tack the first current on
+    snprintf(message + sizeof(DAQ_HEADER) + 6*3 - 1, 7, "IP%04u", primary_current);
+
+    //tack the second current on
+    snprintf(message + sizeof(DAQ_HEADER) + 6*4 - 1, 7, "IP%04u", secondary_current);
+
+    message[sizeof(DAQ_HEADER) + (5 * (4+2)) - 1] = '\0';
+    rlcslog(message);
+}
+
 #endif

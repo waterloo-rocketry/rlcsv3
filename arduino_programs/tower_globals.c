@@ -1,6 +1,8 @@
 #include "tower_globals.h"
 #include "tower_daq.h"
 #include "tower_pin_defines.h"
+#include "nodeio.ioio.h"
+#include "sd_handler.h"
 #include "Arduino.h"
 
 actuator_state_t global_requested_state, global_current_state;
@@ -22,6 +24,11 @@ daq_holder_t* get_global_current_daq(){
 //copies requested_state to current_state, then applies requested state
 //to the outputs
 void apply_state(){
+    //log this transition to the sd card
+    char tolog;
+    if(convert_state_to_radio(get_requested_state(), &tolog))
+        rlcslog_tower_apply_state(tolog);
+
 	if(global_requested_state.remote_fill_valve != global_current_state.remote_fill_valve){
 		//we need to change the remote_fill_valve to what requested wants
 		global_current_state.remote_fill_valve = global_requested_state.remote_fill_valve;
@@ -147,6 +154,7 @@ void init_outputs(){
 //rocket tank vent valve)
 void goto_safe_mode()
 {
+    rlcslog("going to safe mode");
     //take the current requested state, set it to the safest possible
     //state, and then call apply_state
     actuator_state_t* requested = get_requested_state();
@@ -172,3 +180,8 @@ void goto_safe_mode()
     //apply that state
     apply_state();
 }
+
+//global for how long it's been since the output log was flushed
+//to the SD card
+unsigned long global_time_last_output_flush = 0;
+const unsigned long global_output_flush_interval = 10000;

@@ -29,6 +29,16 @@ void rlcslog_client_button(actuator_state_t* buttons);
 void rlcslog_client_tower_state(char state);
 #endif
 
+//tower only functions
+#ifdef TOWER
+void rlcslog_tower_apply_state(char input);
+void rlcslog_tower_daq(uint16_t mass,
+                       uint16_t pressure1,
+                       uint16_t pressure2,
+                       uint16_t primary_current,
+                       uint16_t secondary_current);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

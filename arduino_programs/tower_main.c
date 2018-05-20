@@ -7,6 +7,7 @@
 #include "shared_types.h"
 #include "SevSeg.h"
 #include "Arduino.h"
+#include "sd_handler.h"
 
 void setup() {
     //initialize all outputs
@@ -14,12 +15,21 @@ void setup() {
     radio_init();
     nio_init(NULL, NULL);
     start_SevSeg();
+    sd_init();
+    if(sd_active){
+        rlcslog("I'm the tower");
+    }
 }
 
 //updated by the FSM whenever the client requests state or daq
 unsigned long time_last_contact = 0;
 //goto safe mode after 10 seconds of radio silence
 const unsigned long global_min_time_between_contacts = 10000;
+
+//used for the SD card handler
+extern unsigned long global_time_last_output_flush;
+//flush the rlcslog to sd card every 10 seconds
+extern const unsigned long global_output_flush_interval;
 
 void loop() {
     //check for inputs from radio
@@ -51,4 +61,9 @@ void loop() {
         setNewNum_SevSeg( (uint8_t) fromBase64(to_put_on_sevenseg) );
     }
     refresh_SevSeg();
+
+    //check how long it's been since we flushed the log
+    if(millis() - global_time_last_output_flush > global_output_flush_interval){
+        flush();
+    }
 }
