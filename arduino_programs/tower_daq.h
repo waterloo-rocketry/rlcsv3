@@ -24,9 +24,9 @@ void compute_daq_values(daq_holder_t* output);
 #define PRESSURE2_SCALE 0.5
 #define PRESSURE2_OFFSET 0
 
-#define IGNPRI_SCALE 0.5
+#define IGNPRI_SCALE 1.1
 #define IGNPRI_OFFSET 0
-#define IGNSEC_SCALE 0.5
+#define IGNSEC_SCALE 1.1
 #define IGNSEC_OFFSET 0
 
 #define RFILL_OPN_SCALE 0.5
