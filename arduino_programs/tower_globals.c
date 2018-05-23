@@ -27,7 +27,8 @@ void apply_state(){
     //log this transition to the sd card
     char tolog;
     if(convert_state_to_radio(get_requested_state(), &tolog))
-        rlcslog_tower_apply_state(tolog);
+        if(sd_active())
+            rlcslog_tower_apply_state(tolog);
 
     if(global_requested_state.remote_fill_valve != global_current_state.remote_fill_valve){
         //we need to change the remote_fill_valve to what requested wants
@@ -168,7 +169,6 @@ void init_outputs(){
 //rocket tank vent valve)
 void goto_safe_mode()
 {
-    rlcslog("going to safe mode");
     //take the current requested state, set it to the safest possible
     //state, and then call apply_state
     actuator_state_t* requested = get_requested_state();
@@ -199,3 +199,6 @@ void goto_safe_mode()
 //to the SD card
 unsigned long global_time_last_output_flush = 0;
 const unsigned long global_output_flush_interval = 10000;
+//global for how long it's been since we logged daq values
+unsigned long global_time_last_logged_daq = 0;
+const unsigned long global_time_between_daq_logs = 7000;

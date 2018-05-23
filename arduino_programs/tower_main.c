@@ -16,7 +16,7 @@ void setup() {
     nio_init(0, 0);
     start_SevSeg();
     sd_init();
-    if(sd_active){
+    if(sd_active()){
         rlcslog("I'm the tower");
     }
 }
@@ -31,6 +31,9 @@ extern unsigned long global_time_last_output_flush;
 //flush the rlcslog to sd card every 10 seconds
 extern const unsigned long global_output_flush_interval;
 
+extern unsigned long global_time_last_logged_daq;
+extern const unsigned long global_time_between_daq_logs;
+
 void loop() {
     //check for inputs from radio
     while(xbee_bytes_available()){
@@ -40,6 +43,11 @@ void loop() {
 
     //get all the daq updates
     read_daq_pins();
+    //if we haven't calculated (and thus logged) the daq values in some
+    //amount of time, do that now
+    if (millis() - global_time_last_logged_daq > global_time_between_daq_logs) {
+        get_global_current_daq();
+    }
     
     //check time last contact
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {

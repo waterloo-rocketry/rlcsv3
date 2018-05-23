@@ -94,18 +94,9 @@ void read_daq_pins() {
     window_holder[window_holder_index].lsw_linac_ret =
         digitalRead(PIN_LIMITSW_LINAC_RET);
 
-    //log the raw window values, because _speed_
-    //these are only logged every 100 ms, so most of these calls
-    //are just NOPs
-    rlcslog_tower_daq(window_holder[window_holder_index].mass,
-            window_holder[window_holder_index].pressure1,
-            window_holder[window_holder_index].pressure2,
-            window_holder[window_holder_index].curr_ignition_pri,
-            window_holder[window_holder_index].curr_ignition_sec);
-
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0
-    if(++window_holder_index > WINDOW_WIDTH)
+    if(++window_holder_index >= WINDOW_WIDTH)
         window_holder_index = 0;
 }
 
@@ -189,4 +180,9 @@ void compute_daq_values(daq_holder_t* output) {
     output->linac_lsw_retract = (output->linac_lsw_retract / WINDOW_WIDTH) != 0;
 
     //TODO, find a way to get pressure3 (pressure in the rocket) into this
+
+    //log what we just computed
+    daq_radio_value_t to_log;
+    convert_daq_to_radio(output, &to_log);
+    rlcslog_tower_daq(&to_log);
 }

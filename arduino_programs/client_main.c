@@ -13,7 +13,7 @@ void setup(){
     radio_init();
     init_buttons();
     sd_init();
-    if(sd_active){
+    if(sd_active()){
         rlcslog("start of operations");
     }
 }

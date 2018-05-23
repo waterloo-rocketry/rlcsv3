@@ -1,5 +1,9 @@
 #include "sd_handler.h"
+#ifdef CLIENT
 #include "client_pin_defines.h"
+#else
+#include "tower_pin_defines.h"
+#endif
 #include <SPI.h>
 #include <SD.h>
 
@@ -18,6 +22,9 @@ char output_filename[13];
 //set working to true if this works
 void sd_init() {
     if (!SD.begin(PIN_SD_SS)) {
+#ifdef SD_SERIAL_LOG
+        Serial.println("couldn't start SD card");
+#endif
         return;
     }
 
@@ -177,7 +184,11 @@ void rlcslog_client_tower_state(char input){
 
 #ifdef TOWER
 #define APPLY_HEADER "app state - "
+static char last_logged_state = 'Z';
 void rlcslog_tower_apply_state(char input){
+    if(last_logged_state == input)
+        return;
+    last_logged_state = input;
 #ifdef SD_SERIAL_LOG
     Serial.print("call to rlcslog_tower_apply_state (");
     Serial.print(input, HEX);
@@ -192,38 +203,21 @@ void rlcslog_tower_apply_state(char input){
 
 
 #define DAQ_HEADER "daq values - "
-static unsigned long time_last_daq_logged = 0;
+extern unsigned long global_time_last_logged_daq;
 //log all daq values every 100 ms
 static const unsigned long daq_log_interval = 100;
-void rlcslog_tower_daq(uint16_t mass,
-                       uint16_t pressure1,
-                       uint16_t pressure2,
-                       uint16_t primary_current,
-                       uint16_t secondary_current){
-    if( (millis() - time_last_daq_logged) < daq_log_interval)
+void rlcslog_tower_daq(daq_radio_value_t* to_log){
+    if( (millis() - global_time_last_logged_daq) < daq_log_interval)
         return;
-    time_last_daq_logged = millis();
+    global_time_last_logged_daq = millis();
 
-    //we only log the mass, pressures, and ignition currents
-    //that's 5 values, each is 4 characters plus two prefixes
-    char message[sizeof(DAQ_HEADER) + (5 * (4 + 2))] = DAQ_HEADER;
+    //log all 15 characters of DAQ, plus the header, plus
+    //the null terminator
+    char message[sizeof(DAQ_HEADER) + DAQ_RADIO_LEN + 1] = DAQ_HEADER;
 
-    //tack the mass onto the end
-    snprintf(message + sizeof(DAQ_HEADER) + 6*0 - 1, 7, "MA%04u", mass);
+    strncpy(message + sizeof(DAQ_HEADER) - 1, to_log->data, DAQ_RADIO_LEN);
 
-    //tack the first pressure on. I'm sorry for the magic numbers. Here's hoping it works!
-    snprintf(message + sizeof(DAQ_HEADER) + 6*1 - 1, 7, "P1%04u", pressure1);
-
-    //tack the second pressure on
-    snprintf(message + sizeof(DAQ_HEADER) + 6*2 - 1, 7, "P2%04u", pressure2);
-
-    //tack the first current on
-    snprintf(message + sizeof(DAQ_HEADER) + 6*3 - 1, 7, "IP%04u", primary_current);
-
-    //tack the second current on
-    snprintf(message + sizeof(DAQ_HEADER) + 6*4 - 1, 7, "IP%04u", secondary_current);
-
-    message[sizeof(DAQ_HEADER) + (5 * (4+2)) - 1] = '\0';
+    message[sizeof(DAQ_HEADER) + DAQ_RADIO_LEN] = '\0';
     rlcslog(message);
 }
 

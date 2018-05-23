@@ -32,11 +32,7 @@ void rlcslog_client_tower_state(char state);
 //tower only functions
 #ifdef TOWER
 void rlcslog_tower_apply_state(char input);
-void rlcslog_tower_daq(uint16_t mass,
-                       uint16_t pressure1,
-                       uint16_t pressure2,
-                       uint16_t primary_current,
-                       uint16_t secondary_current);
+void rlcslog_tower_daq(daq_radio_value_t* to_log);
 #endif
 
 #ifdef __cplusplus
