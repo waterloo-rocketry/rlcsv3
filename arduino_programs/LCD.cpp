@@ -23,11 +23,14 @@ void lcd_init()
     //sets every single bit in last_daq to 0 (which should be the default)
     memset(&last_daq, 0, sizeof(last_daq));
 
-    //lcd.print should wrap properly
-    lcd.print("P1:    P2:    P3:   "
-              "RF:    RV:    TV:   "
-              "I1:    I2:    IJ:   "
-              "AC:    M:     LOG:NO");
+    lcd.setCursor(0,0);
+    lcd.print("P1:    P2:    P3:   ");
+    lcd.setCursor(0,1);
+    lcd.print("RF:    RV:    TV:   ");
+    lcd.setCursor(0,2);
+    lcd.print("I1:    I2:    IJ:   ");
+    lcd.setCursor(0,3);
+    lcd.print("AC:    M:     LOG:NO");
 }
 
 void convert(uint16_t value, char* tempx) {
@@ -79,13 +82,13 @@ void lcd_update(daq_holder_t* daq){
     }
     if(daq->ign_pri_current != last_daq.ign_pri_current) {
         last_daq.ign_pri_current = daq->ign_pri_current;
-        lcd.setCursor(3, 1);
+        lcd.setCursor(3, 2);
         convert(daq->ign_pri_current, temp);
         lcd.write(temp);
     }
     if(daq->ign_sec_current != last_daq.ign_sec_current) {
         last_daq.ign_sec_current = daq->ign_sec_current;
-        lcd.setCursor(10, 1);
+        lcd.setCursor(10, 2);
         convert(daq->ign_sec_current, temp);
         lcd.write(temp);
     }
