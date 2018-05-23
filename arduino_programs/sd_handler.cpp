@@ -111,6 +111,8 @@ uint8_t sd_buffer_dirty(){
 const int header_len = 20;
 char header[header_len];
 void rlcslog(const char* message){
+    if(!working)
+        return;
 #ifdef SD_SERIAL_LOG
     Serial.println("Call to rlcslog");
     Serial.println(message);
@@ -147,6 +149,8 @@ void flush(){
 #define BUTTON_HEADER "buttons - "
 static actuator_state_t last_buttons;
 void rlcslog_client_button(actuator_state_t* buttons){
+    if(!working)
+        return;
     if(!actuator_compare(&last_buttons, buttons)){
         //buttons have changed - log it
         char message[sizeof(BUTTON_HEADER) + 2] = BUTTON_HEADER;
@@ -166,6 +170,8 @@ void rlcslog_client_button(actuator_state_t* buttons){
 #define TOWER_STATE_HEADER "tstate - "
 static char last_tower_state = 'A';
 void rlcslog_client_tower_state(char input){
+    if(!working)
+        return;
     if(last_tower_state != input){
 #ifdef SD_SERIAL_LOG
         Serial.print("call to rlcslog_client_tower_state  (");
@@ -186,6 +192,8 @@ void rlcslog_client_tower_state(char input){
 #define APPLY_HEADER "app state - "
 static char last_logged_state = 'Z';
 void rlcslog_tower_apply_state(char input){
+    if(!working)
+        return;
     if(last_logged_state == input)
         return;
     last_logged_state = input;
@@ -201,12 +209,15 @@ void rlcslog_tower_apply_state(char input){
     rlcslog(message);
 }
 
+#endif
 
 #define DAQ_HEADER "daq values - "
 extern unsigned long global_time_last_logged_daq;
 //log all daq values every 100 ms
 static const unsigned long daq_log_interval = 100;
-void rlcslog_tower_daq(daq_radio_value_t* to_log){
+void rlcslog_log_daq_values(daq_radio_value_t* to_log){
+    if(!working)
+        return;
     if( (millis() - global_time_last_logged_daq) < daq_log_interval)
         return;
     global_time_last_logged_daq = millis();
@@ -221,4 +232,3 @@ void rlcslog_tower_daq(daq_radio_value_t* to_log){
     rlcslog(message);
 }
 
-#endif

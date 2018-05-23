@@ -162,3 +162,4 @@ const unsigned long global_tower_daq_update_interval = 3000; //request daq every
 unsigned long global_time_last_output_flush = 0;
 const unsigned long global_output_flush_interval = 30000; //every 30 seconds
 
+unsigned long global_time_last_logged_daq = 0;

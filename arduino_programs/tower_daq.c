@@ -184,5 +184,5 @@ void compute_daq_values(daq_holder_t* output) {
     //log what we just computed
     daq_radio_value_t to_log;
     convert_daq_to_radio(output, &to_log);
-    rlcslog_tower_daq(&to_log);
+    rlcslog_log_daq_values(&to_log);
 }

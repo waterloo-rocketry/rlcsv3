@@ -22,6 +22,9 @@ void rlcslog(const char* message);
 //flushes the buffered output. Should we be hand buffering our logs?
 void flush();
 
+//logs daq values
+void rlcslog_log_daq_values(daq_radio_value_t* to_log);
+
 //client only functions
 #ifdef CLIENT
 //log the current button state
@@ -32,7 +35,6 @@ void rlcslog_client_tower_state(char state);
 //tower only functions
 #ifdef TOWER
 void rlcslog_tower_apply_state(char input);
-void rlcslog_tower_daq(daq_radio_value_t* to_log);
 #endif
 
 #ifdef __cplusplus

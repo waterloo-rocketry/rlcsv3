@@ -48,10 +48,12 @@ void handle_daq_update(char* buffer, daq_holder_t* daq){
     //unpack buffer, copy values into daq
     daq_radio_value_t s;
     for(int i = 0; i < DAQ_RADIO_LEN; i++){
+        //check that all bytes are valid
         if(fromBase64(buffer[i]) < 0)
             return;
     }
     strncpy(s.data, buffer, DAQ_RADIO_LEN);
+    rlcslog_log_daq_values(&s);
     convert_radio_to_daq(daq, &s);
     global_time_last_tower_daq_req = millis_offset();
 }
