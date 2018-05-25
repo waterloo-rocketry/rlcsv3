@@ -9,13 +9,13 @@
 //the tower receives
 
 //all commands that the tower receives have at most one 
-enum {
+static enum {
     REC_NOTHING,
     REC_STATE,
 } state;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
-int valid_data_byte(char data) {
+static int valid_data_byte(char data) {
     if(data >= 'A' && data <= 'Z')
         return 1;
     if(data >= 'a' && data <= 'z')
@@ -27,7 +27,7 @@ int valid_data_byte(char data) {
     return 0;
 }
 
-void handle_state_command(char buffer, actuator_state_t* state){
+static void handle_state_command(char buffer, const actuator_state_t* state){
     //decode buffer, copy values into state. The Ack requesting is handled in the main loop
     convert_radio_to_state(state, buffer);
 }

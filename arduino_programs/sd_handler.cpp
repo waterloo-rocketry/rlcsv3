@@ -12,12 +12,12 @@
 // set up variables using the SD utility library functions:
 File output_log;
 
-uint8_t working = 0;
+static uint8_t working = 0;
 
 static char buffer[SD_BUFFER_SIZE + 10];
 static size_t buffer_index = 0;
 
-char output_filename[13];
+static char output_filename[13];
 
 //set working to true if this works
 void sd_init() {
@@ -148,7 +148,7 @@ void flush(){
 #ifdef CLIENT
 #define BUTTON_HEADER "buttons - "
 static actuator_state_t last_buttons;
-void rlcslog_client_button(actuator_state_t* buttons){
+void rlcslog_client_button(const actuator_state_t* buttons){
     if(!working)
         return;
     if(!actuator_compare(&last_buttons, buttons)){
@@ -215,7 +215,7 @@ void rlcslog_tower_apply_state(char input){
 extern unsigned long global_time_last_logged_daq;
 //log all daq values every 100 ms
 static const unsigned long daq_log_interval = 100;
-void rlcslog_log_daq_values(daq_radio_value_t* to_log){
+void rlcslog_log_daq_values(const daq_radio_value_t* to_log){
     if(!working)
         return;
     if( (millis() - global_time_last_logged_daq) < daq_log_interval)

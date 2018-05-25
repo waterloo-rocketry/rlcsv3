@@ -47,7 +47,7 @@ static const unsigned segmentPinsIn[] = {
 };
 
 //functions
-void setDigitCodes(uint8_t digits);
+static void setDigitCodes(uint8_t digits);
 
 void start_SevSeg () {//sets the values of the digitpin and segment pins in the struct, pinmode all of the pins, and turns them all off
 
@@ -79,7 +79,7 @@ void setNewNum_SevSeg (uint8_t numToShow) {//sets the number the user wants
   setDigitCodes(numToShow);
 }
 
-void setDigitCodes(uint8_t numToShow) { //this function gets the digit code of each number in the 'digit' array
+static void setDigitCodes(uint8_t numToShow) { //this function gets the digit code of each number in the 'digit' array
   // Set the digitCode for each digit in the display(digit array)
   digitCodes[0] = digitCodeMap + (numToShow & 0xF);
   digitCodes[1] = digitCodeMap + ((numToShow >> 4) & 0xF);

@@ -24,12 +24,12 @@ char xbee_get_byte();
 //return 1 on success, 0 on failure (serial overrun, or sending before timeout)
 int client_request_state();
 int client_request_daq();
-int client_push_state(actuator_state_t* state);
+int client_push_state(const actuator_state_t* state);
 int client_ack();
 int client_nack();
 
-int tower_request_ack(actuator_state_t* state);
-int tower_send_state(actuator_state_t* state);
+int tower_request_ack(const actuator_state_t* state);
+int tower_send_state(const actuator_state_t* state);
 int tower_send_daq(daq_holder_t* daq);
 
 //for debug only

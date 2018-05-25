@@ -23,12 +23,12 @@ void rlcslog(const char* message);
 void flush();
 
 //logs daq values
-void rlcslog_log_daq_values(daq_radio_value_t* to_log);
+void rlcslog_log_daq_values(const daq_radio_value_t* to_log);
 
 //client only functions
 #ifdef CLIENT
 //log the current button state
-void rlcslog_client_button(actuator_state_t* buttons);
+void rlcslog_client_button(const actuator_state_t* buttons);
 void rlcslog_client_tower_state(char state);
 #endif
 

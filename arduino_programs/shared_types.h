@@ -25,9 +25,9 @@ typedef struct {
 
 //these functions return 0 on failure, 1 on success.
 int convert_radio_to_state(actuator_state_t* state, char binary);
-int convert_state_to_radio(actuator_state_t* state, char* binary);
+int convert_state_to_radio(const actuator_state_t* state, char* binary);
 
-int actuator_compare(actuator_state_t* s, actuator_state_t* q);
+int actuator_compare(const actuator_state_t* s, const actuator_state_t* q);
 
 typedef struct {
 
@@ -61,8 +61,8 @@ typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;
 //these functions return 0 on failure, 1 on success.
-int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio);
-int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio);
+int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio);
+int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio);
 
 #ifdef __cplusplus
 }

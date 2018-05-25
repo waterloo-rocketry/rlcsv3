@@ -7,7 +7,8 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 
-void setup(){
+void setup()
+{
     lcd_init();
     start_SevSeg();
     radio_init();
@@ -18,14 +19,18 @@ void setup(){
     }
 }
 
-extern unsigned long global_time_last_tower_state_req,
+extern unsigned long
+        global_time_last_tower_state_req,
         global_time_last_tower_daq_req,
         global_time_last_output_flush;
-extern const unsigned long global_tower_update_interval,
-       global_tower_daq_update_interval,
-       global_radio_timeout,
-       global_output_flush_interval;
-void loop(){
+extern const unsigned long
+        global_tower_update_interval,
+        global_tower_daq_update_interval,
+        global_radio_timeout,
+        global_output_flush_interval;
+
+void loop()
+{
 	//check for inputs from radio
 	while(xbee_bytes_available()){
 		//update FSM, which does the command processing
@@ -61,7 +66,7 @@ void loop(){
         set_radio_status(0);
     else
         set_radio_status(1);
-    
+
     //refresh the seven segment display
     char button_for_sevseg;
     convert_state_to_radio(get_button_state(), &button_for_sevseg);

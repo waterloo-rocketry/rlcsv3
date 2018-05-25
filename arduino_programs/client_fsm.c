@@ -9,9 +9,9 @@
 //and we need to receive daq updates. Those should be the only things
 //clients receive
 
-char buffer[DAQ_RADIO_LEN]; //the daq radio input should be the longest thing we get
-unsigned short buffer_index = 0;
-unsigned short data_len = 0;
+static char buffer[DAQ_RADIO_LEN]; //the daq radio input should be the longest thing we get
+static unsigned short buffer_index = 0;
+static unsigned short data_len = 0;
 enum {
     REC_NOTHING,
     REC_STATE,
@@ -20,7 +20,7 @@ enum {
 } state;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
-int valid_data_byte(char data) {
+static int valid_data_byte(char data) {
     if(data >= 'A' && data <= 'Z')
         return 1;
     if(data >= 'a' && data <= 'z')
@@ -33,7 +33,7 @@ int valid_data_byte(char data) {
 }
 
 extern unsigned long global_time_last_tower_state_req;
-void handle_state_update(char* state_buffer, actuator_state_t* state){
+static void handle_state_update(char* state_buffer, actuator_state_t* state){
     //log the last received tower state
     if(sd_active()){
         rlcslog_client_tower_state(state_buffer[0]);
@@ -44,7 +44,7 @@ void handle_state_update(char* state_buffer, actuator_state_t* state){
 }
 
 extern unsigned long global_time_last_tower_daq_req;
-void handle_daq_update(char* buffer, daq_holder_t* daq){
+static void handle_daq_update(char* buffer, daq_holder_t* daq){
     //unpack buffer, copy values into daq
     daq_radio_value_t s;
     for(int i = 0; i < DAQ_RADIO_LEN; i++){
@@ -58,7 +58,7 @@ void handle_daq_update(char* buffer, daq_holder_t* daq){
     global_time_last_tower_daq_req = millis_offset();
 }
 
-void handle_ack_request(char* buffer, actuator_state_t* state){
+static void handle_ack_request(char* buffer, actuator_state_t* state){
     //if the decoded state from buffer[0] is the same as state, then send an ack over the radio
     //if they aren't the same, send a nack
     actuator_state_t received;

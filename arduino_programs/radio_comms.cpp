@@ -65,7 +65,7 @@ int client_request_daq()
 
 //don't push state more than twice every second
 unsigned long time_last_state_push_sent = 0;
-int client_push_state(actuator_state_t* state)
+int client_push_state(const actuator_state_t* state)
 {
     if (millis_offset() - time_last_state_push_sent < millis_between_state_push) 
         //called too soon, so don't send anything
@@ -106,7 +106,7 @@ int client_nack()
 //now for the tower side radio sending functions
 
 unsigned long time_last_tower_ack_req = 0;
-int tower_request_ack(actuator_state_t* state)
+int tower_request_ack(const actuator_state_t* state)
 {
     if (millis_offset() - time_last_tower_ack_req < millis_between_tower_ack_req)
         return 0;
@@ -120,7 +120,7 @@ int tower_request_ack(actuator_state_t* state)
 }
 
 unsigned long time_last_tower_send_state = 0;
-int tower_send_state(actuator_state_t* state)
+int tower_send_state(const actuator_state_t* state)
 {
     if (millis_offset() - time_last_tower_send_state < millis_between_tower_send_state)
         return 0;

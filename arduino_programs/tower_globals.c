@@ -5,8 +5,8 @@
 #include "sd_handler.h"
 #include "Arduino.h"
 
-actuator_state_t global_requested_state, global_current_state;
-daq_holder_t global_current_daq;
+static actuator_state_t global_requested_state, global_current_state;
+static daq_holder_t global_current_daq;
 
 actuator_state_t* get_requested_state(){
     return &global_requested_state;

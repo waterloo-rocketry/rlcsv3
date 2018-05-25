@@ -71,7 +71,7 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
     return 1;
 }
 
-int convert_state_to_radio(actuator_state_t* state, char* binary) 
+int convert_state_to_radio(const actuator_state_t* state, char* binary) 
 {
     *binary = 0;
     *binary += state->injector_valve ? 1 : 0;
@@ -91,7 +91,7 @@ int convert_state_to_radio(actuator_state_t* state, char* binary)
 }
 
 //returns 1 if they're the same, else returns 0
-int actuator_compare(actuator_state_t* s, actuator_state_t* q)
+int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
 {
     return  s->remote_fill_valve == q->remote_fill_valve &&
             s->remote_vent_valve == q->remote_vent_valve &&
@@ -105,7 +105,7 @@ int actuator_compare(actuator_state_t* s, actuator_state_t* q)
 //these functions could easily be changed to make them more efficient
 //TODO I'm pretty sure you can decrease DAQ_RADIO_LEN from 17 to 10 by packing the three-digit values down
 //That involves some bit level fuckery, so I'll leave that as an exercise for later
-int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio){
+int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
     //step 1: convert the first two bytes from radio to pressure1
     daq->pressure1 = fromBase64(radio->data[1]) << 5 |
         fromBase64(radio->data[0]);
@@ -153,7 +153,7 @@ int convert_radio_to_daq(daq_holder_t* daq, daq_radio_value_t* radio){
 }
 
 //this does not check array length, so please pay attention to what you pass this
-void convert_uint16_to_2dig(uint16_t input, char* output){
+static void convert_uint16_to_2dig(uint16_t input, char* output){
     if (input > 999)
         input = 999;
     //it's impossible for input to be more than 10 bits
@@ -161,7 +161,7 @@ void convert_uint16_to_2dig(uint16_t input, char* output){
     output[1] = toBase64((input >> 5) & 0b11111);
 }
 
-int convert_daq_to_radio(daq_holder_t* daq, daq_radio_value_t* radio){
+int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
     //this probably isn't safe, TODO, do some sanity checking here
     convert_uint16_to_2dig(daq->pressure1, radio->data);
     convert_uint16_to_2dig(daq->pressure2, radio->data + 2);

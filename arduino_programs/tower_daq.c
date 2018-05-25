@@ -179,8 +179,6 @@ void compute_daq_values(daq_holder_t* output) {
     output->linac_lsw_extend = (output->linac_lsw_extend / WINDOW_WIDTH) != 0;
     output->linac_lsw_retract = (output->linac_lsw_retract / WINDOW_WIDTH) != 0;
 
-    //TODO, find a way to get pressure3 (pressure in the rocket) into this
-
     //log what we just computed
     daq_radio_value_t to_log;
     convert_daq_to_radio(output, &to_log);
