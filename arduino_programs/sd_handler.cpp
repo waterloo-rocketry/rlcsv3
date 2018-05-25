@@ -7,6 +7,9 @@
 #include <SPI.h>
 #include <SD.h>
 
+//remember kids, always do development in 4K
+#define SD_BUFFER_SIZE 4096
+
 //#define SD_SERIAL_LOG
 
 // set up variables using the SD utility library functions:

@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 
-#define SD_BUFFER_SIZE 1024
 
 void sd_init();
 
