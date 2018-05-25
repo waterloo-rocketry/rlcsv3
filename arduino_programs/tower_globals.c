@@ -195,6 +195,20 @@ void goto_safe_mode()
     apply_state();
 }
 
+void tower_handle_vent_update(sensor_data_t *update)
+{
+    //store the pressure in the daq singleton
+    if(update->pressure <= 999)
+        global_current_daq.pressure3 = update->pressure;
+    else
+        global_current_daq.pressure3 = update->pressure;
+}
+
+void tower_handle_inj_update(sensor_data_t *update)
+{
+    //do nothing. For now.
+}
+
 //global for how long it's been since the output log was flushed
 //to the SD card
 unsigned long global_time_last_output_flush = 0;

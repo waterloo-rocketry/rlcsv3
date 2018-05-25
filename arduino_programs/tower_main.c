@@ -13,7 +13,7 @@ void setup() {
     //initialize all outputs
     init_outputs();
     radio_init();
-    nio_init(0, 0);
+    nio_init(0,0,0,0);
     start_SevSeg();
     sd_init();
     if(sd_active()){

@@ -2,6 +2,7 @@
 #define TOWER_GLOBALS_H
 
 #include "shared_types.h"
+#include "nodeio.ioio.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,6 +23,10 @@ void reset_request();
 //global functions that we just need
 void init_outputs();
 void goto_safe_mode();
+
+//callbacks for nodeio.ioio to give us updates on stuff
+void tower_handle_vent_update(sensor_data_t* update);
+void tower_handle_inj_update(sensor_data_t* update);
 
 #ifdef __cplusplus
 }

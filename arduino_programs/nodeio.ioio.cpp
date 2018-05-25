@@ -59,6 +59,9 @@ void slave_request_ack(nio_actuator_state s);
 #else
 //stuff that only applies to master, in this case RLCS tower side
 
+//header for updating sensor data
+#include "tower_globals.h"
+
 //housekeeping for time between last commands
 unsigned long time_last_told_vent = 0;
 unsigned long time_last_told_inj = 0;
@@ -68,7 +71,7 @@ void tower_send_ack(char);
 void tower_send_nack();
 void tower_tell_vent(nio_actuator_state);
 void tower_tell_inj(nio_actuator_state);
-char fromBase64(char);
+static char nio_fromBase64(char);
 int unpack_sensor_data(char *, sensor_data_t*);
 
 //it currently uses the Serial2 interface
@@ -280,9 +283,42 @@ void nio_refresh(){
                     if(sensor_buffer_index == SENSOR_DATA_LENGTH){
                         //we've received a full data update. Process that.
                         //temporary variable to hold output
-                        sensor_data_t temp;
+                        sensor_data_t sensors_received;
                         //flag to tell us which slave it came from
-                        int ret = unpack_sensor_data(sensor_buffer, &temp);
+                        int ret = unpack_sensor_data(sensor_buffer, &sensors_received);
+                        if(ret == 0)
+                            break;
+                        //check to see if the sensor data tells us the valve state
+                        if( sensors_received.valve_limitswitch_open &&
+                           !sensors_received.valve_limitswitch_closed){
+                            //implies the valve is open
+                            if(ret == 1) //vent section
+                                vent_received = VALVE_OPEN;
+                            else if(ret == -1)//injector section
+                                inj_received = VALVE_OPEN;
+                        } else if( sensors_received.valve_limitswitch_open &&
+                                   sensors_received.valve_limitswitch_closed) {
+                            //implies that the valve is closed
+                            if(ret == 1) //vent section
+                                vent_received = VALVE_CLOSED;
+                            else if(ret == -1)//injector section
+                                inj_received = VALVE_CLOSED;
+                        } else {
+                            //implies that the state is unknown
+                            if(ret == 1) //vent section
+                                vent_received = NOTHING;
+                            else if(ret == -1)//injector section
+                                inj_received = NOTHING;
+                        }
+
+                        //now update tank pressure if we received
+                        //this from the vent section
+                        if(ret == 1)
+                            //update the pressure data and state
+                            tower_handle_vent_update(&sensors_received);
+                        else if (ret == -1)
+                            tower_handle_inj_update(&sensors_received);
+
                     }
                 }
 #endif
@@ -320,7 +356,7 @@ void nio_refresh(){
 //these are used for converting sensor data into radio packets (and
 //converting them back). They're currently not used since the sensor
 //data conversion isn't actually written.
-char fromBase64(char base64){
+static char nio_fromBase64(char base64){
     if ( base64 >= 'A' && base64 <= 'Z' ) {
         //we need to map 'A' (ascii value 65) to 0. So subtract 65
         base64 -= 65;
@@ -342,7 +378,7 @@ char fromBase64(char base64){
     }
     return base64;
 }
-char toBase64(char binary){
+static char nio_toBase64(char binary){
     if (binary >= 0 && binary <= 25) {
         //map to 'A' (ascii value 65). So add 65
         binary += 65;
@@ -402,14 +438,14 @@ int pack_sensor_data(char *output, sensor_data_t* data){
     pressure_holder = ((pressure_holder >> 1) & 0x1FF);
     temp |= ((pressure_holder >> 6) & 0b111);
     //convert temp to base 64, pu into first char of output
-    *output = toBase64(temp);
+    *output = nio_toBase64(temp);
     
     //put bottom 6 bits of pressure into output[1]
-    output[1] = toBase64(pressure_holder & 0x3F);
+    output[1] = nio_toBase64(pressure_holder & 0x3F);
 
     //put thermistor data here
     for(int i = 0; i < NUM_THERMISTORS; i++){
-        output[i+2] = toBase64(data->thermistor_data[i] >> 4);
+        output[i+2] = nio_toBase64(data->thermistor_data[i] >> 4);
     }
 
     return ret_success;
@@ -424,7 +460,7 @@ int unpack_sensor_data(char *input, sensor_data_t* output){
     //take first byte of input, convert from Base 64,
     char decoded[SENSOR_DATA_LENGTH];
     for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
-        if( (decoded[i] = fromBase64(input[i])) < 0 ){
+        if( (decoded[i] = nio_fromBase64(input[i])) < 0 ){
             //fromBase64 returns -1 on failure. If it fails, we fail
             return 0;
         }
