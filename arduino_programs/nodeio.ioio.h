@@ -49,7 +49,10 @@ typedef enum {
 //this is what for not shorting 50 amps through your board
 #define MOSFET_SWITCH_TIME_MS 150
 //initialization function. Sets up Serial communication, and actuator pins
-void nio_init(int pin_valve_closed, int pin_valve_opened);
+void nio_init(int pin_valve_close1,
+              int pin_valve_close2,
+              int pin_valve_open1,
+              int pin_valve_open2);
 
 //call this function every loop. It checks for new packets, and handles
 //incoming commands if need be (opening and closing the valve as needed)

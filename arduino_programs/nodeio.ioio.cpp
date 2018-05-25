@@ -32,7 +32,7 @@
 //wires. Setting the close wire high and the open wire
 //high closes the valve, and vice versa (writing both
 //wires high results in getting eaten by a velociraptor)
-static int pin_close, pin_open;
+static int pin_close1, pin_close2, pin_open1, pin_open2;
 
 //default states for maximum safety.
 #ifdef NODE_VENT
@@ -93,7 +93,10 @@ void nio_set_inj_desired(nio_actuator_state s) { inj_desired = s; }
 #endif //ifndef NODE_GROUND
 
 //init function. Called at startup
-void nio_init(int pin_valve_close, int pin_valve_open){
+void nio_init(int pin_valve_close1,
+              int pin_valve_close2,
+              int pin_valve_open1,
+              int pin_valve_open2){
     //Alex, this blocks at startup if there is no
     //serial interface connected. This seems safest,
     //if the slaves don't have a radio, they really
@@ -103,10 +106,14 @@ void nio_init(int pin_valve_close, int pin_valve_open){
     RADIO_UART.begin(9600);
 #ifndef NODE_GROUND
     //things that the slaves do and master doesn't
-    pin_close = pin_valve_close;
-    pin_open = pin_valve_open;
-    pinMode(pin_close, OUTPUT);
-    pinMode(pin_open, OUTPUT);
+    pin_close1 = pin_valve_close1;
+    pin_close2 = pin_valve_close2;
+    pin_open1 = pin_valve_open1;
+    pin_open2 = pin_valve_open2;
+    pinMode(pin_close1, OUTPUT);
+    pinMode(pin_close2, OUTPUT);
+    pinMode(pin_open1, OUTPUT);
+    pinMode(pin_open2, OUTPUT);
     apply_state(current_state);
 #endif
 }
@@ -483,19 +490,25 @@ void apply_state(nio_actuator_state s){
 #if defined(NODE_VENT) || defined(NODE_INJ)
     if(s == VALVE_OPEN){
         //write high to the "open pin", and low to the "close" pin
-        digitalWrite(pin_close, LOW);
+        digitalWrite(pin_close1, LOW);
+        digitalWrite(pin_close2, LOW);
         delay(MOSFET_SWITCH_TIME_MS);
-        digitalWrite(pin_open, HIGH);
+        digitalWrite(pin_open1, HIGH);
+        digitalWrite(pin_open2, HIGH);
     } else if(s == VALVE_CLOSED){
         //the opposite of that one
-        digitalWrite(pin_open, LOW);
+        digitalWrite(pin_open1, LOW);
+        digitalWrite(pin_open2, LOW);
         delay(MOSFET_SWITCH_TIME_MS);
-        digitalWrite(pin_close, HIGH);
+        digitalWrite(pin_close1, HIGH);
+        digitalWrite(pin_close2, HIGH);
     } else {
         //write them both low. TODO alex confirm that this is how
         //to power off your h-bridge thing
-        digitalWrite(pin_close, LOW);
-        digitalWrite(pin_open,  LOW);
+        digitalWrite(pin_close1, LOW);
+        digitalWrite(pin_close2, LOW);
+        digitalWrite(pin_open1,  LOW);
+        digitalWrite(pin_open2, LOW);
     }
 #endif
     current_state = s;
