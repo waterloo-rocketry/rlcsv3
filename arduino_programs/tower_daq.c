@@ -13,12 +13,6 @@ static struct {
     uint16_t pressure2;
     uint16_t curr_ignition_pri;
     uint16_t curr_ignition_sec;
-    uint16_t curr_remotefill_opn;
-    uint16_t curr_remotefill_cls;
-    uint16_t curr_remotevent_opn;
-    uint16_t curr_remotevent_cls;
-    uint16_t curr_linac_ext;
-    uint16_t curr_linac_ret;
     //all limit switches are digital values (either 1 or 0)
     //these could be packed into a bit field, but I'm not 
     //at all worried about space, so am currently using uint8_t's
@@ -37,12 +31,6 @@ void init_daq_pins() {
     pinMode(PIN_DAQ_MASS, INPUT);
     pinMode(PIN_CURRENT_IGNITION_PRI, INPUT);
     pinMode(PIN_CURRENT_IGNITION_SEC, INPUT);
-    pinMode(PIN_CURRENT_REMOTEFILL_OPN, INPUT);
-    pinMode(PIN_CURRENT_REMOTEFILL_CLS, INPUT);
-    pinMode(PIN_CURRENT_REMOTEVENT_OPN, INPUT);
-    pinMode(PIN_CURRENT_REMOTEVENT_CLS, INPUT);
-    pinMode(PIN_CURRENT_LINAC_EXT, INPUT);
-    pinMode(PIN_CURRENT_LINAC_RET, INPUT);
     pinMode(PIN_LIMITSW_REMOTEFILL_OPN, INPUT);
     pinMode(PIN_LIMITSW_REMOTEFILL_CLS, INPUT);
     pinMode(PIN_LIMITSW_REMOTEVENT_OPN, INPUT);
@@ -67,18 +55,6 @@ void read_daq_pins() {
         analogRead(PIN_CURRENT_IGNITION_PRI);
     window_holder[window_holder_index].curr_ignition_sec = 
         analogRead(PIN_CURRENT_IGNITION_SEC);
-    window_holder[window_holder_index].curr_remotefill_opn = 
-        analogRead(PIN_CURRENT_REMOTEFILL_OPN);
-    window_holder[window_holder_index].curr_remotefill_cls = 
-        analogRead(PIN_CURRENT_REMOTEFILL_CLS);
-    window_holder[window_holder_index].curr_remotevent_opn = 
-        analogRead(PIN_CURRENT_REMOTEVENT_OPN);
-    window_holder[window_holder_index].curr_remotevent_cls = 
-        analogRead(PIN_CURRENT_REMOTEVENT_CLS);
-    window_holder[window_holder_index].curr_linac_ext = 
-        analogRead(PIN_CURRENT_LINAC_EXT);
-    window_holder[window_holder_index].curr_linac_ret = 
-        analogRead(PIN_CURRENT_LINAC_RET);
 
     //now read in all the digital values
     window_holder[window_holder_index].lsw_remotefill_opn =
@@ -111,12 +87,6 @@ void compute_daq_values(daq_holder_t* output) {
         output->rocket_mass         += window_holder[i].mass;
         output->ign_pri_current     += window_holder[i].curr_ignition_pri;
         output->ign_sec_current     += window_holder[i].curr_ignition_sec;
-        output->rfill_current_open  += window_holder[i].curr_remotefill_opn;
-        output->rfill_current_close += window_holder[i].curr_remotefill_cls;
-        output->rvent_current_open  += window_holder[i].curr_remotevent_opn;
-        output->rvent_current_close += window_holder[i].curr_remotevent_cls;
-        output->linac_current_open  += window_holder[i].curr_linac_ext;
-        output->linac_current_close += window_holder[i].curr_linac_ret;
         output->rfill_lsw_open      += window_holder[i].lsw_remotefill_opn;
         output->rfill_lsw_closed    += window_holder[i].lsw_remotefill_cls;
         output->rvent_lsw_open      += window_holder[i].lsw_remotevent_opn;
@@ -146,30 +116,6 @@ void compute_daq_values(daq_holder_t* output) {
     output->ign_sec_current *= IGNSEC_SCALE;
     output->ign_sec_current /= WINDOW_WIDTH;
     output->ign_sec_current += IGNSEC_OFFSET;
-
-    output->rfill_current_open *= RFILL_OPN_SCALE;
-    output->rfill_current_open /= WINDOW_WIDTH;
-    output->rfill_current_open += RFILL_OPN_OFFSET;
-
-    output->rfill_current_close *= RFILL_CLS_SCALE;
-    output->rfill_current_close /= WINDOW_WIDTH;
-    output->rfill_current_close += RFILL_CLS_OFFSET;
-
-    output->rvent_current_open *= RVENT_OPN_SCALE;
-    output->rvent_current_open /= WINDOW_WIDTH;
-    output->rvent_current_open += RVENT_OPN_OFFSET;
-
-    output->rvent_current_close *= RVENT_CLS_SCALE;
-    output->rvent_current_close /= WINDOW_WIDTH;
-    output->rvent_current_close += RVENT_CLS_OFFSET;
-
-    output->linac_current_open *= LINAC_EXT_SCALE;
-    output->linac_current_open /= WINDOW_WIDTH;
-    output->linac_current_open += LINAC_EXT_OFFSET;
-
-    output->linac_current_close *= LINAC_RET_SCALE;
-    output->linac_current_close /= WINDOW_WIDTH;
-    output->linac_current_close += LINAC_RET_OFFSET;
 
     //the on off values just need to be divided by the width
     output->rfill_lsw_open = (output->rfill_lsw_open / WINDOW_WIDTH) != 0;

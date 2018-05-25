@@ -16,8 +16,6 @@ void read_daq_pins();
 void compute_daq_values(daq_holder_t* output);
 
 //scaling factors and other constants
-#define VALVE_CURRENT_THRESHOLD 100
-#define LINAC_CURRENT_THRESHOLD 100
 
 #define PRESSURE1_SCALE 0.5
 #define PRESSURE1_OFFSET 0
@@ -28,20 +26,5 @@ void compute_daq_values(daq_holder_t* output);
 #define IGNPRI_OFFSET 0
 #define IGNSEC_SCALE 1.1
 #define IGNSEC_OFFSET 0
-
-#define RFILL_OPN_SCALE 0.5
-#define RFILL_OPN_OFFSET 0
-#define RFILL_CLS_SCALE 0.5
-#define RFILL_CLS_OFFSET 0
-
-#define RVENT_OPN_SCALE 0.5
-#define RVENT_OPN_OFFSET 0
-#define RVENT_CLS_SCALE 0.5
-#define RVENT_CLS_OFFSET 0
-
-#define LINAC_EXT_SCALE 0.5
-#define LINAC_EXT_OFFSET 0
-#define LINAC_RET_SCALE 0.5
-#define LINAC_RET_OFFSET 0
 
 #endif

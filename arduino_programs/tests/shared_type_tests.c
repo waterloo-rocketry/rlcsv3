@@ -109,12 +109,6 @@ void generateRandomDaqState(daq_holder_t* s){
     s->rocket_mass = rand() % 999;
     s->ign_pri_current = rand() % 999;
     s->ign_sec_current = rand() % 999;
-    s->rfill_current_open = rand() & 1;
-    s->rfill_current_close = rand() & 1;
-    s->rvent_current_open = rand() & 1;
-    s->rvent_current_close = rand() & 1;
-    s->linac_current_open = rand() & 1;
-    s->linac_current_close = rand() & 1;
     s->rfill_lsw_open = rand() & 1;
     s->rfill_lsw_closed = rand() & 1;
     s->rvent_lsw_open = rand() & 1;
@@ -141,12 +135,6 @@ int randomDaqCompare(){
             s.rocket_mass == q.rocket_mass &&
             s.ign_pri_current == q.ign_pri_current &&
             s.ign_sec_current == q.ign_sec_current &&
-            s.rfill_current_open == q.rfill_current_open &&
-            s.rfill_current_close == q.rfill_current_close &&
-            s.rvent_current_open == q.rvent_current_open &&
-            s.rvent_current_close == q.rvent_current_close &&
-            s.linac_current_open == q.linac_current_open &&
-            s.linac_current_close == q.linac_current_close &&
             s.rfill_lsw_open == q.rfill_lsw_open &&
             s.rfill_lsw_closed == q.rfill_lsw_closed &&
             s.rvent_lsw_open == q.rvent_lsw_open &&
@@ -164,12 +152,6 @@ int randomDaqCompare(){
             printf("s.rocket_mass: %u\n",s.rocket_mass);
             printf("s.ign_pri_current: %u\n",s.ign_pri_current);
             printf("s.ign_sec_current: %u\n",s.ign_sec_current);
-            printf("s.rfill_current_open: %u\n",s.rfill_current_open);
-            printf("s.rfill_current_close: %u\n",s.rfill_current_close);
-            printf("s.rvent_current_open: %u\n",s.rvent_current_open);
-            printf("s.rvent_current_close: %u\n",s.rvent_current_close);
-            printf("s.linac_current_open: %u\n",s.linac_current_open);
-            printf("s.linac_current_close: %u\n",s.linac_current_close);
             printf("s.rfill_lsw_open: %u\n",s.rfill_lsw_open);
             printf("s.rfill_lsw_closed: %u\n",s.rfill_lsw_closed);
             printf("s.rvent_lsw_open: %u\n",s.rvent_lsw_open);
@@ -183,12 +165,6 @@ int randomDaqCompare(){
             printf("q.rocket_mass: %u\n",q.rocket_mass);
             printf("q.ign_pri_current: %u\n",q.ign_pri_current);
             printf("q.ign_sec_current: %u\n",q.ign_sec_current);
-            printf("q.rfill_current_open: %u\n",q.rfill_current_open);
-            printf("q.rfill_current_close: %u\n",q.rfill_current_close);
-            printf("q.rvent_current_open: %u\n",q.rvent_current_open);
-            printf("q.rvent_current_close: %u\n",q.rvent_current_close);
-            printf("q.linac_current_open: %u\n",q.linac_current_open);
-            printf("q.linac_current_close: %u\n",q.linac_current_close);
             printf("q.rfill_lsw_open: %u\n",q.rfill_lsw_open);
             printf("q.rfill_lsw_closed: %u\n",q.rfill_lsw_closed);
             printf("q.rvent_lsw_open: %u\n",q.rvent_lsw_open);

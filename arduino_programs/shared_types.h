@@ -37,12 +37,6 @@ typedef struct {
     uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
     uint16_t ign_pri_current;           //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
     uint16_t ign_sec_current;           //between 0 and 999 (measured in centiamps)
-    unsigned char rfill_current_open;   //0 when current reading is below arbitrary limit
-    unsigned char rfill_current_close;
-    unsigned char rvent_current_open;
-    unsigned char rvent_current_close;
-    unsigned char linac_current_open;
-    unsigned char linac_current_close;
     unsigned char rfill_lsw_open;       //0 when low, 1 when high (which means remote fill is open)
     unsigned char rfill_lsw_closed;     //0 when low, 1 when high (which means remote fill is closed)
     unsigned char rvent_lsw_open;       //0 when low, 1 when high (which means remote vent is open)
@@ -56,7 +50,7 @@ typedef struct {
 
 } daq_holder_t;
 
-#define DAQ_RADIO_LEN 15
+#define DAQ_RADIO_LEN 14
 typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;
