@@ -33,7 +33,10 @@ void rlcslog_client_tower_state(char state);
 
 //tower only functions
 #ifdef TOWER
+#include "nodeio.ioio.h"
 void rlcslog_tower_apply_state(char input);
+void rlcslog_tower_vent_update(const sensor_data_t*);
+void rlcslog_tower_inj_update(const sensor_data_t*);
 #endif
 
 #ifdef __cplusplus

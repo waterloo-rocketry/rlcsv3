@@ -195,18 +195,32 @@ void goto_safe_mode()
     apply_state();
 }
 
-void tower_handle_vent_update(sensor_data_t *update)
+void tower_handle_vent_update(const sensor_data_t *update)
 {
     //store the pressure in the daq singleton
     if(update->pressure <= 999)
         global_current_daq.pressure3 = update->pressure;
     else
         global_current_daq.pressure3 = update->pressure;
+
+    //update limit switch data
+    global_current_daq.rocketvent_lsw_open =
+        update->valve_limitswitch_open;
+    global_current_daq.rocketvent_lsw_closed =
+        update->valve_limitswitch_closed;
+
+    rlcslog_tower_vent_update(update);
 }
 
-void tower_handle_inj_update(sensor_data_t *update)
+void tower_handle_inj_update(const sensor_data_t *update)
 {
-    //do nothing. For now.
+    //update limit switch data
+    global_current_daq.injectorvalve_lsw_open =
+        update->valve_limitswitch_open;
+    global_current_daq.injectorvalve_lsw_closed =
+        update->valve_limitswitch_closed;
+
+    rlcslog_tower_inj_update(update);
 }
 
 //global for how long it's been since the output log was flushed
