@@ -61,6 +61,7 @@ void slave_request_ack(nio_actuator_state s);
 
 //header for updating sensor data
 #include "tower_globals.h"
+#include "sd_handler.h"
 
 //housekeeping for time between last commands
 unsigned long time_last_told_vent = 0;
@@ -279,15 +280,17 @@ void nio_refresh(){
                     char temp = fromBase64(x);
                     if(temp < 0) //it's not a base64 number
                         break;
-                    sensor_buffer[sensor_buffer_index++] = temp;
+                    sensor_buffer[sensor_buffer_index++] = x;
                     if(sensor_buffer_index == SENSOR_DATA_LENGTH){
                         //we've received a full data update. Process that.
                         //temporary variable to hold output
                         sensor_data_t sensors_received;
                         //flag to tell us which slave it came from
                         int ret = unpack_sensor_data(sensor_buffer, &sensors_received);
-                        if(ret == 0)
+                        if(ret == 0){
+                            rlcslog("couldn't unpack sensor data");
                             break;
+                        }
                         //check to see if the sensor data tells us the valve state
                         if( sensors_received.valve_limitswitch_open &&
                            !sensors_received.valve_limitswitch_closed){
@@ -462,6 +465,16 @@ int unpack_sensor_data(char *input, sensor_data_t* output){
     for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
         if( (decoded[i] = nio_fromBase64(input[i])) < 0 ){
             //fromBase64 returns -1 on failure. If it fails, we fail
+            char message[8];
+            message[0] = input[0];
+            message[1] = input[1];
+            message[2] = input[2];
+            message[3] = input[3];
+            message[4] = input[4];
+            message[5] = input[5];
+            message[6] = i + '0';
+            message[7] = '\0';
+            rlcslog(message);
             return 0;
         }
     //and then the bit order is
