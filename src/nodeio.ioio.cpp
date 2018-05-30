@@ -28,11 +28,19 @@
 //here is where to change this
 #define RADIO_UART Serial
 
-//it is assumed that driving the valve is done with two
-//wires. Setting the close wire high and the open wire
-//high closes the valve, and vice versa (writing both
+//it is assumed that driving the valve is done with four
+//wires. Setting the close wires high and the open wires
+//high closes the valve, and vice versa (writing all
 //wires high results in getting eaten by a velociraptor)
 static int pin_close1, pin_close2, pin_open1, pin_open2;
+
+//timeout for going to safe state. If we don't receive any
+//communications from the tower box in _this_ long, then go
+//to the safe state. For the vent, that's open. For the inj,
+//that means just stop driving the valve
+#define SAFE_STATE_TIMEOUT 30000 //30 seconds seems good
+static unsigned long time_last_contact = 0;
+static void goto_safe_state(void);
 
 //default states for maximum safety.
 #ifdef NODE_VENT
@@ -149,6 +157,7 @@ void nio_refresh(){
                     tower_send_nack();
                 }
 #elif defined(NODE_VENT)
+                time_last_contact = millis();
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     //we asked them to ack this, and they are
                     if(current_requested_state == VALVE_OPEN){
@@ -182,6 +191,7 @@ void nio_refresh(){
 #elif defined(NODE_VENT)
                 //this code is identical to the code for valve open,
                 //just... you know... for closing
+                time_last_contact = millis();
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     if(current_requested_state == VALVE_CLOSED){
                         apply_state(VALVE_CLOSED);
@@ -209,6 +219,7 @@ void nio_refresh(){
                     tower_send_nack();
                 }
 #elif defined(NODE_INJ)
+                time_last_contact = millis();
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     //we asked them to ack this, and they are
                     if(current_requested_state == VALVE_OPEN){
@@ -232,6 +243,7 @@ void nio_refresh(){
                     tower_send_nack();
                 }
 #elif defined(NODE_INJ)
+                time_last_contact = millis();
                 if(current_fsm_state == STATE_ACK_RECEIVE){
                     if(current_requested_state == VALVE_CLOSED){
                         apply_state(VALVE_CLOSED);
@@ -338,6 +350,11 @@ void nio_refresh(){
         //otherwise we'd be sending packets as fast
         //as humanly (avr-ly) possible. Which is bad.
         slave_request_ack(current_requested_state);
+    }
+
+    //if we need to go to safe state, do that
+    if(millis() - time_last_contact > SAFE_STATE_TIMEOUT){
+        goto_safe_state();
     }
 
 #else //only housekeeping done by tower
@@ -465,16 +482,6 @@ int unpack_sensor_data(char *input, sensor_data_t* output){
     for(int i = 0; i < SENSOR_DATA_LENGTH; i++)
         if( (decoded[i] = nio_fromBase64(input[i])) < 0 ){
             //fromBase64 returns -1 on failure. If it fails, we fail
-            char message[8];
-            message[0] = input[0];
-            message[1] = input[1];
-            message[2] = input[2];
-            message[3] = input[3];
-            message[4] = input[4];
-            message[5] = input[5];
-            message[6] = i + '0';
-            message[7] = '\0';
-            rlcslog(message);
             return 0;
         }
     //and then the bit order is
@@ -587,6 +594,20 @@ void slave_request_ack(nio_actuator_state s){
 #endif
         time_last_ack_sent = millis();
     }
+}
+
+void goto_safe_state(){
+#ifdef NODE_INJ
+    //injector doesn't do anything
+    if(current_state == NOTHING)
+        return;
+    apply_state(NOTHING);
+#elif defined(NODE_VENT)
+    //vent valve should open
+    if(current_state == VALVE_OPEN)
+        return;
+    apply_state(VALVE_OPEN);
+#endif
 }
 
 #else //code only applies to ground
