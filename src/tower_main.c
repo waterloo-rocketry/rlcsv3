@@ -48,7 +48,7 @@ void loop() {
     if (millis() - global_time_last_logged_daq > global_time_between_daq_logs) {
         get_global_current_daq();
     }
-    
+
     //check time last contact
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {
         //goto safe mode
