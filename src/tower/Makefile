@@ -37,6 +37,7 @@ objects +=tower_fsm.o
 objects +=SevSeg.o
 objects +=nodeio.ioio.o
 objects +=sd_handler.o
+objects +=linac.o
 
 #header files - always recompile everything whenever a header changes
 headers =LCD.h
