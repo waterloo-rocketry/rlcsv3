@@ -99,15 +99,27 @@ void compute_daq_values(daq_holder_t* output) {
     //placeholders for now. There are defined in the header
     output->pressure1 *= PRESSURE1_SCALE;
     output->pressure1 /= WINDOW_WIDTH;
-    output->pressure1 += PRESSURE1_OFFSET;
+    if(output->pressure1 > (-PRESSURE1_OFFSET)){
+        output->pressure1 += PRESSURE1_OFFSET;
+    } else {
+        output->pressure1 = 0;
+    }
 
     output->pressure2 *= PRESSURE2_SCALE;
     output->pressure2 /= WINDOW_WIDTH;
-    output->pressure2 += PRESSURE2_OFFSET;
+    if(output->pressure2 > (-PRESSURE2_OFFSET)){
+        output->pressure2 += PRESSURE2_OFFSET;
+    } else {
+        output->pressure2 = 0;
+    }
 
-    output->rocket_mass *= PRESSURE2_SCALE;
+    output->rocket_mass *= MASS_SCALE;
     output->rocket_mass /= WINDOW_WIDTH;
-    output->rocket_mass += PRESSURE2_OFFSET;
+    if(output->rocket_mass > (-MASS_OFFSET)){
+        output->rocket_mass += MASS_OFFSET;
+    } else {
+        output->rocket_mass = 0;
+    }
 
     output->ign_pri_current *= IGNPRI_SCALE;
     output->ign_pri_current /= WINDOW_WIDTH;
