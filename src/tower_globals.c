@@ -3,6 +3,7 @@
 #include "tower_pin_defines.h"
 #include "nodeio.ioio.h"
 #include "sd_handler.h"
+#include "linac.h"
 #include "Arduino.h"
 
 static actuator_state_t global_requested_state, global_current_state;
@@ -85,15 +86,14 @@ void apply_state(){
 
     if(global_requested_state.linear_actuator != global_current_state.linear_actuator){
         //we need to change the linear_actuator to what requested wants
-        global_current_state.linear_actuator = global_requested_state.linear_actuator;
         if(global_current_state.linear_actuator){
             //retract the linear_actuator
-            digitalWrite((uint8_t) PIN_LINACTUATOR_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_LINACTUATOR_SELECT, LOW);
+            if(linac_retract())
+                global_current_state.linear_actuator = global_requested_state.linear_actuator;
         } else {
             //extend the linear_actuator
-            digitalWrite((uint8_t) PIN_LINACTUATOR_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_LINACTUATOR_SELECT, HIGH);
+            if(linac_extend())
+                global_current_state.linear_actuator = global_requested_state.linear_actuator;
         }
     }
 
@@ -155,9 +155,7 @@ void init_outputs(){
     //TODO, figure out how the run tank valve is going to work
     //likely involve a serial link to another arduino
 
-    //linac, extend on startup
-    digitalWrite((uint8_t) PIN_LINACTUATOR_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_LINACTUATOR_SELECT, HIGH);
+    linac_init();
 
     //ignition, set to off by default
     digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);

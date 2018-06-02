@@ -14,8 +14,7 @@ INCLUDES += -I$(HARDWARE)/arduino/variants/mega
 #my mac _does_ put the /avr/ in there
 INCLUDES += -I$(HARDWARE)/arduino/avr/cores/arduino
 INCLUDES += -I$(HARDWARE)/arduino/avr/variants/mega
-INCLUDES += -I$(HARDWARE)/../libraries/SD/src
-INCLUDES += -I$(HARDWARE)/arduino/avr/libraries/SPI/src
+INCLUDES += -I../
 
 #our source files are in the parent directory
 VPATH += ..
@@ -28,25 +27,11 @@ VPATH += $(HARDWARE)/../libraries/SD/src
 VPATH += $(HARDWARE)/../libraries/SD/src/utility
 
 #our source files
-objects  =tower_globals.o
-objects +=tower_main.o
-objects +=tower_daq.o
-objects +=radio_comms.o
-objects +=shared_types.o
-objects +=tower_fsm.o
-objects +=SevSeg.o
-objects +=nodeio.ioio.o
-objects +=sd_handler.o
-objects +=linac.o
+objects  =linac.o
+objects +=linac_test.o
 
 #header files - always recompile everything whenever a header changes
-headers =LCD.h
-headers +=SevSeg.h
-headers +=radio_comms.h
-headers +=shared_types.h
-headers +=tower_daq.h
-headers +=tower_fsm.h
-headers +=tower_globals.h
+headers =linac.h
 headers +=tower_pin_defines.h
 
 #arduino source files: get compiled into core.a
@@ -73,20 +58,13 @@ lib_objects += WMath.o
 lib_objects += WString.o
 lib_objects += abi.o
 lib_objects += main.o
-lib_objects += new.o
-lib_objects +=SPI.o
-lib_objects +=SD.o
-lib_objects +=SdFile.o
-lib_objects +=Sd2Card.o
-lib_objects +=SdVolume.o
-lib_objects +=File.o
 
-all:  tower.hex
+all:  linac.hex
 
-tower.hex: tower.elf
-	avr-objcopy -O ihex -R .eeprom tower.elf tower.hex
+linac.hex: linac.elf
+	avr-objcopy -O ihex -R .eeprom linac.elf linac.hex
 
-tower.elf: $(objects) core.a 
+linac.elf: $(objects) core.a 
 	$(CC) $(ELFFLAGS) -o $@ $(objects) core.a -lm
 
 core.a: $(lib_objects)
@@ -103,6 +81,6 @@ core.a: $(lib_objects)
 clean:
 	-rm *.o
 	-rm core.a
-	-rm tower.elf
-	-rm tower.hex
+	-rm linac.elf
+	-rm linac.hex
 
