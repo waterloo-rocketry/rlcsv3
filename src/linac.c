@@ -11,10 +11,10 @@
 #define LINAC_COOLDOWN_TIME 2000
 
 static enum {
-    LINAC_UNKOWN, //what it is at startup
+    LINAC_UNKNOWN, //what it is at startup
     LINAC_EXTENDED,
     LINAC_RETRACTED
-} current_linac_state = LINAC_UNKOWN;
+} current_linac_state = LINAC_UNKNOWN;
 
 static enum {
     LINAC_COOLDOWN,
