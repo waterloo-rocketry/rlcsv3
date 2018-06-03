@@ -17,11 +17,11 @@ void compute_daq_values(daq_holder_t* output);
 
 //scaling factors and other constants
 
-#define PRESSURE1_SCALE (611.99*5/1024)
-#define PRESSURE1_OFFSET (-46.704)
+#define PRESSURE1_SCALE ((561*5)/1024)
+#define PRESSURE1_OFFSET (-104)
 
-#define PRESSURE2_SCALE (612.37*5/1024)
-#define PRESSURE2_OFFSET (-43.355)
+#define PRESSURE2_SCALE ((252*5)/1024)
+#define PRESSURE2_OFFSET (-89)
 
 #define MASS_SCALE 0.195
 #define MASS_OFFSET (-30)
