@@ -1,0 +1,79 @@
+Item                                        Quantity (needed+spare)
+-----------------------------------------------------------------------------
+Relay Boards                                5+2
+Power Supply boards                         2+1
+Pancake                                     1+1
+XBEE S3B                                    2+1
+XBEE RP-SMA antenna                         2+1
+XBEE S1                                     1+1
+Xbee breakout                               3+1
+XBEE box                                    2+2
+Client Side LCD                             1+1
+
+All the spare components we can find (to be updated)
+(board components. Mosfets and stuff)
+
+Strain based Pressure Transducers           2
+Load cell                                   1
+Lipo 2200mAh                                3+3
+M3 Screw                                    8 min
+
+Misumi connectors                           4 + 1 male + 1 female
+Nick's Molex connectors                     2 male + 2 female
+Quick conn                                  all
+Dupont conn                                 all
+Ferrules                                    all
+Barrel splices                              all
+RJ-45 housings and sleeve things            all
+
+Electric Valves (with cables)               2+1
+Fuses:
+    - Big 30 amp one (full tower box)       1 + 2
+    - Small 20 amp ones (relay boards)      5 + 3
+    - Even smaller 1 amp one (power supply) 2 + 3
+Linear actuator                             1 + 2
+Ignition Connectors (female)                2 + 2
+
+
+-----------------------------------------------------------------------------
+Cables                                      Quantity (needed+spare)
+-----------------------------------------------------------------------------
+USB A-B cables                              2
+Linear actuator cable
+ignition cable
+XBEE cables (cat 5 with a symmetric pinout) 2+1
+XBEE cables (4pin thing into female rj45)   2+1
+Spare cable:
+    16 awg 6-cond cable
+    22AWG
+    Cat-5
+    
+
+-----------------------------------------------------------------------------
+Tool                                        Quantity (TBD)
+-----------------------------------------------------------------------------
+Screwdriver (Phillips head)
+Screwdriver (Jeweler's Phillips)
+Screwdriver (Jeweler's smalles flathead)
+Screwdriver (Mastercraft Blue flathead)
+Allen key (M3)
+Tweezers
+
+Crimpers (Dupont)
+Crimpers (ferrule)
+Crimpers/Strippers
+Cutters (red ones and blue ones)
+Heat gun
+Heat shrink (clear):
+    -1/8
+    -1/4
+    -1/2
+
+Soldering iron
+Solder
+Flux
+Solder braid
+Bunch of zipties
+
+Multimeter
+Magnifying glass
