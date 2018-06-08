@@ -6,7 +6,17 @@
 #include "linac.h"
 #include "Arduino.h"
 
-static actuator_state_t global_requested_state, global_current_state;
+static actuator_state_t global_requested_state;
+static actuator_state_t global_current_state = {
+    .remote_fill_valve = 0,
+    .remote_vent_valve = 0,
+    .run_tank_valve = 1,
+    .injector_valve = 0,
+    .linear_actuator = 0,
+    .ignition_power = 0,
+    .ignition_select = 0
+};
+
 static daq_holder_t global_current_daq;
 
 actuator_state_t* get_requested_state(){
@@ -227,4 +237,4 @@ unsigned long global_time_last_output_flush = 0;
 const unsigned long global_output_flush_interval = 10000;
 //global for how long it's been since we logged daq values
 unsigned long global_time_last_logged_daq = 0;
-const unsigned long global_time_between_daq_logs = 7000;
+const unsigned long global_time_between_daq_logs = 1000;

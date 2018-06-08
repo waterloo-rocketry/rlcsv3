@@ -8,7 +8,28 @@ void lcd_print(int x, int y, char c);
 void output_labels();
 #include <string.h>
 
-static daq_holder_t last_daq;
+//setup last daq to hold impossible values
+//so that when we get the first data from the tower,
+//it updates with those values
+static daq_holder_t last_daq = {
+    .pressure1 = 999,
+    .pressure2 = 999,
+    .pressure3 = 999,
+    .rocket_mass = 0xFFFF,
+    .ign_pri_current = 0xFFFF,
+    .ign_sec_current = 0xFFFF,
+    .rfill_lsw_open = 0,
+    .rfill_lsw_closed = 0,
+    .rvent_lsw_open = 0,
+    .rvent_lsw_closed = 0,
+    .rocketvent_lsw_open = 0,
+    .rocketvent_lsw_closed = 0,
+    .injectorvalve_lsw_open = 0,
+    .injectorvalve_lsw_closed = 0,
+    .linac_lsw_extend = 0,
+    .linac_lsw_retract = 0
+};
+
 static LiquidCrystal lcd(
     PIN_LCD_RS,
     PIN_LCD_EN,
@@ -20,8 +41,6 @@ static LiquidCrystal lcd(
 void lcd_init()
 {
     lcd.begin(20,4);
-    //sets every single bit in last_daq to 0 (which should be the default)
-    memset(&last_daq, 0, sizeof(last_daq));
 
     lcd.setCursor(0,0);
     lcd.print("P1:    P2:    P3:   ");
