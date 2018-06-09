@@ -17,11 +17,20 @@ void compute_daq_values(daq_holder_t* output);
 
 //scaling factors and other constants
 
-#define PRESSURE1_SCALE ((561*5)/1024)
-#define PRESSURE1_OFFSET (-104)
+/*
+ * BASED ON CALIBRATION DONE ON JUNE 8TH
+ * AT 12.49Vbatt:
+ *  SP1: (278.92*vout - 74.42)PSI
+ *  SP2: (278.66*vout - 120.43)PSI
+ * AT 11.63Vbatt:
+ *  SP1: (277.76*vout - 68.179)PSI
+ *  SP2: (277.28*vout - 113.76)PSI
+ */
+#define PRESSURE1_SCALE ((278*5)/1024)
+#define PRESSURE1_OFFSET (-71)
 
-#define PRESSURE2_SCALE ((252*5)/1024)
-#define PRESSURE2_OFFSET (-89)
+#define PRESSURE2_SCALE ((278*5)/1024)
+#define PRESSURE2_OFFSET (-117)
 
 #define MASS_SCALE 0.195
 #define MASS_OFFSET (-30)
