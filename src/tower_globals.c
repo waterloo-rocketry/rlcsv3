@@ -111,24 +111,32 @@ void apply_state(){
         //we need to change the ignition_power to what requested wants
         global_current_state.ignition_power = global_requested_state.ignition_power;
         if(global_current_state.ignition_power){
-            //apply power to ignition circuit
-            digitalWrite((uint8_t) PIN_IGNITION_POWER, HIGH);
+            //decide whether to write to primary or secondary ignition
+            if(global_requested_state.ignition_select) {
+                //write to secondary
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
+            } else {
+                //write to primary
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+            }
         } else {
             //remove power from ignition circuit
-            digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
         }
     }
 
     if(global_requested_state.ignition_select != global_current_state.ignition_select){
         //we need to change the ignition_select to what requested wants
         global_current_state.ignition_select = global_requested_state.ignition_select;
-        if(global_current_state.ignition_select){
-            //apply power to ignition_select
-            digitalWrite((uint8_t) PIN_IGNITION_SELECT, HIGH);
-        } else {
-            //remove power from ignition_select
-            digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
-        }
     }
 }
 
@@ -149,8 +157,11 @@ void init_outputs(){
     pinMode(PIN_REMOTEVENT_SELECT, OUTPUT);
     pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
     pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
-    pinMode(PIN_IGNITION_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_SELECT, OUTPUT);
+
+    pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
+    pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
+    pinMode(PIN_IGNITION_SECONDARY_POWER, OUTPUT);
+    pinMode(PIN_IGNITION_SECONDARY_SELECT, OUTPUT);
 
     //close the valves. This is the safest startup state
     //fill valve
@@ -168,8 +179,10 @@ void init_outputs(){
     linac_init();
 
     //ignition, set to off by default
-    digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
 }
 
 //called when client hasn't told us to do anything for a while
