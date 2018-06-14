@@ -142,7 +142,7 @@ void nio_refresh(){
 //implement a fsm. This is largely based off the one used by RLCS.
 //This isn't done atm (only works for vent slave). The explanatory
 //comments will be updated when this function actually does stuff
-    if(RADIO_UART.available()){
+    while(RADIO_UART.available()){
         char x = RADIO_UART.read();
         switch(x){
             case NIO_VENT_OPEN:
