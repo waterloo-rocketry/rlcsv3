@@ -1,4 +1,7 @@
 #define TESTTHING
+//need both defines to make all functions get compiled
+#define CLIENT
+#define TOWER
 
 #include <stdio.h>
 #include <string>
@@ -6,7 +9,10 @@
 #include "SD.h"
 #include "../shared_types.h"
 
-#define COMP(x,y) if(strcmp(SD.f.test_buffer, "\n0000010000 -\t\t" x)) { printf("Failure in test \"" y "\"\n"); exit(1); }
+#define COMP(x,y) if(strcmp(SD.f.test_buffer, "\n0000010000 -\t\t" x)) { \
+    printf("Failure in test \"%s\"\n", y); \
+    exit(1); \
+}
 /*File mock_sd::open(const char *x, int y){
     File z;
     return z;
@@ -34,6 +40,15 @@ daq_radio_value_t test_daq_data = {
         [13] = 'A',
     }
 };
+actuator_state_t test_actuator_state = {
+    .remote_fill_valve = 0,
+    .remote_vent_valve = 1,
+    .run_tank_valve = 0,
+    .injector_valve = 1,
+    .linear_actuator = 0,
+    .ignition_power = 1,
+    .ignition_select = 1,
+};
 
 unsigned long global_time_last_output_flush = 0;
 unsigned long global_time_last_logged_daq = 0;
@@ -49,6 +64,18 @@ int main(int argc, char *argv[]){
     rlcslog_log_daq_values( &test_daq_data );
     flush();
     COMP("daq values - AAAAAAAAAAAAAA", "daq values logging test");
+
+    rlcslog_client_button( &test_actuator_state );
+    flush();
+    COMP("buttons - z", "client button state test");
+
+    rlcslog_client_tower_state('Q');
+    flush();
+    COMP("tstate - Q", "client tower state test");
+
+    rlcslog_tower_apply_state('R');
+    flush();
+    COMP("app state - R", "tower apply state test");
 
     printf("test %s passed successfully\n", argv[0]);
     exit(0);

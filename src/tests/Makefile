@@ -31,8 +31,11 @@ shared_type_tests: shared_type_tests.o shared_types.o
 nodeio_ioio_tests: nodeio_ioio_tests.o nodeio.ioio.o
 	@$(CC) -o $@ $^
 
-rlcslog_tests: rlcslog_tests.o sd_handler.o
+rlcslog_tests: rlcslog_tests.o sd_handler.o shared_types.o
 	@$(CC) -o $@ $^
+
+sd_handler.o: sd_handler.cpp SD.h
+	@$(CXX) $(INCLUDES) $(CXXFLAGS) -DCLIENT -DTOWER -c $< -o $@
 
 %.o: %.c SD.h
 	@$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
