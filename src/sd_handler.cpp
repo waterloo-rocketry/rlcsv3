@@ -218,12 +218,12 @@ void rlcslog_tower_vent_update(const sensor_data_t* tolog)
     char message[sizeof(NIO_VENT_HEADER) + 4 + 2 + (NUM_THERMISTORS*3)] =
         NIO_VENT_HEADER;
     uint8_t index = sizeof(NIO_VENT_HEADER) - 1;
-    index += snprintf(message + index, 4, "%04u", tolog->pressure);
+    index += snprintf(message + index, 5, "%04u", tolog->pressure);
     index += snprintf(message + index, 2, tolog->valve_limitswitch_open ?
             "1" : "0");
-    index += snprintf(message + index, 2, tolog->valve_limitswitch_open ?
+    index += snprintf(message + index, 2, tolog->valve_limitswitch_closed ?
             "1" : "0");
-    for(uint8_t i = 0; i < NUM_THERMISTORS; --i)
+    for(uint8_t i = 0; i < NUM_THERMISTORS; ++i)
     {
         index += snprintf(message + index, 4, "%03u",
                 tolog->thermistor_data[i]);
@@ -236,14 +236,14 @@ void rlcslog_tower_vent_update(const sensor_data_t* tolog)
 void rlcslog_tower_inj_update(const sensor_data_t* tolog)
 {
     char message[sizeof(NIO_INJ_HEADER) + 4 + 2 + (NUM_THERMISTORS*3)] =
-        NIO_VENT_HEADER;
+        NIO_INJ_HEADER;
     uint8_t index = sizeof(NIO_INJ_HEADER) - 1;
-    index += snprintf(message + index, 4, "%04u", tolog->pressure);
+    index += snprintf(message + index, 5, "%04u", tolog->pressure);
     index += snprintf(message + index, 2, tolog->valve_limitswitch_open ?
             "1" : "0");
-    index += snprintf(message + index, 2, tolog->valve_limitswitch_open ?
+    index += snprintf(message + index, 2, tolog->valve_limitswitch_closed ?
             "1" : "0");
-    for(uint8_t i = 0; i < NUM_THERMISTORS; --i)
+    for(uint8_t i = 0; i < NUM_THERMISTORS; ++i)
     {
         index += snprintf(message + index, 4, "%03u",
                 tolog->thermistor_data[i]);
