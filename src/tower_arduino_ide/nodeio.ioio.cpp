@@ -1,6 +1,6 @@
 #include "nodeio.ioio.h"
 #include "Arduino.h"
-
+#define NODE_GROUND
 #ifdef NODE_TEST
 #include <stdlib.h>
 #endif
@@ -16,7 +16,7 @@
 #define NIO_ACK_HEADER      ':'
 #define NIO_NACK_HEADER     ';'
 #define NIO_SENSOR_HEADER   '?'
-#define NODE_GROUND
+
 
 #ifndef NODE_GROUND
 //stuff that only applies to the slaves (the injector and

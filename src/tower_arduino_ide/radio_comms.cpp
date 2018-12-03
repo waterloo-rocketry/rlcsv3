@@ -7,7 +7,7 @@
 #include "client_globals.h"
 #endif
 #ifdef TOWER
-#define XBEE_INTERFACE Serial1
+#define XBEE_INTERFACE Serial2
 #include "tower_globals.h"
 #endif
 

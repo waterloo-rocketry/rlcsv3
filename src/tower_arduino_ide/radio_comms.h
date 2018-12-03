@@ -15,7 +15,8 @@ extern "C" {
 #define RADIO_STATE_REQ '{'
 #define RADIO_DAQ_REQ '}'
 #define RADIO_STATE_ASSIGN ';'
-
+//send semi colon then state you want to assign state
+//set [ to ackknowledge
 void radio_init();
 
 int xbee_bytes_available();

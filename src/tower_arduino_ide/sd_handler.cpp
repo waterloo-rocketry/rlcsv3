@@ -1,3 +1,4 @@
+#define TOWER
 #include "sd_handler.h"
 #ifdef CLIENT
 #include "client_pin_defines.h"
