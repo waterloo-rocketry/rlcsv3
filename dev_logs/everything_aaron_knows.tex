@@ -1,4 +1,4 @@
-% Created 2019-03-11 Mon 22:14
+% Created 2019-04-06 Sat 20:45
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 
 \section{Revisions}
-\label{sec:org307fd79}
+\label{sec:org9c9debc}
 \begin{center}
 \begin{tabular}{rrl}
 Revision Number & Date & Changes\\
@@ -59,10 +59,10 @@ Revision Number & Date & Changes\\
 
 
 \section{History lesson}
-\label{sec:orge610adf}
+\label{sec:orgdaeb114}
 
 \subsection{Nitrous Safety, an Aside}
-\label{sec:org236cc74}
+\label{sec:org35e2bab}
 Almost all of the rockets that Waterloo Rocketry has built have been nitrous
 oxide hybrid rockets. That means, that at launch and during flight, the rocket
 contains some amount of liquid nitrous oxide, which at room temperature self
@@ -100,16 +100,16 @@ on Waterloo Rocketry has ever been injured by nitrous oxide or the
 rocket firing. Let's keep it that way.
 
 \subsection{The before time}
-\label{sec:org6ccceae}
+\label{sec:org0734619}
 \subsubsection{When I first joined}
-\label{sec:org2dc453a}
+\label{sec:org3f01663}
 
 This is what our launch system looked like when I first joined the team:
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/old_system.png}
-\caption{\label{fig:orgc1b79f2}
+\caption{\label{fig:org18a0954}
 Launch system for 2016}
 \end{figure}
 
@@ -145,7 +145,7 @@ understanding their operation is important. More information can be found on
 \href{https://en.wikipedia.org/wiki/Relay}{Wikipedia}.
 
 \subsubsection{Ignition testing}
-\label{sec:orgfbd1ad2}
+\label{sec:org7495877}
 
 At the competition in 2016, the ignition system failed to cause the rocket to
 launch. As such, much of the development effort in the fall term of 2016 was
@@ -161,12 +161,12 @@ cheaper, and lighter.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/tsig.png}
-\caption{\label{fig:org7531236}
+\caption{\label{fig:org3291e70}
 Ignition system for IREC 2017}
 \end{figure}
 
 \subsection{RLCS V1}
-\label{sec:org468ac68}
+\label{sec:org9541d10}
 
 Everything changed when we got the documents for SAC 1. The rules for the new
 competition stated that we had to be at least 2000 feet away from the rocket
@@ -177,7 +177,7 @@ control all of the valves and ignition from 2000 feet (which later became 3000
 feet) away, so we knew we needed to do something wireless.
 
 \subsubsection{Why I was put in charge}
-\label{sec:orgd3222d4}
+\label{sec:orgd2ffc91}
 
 These issues were discovered early in the spring 2017 term. During that term,
 most of the team (including all of the senior members) were on coop. The only
@@ -190,7 +190,7 @@ with the motorization of the valves and the driving of them, David volunteered
 to do that, and a lot of the assembly was done by Remy.
 
 \subsubsection{Remote fill and TSRF}
-\label{sec:orgbfaefa1}
+\label{sec:org0f8a52e}
 
 TSRF stands for "Tower Side Remote Fill". It was the box that controlled the two
 electrically actuated valves that we used at IREC 2017. Electrically controlled
@@ -207,14 +207,14 @@ drive these valves with a \href{https://en.wikipedia.org/wiki/Relay\#Pole\_and\_
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/dpdt_opening.png}
-\caption{\label{fig:org863402e}
+\caption{\label{fig:orga38b287}
 DPDT relay opening valve}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/dpdt_closing.png}
-\caption{\label{fig:orgfd883ba}
+\caption{\label{fig:orgfd0a9ba}
 DPDT relay closing valve}
 \end{figure}
 
@@ -232,7 +232,7 @@ an electronic system in the New Mexico desert sun for days on end, don't put it
 in a black box). That box was renamed to TSIG, "Tower Side IGnition".
 
 \subsubsection{TSC - do as little as possible to make it work}
-\label{sec:org8aecf9f}
+\label{sec:orgc3ad791}
 
 TSC, or "Tower Side Control", was the box near the tower with a radio antenna on
 it. This box controlled, via some small signal relays, the larger relays in TSIG
@@ -243,7 +243,7 @@ which opened valves or fired ignition or extended/retracted the linear actuator
 (the actuator was what pulled the fill hose out of the rocket).
 
 \subsubsection{CSRF and CSIG}
-\label{sec:org877647f}
+\label{sec:org3b7548b}
 
 On the client side of the MSD were two boxes, named CSRF (Client Side Remote
 Fill) and CSIG (Client Side IGnition). CSRF contains the switches for all of the
@@ -265,7 +265,7 @@ you not, we made engineering decisions about this system based on a dream
 someone had. This story isn't \emph{relevant} in any way, I just thought it was fun.
 
 \subsubsection{The code}
-\label{sec:org32e305f}
+\label{sec:orgdacf1c2}
 
 All the code from RLCSv1 is backed up on GitHub,
 \url{https://github.com/waterloo-rocketry/rlcsv1}. There's about 600 lines of code
@@ -306,7 +306,7 @@ The loop for the tower is mostly this:
 immediately close the fill valve and turn off ignition (go to safe state)
 \end{itemize}
 \subsection{The move to V2}
-\label{sec:org35abe2b}
+\label{sec:org64bece1}
 
 After IREC 2017, there were a lot of things I wanted to change about RLCS. I
 even wrote a whole document outlining the reasons I wanted to upgrade it, how I
@@ -317,7 +317,7 @@ found on GitHub at
 \url{https://github.com/waterloo-rocketry/rlcs/blob/master/dev\_logs/official\_project\_proposal.pdf}.
 
 \subsubsection{Things to Fix}
-\label{sec:org1d2c733}
+\label{sec:org0dd499f}
 
 There were a lot of things that I hated about RLCSv1:
 \begin{itemize}
@@ -346,12 +346,12 @@ analysis anyways.
 \end{itemize}
 
 \subsubsection{Extensibility (PCBs)}
-\label{sec:org3e39252}
+\label{sec:org34b0ba2}
 
 The first problem we solved was the extensibility problem. All of the actuators
 (ignition coils, electric valves, and linear actuator) can all be controlled by
-the circuit shown in figure \ref{fig:orgb4106d3}. For the ignition coils, if you want
-to fire them, you just do as is shown in figure \ref{fig:org802ef6e}. When the coil
+the circuit shown in figure \ref{fig:orgc4748df}. For the ignition coils, if you want
+to fire them, you just do as is shown in figure \ref{fig:org5d1220c}. When the coil
 is energized, the switches move over and short the ignition coil across the 12
 volt battery. The linear actuator is slightly more complicated, but can still be
 driven by the same circuit.
@@ -359,21 +359,21 @@ driven by the same circuit.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/pcb_general.png}
-\caption{\label{fig:orgb4106d3}
+\caption{\label{fig:orgc4748df}
 Circuit capable of driving all the actuators}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/pcb_ignition.png}
-\caption{\label{fig:org802ef6e}
+\caption{\label{fig:org5d1220c}
 Wiring that circuit for ignition}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./images/pcb_linear_act.png}
-\caption{\label{fig:orge1027c0}
+\caption{\label{fig:orgfdcfd88}
 Wiring that circuit for linear actuator}
 \end{figure}
 
@@ -381,7 +381,7 @@ The linear actuator has two wires coming out of it, one with blue insulation and
 one with brown. If you apply 12V to the blue wire and short the brown to
 negative, the linear actuator will extend. If you swap them (brown -> 12V, blue
 -> GND), the linear actuator will retract. If you wire the linear actuator to
-the DPDT relay in the way shown in figure \ref{fig:orge1027c0}, then you can
+the DPDT relay in the way shown in figure \ref{fig:orgfdcfd88}, then you can
 control its direction. energizing the DPDT coil changes the direction of the
 linear actuator, and energizing the SPST coil applies power to it.
 
@@ -425,16 +425,21 @@ PWR input is pulled to 5V, the SPST relay switches. In order for these relays to
 switch, the 12V and GND small power connections must be present.
 
 \subsubsection{Tower side box}
-\label{sec:org4e78237}
+\label{sec:orgcb56c84}
 
 Once we had the PCBs, all we needed was a box to put them in. This is the big
 silver box you can find under the electrical bench. In V1 we had three tower
 side boxes (one for each of ignition (TSIG), remote fill (TSRF) and control
 (TSC)). All three of these boxes merged into what we now just call the Tower
 Side Box. A rough schematic of how the electrical connections of the tower side
-box is below TODO.
+box is below.
 
-TODO TODO TODO
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./images/tsb_full.png}
+\caption{\label{fig:orga8d53f0}
+All the connections inside the tower side box}
+\end{figure}
 
 The reason for the split between batteries is historical largely: In V1 there
 were separate batteries in TSIG and TSRF, with the intention of not draining the
@@ -471,7 +476,7 @@ over), Alex epoxied a bunch of 2x4's into the bottom of the box. Which is why
 it's so goddamn heavy.
 
 \subsubsection{Client Side box}
-\label{sec:org2dcf9e8}
+\label{sec:org3be7efb}
 
 Similar to the tower side box, the client side boxes all merged into
 one. Ignition and remote fill controls are both in the same box this time, and
@@ -492,7 +497,12 @@ owns. We bring it out at Open Houses sometimes.
 
 A rough electrical schematic of the box is below.
 
-TODO TODO TODO.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./images/csb_full.png}
+\caption{\label{fig:org299422c}
+All the connections inside the client side box}
+\end{figure}
 
 Note the Safety key switch: When this key is off, all of the actuator switches
 lose power (which has the cool effect of making their LEDs turn off). Note that
@@ -518,7 +528,7 @@ switch, but two arming missile switches (one labeled primary, one labeled
 secondary). 
 
 \subsubsection{Code changes}
-\label{sec:orgf9e9c09}
+\label{sec:org47e6b6c}
 
 The code was entirely rewritten when moving from V1 to V2. And the codesize
 exploded. We went from about 1000 lines of code in 2 files to about 3000 lines
@@ -531,7 +541,7 @@ this is discussed in the Code section of the "System as it currently exists"
 section.
 
 \subsubsection{DAQ}
-\label{sec:orgb6d947a}
+\label{sec:orgdfd014e}
 
 During static fires and cold flow tests in Waterloo, we use the DAQ system to
 monitor how much nitrous has been loaded into the rocket, and what pressure that
@@ -553,7 +563,7 @@ back the DAQ data is almost identical to the code used for the actuator state
 stuff, so it isn't really explained in this document in great detail.
 
 \subsubsection{Flight instr}
-\label{sec:org5ce3f6c}
+\label{sec:org429993c}
 
 You can probably skip this section, since flight instr has been replaced by
 busproj.
@@ -586,19 +596,19 @@ rocket, you can look through \textbf{nodeio.ioio.cpp/.h}. The network was named 
 (nodeio.ioio) because I thought it was funny.
 
 \section{The system as it currently exists}
-\label{sec:org14d4550}
+\label{sec:orgfaa273c}
 
 \subsection{Drawing}
-\label{sec:org3057ff4}
+\label{sec:orgc78e79c}
 
 TODO, draw the entire system, label each component, and describe what each
 component does, briefly.
 
 \subsection{Setup instructions}
-\label{sec:org8f259bb}
+\label{sec:org07f2591}
 
 \subsubsection{Required items}
-\label{sec:orgf6e0c4c}
+\label{sec:org543765a}
 \begin{enumerate}
 \item Tower side box (big, briefcasy, and silver)
 \item Tower side radio box (small white 3d printed box with an antenna sticking
@@ -622,7 +632,7 @@ in tower side box).
 \end{enumerate}
 
 \subsubsection{Setup the tower side box}
-\label{sec:orge7eb44f}
+\label{sec:org50cf548}
 You'll need two LiPo batteries for this part. One plugs into the deans connector
 leading to the power PCB. This will turn on the Arduino, radio, and power all of
 the relays. The other plugs into the deans connector leading to the relay
@@ -651,7 +661,7 @@ step is not necessary during static fires and cold flow tests, RLCS is only used
 with these sensors at competition.
 
 \subsubsection{Setup the client side box}
-\label{sec:org1aa15e6}
+\label{sec:orgea0a775}
 
 Remove the wooden plate from the client side box, so that you can access the
 power connector. Plug this into the battery, and put the plate back into the
@@ -672,7 +682,7 @@ working. It will usually be a problem with a connector somewhere, but it could
 be a broken radio or radio communication PCB.
 
 \subsubsection{Test that everything is working correctly}
-\label{sec:org509e3fc}
+\label{sec:org5fd4be5}
 Make sure that when you flip a switch on the client side box, the associated
 actuator on the tower side box moves. Check this with both valves and the linear
 actuator. Use a multimeter to ensure that when you fire ignition (arppming one of
@@ -691,13 +701,13 @@ go. If parts are broken, you'll need at least a few days to order them in from
 digikey. Plan for this, debug early.
 
 \subsection{The code}
-\label{sec:org71acea6}
+\label{sec:org66fd929}
 \subsubsection{The common code}
-\label{sec:org318fb9c}
+\label{sec:org9fbc1f9}
 The stuff that's used in both Arduino's
 \begin{enumerate}
 \item The SD card library:
-\label{sec:org5e1f1b2}
+\label{sec:orgd37c3df}
 Both the tower side and client side boxes have SD cards in them to log data. As
 such, the \textbf{sd\_handler.h/.cpp} library is run on both. This code depends on the
 Arduino \textbf{SD} library, and provides some helper functions that log data to the SD
@@ -719,7 +729,7 @@ This library has an init function (\textbf{sd\_init()}) that needs to be called 
 setup function of both Arduinos.
 
 \item The Seven Segment display library
-\label{sec:orgde1cf61}
+\label{sec:org5949596}
 Similar to the SD card, both boxes have a seven segment display, so this library
 drives both of those. It's possible that the two Arduino's will use different
 pins in order to drive the seven segment display. To accommodate this, both boxes
@@ -740,7 +750,7 @@ side box shows a number that is not \textbf{04}, but the tower side box shows \t
 that means they can't communicate, and you need to debug the problem.
 
 \item The shared types library
-\label{sec:org27dd200}
+\label{sec:org362d36f}
 There are two types (classes if you're a C++ guy) that are used in both the
 client side and tower side boxes. One is the DAQ type, which will be talked more
 about in the DAQ section, and the other is the \textbf{actuator\_state\_t}. The
@@ -762,7 +772,7 @@ thought meant "Fire ignition", but the tower thought it was "open the fill
 valve". This would be bad. Hence, they're in the same file.
 
 \item The radio\_comms library (\textbf{radio\_comms.h/.cpp})
-\label{sec:org9d34d46}
+\label{sec:org2829f55}
 This library handles all the incoming and outgoing data through the
 radios. Some of the functions in this library are only used by the client, or by
 the tower, and thus have that name prepended to the function name (ie
@@ -798,13 +808,13 @@ doesn't update its current state.
 
 
 \subsubsection{Tower side code}
-\label{sec:orgd1d744b}
+\label{sec:orgc57cb16}
 
 All is found in src/tower\_arduino\_ide/
 
 \begin{enumerate}
 \item Tower main loop
-\label{sec:orgaf1e504}
+\label{sec:orgceb1bcd}
 The main loop is found in \textbf{tower\_arduino\_ide.ino}. Following arduino standard
 practice, this file contains the \textbf{setup} and \textbf{loop} functions. The setup
 function initializes all of the libraries that the tower uses (the output
@@ -819,7 +829,7 @@ valves. In this loop it also deals with the seven segment display library and
 flushes data to the SD card if it's been more than a few seconds.
 
 \item Tower FSM/radio bytes parser
-\label{sec:org30164ee}
+\label{sec:orga86f2a7}
 The FSM here stands for finite state machine, and it's that because the radio
 bytes parser is a finite state machine (it's a type of parser, google it for
 more information). The problem that this parser is trying to solve is that all
@@ -840,7 +850,7 @@ any kind of sense?
 
 
 \item \textbf{tower\_globals.h/.c}, the worst named files
-\label{sec:org4183310}
+\label{sec:orgda69674}
 These two files contain what I think of as the "global" functions and
 variables. global variables makes sense, but global functions don't
 really. These files mostly became a "miscellaneous" category, so it might be
@@ -849,10 +859,10 @@ best to think of them in that way. The most important of these is the
 \end{enumerate}
 
 \section{Other Stuff/Appendices}
-\label{sec:org10323e3}
+\label{sec:org58ad61e}
 
 \subsection{Linear Actuator limit switches}
-\label{sec:org411c3e4}
+\label{sec:org47aef76}
 \label{sec:linear_act_lsw}
 
 Aright, we have to talk about the linear actuator. Specifically, its limit
@@ -888,7 +898,7 @@ All this logic for keeping track of when power should be applied vs not
 applied is contained in linac.\{c,h\}.
 
 \subsection{Ignition - why two PCBs and not one}
-\label{sec:orga0d12e6}
+\label{sec:org7107fc7}
 
 We have two ignition coils in the rocket, because we're paranoid. In 2016,
 the team failed to launch three times because of ignition
@@ -923,7 +933,7 @@ trigger both the SPST and DPDT relays in order to fire it.
 \end{enumerate}
 
 \subsection{Why the RLCS tower side PCBs have a separate power in block}
-\label{sec:orgc4db07f}
+\label{sec:orgf54ef98}
 
 The actuator PCBs have a 12V and GND input in the small screw block, and
 another fatter 12V and GND input on the side. The latter is what's passed
@@ -942,7 +952,7 @@ could hurt someone by doing so. Stick to DC unless you have looked at the
 PCB design, and know your stuff about mains voltage.
 
 \subsection{Tower Safe State: What is it and why?}
-\label{sec:orgaa5a088}
+\label{sec:org756b911}
 
 When the tower side box hasn't received any communication from the radio
 side box in a prescribed amount of time (I think it's set to 10 seconds),
@@ -974,7 +984,7 @@ I don't want our rocket to get shot. So we open the vent valve and it
 slowly depressurizes, safely.
 
 \subsection{Debugging radio communications with your laptop}
-\label{sec:org813ea8c}
+\label{sec:org6fc63bd}
 
 One of the hardest things to debug in RLCS is the radio link, since you
 can't really see it. We have a USB dongle for XBEEs that you can plug into

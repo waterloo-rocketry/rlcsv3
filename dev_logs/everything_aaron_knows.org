@@ -352,9 +352,11 @@ silver box you can find under the electrical bench. In V1 we had three tower
 side boxes (one for each of ignition (TSIG), remote fill (TSRF) and control
 (TSC)). All three of these boxes merged into what we now just call the Tower
 Side Box. A rough schematic of how the electrical connections of the tower side
-box is below TODO.
+box is below.
 
-TODO TODO TODO
+#+CAPTION: All the connections inside the tower side box
+#+NAME: fig:tsb_full
+[[./images/tsb_full.png]]
 
 The reason for the split between batteries is historical largely: In V1 there
 were separate batteries in TSIG and TSRF, with the intention of not draining the
@@ -411,7 +413,9 @@ owns. We bring it out at Open Houses sometimes.
 
 A rough electrical schematic of the box is below.
 
-TODO TODO TODO.
+#+CAPTION: All the connections inside the client side box
+#+NAME: fig:csb_full
+[[./images/csb_full.png]]
 
 Note the Safety key switch: When this key is off, all of the actuator switches
 lose power (which has the cool effect of making their LEDs turn off). Note that
