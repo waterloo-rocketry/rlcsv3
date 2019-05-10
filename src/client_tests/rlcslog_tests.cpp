@@ -7,8 +7,8 @@
 #include <string>
 #include <stdlib.h>
 #include "SD.h"
-#include "../shared_types.h"
-#include "../nodeio.ioio.h"
+#include "shared_types.h"
+//#include "nodeio.ioio.h"
 
 #define COMP(x,y) if(strcmp(SD.f.test_buffer, "\n0000010000 -\t\t" x)) { \
     printf("Failure in test \"%s\"\n", y); \
@@ -50,17 +50,6 @@ actuator_state_t test_actuator_state = {
     .ignition_power = 1,
     .ignition_select = 1,
 };
-sensor_data_t nodeio_data = {
-    .pressure = 776,
-    .valve_limitswitch_open = 1,
-    .valve_limitswitch_closed = 0,
-    .thermistor_data = {
-        [0] = 150,
-        [1] = 200,
-        [2] = 230,
-        [3] = 10,
-    },
-};
 
 unsigned long global_time_last_output_flush = 0;
 unsigned long global_time_last_logged_daq = 0;
@@ -80,22 +69,6 @@ int main(int argc, char *argv[]){
     rlcslog_client_button( &test_actuator_state );
     flush();
     COMP("buttons - z", "client button state test");
-
-    rlcslog_client_tower_state('Q');
-    flush();
-    COMP("tstate - Q", "client tower state test");
-
-    rlcslog_tower_apply_state('R');
-    flush();
-    COMP("app state - R", "tower apply state test");
-
-    rlcslog_tower_vent_update(&nodeio_data);
-    flush();
-    COMP("lorelai - 077610150200230010", "tower vent update test");
-
-    rlcslog_tower_inj_update(&nodeio_data);
-    flush();
-    COMP("rory - 077610150200230010", "tower inj update test");
 
     printf("test %s passed successfully\n", argv[0]);
     exit(0);

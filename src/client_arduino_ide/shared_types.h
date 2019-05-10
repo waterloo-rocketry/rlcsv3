@@ -29,8 +29,14 @@ int convert_state_to_radio(const actuator_state_t* state, char* binary);
 
 int actuator_compare(const actuator_state_t* s, const actuator_state_t* q);
 
-typedef struct {
+typedef enum {
+    DAQ_VALVE_OPEN,
+    DAQ_VALVE_CLOSED,
+    DAQ_VALVE_UNK,
+    DAQ_VALVE_ILLEGAL
+} valve_state_t;
 
+typedef struct {
     uint16_t pressure1;                 //between 0 and 999
     uint16_t pressure2;                 //between 0 and 999
     uint16_t pressure3;
@@ -41,13 +47,14 @@ typedef struct {
     unsigned char rfill_lsw_closed;     //0 when low, 1 when high (which means remote fill is closed)
     unsigned char rvent_lsw_open;       //0 when low, 1 when high (which means remote vent is open)
     unsigned char rvent_lsw_closed;     //0 when low, 1 when high (which means remote vent is closed)
-    unsigned char rocketvent_lsw_open;
-    unsigned char rocketvent_lsw_closed; //same as other valve limit switches
-    unsigned char injectorvalve_lsw_open;
-    unsigned char injectorvalve_lsw_closed;
     unsigned char linac_lsw_extend;     //0 when low, 1 when high (which means the actuator is extended)
     unsigned char linac_lsw_retract;    //0 when low, 1 when high (which means the actuator is retracted)
 
+    // new data fields for RocketCAN stuff
+    unsigned char num_boards_connected;
+    bool any_errors_detected;
+    valve_state_t injector_valve_state;
+    valve_state_t rocketvent_valve_state;
 } daq_holder_t;
 
 #define DAQ_RADIO_LEN 14

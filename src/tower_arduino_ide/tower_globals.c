@@ -218,6 +218,8 @@ void goto_safe_mode()
 
 void tower_handle_vent_update(const sensor_data_t *update)
 {
+    /* All of this will be replaced in the move to RocketCAN
+
     //store the pressure in the daq singleton
     if(update->pressure <= 999)
         global_current_daq.pressure3 = update->pressure;
@@ -230,18 +232,20 @@ void tower_handle_vent_update(const sensor_data_t *update)
     global_current_daq.rocketvent_lsw_closed =
         update->valve_limitswitch_closed;
 
-    rlcslog_tower_vent_update(update);
+    rlcslog_tower_vent_update(update); */
 }
 
 void tower_handle_inj_update(const sensor_data_t *update)
 {
+    /* All of this will be replaced in the move to RocketCAN
+
     //update limit switch data
     global_current_daq.injectorvalve_lsw_open =
         update->valve_limitswitch_open;
     global_current_daq.injectorvalve_lsw_closed =
         update->valve_limitswitch_closed;
 
-    rlcslog_tower_inj_update(update);
+    rlcslog_tower_inj_update(update); */
 }
 
 //global for how long it's been since the output log was flushed

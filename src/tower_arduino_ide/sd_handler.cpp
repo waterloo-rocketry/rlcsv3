@@ -1,10 +1,6 @@
 #define TOWER
 #include "sd_handler.h"
-#ifdef CLIENT
-#include "client_pin_defines.h"
-#else
 #include "tower_pin_defines.h"
-#endif
 #include <SPI.h>
 #include <SD.h>
 

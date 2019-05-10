@@ -137,10 +137,8 @@ int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
     daq->linac_lsw_extend    =   (first_bitfield & 2) != 0;
     daq->linac_lsw_retract   =   (first_bitfield & 1) != 0;
 
-    daq->rocketvent_lsw_open      = (second_bitfield & 32) != 0;
-    daq->rocketvent_lsw_closed    = (second_bitfield & 16) != 0;
-    daq->injectorvalve_lsw_open   = (second_bitfield &  8) != 0;
-    daq->injectorvalve_lsw_closed = (second_bitfield &  4) != 0;
+    daq->injector_valve_state     = static_cast<valve_state_t>((second_bitfield & 0b110000) >> 4);
+    daq->rocketvent_valve_state   = static_cast<valve_state_t>((second_bitfield & 0b1100) >> 2);
 
     return 1;
 }
@@ -172,10 +170,8 @@ int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
     first_bitfield += daq->linac_lsw_extend? 2 : 0;
     first_bitfield += daq->linac_lsw_retract ? 1 : 0;
 
-    second_bitfield += daq->rocketvent_lsw_open ? 32 : 0;
-    second_bitfield += daq->rocketvent_lsw_closed ? 16 : 0;
-    second_bitfield += daq->injectorvalve_lsw_open ? 8 : 0;
-    second_bitfield += daq->injectorvalve_lsw_closed ? 4 : 0;
+    second_bitfield |= daq->injector_valve_state << 4;
+    second_bitfield |= daq->rocketvent_valve_state << 2;
 
     first_bitfield = toBase64(first_bitfield);
     second_bitfield = toBase64(second_bitfield);

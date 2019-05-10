@@ -3,19 +3,16 @@ CXX = g++
 
 CFLAGS = -DNODE_TEST
 CXXFLAGS = -DNODE_TEST
-VPATH += ..
+VPATH += ../client_arduino_ide
 
-INCLUDES = -I..
+INCLUDES = -I../client_arduino_ide
 INCLUDES+= -I.
 
 TESTS = shared_type_tests
-TESTS+= nodeio_ioio_tests
 TESTS+= rlcslog_tests
 
 OBJS  = shared_type_tests.o
 OBJS += shared_types.o
-OBJS += nodeio_ioio_tests.o
-OBJS += nodeio.ioio.o
 OBJS += rlcslog_tests.o
 OBJS += sd_handler.o
 
@@ -26,9 +23,6 @@ all: $(TESTS)
 	done
 
 shared_type_tests: shared_type_tests.o shared_types.o
-	@$(CC) -o $@ $^
-
-nodeio_ioio_tests: nodeio_ioio_tests.o nodeio.ioio.o
 	@$(CC) -o $@ $^
 
 rlcslog_tests: rlcslog_tests.o sd_handler.o shared_types.o

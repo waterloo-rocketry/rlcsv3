@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include <stdbool.h>
 
 #include "shared_types.h"
 
@@ -113,10 +114,8 @@ void generateRandomDaqState(daq_holder_t* s){
     s->rfill_lsw_closed = rand() & 1;
     s->rvent_lsw_open = rand() & 1;
     s->rvent_lsw_closed = rand() & 1;
-    s->rocketvent_lsw_open = rand() & 1;
-    s->rocketvent_lsw_closed = rand() & 1;
-    s->injectorvalve_lsw_open = rand() & 1;
-    s->injectorvalve_lsw_closed = rand() & 1;
+    s->rocketvent_valve_state = rand() % 4;
+    s->injector_valve_state = rand() % 4;
     s->linac_lsw_extend = rand() & 1;
     s->linac_lsw_retract = rand() & 1;
 }
@@ -139,10 +138,8 @@ int randomDaqCompare(){
             s.rfill_lsw_closed == q.rfill_lsw_closed &&
             s.rvent_lsw_open == q.rvent_lsw_open &&
             s.rvent_lsw_closed == q.rvent_lsw_closed &&
-            s.rocketvent_lsw_open == q.rocketvent_lsw_open &&
-            s.rocketvent_lsw_closed == q.rocketvent_lsw_closed &&
-            s.injectorvalve_lsw_open == q.injectorvalve_lsw_open &&
-            s.injectorvalve_lsw_closed == q.injectorvalve_lsw_closed &&
+            s.rocketvent_valve_state == q.rocketvent_valve_state &&
+            s.injector_valve_state == q.injector_valve_state &&
             s.linac_lsw_extend == q.linac_lsw_extend &&
             s.linac_lsw_retract == q.linac_lsw_retract
         )){
@@ -158,6 +155,8 @@ int randomDaqCompare(){
             printf("s.rvent_lsw_closed: %u\n",s.rvent_lsw_closed);
             printf("s.linac_lsw_extend: %u\n",s.linac_lsw_extend);
             printf("s.linac_lsw_retract: %u\n",s.linac_lsw_retract);
+            printf("s.rocketvent_valve_state: %u\n", s.rocketvent_valve_state);
+            printf("s.injector_valve_state: %u\n", s.injector_valve_state);
 
             printf("q.pressure1: %u\n",q.pressure1);
             printf("q.pressure2: %u\n",q.pressure2);
@@ -171,6 +170,8 @@ int randomDaqCompare(){
             printf("q.rvent_lsw_closed: %u\n",q.rvent_lsw_closed);
             printf("q.linac_lsw_extend: %u\n",q.linac_lsw_extend);
             printf("q.linac_lsw_retract: %u\n",q.linac_lsw_retract);
+            printf("q.rocketvent_valve_state: %u\n", q.rocketvent_valve_state);
+            printf("q.injector_valve_state: %u\n", q.injector_valve_state);
 
 
             printf("failure random daq compare\n");
