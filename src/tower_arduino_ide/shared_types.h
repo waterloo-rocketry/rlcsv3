@@ -37,9 +37,9 @@ typedef enum {
 } valve_state_t;
 
 typedef struct {
-    uint16_t pressure1;                 //between 0 and 999
-    uint16_t pressure2;                 //between 0 and 999
-    uint16_t pressure3;
+    uint16_t pressure1; //fill tank pressure
+    uint16_t pressure2; //fill line pressure
+    uint16_t pressure3; //rocket tank pressure
     uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
     uint16_t ign_pri_current;           //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
     uint16_t ign_sec_current;           //between 0 and 999 (measured in centiamps)

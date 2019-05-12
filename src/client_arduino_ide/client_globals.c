@@ -15,10 +15,10 @@ static daq_holder_t global_current_daq = {
     .rfill_lsw_closed = 0,
     .rvent_lsw_open = 0,
     .rvent_lsw_closed = 0,
-    .rocketvent_lsw_open = 0,
-    .rocketvent_lsw_closed = 0,
-    .injectorvalve_lsw_open = 0,
-    .injectorvalve_lsw_closed = 0,
+
+    .rocketvent_valve_state = DAQ_VALVE_UNK,
+    .injector_valve_state = DAQ_VALVE_UNK,
+
     .linac_lsw_extend = 0,
     .linac_lsw_retract = 0
 };
@@ -39,8 +39,9 @@ static uint8_t button_debounce_index = 0;
 //boolean to track whether we need to recalculate global button state before
 //handing it back to the caller
 static uint8_t global_button_state_tainted = 1;
-actuator_state_t* get_button_state(){
-    if(global_button_state_tainted) {
+actuator_state_t *get_button_state()
+{
+    if (global_button_state_tainted) {
         //recalculate button state. We do calculations here for
         //software debouncing purposes
         button_t remotefill = 1;
@@ -51,7 +52,7 @@ actuator_state_t* get_button_state(){
         button_t ignition_pri = 1;
         button_t ignition_sec = 1;
         button_t ignition_fire = 1;
-        for(int i = 0; i < DEBOUNCE_WIDTH; i++) {
+        for (int i = 0; i < DEBOUNCE_WIDTH; i++) {
             //each button is only considered active (high)
             //if all readings in the past DEBOUNCE width
             //readings were active
@@ -79,8 +80,8 @@ actuator_state_t* get_button_state(){
 
         //by default, ignition relays are both off
         global_button_state.ignition_power = global_button_state.ignition_select = 0;
-        if(ignition_fire) {
-            if(ignition_pri && !ignition_sec) {
+        if (ignition_fire) {
+            if (ignition_pri && !ignition_sec) {
                 global_button_state.ignition_power = 1;
             } else if ( !ignition_pri && ignition_sec) {
                 global_button_state.ignition_power = 1;
@@ -96,16 +97,19 @@ actuator_state_t* get_button_state(){
     return &global_button_state;
 }
 
-actuator_state_t* get_tower_state(){
+actuator_state_t *get_tower_state()
+{
     return &global_tower_state;
 }
 
-daq_holder_t* get_tower_daq(){
+daq_holder_t *get_tower_daq()
+{
     return &global_current_daq;
 }
 
 
-void read_all_buttons(){
+void read_all_buttons()
+{
     button_debounce[button_debounce_index].remotefill =
         digitalRead(PIN_SWITCH_REMOTEFILL) == HIGH;
     button_debounce[button_debounce_index].remotevent =
@@ -124,14 +128,15 @@ void read_all_buttons(){
     button_debounce[button_debounce_index].ignition_fire =
         digitalRead(PIN_SWITCH_IGNITION_FIRE) == LOW;
 
-    if( (++button_debounce_index) >= DEBOUNCE_WIDTH )
+    if ( (++button_debounce_index) >= DEBOUNCE_WIDTH )
         button_debounce_index = 0;
 
     //mark boolean to
     global_button_state_tainted = 1;
 }
 
-void init_buttons(){
+void init_buttons()
+{
     pinMode(PIN_SWITCH_REMOTEFILL, INPUT);
     pinMode(PIN_SWITCH_REMOTEVENT, INPUT);
     pinMode(PIN_SWITCH_ROCKETVALVE, INPUT);
@@ -152,12 +157,13 @@ void init_buttons(){
 }
 
 static int led_state = 0;
-void set_radio_status(int state){
+void set_radio_status(int state)
+{
 
-    if(state == led_state)
+    if (state == led_state)
         return;
     //If state is true, then turn on green led
-    if((led_state = state)) {
+    if ((led_state = state)) {
         digitalWrite(PIN_LED_GREEN, HIGH);
         digitalWrite(PIN_LED_RED, LOW);
     } else {
@@ -174,7 +180,8 @@ unsigned long global_time_last_tower_state_req = 0;
 const unsigned long global_tower_update_interval = 1000; //request every second
 const unsigned long global_radio_timeout = 5000; //we've lost radio contact
 unsigned long global_time_last_tower_daq_req = 0;
-const unsigned long global_tower_daq_update_interval = 1000; //request daq every 1 seconds
+const unsigned long global_tower_daq_update_interval =
+    1000; //request daq every 1 seconds
 //how often to flush the buffered output to the SD card
 unsigned long global_time_last_output_flush = 0;
 const unsigned long global_output_flush_interval = 30000; //every 30 seconds

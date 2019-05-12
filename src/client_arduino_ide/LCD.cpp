@@ -1,139 +1,260 @@
 #include "LCD.h"
-#include "LiquidCrystal.h"
+#include <LiquidCrystal.h>
+#include <Arduino.h>
 #include "client_pin_defines.h"
-#include "sd_handler.h"
-//note this does not do formatting, so do that yourself
-void lcd_nprint(int x, int y, int length, char *str);
-void lcd_print(int x, int y, char c);
-void output_labels();
-#include <string.h>
 
-//setup last daq to hold impossible values
-//so that when we get the first data from the tower,
-//it updates with those values
-static daq_holder_t last_daq = {
-    .pressure1 = 999,
-    .pressure2 = 999,
-    .pressure3 = 999,
-    .rocket_mass = 0xFFFF,
-    .ign_pri_current = 0xFFFF,
-    .ign_sec_current = 0xFFFF,
-    .rfill_lsw_open = 0,
-    .rfill_lsw_closed = 0,
-    .rvent_lsw_open = 0,
-    .rvent_lsw_closed = 0,
-    .rocketvent_lsw_open = 0,
-    .rocketvent_lsw_closed = 0,
-    .injectorvalve_lsw_open = 0,
-    .injectorvalve_lsw_closed = 0,
-    .linac_lsw_extend = 0,
-    .linac_lsw_retract = 0
-};
+/* We have a 4x20 LCD to work with, we need to display the following data
+ *
+ *x fill tank pressure
+ *x line pressure
+ *x rocket mass
+ *x run tank pressure
+ *  battery voltages:
+ *    RLCS client
+ *    RLCS tower
+ *    RocketCAN bus battery
+ *    RocketCAN vent battery
+ *  valve positions:
+ *x   Fill
+ *x   Line Vent
+ *x   Tank Vent
+ *x   Injector
+ *x   Fill arm (kind of a valve)
+ *x ignition currents (2)
+ *
+ *  Here's how we're going to lay all that out. The top row of the LCD
+ *  will always contain the following text
+ *  RF:___ RV:___ TV:___
+ *
+ *  These are the positions of the three most important valves, we always
+ *  need to know what they are (remote fill, remote vent, and tank vent)
+ *
+ *  The next line will always display the following DAQ values, since they
+ *  are the only time critical values (if we don't see them for 10 seconds,
+ *  we are maybe fucked):
+ *  IP:___ IS:___ PT:___
+ *  (those are ignition primary current, ignition secondary current, and
+ *  flight tank pressure)
+ *
+ *  The next line switches back and forth between the following DAQ values
+ *  every 2 seconds (2 seconds on, 2 seconds off):
+ *  IV:___ PF:___ M:____ and IV:___ PL:___ RD:___
+ *  Those are, in order, injector valve, pressure in fill tank, rocket mass,
+ *  injector valve again (it should always be onscreen), pressure in fill
+ *  lines, and remote disconnect status
+ *
+ *  The fourth line alternates between battery voltages and error messages
+ *  from rocketCAN. The battery voltages alternate back and forth between
+ *  these two lines:
+ *  BATGC:_____ GT:_____ and BATFB:_____ FV:_____
+ *  those values are all in millivolts, the acronyms stand for "ground
+ *  client", "ground tower", "flight bus", and "flight vent".
+ *
+ *  whenever an error message from RocketCAN is available, a string
+ *  like the following will marquee across the LCD
+ *  "E_BOARD_FEARED_DEAD RADIO_BOARD $board_id E_BOARD_FEARED_DEAD"
+ *  between every marqueed error message both battery voltage lines
+ *  will be displayed in succession, to make sure no data is missed.
+ *  Error messages will queue up, so make sure rocketCAN doesn't send
+ *  too goddamn many.
+ */
 
-static LiquidCrystal lcd(
-    PIN_LCD_RS,
-    PIN_LCD_EN,
-    PIN_LCD_D4,
-    PIN_LCD_D5,
-    PIN_LCD_D6,
-    PIN_LCD_D7);
-
+static LiquidCrystal lcd(PIN_LCD_RS, PIN_LCD_EN, PIN_LCD_D4,
+                         PIN_LCD_D5, PIN_LCD_D6, PIN_LCD_D7);
 void lcd_init()
 {
-    lcd.begin(20,4);
-
-    lcd.setCursor(0,0);
-    lcd.print("P1:    P2:    P3:   ");
-    lcd.setCursor(0,1);
-    lcd.print("RF:    RV:    TV:   ");
-    lcd.setCursor(0,2);
-    lcd.print("I1:    I2:    IJ:   ");
-    lcd.setCursor(0,3);
-    lcd.print("AC:    M:     LOG:NO");
+    lcd.begin(20, 4);
+    lcd.setCursor(2, 1);
+    lcd.print("WAITING FOR DATA");
 }
 
-void convert(uint16_t value, char* tempx) {
-  sprintf(tempx, "%03u", value);
- }
+static void display_valves_line(unsigned char fill_open,
+                                unsigned char fill_closed, unsigned char vent_open, unsigned char vent_closed,
+                                valve_state_t rocket_vent_state);
+static void display_currents_line(uint16_t pri_current, uint16_t sec_current,
+                                  uint16_t rocket_tank_pressure);
+static void display_mass_line(valve_state_t injector_state,
+                              uint16_t fill_tank_pressure, uint16_t mass);
+static void display_disconnect_line(valve_state_t injector_state,
+                                    uint16_t fill_line_pressure, unsigned char linac_extend,
+                                    unsigned char linac_retract);
+static void display_ground_batt_line(uint16_t client_batt, uint16_t tower_batt);
+static void display_rocket_batt_line(uint16_t flight_bus_batt,
+                                     uint16_t flight_vent_batt);
+static void marquee_current_error();
+static void marquee_next_error();
 
-static void lcd_update_valve(unsigned char lsw_open,
-                      unsigned char lsw_closed,
-                      const char* msg1, //closed
-                      const char* msg2) //open
+//static variables we keep track of in order to show marquee error msgs
+static bool currently_marqueeing_error = false;
+static char buffer_to_marquee[10][50];
+static uint8_t marquee_buffer_index = 0;
+static uint8_t num_errors_queued = 0;
+static long time_last_error_displayed = 0;
+
+void lcd_update(daq_holder_t *input)
 {
-    //for now, just run off of the limit switches
-    //this means the output is always open, closed, or unknown
-    if(!lsw_open && lsw_closed) {
-        lcd.write(msg1);
-    } else if (lsw_open && !lsw_closed) {
-        lcd.write(msg2);
+    //two of the LCD lines switch back and forth between two lines
+    //every two seconds. We use this variable to keep track of which
+    //line should be displayed at the current time
+    static bool display_first_line = true;
+    //timer to keep track of when to switch between lines
+    static long time_last_line_switch = 0;
+    //if we need to switch lines, do so
+    if (millis() - time_last_line_switch > 2000) {
+        display_first_line = !display_first_line;
+        time_last_line_switch = millis();
+    }
+
+
+    //display the top line
+    display_valves_line(input->rfill_lsw_open, input->rfill_lsw_closed,
+                        input->rvent_lsw_open, input->rvent_lsw_closed,
+                        input->rocketvent_valve_state);
+
+    //display the second line
+    display_currents_line(input->ign_pri_current, input->ign_sec_current,
+                          input->pressure3);
+
+    //display the third line
+    if (display_first_line) {
+        //the one with the rocket mass in it
+        display_mass_line(input->injector_valve_state, input->pressure1,
+                          input->rocket_mass);
     } else {
-        lcd.write("UKN");
+        //the one with the remote disconnect status
+        display_disconnect_line(input->injector_valve_state, input->pressure2,
+                                input->linac_lsw_extend,
+                                input->linac_lsw_retract);
+    }
+
+    //this one's fun
+    if (currently_marqueeing_error) {
+        marquee_current_error();
+    } else if (num_errors_queued != 0 &&
+               millis() - time_last_error_displayed > 4000) {
+        marquee_next_error();
+    } else {
+        if (display_first_line) {
+            display_ground_batt_line(12, 13);
+        } else {
+            display_rocket_batt_line(40, 44);
+        }
     }
 }
 
-void lcd_update(daq_holder_t* daq){
-
-    //pressures first
-    if(daq->pressure1 > 999) daq->pressure1 = 999;
-    if(daq->pressure2 > 999) daq->pressure1 = 999;
-    if(daq->pressure3 > 999) daq->pressure1 = 999;
-
-    char temp[10];
-    if(daq->pressure1 != last_daq.pressure1) {
-        last_daq.pressure1 = daq->pressure1;
-        convert(daq->pressure1, temp);
-        lcd.setCursor(3, 0);
-        lcd.write(temp);
-    }
-
-    if(daq->pressure2 != last_daq.pressure2) {
-        last_daq.pressure2 = daq->pressure2;
-        lcd.setCursor(10, 0);
-        convert(daq->pressure2, temp);
-        lcd.write(temp);
-    }
-    if(daq->pressure3 != last_daq.pressure3) {
-        last_daq.pressure3 = daq->pressure3;
-        lcd.setCursor(17, 0);
-        convert(daq->pressure3, temp);
-        lcd.write(temp);
-    }
-    if(daq->ign_pri_current != last_daq.ign_pri_current) {
-        last_daq.ign_pri_current = daq->ign_pri_current;
-        lcd.setCursor(3, 2);
-        convert(daq->ign_pri_current, temp);
-        lcd.write(temp);
-    }
-    if(daq->ign_sec_current != last_daq.ign_sec_current) {
-        last_daq.ign_sec_current = daq->ign_sec_current;
-        lcd.setCursor(10, 2);
-        convert(daq->ign_sec_current, temp);
-        lcd.write(temp);
-    }
-
-    if(daq->rocket_mass != last_daq.rocket_mass) {
-        last_daq.rocket_mass = daq->rocket_mass;
-        lcd.setCursor(10, 3);
-        convert(daq->rocket_mass, temp);
-        lcd.write(temp);
-    }
-
-    //handle whether the SD card is working
-    if(sd_active()){
-        lcd.setCursor(18,3);
-        lcd.write(sd_buffer_dirty() ? "DI" : "OK");
-    }
-
-    lcd.setCursor(3, 1);
-    lcd_update_valve(daq->rfill_lsw_open, daq->rfill_lsw_closed, "CLS", "OPN");//rfill
-    lcd.setCursor(10, 1);
-    lcd_update_valve(daq->rvent_lsw_open,  daq->rvent_lsw_closed, "CLS", "OPN");//rvent
-    lcd.setCursor(17,1);
-    lcd_update_valve(daq->rocketvent_lsw_open, daq->rocketvent_lsw_closed, "CLS", "OPN");//tank valve
-    lcd.setCursor(17,2);
-    lcd_update_valve(daq->injectorvalve_lsw_open, daq->injectorvalve_lsw_closed, "CLS", "OPN");
-    lcd.setCursor(3, 3);
-    lcd_update_valve(daq->linac_lsw_extend, daq->linac_lsw_retract, "RET", "EXT");//linear actuator
+void display_new_error(const char *error)
+{
+    if (num_errors_queued == 10)
+        return;
+    uint8_t write_index = (marquee_buffer_index + num_errors_queued ) % 10;
+    strncpy(buffer_to_marquee[write_index], error, sizeof(buffer_to_marquee[0]));
+    num_errors_queued++;
 }
 
+static void display_valves_line(unsigned char fill_open,
+                                unsigned char fill_closed, unsigned char vent_open, unsigned char vent_closed,
+                                valve_state_t rocket_vent_state)
+{
+    lcd.setCursor(0, 0);
+    char line[21];
+    snprintf(line, 21, "RF:%s RV:%s TV:%s",
+             (fill_open && !fill_closed) ? "OPN" :
+             (!fill_open && fill_closed) ? "CLS" : "UNK",
+             (vent_open && !vent_closed) ? "OPN" :
+             (!vent_open && vent_closed) ? "CLS" : "UNK",
+             (rocket_vent_state == DAQ_VALVE_OPEN) ? "OPN" :
+             (rocket_vent_state == DAQ_VALVE_CLOSED) ? "CLS" :
+             (rocket_vent_state == DAQ_VALVE_UNK) ? "UNK" : "ILL");
+    lcd.print(line);
+}
+
+static void display_currents_line(uint16_t pri_current, uint16_t sec_current,
+                                  uint16_t rocket_tank_pressure)
+{
+    lcd.setCursor(0, 1);
+    if (pri_current > 999)
+        pri_current = 999;
+    if (sec_current > 999)
+        sec_current = 999;
+    if (rocket_tank_pressure > 999)
+        rocket_tank_pressure = 999;
+    char line[21];
+    snprintf(line, 21, "IP:%03u IS:%03u PT:%03u", pri_current, sec_current,
+             rocket_tank_pressure);
+    lcd.print(line);
+}
+
+static void display_mass_line(valve_state_t injector_state,
+                              uint16_t fill_tank_pressure, uint16_t mass)
+{
+    lcd.setCursor(0, 2);
+    if (fill_tank_pressure > 999)
+        fill_tank_pressure = 999;
+    char line[21];
+    snprintf(line, 21, "IV:%s PF:%03u M:%04u",
+             (injector_state == DAQ_VALVE_OPEN) ? "OPN" :
+             (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
+             (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
+             fill_tank_pressure, mass);
+    lcd.print(line);
+}
+
+static void display_disconnect_line(valve_state_t injector_state,
+                                    uint16_t fill_line_pressure, unsigned char linac_extend,
+                                    unsigned char linac_retract)
+{
+    lcd.setCursor(0, 2);
+    if (fill_line_pressure > 999)
+        fill_line_pressure = 999;
+    char line[21];
+    snprintf(line, 21, "IV:%s PF:%03u M:%04u",
+             (injector_state == DAQ_VALVE_OPEN) ? "OPN" :
+             (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
+             (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
+             fill_line_pressure,
+             (linac_extend && !linac_retract) ? "EXT" :
+             (!linac_extend && linac_retract) ? "RET" : "UNK");
+    lcd.print(line);
+}
+
+static void display_ground_batt_line(uint16_t client_batt, uint16_t tower_batt)
+{
+    lcd.setCursor(0, 3);
+    char line[21];
+    snprintf(line, 21, "BATGC:%05u CT:%05u", client_batt, tower_batt);
+    lcd.print(line);
+}
+
+static void display_rocket_batt_line(uint16_t flight_bus_batt,
+                                     uint16_t flight_vent_batt)
+{
+    lcd.setCursor(0, 3);
+    char line[21];
+    snprintf(line, 21, "BATFB:%05u FV:%05u", flight_bus_batt, flight_vent_batt);
+    lcd.print(line);
+}
+
+static void marquee_current_error()
+{
+    //exit conditions
+    if (millis() - time_last_error_displayed > 2000) {
+        currently_marqueeing_error = false;
+        num_errors_queued--;
+        marquee_buffer_index++;
+        if (marquee_buffer_index >= 10)
+            marquee_buffer_index = 0;
+    }
+
+    //TODO, make this actually marquee
+    char line[21];
+    snprintf(line, 21, "%s", buffer_to_marquee[marquee_buffer_index]);
+    lcd.setCursor(0, 3);
+    lcd.print(line);
+}
+
+static void marquee_next_error()
+{
+    time_last_error_displayed = millis();
+    lcd.setCursor(0, 3);
+    lcd.print("                    ");
+}
