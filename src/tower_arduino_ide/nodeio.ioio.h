@@ -20,97 +20,53 @@ extern "C" {
  * The sensor data is held in a sensor_data_t. Leave values unchanged if they
  * aren't needed, send them with nodeioio_send_sensor_data as often as you want.
  *
- * All actuator control is handled in nodeio_ioio_refresh. It currently assumes 
+ * All actuator control is handled in nodeio_ioio_refresh. It currently assumes
  * that the valve is closed by setting pin pin_valve_closed high and the other
  * pin low (is that as desired?). Set this up by passing the pin numbers to the
  * init function at program startup.
  */
 
-#define NUM_THERMISTORS 4
-#define SENSOR_DATA_LENGTH (2+(NUM_THERMISTORS))
-typedef struct{
-    uint16_t pressure;
-    uint8_t valve_limitswitch_open;
-    uint8_t valve_limitswitch_closed;
-    uint8_t thermistor_data[NUM_THERMISTORS];
-} sensor_data_t;
-
-//different states that the valve can be in. This is for
-//writing, not reading. So this holds the "desired" valve
-//state, reading the limit switches is what tells you the
-//actual state of the valve
+//different states that the valve can be in. Nothing
+//means that the valve shouldn't be driven at all, VALVE_OPEN
+//and VALVE_CLOSED are hopefully self explanatory, and
+//VALVE_ILLEGAL, if read from the valve, mean that both limit
+//switches are depressed simultaneously (should not happen).
+//writing VALVE_ILLEGAL to the injector valve should cause the
+//injector valve to open as little as possible (as a secondary
+//emergency vent procedure). Do not write VALVE_ILLEGAL to the
+//vent valve, it doesn't mean anything.
 typedef enum {
     NOTHING,
     VALVE_OPEN,
-    VALVE_CLOSED
+    VALVE_CLOSED,
+    VALVE_ILLEGAL,
 } nio_actuator_state;
 
-//amount of time between driving unused mosfets low and used mosfets high
-//this is what for not shorting 50 amps through your board
+//how to identify whether we're talking about the injector valve or vent valve
+typedef enum {
+    NIO_INJECTOR_VALVE,
+    NIO_VENT_VALVE,
+} nio_valve_identifier;
+
+#define SENSOR_DATA_LENGTH (2+(NUM_THERMISTORS))
+typedef struct {
+    uint16_t pressure;
+    nio_actuator_state read_valve_state;
+    nio_valve_identifier valve_id;
+} sensor_data_t;
+
+
 #define MOSFET_SWITCH_TIME_MS 150
-//initialization function. Sets up Serial communication, and actuator pins
-void nio_init(int pin_valve_close1,
-              int pin_valve_close2,
-              int pin_valve_open1,
-              int pin_valve_open2);
+//initialization function. Sets up Serial communication
+void nio_init(void);
 
 //call this function every loop. It checks for new packets, and handles
 //incoming commands if need be (opening and closing the valve as needed)
-void nio_refresh();
+void nio_refresh(void);
 
-//call this function as often as is desired. It will send the sensor data
-//back to the ground station, and through there to the operator
-//Please call this at least every three seconds or so (faster is better)
-//(but not like, every loop or anything).
-void nio_send_sensor_data(sensor_data_t*);
-
-//returns true if valve is open, false otherwise. This way you can log
-//when the valve opens or closes. This is based off desired state, not
-//the actual valve state. Read your limit switches for that
-uint8_t nio_current_valve_state();
-
-//helpers that are only needed by ground node
+//helpers to set which position a valve should be in
 void nio_set_vent_desired(nio_actuator_state);
 void nio_set_inj_desired(nio_actuator_state);
-
-//compile guards, you need to compile this with either NODE_INJ, NODE_VENT,
-//or NODE_GROUND defined (and only one of these). This changes how different
-//functions are defined
-
-#ifndef NODE_TEST //test file gets special treatment
-//Yes, I know it's ugly. Yes, there's probably a better way. No, I'm
-//not changing it.
-#if !defined(NODE_INJ) && !defined(NODE_VENT) && !defined(NODE_GROUND)
-#error "No node designator (NODE_{INJ,VENT,GROUND}) defined!"
-#endif
-
-#ifdef NODE_INJ
-#ifdef NODEIO_IOIO_DESIGNATOR
-#error "Multiple node designators (NODE_{INJ,VENT|GROUND}) defined!"
-#endif
-#define NODEIO_IOIO_DESIGNATOR
-#endif
-
-#ifdef NODE_VENT
-#ifdef NODEIO_IOIO_DESIGNATOR
-#error "Multiple node designators (NODE_{VENT,INJ|GROUND}) defined!"
-#endif
-#define NODEIO_IOIO_DESIGNATOR
-#endif
-
-#ifdef NODE_GROUND
-#ifdef NODEIO_IOIO_DESIGNATOR
-#error "Multiple node designators (NODE_{GROUND,VENT|INJ}) defined!"
-#endif
-#define NODEIO_IOIO_DESIGNATOR
-#endif
-
-#else
-//need to delcare these here so they're generated as c symbols,
-//not c++ symbols. Only matters while testing
-int pack_sensor_data(char *,sensor_data_t*);
-int unpack_sensor_data(char*, sensor_data_t*);
-#endif //ifndef NODE_TEST
 
 #ifdef __cplusplus
 }

@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include<stdint.h>
+#include<stdbool.h>
 
 char fromBase64(char base64);
 char toBase64(char binary);
