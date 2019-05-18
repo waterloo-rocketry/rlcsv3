@@ -42,20 +42,6 @@ typedef enum {
     VALVE_ILLEGAL,
 } nio_actuator_state;
 
-//how to identify whether we're talking about the injector valve or vent valve
-typedef enum {
-    NIO_INJECTOR_VALVE,
-    NIO_VENT_VALVE,
-} nio_valve_identifier;
-
-#define SENSOR_DATA_LENGTH (2+(NUM_THERMISTORS))
-typedef struct {
-    uint16_t pressure;
-    nio_actuator_state read_valve_state;
-    nio_valve_identifier valve_id;
-} sensor_data_t;
-
-
 #define MOSFET_SWITCH_TIME_MS 150
 //initialization function. Sets up Serial communication
 void nio_init(void);
@@ -67,6 +53,8 @@ void nio_refresh(void);
 //helpers to set which position a valve should be in
 void nio_set_vent_desired(nio_actuator_state);
 void nio_set_inj_desired(nio_actuator_state);
+void nio_depower_bus(void);
+void nio_power_bus(void);
 
 #ifdef __cplusplus
 }

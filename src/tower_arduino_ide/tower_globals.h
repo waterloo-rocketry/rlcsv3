@@ -25,8 +25,8 @@ void init_outputs();
 void goto_safe_mode();
 
 //callbacks for nodeio.ioio to give us updates on stuff
-void tower_handle_vent_update(const sensor_data_t* update);
-void tower_handle_inj_update(const sensor_data_t* update);
+void tower_handle_vent_update();
+void tower_handle_inj_update();
 
 #ifdef __cplusplus
 }

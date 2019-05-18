@@ -214,9 +214,12 @@ void goto_safe_mode()
 
     //apply that state
     apply_state();
+
+    //tell rocketCAN to depower the system bus
+    nio_depower_bus();
 }
 
-void tower_handle_vent_update(const sensor_data_t *update)
+void tower_handle_vent_update()
 {
     /* All of this will be replaced in the move to RocketCAN
 
@@ -235,7 +238,7 @@ void tower_handle_vent_update(const sensor_data_t *update)
     rlcslog_tower_vent_update(update); */
 }
 
-void tower_handle_inj_update(const sensor_data_t *update)
+void tower_handle_inj_update()
 {
     /* All of this will be replaced in the move to RocketCAN
 

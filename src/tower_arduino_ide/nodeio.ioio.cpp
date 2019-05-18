@@ -7,7 +7,7 @@ typedef struct {
     uint8_t num_boards_connected;
     bool injector_valve_open;
     bool vent_valve_open;
-    bool running_self_test;
+    bool bus_is_powered;
     bool any_errors_detected;
 } system_state;
 enum BOARD_STATUS {
@@ -70,15 +70,15 @@ static void send_desired_system_state(void);
 #include "tower_globals.h"
 #include "sd_handler.h"
 
-//it currently uses the Serial2 interface
-#define RADIO_UART Serial2
+//it currently uses the Serial3 interface
+#define RADIO_UART Serial3
 
 //stores bytes that come in from the radio
 char message_received_buffer[50];
-int sensor_buffer_index = 0;
+int message_buffer_index = 0;
 
 //the last received system state that we got from the rocket
-static system_state last_received_rocket_state;
+static system_state last_received_rocket_state = {};
 
 //the state that we want the rocket to be in
 static system_state desired_rocket_state;
@@ -107,13 +107,23 @@ void nio_set_inj_desired(nio_actuator_state s)
             desired_rocket_state.injector_valve_open = true;
             break;
         case VALVE_CLOSED:
-            desired_rocket_state.vent_valve_open = false;
+            desired_rocket_state.injector_valve_open = false;
             break;
         default:
             //when in doubt, do nothing
             break;
             //TODO, make it jog the valve when s == VALVE_ILLEGAL
     }
+}
+
+void nio_power_bus(void)
+{
+    desired_rocket_state.bus_is_powered = true;
+}
+
+void nio_depower_bus(void)
+{
+    desired_rocket_state.bus_is_powered = false;
 }
 
 //init function. Called at startup
@@ -132,6 +142,7 @@ enum nio_states {
 };
 
 nio_states current_fsm_state = STATE_NONE;
+static long time_last_received_rocket_state = 0;
 void nio_refresh()
 {
 //implement a fsm. This is largely based off the one used by RLCS.
@@ -141,7 +152,13 @@ void nio_refresh()
         char x = RADIO_UART.read();
         switch (x) {
             case NIO_STATE_COMMAND_HEADER:
+                current_fsm_state = STATE_STATE_RECEIVE;
+                message_buffer_index = 0;
+                break;
             case NIO_ERROR_COMMAND_HEADER:
+                current_fsm_state = STATE_ERROR_RECEIVE;
+                message_buffer_index = 0;
+                break;
             default:
                 //check if the character is a base 64 one
                 uint8_t temp = base64_to_binary(x);
@@ -150,24 +167,26 @@ void nio_refresh()
                     continue;
                 } else {
                     //if there's room in the buffer, push this in
-                    if (sensor_buffer_index < sizeof(message_received_buffer)) {
-                        message_received_buffer[sensor_buffer_index] = x;
-                        sensor_buffer_index++;
+                    if (message_buffer_index < sizeof(message_received_buffer)) {
+                        message_received_buffer[message_buffer_index] = x;
+                        message_buffer_index++;
                     }
                     //check if we've received a full message
                     if (current_fsm_state == STATE_STATE_RECEIVE) {
-                        if (sensor_buffer_index == (STATE_COMMAND_LEN - 1)) {
+                        if (message_buffer_index == (STATE_COMMAND_LEN - 2)) {
                             //compute the checksum of bytes 0 through STATE_COMMAND_LEN - 2
                             uint8_t expected_checksum = message_received_buffer[STATE_COMMAND_LEN - 2];
                             message_received_buffer[STATE_COMMAND_LEN - 2] = '\0';
                             uint8_t sum = checksum(message_received_buffer);
                             if (sum == expected_checksum) {
                                 deserialize_state(&last_received_rocket_state, message_received_buffer + 1);
+
+                                time_last_received_rocket_state = millis();
                             }
                             current_fsm_state = STATE_NONE;
                         }
                     } else if (current_fsm_state == STATE_ERROR_RECEIVE) {
-                        if (sensor_buffer_index == ERROR_COMMAND_LENGTH) {
+                        if (message_buffer_index == ERROR_COMMAND_LENGTH) {
                             //TODO, decode errors
                             current_fsm_state = STATE_NONE;
                         }
@@ -181,7 +200,8 @@ void nio_refresh()
     if (desired_rocket_state.injector_valve_open !=
         last_received_rocket_state.injector_valve_open ||
         desired_rocket_state.vent_valve_open !=
-        last_received_rocket_state.vent_valve_open) {
+        last_received_rocket_state.vent_valve_open ||
+        millis() - time_last_received_rocket_state > 5000) {
         send_desired_system_state();
     }
 
@@ -206,6 +226,7 @@ static void send_desired_system_state(void)
         //send message. create_state_command included null terminator.
         RADIO_UART.print(buffer);
     }
+    last_time_sent_system_state  = millis();
 }
 
 /*
@@ -266,7 +287,7 @@ static bool serialize_state(const system_state *state, char *str)
 
     raw = 0;
     // Bit 5 represents whether self-testing is enabled
-    if (state->running_self_test)
+    if (state->bus_is_powered)
         raw |= 0b00100000;
     // Bit 4 represents whether errors have been detected
     if (state->any_errors_detected)
@@ -297,7 +318,7 @@ static bool deserialize_state(system_state *state, const char *str)
     raw = base64_to_binary(str[1]);
 
     // Bit 5 represents whether self-testing is enabled
-    state->running_self_test = raw & 0b00100000;
+    state->bus_is_powered = raw & 0b00100000;
     // Bit 4 represents whether errors have been detected
     state->any_errors_detected = raw & 0b00010000;
 
@@ -355,7 +376,7 @@ static bool compare_system_states(const system_state *s, const system_state *p)
         return false;
     if (s->vent_valve_open != p->vent_valve_open)
         return false;
-    if (s->running_self_test != p->running_self_test)
+    if (s->bus_is_powered != p->bus_is_powered)
         return false;
     if (s->any_errors_detected != p->any_errors_detected)
         return false;

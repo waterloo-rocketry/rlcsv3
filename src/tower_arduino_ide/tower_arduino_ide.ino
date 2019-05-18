@@ -53,6 +53,9 @@ void loop() {
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {
         //goto safe mode
         goto_safe_mode();
+    } else {
+        //we've heard from the client recently, so the rocket should be awake
+        nio_power_bus();
     }
 
     //if the requested state and the current state aren't the same,
