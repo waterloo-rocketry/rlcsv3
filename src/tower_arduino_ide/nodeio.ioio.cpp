@@ -3,13 +3,6 @@
 #define NODE_GROUND
 
 //copied from RocketCAN
-typedef struct {
-    uint8_t num_boards_connected;
-    bool injector_valve_open;
-    bool vent_valve_open;
-    bool bus_is_powered;
-    bool any_errors_detected;
-} system_state;
 enum BOARD_STATUS {
     E_NOMINAL = 0,
     E_BUS_OVER_CURRENT,
@@ -51,9 +44,9 @@ typedef struct {
 #define NIO_STATE_REQUEST_HEADER '}'
 #define NIO_ERROR_COMMAND_HEADER '!'
 
-#define STATE_COMMAND_LEN 5
+#define STATE_COMMAND_LEN 6
 #define ERROR_COMMAND_LENGTH 8
-#define SERIALIZED_OUTPUT_LEN 3
+#define SERIALIZED_OUTPUT_LEN 4
 
 //static functions copy/pasted from cansw_radio
 static char binary_to_base64(uint8_t binary);
@@ -292,9 +285,15 @@ static bool serialize_state(const system_state *state, char *str)
     // Bit 4 represents whether errors have been detected
     if (state->any_errors_detected)
         raw |= 0b00010000;
+    // Bits 3-0 are the top bits 9-6 of the tank pressure
+    raw |= ((state->ttank_pressure >> 6) & 0b1111);
     str[1] = binary_to_base64(raw);
 
-    str[2] = 0;
+    //use all the bits of this next one to hold bits 5-0 of tank pressure
+    raw = (state->tank_pressure & 0b00111111);
+    str[2] = binary_to_base64(raw);
+
+    str[3] = 0;
 
     return true;
 }
@@ -321,6 +320,11 @@ static bool deserialize_state(system_state *state, const char *str)
     state->bus_is_powered = raw & 0b00100000;
     // Bit 4 represents whether errors have been detected
     state->any_errors_detected = raw & 0b00010000;
+    // Bit 3-0 are bits 9-6 of tank pressure
+    state->tank_pressure = ((uint16_t) raw & 0b1111) << 6;
+
+    raw = base64_to_binary(str[2]);
+    state->tank_pressure |= (raw & 0b00111111);
 
     return true;
 }
@@ -401,6 +405,7 @@ static bool create_state_command(char *cmd, const system_state *state)
     // Message start indicator
     cmd[0] = NIO_STATE_COMMAND_HEADER;
     // Checksum
+    cmd[STATE_COMMAND_LEN - 2] = '\0';
     cmd[STATE_COMMAND_LEN - 2] = checksum(serialized);
     // Null terminator
     cmd[STATE_COMMAND_LEN - 1] = 0;

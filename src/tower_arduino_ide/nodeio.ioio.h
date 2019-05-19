@@ -7,23 +7,17 @@ extern "C" {
 #define NODE_GROUND
 #include <stdint.h>
 
-/* Nodeio.ioio is the name of the local area network formed by three xbees
+/* Nodeio.ioio is the name of the local area network formed by two xbees
  * on or around the rocket, one being in the injector valve section (which
- * is named inj), one in the vent section (which is named vent), and one in
- * the tower side RLCS box (which is named ground).
+ * handles rocketCAN), and one in the tower side RLCS box (which is named
+ * ground).
  *
  * Nodeio.ioio has three goals:
  *  - Open the injector valve when the operator says so
  *  - Open the vent valve when the operator says so
  *  - send sensor data from both inj and vent back to the operator
  *
- * The sensor data is held in a sensor_data_t. Leave values unchanged if they
- * aren't needed, send them with nodeioio_send_sensor_data as often as you want.
- *
- * All actuator control is handled in nodeio_ioio_refresh. It currently assumes
- * that the valve is closed by setting pin pin_valve_closed high and the other
- * pin low (is that as desired?). Set this up by passing the pin numbers to the
- * init function at program startup.
+ * Everything of importance is held in the system_state type
  */
 
 //different states that the valve can be in. Nothing
@@ -42,7 +36,16 @@ typedef enum {
     VALVE_ILLEGAL,
 } nio_actuator_state;
 
-#define MOSFET_SWITCH_TIME_MS 150
+//copied from RocketCAN
+typedef struct {
+    uint16_t tank_pressure;
+    uint8_t num_boards_connected;
+    bool injector_valve_open;
+    bool vent_valve_open;
+    bool bus_is_powered;
+    bool any_errors_detected;
+} system_state;
+
 //initialization function. Sets up Serial communication
 void nio_init(void);
 
