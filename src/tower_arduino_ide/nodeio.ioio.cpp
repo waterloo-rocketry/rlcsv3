@@ -151,7 +151,7 @@ void nio_refresh()
                             uint8_t sum = checksum(message_received_buffer);
                             if (sum == expected_checksum) {
                                 deserialize_state(&last_received_rocket_state, message_received_buffer + 1);
-
+                                tower_handle_rocketcan_update(&last_received_rocket_state);
                                 time_last_received_rocket_state = millis();
                             }
                             current_fsm_state = STATE_NONE;

@@ -103,8 +103,6 @@ int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
 }
 
 //these functions could easily be changed to make them more efficient
-//TODO I'm pretty sure you can decrease DAQ_RADIO_LEN from 17 to 10 by packing the three-digit values down
-//That involves some bit level fuckery, so I'll leave that as an exercise for later
 int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
     //step 1: convert the first two bytes from radio to pressure1
     daq->pressure1 = fromBase64(radio->data[1]) << 5 |
@@ -139,6 +137,10 @@ int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
 
     daq->injector_valve_state     = static_cast<valve_state_t>((second_bitfield & 0b110000) >> 4);
     daq->rocketvent_valve_state   = static_cast<valve_state_t>((second_bitfield & 0b1100) >> 2);
+    daq->bus_is_powered           = (second_bitfield & 0b10) >> 1;
+    daq->any_errors_detected      = second_bitfield & 1;
+
+    daq->num_boards_connected = fromBase64(radio->data[14]);
 
     return 1;
 }
@@ -172,6 +174,12 @@ int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
 
     second_bitfield |= daq->injector_valve_state << 4;
     second_bitfield |= daq->rocketvent_valve_state << 2;
+    if(daq->bus_is_powered) {
+        second_bitfield |= 0b10;
+    }
+    if(daq->any_errors_detected) {
+        second_bitfield |= 1;
+    }
 
     first_bitfield = toBase64(first_bitfield);
     second_bitfield = toBase64(second_bitfield);
@@ -179,5 +187,6 @@ int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
         return 0;
     radio->data[12] = first_bitfield;
     radio->data[13] = second_bitfield;
+    radio->data[14] = toBase64(daq->num_boards_connected & 0x3f);
     return 1;
 }

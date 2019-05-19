@@ -24,9 +24,8 @@ void reset_request();
 void init_outputs();
 void goto_safe_mode();
 
-//callbacks for nodeio.ioio to give us updates on stuff
-void tower_handle_vent_update();
-void tower_handle_inj_update();
+//callback for nodeio.ioio to give us updates on stuff
+void tower_handle_rocketcan_update(const system_state *update);
 
 #ifdef __cplusplus
 }

@@ -53,12 +53,13 @@ typedef struct {
 
     // new data fields for RocketCAN stuff
     unsigned char num_boards_connected;
+    unsigned char bus_is_powered;
     bool any_errors_detected;
     valve_state_t injector_valve_state;
     valve_state_t rocketvent_valve_state;
 } daq_holder_t;
 
-#define DAQ_RADIO_LEN 14
+#define DAQ_RADIO_LEN 15
 typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;

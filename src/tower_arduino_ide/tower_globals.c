@@ -219,36 +219,14 @@ void goto_safe_mode()
     nio_depower_bus();
 }
 
-void tower_handle_vent_update()
+void tower_handle_rocketcan_update(const system_state *update)
 {
-    /* All of this will be replaced in the move to RocketCAN
-
-    //store the pressure in the daq singleton
-    if(update->pressure <= 999)
-        global_current_daq.pressure3 = update->pressure;
-    else
-        global_current_daq.pressure3 = update->pressure;
-
-    //update limit switch data
-    global_current_daq.rocketvent_lsw_open =
-        update->valve_limitswitch_open;
-    global_current_daq.rocketvent_lsw_closed =
-        update->valve_limitswitch_closed;
-
-    rlcslog_tower_vent_update(update); */
-}
-
-void tower_handle_inj_update()
-{
-    /* All of this will be replaced in the move to RocketCAN
-
-    //update limit switch data
-    global_current_daq.injectorvalve_lsw_open =
-        update->valve_limitswitch_open;
-    global_current_daq.injectorvalve_lsw_closed =
-        update->valve_limitswitch_closed;
-
-    rlcslog_tower_inj_update(update); */
+    global_current_daq.num_boards_connected = update->num_boards_connected;
+    global_current_daq.any_errors_detected = update->any_errors_detected;
+    global_current_daq.pressure3 = update->tank_pressure;
+    global_current_daq.injector_valve_state = update->injector_valve_state;
+    global_current_daq.rocketvent_valve_state = update->vent_valve_state;
+    //TODO, log to rlcslog
 }
 
 //global for how long it's been since the output log was flushed
