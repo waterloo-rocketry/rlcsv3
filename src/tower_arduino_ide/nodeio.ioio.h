@@ -30,9 +30,9 @@ extern "C" {
 //emergency vent procedure). Do not write VALVE_ILLEGAL to the
 //vent valve, it doesn't mean anything.
 typedef enum {
-    NOTHING,
-    VALVE_OPEN,
+    VALVE_OPEN = 0,
     VALVE_CLOSED,
+    NOTHING,
     VALVE_ILLEGAL,
 } nio_actuator_state;
 
@@ -40,8 +40,8 @@ typedef enum {
 typedef struct {
     uint16_t tank_pressure;
     uint8_t num_boards_connected;
-    bool injector_valve_open;
-    bool vent_valve_open;
+    nio_actuator_state injector_valve_state;
+    nio_actuator_state vent_valve_state;
     bool bus_is_powered;
     bool any_errors_detected;
 } system_state;

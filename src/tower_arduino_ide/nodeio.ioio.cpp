@@ -44,9 +44,9 @@ typedef struct {
 #define NIO_STATE_REQUEST_HEADER '}'
 #define NIO_ERROR_COMMAND_HEADER '!'
 
-#define STATE_COMMAND_LEN 6
+#define STATE_COMMAND_LEN 7
 #define ERROR_COMMAND_LENGTH 8
-#define SERIALIZED_OUTPUT_LEN 4
+#define SERIALIZED_OUTPUT_LEN 5
 
 //static functions copy/pasted from cansw_radio
 static char binary_to_base64(uint8_t binary);
@@ -80,33 +80,11 @@ static system_state desired_rocket_state;
 //called from tower fsm loop
 void nio_set_vent_desired(nio_actuator_state s)
 {
-    switch (s) {
-        case VALVE_OPEN:
-            desired_rocket_state.vent_valve_open = true;
-            break;
-        case VALVE_CLOSED:
-            desired_rocket_state.vent_valve_open = false;
-            break;
-        default:
-            //when in doubt, open the valve
-            desired_rocket_state.vent_valve_open = true;
-            break;
-    }
+    desired_rocket_state.vent_valve_state = s;
 }
 void nio_set_inj_desired(nio_actuator_state s)
 {
-    switch (s) {
-        case VALVE_OPEN:
-            desired_rocket_state.injector_valve_open = true;
-            break;
-        case VALVE_CLOSED:
-            desired_rocket_state.injector_valve_open = false;
-            break;
-        default:
-            //when in doubt, do nothing
-            break;
-            //TODO, make it jog the valve when s == VALVE_ILLEGAL
-    }
+    desired_rocket_state.injector_valve_state = s;
 }
 
 void nio_power_bus(void)
@@ -190,10 +168,10 @@ void nio_refresh()
     }
 
     //if the desired state and last received state don't match, send a new command
-    if (desired_rocket_state.injector_valve_open !=
-        last_received_rocket_state.injector_valve_open ||
-        desired_rocket_state.vent_valve_open !=
-        last_received_rocket_state.vent_valve_open ||
+    if (desired_rocket_state.injector_valve_state !=
+        last_received_rocket_state.injector_valve_state ||
+        desired_rocket_state.vent_valve_state !=
+        last_received_rocket_state.vent_valve_state ||
         millis() - time_last_received_rocket_state > 5000) {
         send_desired_system_state();
     }
@@ -270,31 +248,30 @@ static bool serialize_state(const system_state *state, char *str)
     uint8_t raw = 0;
     // Bits 5-2 represent the number of boards connected
     raw |= (state->num_boards_connected & 0b00001111) << 2;
-    // Bit 1 represents the injector valve state
-    if (state->injector_valve_open)
-        raw |= 0b00000010;
-    // Bit 0 represents the vent valve state
-    if (state->vent_valve_open)
-        raw |= 0b00000001;
+    // Bits 1-0 represent the injector valve state
+    raw |= (state->injector_valve_state & 0x3);
     str[0] = binary_to_base64(raw);
 
     raw = 0;
-    // Bit 5 represents whether self-testing is enabled
-    if (state->bus_is_powered)
-        raw |= 0b00100000;
-    // Bit 4 represents whether errors have been detected
-    if (state->any_errors_detected)
-        raw |= 0b00010000;
+    // Bits 5-4 represent the vent valve state
+    raw |= ((state->vent_valve_state & 0x3) << 4);
     // Bits 3-0 are the top bits 9-6 of the tank pressure
-    raw |= ((state->ttank_pressure >> 6) & 0b1111);
+    raw |= ((state->tank_pressure >> 6) & 0b1111);
     str[1] = binary_to_base64(raw);
 
     //use all the bits of this next one to hold bits 5-0 of tank pressure
     raw = (state->tank_pressure & 0b00111111);
     str[2] = binary_to_base64(raw);
 
-    str[3] = 0;
+    // Bit 5 represents whether the bus is powered
+    if (state->bus_is_powered)
+        raw |= 0b00100000;
+    // Bit 4 represents whether errors have been detected
+    if (state->any_errors_detected)
+        raw |= 0b00010000;
+    str[3] = binary_to_base64(raw);
 
+    str[4] = '\0';
     return true;
 }
 
@@ -309,13 +286,13 @@ static bool deserialize_state(system_state *state, const char *str)
 
     // Bits 5-2 represent the number of boards connected
     state->num_boards_connected = (raw & 0b00111100) >> 2;
-    // Bit 1 represents the injector valve state
-    state->injector_valve_open = raw & 0b00000010;
-    // Bit 0 represents the vent valve state
-    state->vent_valve_open = raw & 0b00000001;
+    // Bits 1-0 represent the injector valve state
+    state->injector_valve_state = (raw & 0x3);
 
     raw = base64_to_binary(str[1]);
 
+    // Bits 5-4 represent the vent valve state
+    state->vent_valve_state = ((raw & 0x30) >> 4);
     // Bit 5 represents whether self-testing is enabled
     state->bus_is_powered = raw & 0b00100000;
     // Bit 4 represents whether errors have been detected
@@ -325,6 +302,10 @@ static bool deserialize_state(system_state *state, const char *str)
 
     raw = base64_to_binary(str[2]);
     state->tank_pressure |= (raw & 0b00111111);
+
+    raw = base64_to_binary(str[3]);
+    state->bus_is_powered = raw & 0x20;
+    state->any_errors_detected = raw & 0x10;
 
     return true;
 }
@@ -376,9 +357,9 @@ static bool compare_system_states(const system_state *s, const system_state *p)
 
     if (s->num_boards_connected != p->num_boards_connected)
         return false;
-    if (s->injector_valve_open != p->injector_valve_open)
+    if (s->injector_valve_state != p->injector_valve_state)
         return false;
-    if (s->vent_valve_open != p->vent_valve_open)
+    if (s->vent_valve_state != p->vent_valve_state)
         return false;
     if (s->bus_is_powered != p->bus_is_powered)
         return false;
