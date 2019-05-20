@@ -103,6 +103,12 @@ void nio_init(void)
     while (!RADIO_UART);
     //make sure to set the radio module to 9600 baud.
     RADIO_UART.begin(9600);
+
+    //set default values to show on the LCD
+    daq_holder_t *daq = get_global_current_daq();
+    daq->injector_valve_state = DAQ_VALVE_UNK;
+    daq->rocketvent_valve_state = DAQ_VALVE_UNK;
+    daq->pressure3 = 0; //set flight tank pressure to 0 until we know
 }
 
 //different states the FSM can be in
