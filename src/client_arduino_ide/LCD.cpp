@@ -207,7 +207,7 @@ static void display_disconnect_line(valve_state_t injector_state,
     if (fill_line_pressure > 999)
         fill_line_pressure = 999;
     char line[21];
-    snprintf(line, 21, "IV:%s PF:%03u M:%04u",
+    snprintf(line, 21, "IV:%s PL:%03u RD:%s",
              (injector_state == DAQ_VALVE_OPEN) ? "OPN" :
              (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
              (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
@@ -221,7 +221,7 @@ static void display_ground_batt_line(uint16_t client_batt, uint16_t tower_batt)
 {
     lcd.setCursor(0, 3);
     char line[21];
-    snprintf(line, 21, "BATGC:%05u CT:%05u", client_batt, tower_batt);
+    snprintf(line, 21, "BATGC:%05u GT:%05u", client_batt, tower_batt);
     lcd.print(line);
 }
 
