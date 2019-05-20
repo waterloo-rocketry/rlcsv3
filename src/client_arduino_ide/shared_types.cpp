@@ -105,22 +105,22 @@ int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
 //these functions could easily be changed to make them more efficient
 int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
     //step 1: convert the first two bytes from radio to pressure1
-    daq->pressure1 = fromBase64(radio->data[1]) << 5 |
+    daq->pressure1 = fromBase64(radio->data[1]) << 6 |
         fromBase64(radio->data[0]);
     //step 2, do the second two bytes into pressure2
-    daq->pressure2 = fromBase64(radio->data[3]) << 5 |
+    daq->pressure2 = fromBase64(radio->data[3]) << 6 |
         fromBase64(radio->data[2]);
     //step 3, do the third two bytes into pressure3
-    daq->pressure3 = fromBase64(radio->data[5]) << 5 |
+    daq->pressure3 = fromBase64(radio->data[5]) << 6 |
         fromBase64(radio->data[4]);
     //step 4, that same thing but for rocket_mass
-    daq->rocket_mass = fromBase64(radio->data[7]) << 5|
+    daq->rocket_mass = fromBase64(radio->data[7]) << 6 |
         fromBase64(radio->data[6]);
     //step 5, now for ign_pri_current
-    daq->ign_pri_current = fromBase64(radio->data[9]) << 5 |
+    daq->ign_pri_current = fromBase64(radio->data[9]) << 6 |
         fromBase64(radio->data[8]);
     //step 6: now for ign_sec_current
-    daq->ign_sec_current = fromBase64(radio->data[11]) << 5 |
+    daq->ign_sec_current = fromBase64(radio->data[11]) << 6 |
         fromBase64(radio->data[10]);
     //step 6: now let's do some binary stuff. convert byte 15 from base64
     char first_bitfield = fromBase64(radio->data[12]);
@@ -147,11 +147,11 @@ int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
 
 //this does not check array length, so please pay attention to what you pass this
 static void convert_uint16_to_2dig(uint16_t input, char* output){
-    if (input > 999)
-        input = 999;
+    if (input > 4095)
+        input = 4095;
     //it's impossible for input to be more than 10 bits
-    output[0] = toBase64(input & 0b11111);
-    output[1] = toBase64((input >> 5) & 0b11111);
+    output[0] = toBase64(input & 0b111111);
+    output[1] = toBase64((input >> 6) & 0b111111);
 }
 
 int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
