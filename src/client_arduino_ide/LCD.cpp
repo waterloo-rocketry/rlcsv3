@@ -212,8 +212,8 @@ static void display_disconnect_line(valve_state_t injector_state,
              (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
              (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
              fill_line_pressure,
-             (linac_extend && !linac_retract) ? "EXT" :
-             (!linac_extend && linac_retract) ? "RET" : "UNK");
+             (linac_extend && !linac_retract) ? "DIS" :
+             (!linac_extend && linac_retract) ? "CON" : "UNK");
     lcd.print(line);
 }
 

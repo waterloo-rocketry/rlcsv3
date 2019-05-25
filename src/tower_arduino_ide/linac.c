@@ -3,12 +3,12 @@
 #include "Arduino.h"
 
 //macros
-#define LINAC_POWERED_TIME_MOVING 100
-#define LINAC_UNPOWERED_TIME_MOVING 700
+#define LINAC_POWERED_TIME_MOVING 2000 // who needs duty cycling time anyways
+#define LINAC_UNPOWERED_TIME_MOVING 50
 //turn on and off this many times while moving
-#define LINAC_CYCLES_MOVING 15
+#define LINAC_CYCLES_MOVING 1 // lets do it all in one go
 //don't move for 2 seconds after moving
-#define LINAC_COOLDOWN_TIME 2000
+#define LINAC_COOLDOWN_TIME 50 // cooldown time? where we're going we don't need cooldown time
 
 static enum {
     LINAC_UNKNOWN, //what it is at startup
@@ -98,7 +98,7 @@ uint8_t linac_extend()
     //at this point, we know that we're allowed to extend the linear
     //actuator. So do that. the select pin needs to be written high
     //for this to work right
-    digitalWrite(PIN_LINACTUATOR_SELECT, HIGH);
+    digitalWrite(PIN_LINACTUATOR_SELECT, HIGH); 
     digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
 
     //remember to stop moving after a certain amount of time
@@ -119,7 +119,7 @@ uint8_t linac_retract()
     if(current_linac_state == LINAC_RETRACTED)
         return true;
 
-    digitalWrite(PIN_LINACTUATOR_SELECT, LOW);
+    digitalWrite(PIN_LINACTUATOR_SELECT, LOW); 
     digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
 
     current_timer_state = LINAC_MOVING_POWERED;
