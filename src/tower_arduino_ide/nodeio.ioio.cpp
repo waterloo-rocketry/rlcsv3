@@ -152,11 +152,11 @@ void nio_refresh()
                     if (current_fsm_state == STATE_STATE_RECEIVE) {
                         if (message_buffer_index == (STATE_COMMAND_LEN - 2)) {
                             //compute the checksum of bytes 0 through STATE_COMMAND_LEN - 2
-                            uint8_t expected_checksum = message_received_buffer[STATE_COMMAND_LEN - 2];
-                            message_received_buffer[STATE_COMMAND_LEN - 2] = '\0';
+                            uint8_t expected_checksum = message_received_buffer[STATE_COMMAND_LEN - 3];
+                            message_received_buffer[STATE_COMMAND_LEN - 3] = '\0';
                             uint8_t sum = checksum(message_received_buffer);
                             if (sum == expected_checksum) {
-                                deserialize_state(&last_received_rocket_state, message_received_buffer + 1);
+                                deserialize_state(&last_received_rocket_state, message_received_buffer);
                                 tower_handle_rocketcan_update(&last_received_rocket_state);
                                 time_last_received_rocket_state = millis();
                             }
@@ -269,7 +269,8 @@ static bool serialize_state(const system_state *state, char *str)
     raw = (state->tank_pressure & 0b00111111);
     str[2] = binary_to_base64(raw);
 
-    // Bit 5 represents whether the bus is powered
+    raw = 0;
+    // Bit 5 represents whether the bus is should be powered
     if (state->bus_is_powered)
         raw |= 0b00100000;
     // Bit 4 represents whether errors have been detected
@@ -299,18 +300,16 @@ static bool deserialize_state(system_state *state, const char *str)
 
     // Bits 5-4 represent the vent valve state
     state->vent_valve_state = ((raw & 0x30) >> 4);
-    // Bit 5 represents whether self-testing is enabled
-    state->bus_is_powered = raw & 0b00100000;
-    // Bit 4 represents whether errors have been detected
-    state->any_errors_detected = raw & 0b00010000;
     // Bit 3-0 are bits 9-6 of tank pressure
-    state->tank_pressure = ((uint16_t) raw & 0b1111) << 6;
+    state->tank_pressure = ((uint16_t) (raw & 0xf)) << 6;
 
     raw = base64_to_binary(str[2]);
-    state->tank_pressure |= (raw & 0b00111111);
+    state->tank_pressure |= (raw & 0x3f);
 
     raw = base64_to_binary(str[3]);
+    // Bit 5 represents whether the bus should be powered
     state->bus_is_powered = raw & 0x20;
+    // Bit 4 represents whether any errors are active
     state->any_errors_detected = raw & 0x10;
 
     return true;
