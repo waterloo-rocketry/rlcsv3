@@ -69,29 +69,24 @@ void apply_state(){
         }
     }
 
-    if(global_requested_state.run_tank_valve != global_current_state.run_tank_valve){
-        //we need to change the run_tank_valve to what requested wants
-        global_current_state.run_tank_valve = global_requested_state.run_tank_valve;
-        //tell nodeio.ioio that we want the vent to change
-        if(global_requested_state.run_tank_valve){
-            //we want it open
-            nio_set_vent_desired(VALVE_OPEN);
-        }
-        else {
-            nio_set_vent_desired(VALVE_CLOSED);
-        }
+    global_current_state.run_tank_valve = global_requested_state.run_tank_valve;
+    //tell nodeio.ioio that we want the vent to change
+    if(global_requested_state.run_tank_valve){
+        //we want it open
+        nio_set_vent_desired(VALVE_OPEN);
+    }
+    else {
+        nio_set_vent_desired(VALVE_CLOSED);
     }
 
-    if(global_requested_state.injector_valve != global_current_state.injector_valve){
-        global_current_state.injector_valve = global_requested_state.injector_valve;
-        //tell nodeio.ioio that we want the injector to change
-        if(global_requested_state.injector_valve){
-            //we want it open
-            nio_set_inj_desired(VALVE_OPEN);
-        }
-        else {
-            nio_set_inj_desired(VALVE_CLOSED);
-        }
+    global_current_state.injector_valve = global_requested_state.injector_valve;
+    //tell nodeio.ioio that we want the injector to change
+    if(global_requested_state.injector_valve){
+        //we want it open
+        nio_set_inj_desired(VALVE_OPEN);
+    }
+    else {
+        nio_set_inj_desired(VALVE_CLOSED);
     }
 
     if(global_requested_state.linear_actuator != global_current_state.linear_actuator){

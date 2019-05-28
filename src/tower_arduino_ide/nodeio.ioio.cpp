@@ -109,6 +109,12 @@ void nio_init(void)
     daq->injector_valve_state = DAQ_VALVE_UNK;
     daq->rocketvent_valve_state = DAQ_VALVE_UNK;
     daq->pressure3 = 0; //set flight tank pressure to 0 until we know
+
+    //by default, make the bus unpowered, the injector valve unknown
+    //(depowered), and the vent valve open
+    desired_rocket_state.bus_is_powered = false;
+    desired_rocket_state.injector_valve_state = NOTHING;
+    desired_rocket_state.vent_valve_state = VALVE_OPEN;
 }
 
 //different states the FSM can be in
