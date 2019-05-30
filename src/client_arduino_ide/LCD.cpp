@@ -38,8 +38,8 @@
  *
  *  The next line switches back and forth between the following DAQ values
  *  every 2 seconds (2 seconds on, 2 seconds off):
- *  IV:___ PF:___ M:____ and IV:___ PL:___ RD:___
- *  Those are, in order, injector valve, pressure in fill tank, rocket mass,
+ *  IV:___ PS:___ M:____ and IV:___ PL:___ RD:___
+ *  Those are, in order, injector valve, pressure in supply tank, rocket mass,
  *  injector valve again (it should always be onscreen), pressure in fill
  *  lines, and remote disconnect status
  *
@@ -191,7 +191,7 @@ static void display_mass_line(valve_state_t injector_state,
     if (fill_tank_pressure > 999)
         fill_tank_pressure = 999;
     char line[21];
-    snprintf(line, 21, "IV:%s PF:%03u M:%04u",
+    snprintf(line, 21, "IV:%s PS:%03u M:%04u",
              (injector_state == DAQ_VALVE_OPEN) ? "OPN" :
              (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
              (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
