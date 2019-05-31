@@ -13,6 +13,7 @@
 void setup() {
     //initialize all outputs
     init_outputs();
+    init_daq_pins();
     radio_init();
     nio_init();
     start_SevSeg();

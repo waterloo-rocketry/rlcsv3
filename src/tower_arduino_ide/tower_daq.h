@@ -32,11 +32,11 @@ void compute_daq_values(daq_holder_t* output);
  *  SP1: (277.76*vout - 68.179)PSI
  *  SP2: (277.28*vout - 113.76)PSI
  */
-#define PRESSURE1_SCALE 1 //((278*5)/1024)
-#define PRESSURE1_OFFSET 0 //(-71)
+#define PRESSURE1_SCALE 1.267
+#define PRESSURE1_OFFSET (-20)
 
-#define PRESSURE2_SCALE 1 //((278*5)/1024)
-#define PRESSURE2_OFFSET 0 //(-117)
+#define PRESSURE2_SCALE 1.224
+#define PRESSURE2_OFFSET (-40)
 
 #define MASS_SCALE 0.195
 #define MASS_OFFSET (-30)
