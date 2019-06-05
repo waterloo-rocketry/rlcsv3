@@ -38,8 +38,8 @@ void compute_daq_values(daq_holder_t* output);
 #define PRESSURE2_SCALE 1.224
 #define PRESSURE2_OFFSET (-40)
 
-#define MASS_SCALE 0.195
-#define MASS_OFFSET (-30)
+#define MASS_SCALE 1.95
+#define MASS_OFFSET (-300)
 
 #define IGNPRI_SCALE 1.1
 #define IGNPRI_OFFSET 0
