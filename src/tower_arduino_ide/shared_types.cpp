@@ -142,6 +142,35 @@ int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
 
     daq->num_boards_connected = fromBase64(radio->data[14]);
 
+    //need 14 bits for each of the battery voltages, so that's 28 bits is 5 more characters
+    //bits 13-8 are in char 1
+    daq->bus_batt_mv  = fromBase64(radio->data[15]) << 8;
+    //bits 7-2 are in char 2
+    daq->bus_batt_mv |= fromBase64(radio->data[16]) << 2;
+    //bits 1 and 0 are the top two bits of char 3
+    daq->bus_batt_mv |= (fromBase64(radio->data[17]) >> 4) & 0x3;
+
+    //bits 13-10 are the bottom four bits of char 1
+    daq->vent_batt_mv  = (fromBase64(radio->data[17]) & 0xf) << 10;
+    //bits 9-4 are in char 2
+    daq->vent_batt_mv |= fromBase64(radio->data[18]) << 4;
+    //bits 3-0 are in the top four bits of char 3
+    daq->vent_batt_mv |= (fromBase64(radio->data[19]) >> 2) & 0xf;
+
+    //bits 13 and 12 are in bottom two bits of char 19
+    daq->rlcs_main_batt_mv = ((fromBase64(radio->data[19]) & 0x3) << 12);
+    //bits 11-6 are in char 20
+    daq->rlcs_main_batt_mv |= fromBase64(radio->data[20]) << 6;
+    //bits 5-0 are in char 21
+    daq->rlcs_main_batt_mv |= fromBase64(radio->data[21]);
+
+    //bits 13-8 are in char 22
+    daq->rlcs_actuator_batt_mv  = fromBase64(radio->data[22]) << 8;
+    //bits 7-2 are in char 23
+    daq->rlcs_actuator_batt_mv |= fromBase64(radio->data[23]) << 2;
+    //bits 1 and 0 are the top two bits of char 24
+    daq->rlcs_actuator_batt_mv |= (fromBase64(radio->data[24]) >> 4) & 0x3;
+
     return 1;
 }
 
@@ -149,7 +178,7 @@ int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio){
 static void convert_uint16_to_2dig(uint16_t input, char* output){
     if (input > 4095)
         input = 4095;
-    //it's impossible for input to be more than 10 bits
+    //it's impossible for input to be more than 12 bits
     output[0] = toBase64(input & 0b111111);
     output[1] = toBase64((input >> 6) & 0b111111);
 }
@@ -188,5 +217,16 @@ int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio){
     radio->data[12] = first_bitfield;
     radio->data[13] = second_bitfield;
     radio->data[14] = toBase64(daq->num_boards_connected & 0x3f);
+
+    radio->data[15] = toBase64((daq->bus_batt_mv >> 8) & 0x3f);
+    radio->data[16] = toBase64((daq->bus_batt_mv >> 2) & 0x3f);
+    radio->data[17] = toBase64(((daq->bus_batt_mv & 0x3) << 4) | ((daq->vent_batt_mv >> 10) & 0xf));
+    radio->data[18] = toBase64((daq->vent_batt_mv >> 4) & 0x3f);
+    radio->data[19] = toBase64(((daq->vent_batt_mv & 0xf) << 2) | ((daq->rlcs_main_batt_mv >> 12) & 0x3));
+    radio->data[20] = toBase64((daq->rlcs_main_batt_mv >> 6) & 0x3f);
+    radio->data[21] = toBase64(daq->rlcs_main_batt_mv & 0x3f);
+    radio->data[22] = toBase64((daq->rlcs_actuator_batt_mv >> 8) & 0x3f);
+    radio->data[23] = toBase64((daq->rlcs_actuator_batt_mv >> 2) & 0x3f);
+    radio->data[24] = toBase64((daq->rlcs_actuator_batt_mv & 0x3) << 4);
     return 1;
 }

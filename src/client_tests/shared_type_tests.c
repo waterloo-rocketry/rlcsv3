@@ -104,20 +104,28 @@ int randomActuatorCompare(){
 }
 
 void generateRandomDaqState(daq_holder_t* s){
-    s->pressure1 = rand() % 999;
-    s->pressure2 = rand() % 999;
-    s->pressure3 = rand() % 999;
-    s->rocket_mass = rand() % 999;
-    s->ign_pri_current = rand() % 999;
-    s->ign_sec_current = rand() % 999;
+    s->pressure1 = rand() % 4096;
+    s->pressure2 = rand() % 4096;
+    s->pressure3 = rand() % 4096;
+    s->rocket_mass = rand() % 4096;
+    s->ign_pri_current = rand() % 4096;
+    s->ign_sec_current = rand() % 4096;
     s->rfill_lsw_open = rand() & 1;
     s->rfill_lsw_closed = rand() & 1;
     s->rvent_lsw_open = rand() & 1;
     s->rvent_lsw_closed = rand() & 1;
-    s->rocketvent_valve_state = rand() % 4;
-    s->injector_valve_state = rand() % 4;
     s->linac_lsw_extend = rand() & 1;
     s->linac_lsw_retract = rand() & 1;
+    s->num_boards_connected = rand() % 16;
+    s->bus_is_powered = rand() & 1;
+    s->any_errors_detected = rand() & 1;
+    s->rocketvent_valve_state = rand() % 4;
+    s->injector_valve_state = rand() % 4;
+    s->bus_batt_mv = rand() & 0x3ff;
+    s->vent_batt_mv = rand() & 0x3ff;
+    s->rlcs_main_batt_mv = rand() & 0x3ff;
+    s->rlcs_actuator_batt_mv = rand() & 0x3ff;
+
 }
 
 int randomDaqCompare(){
@@ -141,7 +149,14 @@ int randomDaqCompare(){
             s.rocketvent_valve_state == q.rocketvent_valve_state &&
             s.injector_valve_state == q.injector_valve_state &&
             s.linac_lsw_extend == q.linac_lsw_extend &&
-            s.linac_lsw_retract == q.linac_lsw_retract
+            s.linac_lsw_retract == q.linac_lsw_retract &&
+            s.num_boards_connected == q.num_boards_connected &&
+            s.bus_is_powered == q.bus_is_powered &&
+            s.any_errors_detected == q.any_errors_detected &&
+            s.bus_batt_mv == q.bus_batt_mv &&
+            s.vent_batt_mv == q.vent_batt_mv &&
+            s.rlcs_main_batt_mv == q.rlcs_main_batt_mv &&
+            s.rlcs_actuator_batt_mv == q.rlcs_actuator_batt_mv
         )){
             printf("s.pressure1: %u\n",s.pressure1);
             printf("s.pressure2: %u\n",s.pressure2);

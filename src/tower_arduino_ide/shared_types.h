@@ -57,9 +57,14 @@ typedef struct {
     bool any_errors_detected;
     valve_state_t injector_valve_state;
     valve_state_t rocketvent_valve_state;
+
+    uint16_t bus_batt_mv;
+    uint16_t vent_batt_mv;
+    uint16_t rlcs_main_batt_mv;
+    uint16_t rlcs_actuator_batt_mv;
 } daq_holder_t;
 
-#define DAQ_RADIO_LEN 15
+#define DAQ_RADIO_LEN 25
 typedef struct {
 	char data[DAQ_RADIO_LEN];
 } daq_radio_value_t;
