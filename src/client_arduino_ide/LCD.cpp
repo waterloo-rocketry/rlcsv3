@@ -46,9 +46,9 @@
  *  The fourth line alternates between battery voltages and error messages
  *  from rocketCAN. The battery voltages alternate back and forth between
  *  these two lines:
- *  BATGC:_____ GT:_____ and BATFB:_____ FV:_____
- *  those values are all in millivolts, the acronyms stand for "ground
- *  client", "ground tower", "flight bus", and "flight vent".
+ *  BAT TA:_____TM:_____ and BAT FB:_____FV:_____
+ *  those values are all in millivolts, the acronyms stand for "tower actuators",
+ *  "tower main", "flight bus", and "flight vent".
  *
  *  whenever an error message from RocketCAN is available, a string
  *  like the following will marquee across the LCD
@@ -135,9 +135,9 @@ void lcd_update(daq_holder_t *input)
         marquee_next_error();
     } else {
         if (display_first_line) {
-            display_ground_batt_line(12, 13);
+            display_ground_batt_line(input->rlcs_actuator_batt_mv, input->rlcs_main_batt_mv);
         } else {
-            display_rocket_batt_line(40, 44);
+            display_rocket_batt_line(input->bus_batt_mv, input->vent_batt_mv);
         }
     }
 }
@@ -217,11 +217,11 @@ static void display_disconnect_line(valve_state_t injector_state,
     lcd.print(line);
 }
 
-static void display_ground_batt_line(uint16_t client_batt, uint16_t tower_batt)
+static void display_ground_batt_line(uint16_t tower_act, uint16_t tower_main)
 {
     lcd.setCursor(0, 3);
     char line[21];
-    snprintf(line, 21, "BATGC:%05u GT:%05u", client_batt, tower_batt);
+    snprintf(line, 21, "BAT TA:%05uTM:%05u", tower_act, tower_main);
     lcd.print(line);
 }
 
@@ -230,7 +230,7 @@ static void display_rocket_batt_line(uint16_t flight_bus_batt,
 {
     lcd.setCursor(0, 3);
     char line[21];
-    snprintf(line, 21, "BATFB:%05u FV:%05u", flight_bus_batt, flight_vent_batt);
+    snprintf(line, 21, "BAT FB:%05uFV:%05u", flight_bus_batt, flight_vent_batt);
     lcd.print(line);
 }
 

@@ -22,6 +22,9 @@
 //current sensor pins
 #define PIN_CURRENT_IGNITION_PRI A9
 #define PIN_CURRENT_IGNITION_SEC A15
+//battery voltage pins
+#define PIN_BATTERY_MAIN A1
+#define PIN_BATTERY_ACTUATORS A0
 //limit switch pins
 #define PIN_LIMITSW_REMOTEFILL_OPN 34
 #define PIN_LIMITSW_REMOTEFILL_CLS 35

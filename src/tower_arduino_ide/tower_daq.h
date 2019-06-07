@@ -46,4 +46,9 @@ void compute_daq_values(daq_holder_t* output);
 #define IGNSEC_SCALE 1.1
 #define IGNSEC_OFFSET 0
 
+#define MAIN_BATT_SCALE (7.63)
+#define MAIN_BATT_OFFSET 0
+#define ACTUATOR_BATT_SCALE (7.63)
+#define ACTUATOR_BATT_OFFSET 0
+
 #endif

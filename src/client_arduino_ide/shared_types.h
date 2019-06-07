@@ -58,10 +58,10 @@ typedef struct {
     valve_state_t injector_valve_state;
     valve_state_t rocketvent_valve_state;
 
-    uint16_t bus_batt_mv;
-    uint16_t vent_batt_mv;
-    uint16_t rlcs_main_batt_mv;
-    uint16_t rlcs_actuator_batt_mv;
+    uint32_t bus_batt_mv;
+    uint32_t vent_batt_mv;
+    uint32_t rlcs_main_batt_mv;
+    uint32_t rlcs_actuator_batt_mv;
 } daq_holder_t;
 
 #define DAQ_RADIO_LEN 25

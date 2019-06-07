@@ -13,6 +13,10 @@ static struct {
     uint16_t pressure2;
     uint16_t curr_ignition_pri;
     uint16_t curr_ignition_sec;
+
+    uint32_t battery_main;
+    uint32_t battery_actuators;
+
     //all limit switches are digital values (either 1 or 0)
     //these could be packed into a bit field, but I'm not 
     //at all worried about space, so am currently using uint8_t's
@@ -31,6 +35,8 @@ void init_daq_pins() {
     pinMode(PIN_DAQ_MASS, INPUT);
     pinMode(PIN_CURRENT_IGNITION_PRI, INPUT);
     pinMode(PIN_CURRENT_IGNITION_SEC, INPUT);
+    pinMode(PIN_BATTERY_MAIN, INPUT);
+    pinMode(PIN_BATTERY_ACTUATORS, INPUT);
     pinMode(PIN_LIMITSW_REMOTEFILL_OPN, INPUT);
     pinMode(PIN_LIMITSW_REMOTEFILL_CLS, INPUT);
     pinMode(PIN_LIMITSW_REMOTEVENT_OPN, INPUT);
@@ -55,6 +61,10 @@ void read_daq_pins() {
         analogRead(PIN_CURRENT_IGNITION_PRI);
     window_holder[window_holder_index].curr_ignition_sec = 
         analogRead(PIN_CURRENT_IGNITION_SEC);
+    window_holder[window_holder_index].battery_main =
+        analogRead(PIN_BATTERY_MAIN);
+    window_holder[window_holder_index].battery_actuators =
+        analogRead(PIN_BATTERY_ACTUATORS);
 
     //now read in all the digital values
     window_holder[window_holder_index].lsw_remotefill_opn =
@@ -87,6 +97,8 @@ void compute_daq_values(daq_holder_t* output) {
         output->rocket_mass         += window_holder[i].mass;
         output->ign_pri_current     += window_holder[i].curr_ignition_pri;
         output->ign_sec_current     += window_holder[i].curr_ignition_sec;
+        output->rlcs_main_batt_mv   += window_holder[i].battery_main;
+        output->rlcs_actuator_batt_mv += window_holder[i].battery_actuators;
         output->rfill_lsw_open      += window_holder[i].lsw_remotefill_opn;
         output->rfill_lsw_closed    += window_holder[i].lsw_remotefill_cls;
         output->rvent_lsw_open      += window_holder[i].lsw_remotevent_opn;
@@ -128,6 +140,14 @@ void compute_daq_values(daq_holder_t* output) {
     output->ign_sec_current *= IGNSEC_SCALE;
     output->ign_sec_current /= WINDOW_WIDTH;
     output->ign_sec_current += IGNSEC_OFFSET;
+
+    output->rlcs_main_batt_mv *= MAIN_BATT_SCALE;
+    output->rlcs_main_batt_mv /= WINDOW_WIDTH;
+    output->rlcs_main_batt_mv += MAIN_BATT_OFFSET;
+
+    output->rlcs_actuator_batt_mv *= ACTUATOR_BATT_SCALE;
+    output->rlcs_actuator_batt_mv /= WINDOW_WIDTH;
+    output->rlcs_actuator_batt_mv += ACTUATOR_BATT_OFFSET;
 
     //the on off values just need to be divided by the width
     output->rfill_lsw_open = (output->rfill_lsw_open / WINDOW_WIDTH) != 0;
