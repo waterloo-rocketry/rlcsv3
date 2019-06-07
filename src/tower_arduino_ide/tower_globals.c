@@ -178,6 +178,10 @@ void init_outputs(){
     digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
     digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
     digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+
+    //turn off the pin 13 LED
+    pinMode(13, OUTPUT);
+    digitalWrite(13, LOW);
 }
 
 //called when client hasn't told us to do anything for a while
