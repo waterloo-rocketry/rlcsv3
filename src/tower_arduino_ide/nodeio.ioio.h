@@ -44,6 +44,8 @@ typedef struct {
     nio_actuator_state vent_valve_state;
     bool bus_is_powered;
     bool any_errors_detected;
+    uint16_t bus_battery_voltage_mv;
+    uint16_t vent_battery_voltage_mv;
 } system_state;
 
 //initialization function. Sets up Serial communication

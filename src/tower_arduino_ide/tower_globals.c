@@ -225,6 +225,8 @@ void tower_handle_rocketcan_update(const system_state *update)
     global_current_daq.pressure3 = update->tank_pressure;
     global_current_daq.injector_valve_state = update->injector_valve_state;
     global_current_daq.rocketvent_valve_state = update->vent_valve_state;
+    global_current_daq.bus_batt_mv = update->bus_battery_voltage_mv;
+    global_current_daq.vent_batt_mv = update->vent_battery_voltage_mv;
     //TODO, log to rlcslog
 }
 
