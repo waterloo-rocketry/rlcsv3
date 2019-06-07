@@ -1,5 +1,6 @@
 #include "nodeio.ioio.h"
 #include "Arduino.h"
+#include "sd_handler.h"
 #define NODE_GROUND
 
 //copied from RocketCAN
@@ -162,6 +163,9 @@ void nio_refresh()
                             message_received_buffer[STATE_COMMAND_LEN - 3] = '\0';
                             uint8_t sum = checksum(message_received_buffer);
                             if (sum == expected_checksum) {
+                                // log that the message came in
+                                rlcslog("Message from rocketCAN");
+                                rlcslog(message_received_buffer);
                                 deserialize_state(&last_received_rocket_state, message_received_buffer);
                                 tower_handle_rocketcan_update(&last_received_rocket_state);
                                 time_last_received_rocket_state = millis();
