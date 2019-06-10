@@ -22,36 +22,39 @@ enum {
 } state;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
-static int valid_data_byte(char data) {
-    if(data >= 'A' && data <= 'Z')
+static int valid_data_byte(char data)
+{
+    if (data >= 'A' && data <= 'Z')
         return 1;
-    if(data >= 'a' && data <= 'z')
+    if (data >= 'a' && data <= 'z')
         return 1;
-    if(data >= '0' && data <= '9')
+    if (data >= '0' && data <= '9')
         return 1;
-    if(data == '+' || data == '/')
+    if (data == '+' || data == '/')
         return 1;
     return 0;
 }
 
 extern unsigned long global_time_last_tower_state_req;
-static void handle_state_update(char* state_buffer, actuator_state_t* state){
+static void handle_state_update(char *state_buffer, actuator_state_t *state)
+{
     //log the last received tower state
-    if(sd_active()){
+    if (sd_active()) {
         rlcslog_client_tower_state(state_buffer[0]);
     }
     //unpack buffer, copy values into state
-    convert_radio_to_state(state,*state_buffer);
+    convert_radio_to_state(state, *state_buffer);
     global_time_last_tower_state_req = millis_offset();
 }
 
 extern unsigned long global_time_last_tower_daq_req;
-static void handle_daq_update(char* buffer, daq_holder_t* daq){
+static void handle_daq_update(char *buffer, daq_holder_t *daq)
+{
     //unpack buffer, copy values into daq
     daq_radio_value_t s;
-    for(int i = 0; i < DAQ_RADIO_LEN; i++){
+    for (int i = 0; i < DAQ_RADIO_LEN; i++) {
         //check that all bytes are valid
-        if(fromBase64(buffer[i]) < 0)
+        if (fromBase64(buffer[i]) < 0)
             return;
     }
     strncpy(s.data, buffer, DAQ_RADIO_LEN);
@@ -60,20 +63,21 @@ static void handle_daq_update(char* buffer, daq_holder_t* daq){
     global_time_last_tower_daq_req = millis_offset();
 }
 
-static void handle_ack_request(char* buffer, actuator_state_t* state){
+static void handle_ack_request(char *buffer, actuator_state_t *state)
+{
     //if the decoded state from buffer[0] is the same as state, then send an ack over the radio
     //if they aren't the same, send a nack
     actuator_state_t received;
     convert_radio_to_state(&received, *buffer);
-    if(actuator_compare(state, &received)) {
+    if (actuator_compare(state, &received)) {
         client_ack();
-    }
-    else{
+    } else {
         client_nack();
     }
 }
 
-void push_radio_char(char input){
+void push_radio_char(char input)
+{
     switch (input) {
         case RADIO_STATE_REQ:
             state = REC_STATE;
@@ -98,21 +102,21 @@ void push_radio_char(char input){
         default:
             break;
     }
-    if(!valid_data_byte(input) || state == REC_NOTHING)
+    if (!valid_data_byte(input) || state == REC_NOTHING)
         //we either received a byte that wansn't data, or we weren't expecting any data
         return;
-    
+
     //at this point, we assume that we just want to push the input into the buffer. We will also assume
     //that this won't overflow. Maybe eventually put in a check that this won't overflow.
     buffer[buffer_index++] = input;
 
     //check if we're still waiting for more bytes in the current command. If so, return to wait for more
-    if(buffer_index < data_len)
+    if (buffer_index < data_len)
         return;
 
     //now we assume that we've received a full command, and it's stored in buffer starting at index 0.
     //so now we just call the appropriate handler
-    switch(state){
+    switch (state) {
         case REC_STATE:
             handle_state_update(buffer, get_tower_state());
             break;
@@ -125,25 +129,66 @@ void push_radio_char(char input){
         case REC_ERROR:
             buffer[13] = 0;
             char error_to_display[21];
-            error_to_display[0] = buffer[0];
-            error_to_display[1] = buffer[1];
-            error_to_display[2] = buffer[2];
+            if (buffer[2] == '1' || buffer[2] == '2') {
+                error_to_display[0] = 'I';
+                error_to_display[1] = 'N';
+                error_to_display[2] = 'J';
+            } else if (buffer[2] == '3' || buffer[2] == '4') {
+                error_to_display[0] = 'L';
+                error_to_display[1] = 'O';
+                error_to_display[2] = 'G';
+            } else if (buffer[2] == '5' || buffer[2] == '6') {
+                error_to_display[0] = 'R';
+                error_to_display[1] = 'A';
+                error_to_display[2] = 'D';
+            } else if (buffer[2] == '7' || buffer[2] == '8') {
+                error_to_display[0] = 'S';
+                error_to_display[1] = 'E';
+                error_to_display[2] = 'N';
+            } else if (buffer[2] == '9' ||
+                       buffer[2] == 'A' ||
+                       buffer[2] == 'a') {
+                error_to_display[0] = 'U';
+                error_to_display[1] = 'S';
+                error_to_display[2] = 'B';
+            } else if (buffer[2] == 'B' ||
+                       buffer[2] == 'b' ||
+                       buffer[2] == 'C' ||
+                       buffer[2] == 'c') {
+                error_to_display[0] = 'V';
+                error_to_display[1] = 'N';
+                error_to_display[2] = 'T';
+            } else if (buffer[2] == 'D' ||
+                       buffer[2] == 'd' ||
+                       buffer[2] == 'E' ||
+                       buffer[2] == 'e') {
+                error_to_display[0] = 'G';
+                error_to_display[1] = 'P';
+                error_to_display[2] = 'S';
+            } else {
+                error_to_display[0] = 'U';
+                error_to_display[1] = 'N';
+                error_to_display[2] = 'K';
+            }
+
             error_to_display[3] = ' ';
             error_to_display[4] = buffer[3];
             error_to_display[5] = buffer[4];
             error_to_display[6] = ' ';
-            error_to_display[7] = buffer[5];
-            error_to_display[8] = buffer[6];
-            error_to_display[9] = ' ';
-            error_to_display[10] = buffer[7];
-            error_to_display[11] = buffer[8];
-            error_to_display[12] = ' ';
-            error_to_display[13] = buffer[9];
-            error_to_display[14] = buffer[10];
-            error_to_display[15] = ' ';
-            error_to_display[16] = buffer[11];
-            error_to_display[17] = buffer[12];
-            error_to_display[18] = '\0';
+            error_to_display[7] = ' ';
+            error_to_display[8] = ' ';
+            error_to_display[9] = buffer[5];
+            error_to_display[10] = buffer[6];
+            error_to_display[11] = ' ';
+            error_to_display[12] = buffer[7];
+            error_to_display[13] = buffer[8];
+            error_to_display[14] = ' ';
+            error_to_display[15] = buffer[9];
+            error_to_display[16] = buffer[10];
+            error_to_display[17] = ' ';
+            error_to_display[18] = buffer[11];
+            error_to_display[19] = buffer[12];
+            error_to_display[20] = '\0';
             display_new_error(error_to_display);
         default:
             break;

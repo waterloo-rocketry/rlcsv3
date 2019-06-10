@@ -86,7 +86,7 @@ static void marquee_next_error();
 
 //static variables we keep track of in order to show marquee error msgs
 static bool currently_marqueeing_error = false;
-static char buffer_to_marquee[10][20];
+static char buffer_to_marquee[10][21];
 static uint8_t marquee_buffer_index = 0;
 static uint8_t num_errors_queued = 0;
 static long time_last_error_displayed = 0;
@@ -247,7 +247,7 @@ static void marquee_current_error()
     }
 
     char line[21];
-    snprintf(line, 20, "%s", buffer_to_marquee[marquee_buffer_index]);
+    snprintf(line, 21, "%s", buffer_to_marquee[marquee_buffer_index]);
     lcd.setCursor(0, 3);
     lcd.print(line);
 }
