@@ -4,19 +4,21 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 #include "client_globals.h"
+#include "LCD.h"
 
 //we need to receive ack requests, we need to receive state updates,
 //and we need to receive daq updates. Those should be the only things
 //clients receive
 
-static char buffer[DAQ_RADIO_LEN]; //the daq radio input should be the longest thing we get
+static char buffer[50]; //the daq radio input should be the longest thing we get
 static unsigned short buffer_index = 0;
 static unsigned short data_len = 0;
 enum {
     REC_NOTHING,
     REC_STATE,
     REC_DAQ,
-    REC_ACK
+    REC_ACK,
+    REC_ERROR
 } state;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
@@ -63,58 +65,10 @@ static void handle_ack_request(char* buffer, actuator_state_t* state){
     //if they aren't the same, send a nack
     actuator_state_t received;
     convert_radio_to_state(&received, *buffer);
-#ifdef RLCS_DEBUG
-    radio_println("");
-    radio_print("received byte ");
-    radio_print_char(*buffer);
-    radio_println("");
-    char temp;
-    convert_state_to_radio(state, &temp);
-    radio_print("current byte ");
-    radio_print_char(temp);
-    radio_println("");
-    radio_print("received: ");
-    radio_println(received.remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
-    radio_println(received.remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
-    radio_println(received.run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
-    radio_println(received.injector_valve ? "injector_valve open" : "injector_valve closed");
-    radio_println(received.linear_actuator ? "linear_actuator open" : "linear_actuator closed");
-    radio_println(received.ignition_power ? "ignition_power open" : "ignition_power closed");
-    radio_println(received.ignition_select ? "ignition_select open" : "ignition_select closed");
-    radio_print("button: ");
-    radio_println(state->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
-    radio_println(state->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
-    radio_println(state->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
-    radio_println(state->injector_valve ? "injector_valve open" : "injector_valve closed");
-    radio_println(state->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
-    radio_println(state->ignition_power ? "ignition_power open" : "ignition_power closed");
-    radio_println(state->ignition_select ? "ignition_select open" : "ignition_select closed");
-
-    //now a full comparison
-    radio_println(state->remote_fill_valve == received.remote_fill_valve ? "remote_fill_valve matches" : "remote_fill_valve doesn't match");
-    radio_println(state->remote_vent_valve == received.remote_vent_valve ? "remote_vent_valve matches" : "remote_vent_valve doesn't match");
-    radio_println(state->run_tank_valve == received.run_tank_valve ? "run_tank_valve matches" : "run_tank_valve doesn't match");
-    radio_println(state->linear_actuator == received.linear_actuator ? "linear_actuator matches" : "linear_actuator doesn't match");
-    radio_println(state->ignition_power == received.ignition_power ? "ignition_power matches" : "ignition_power doesn't match");
-    radio_println(state->ignition_select == received.ignition_select ? "ignition_select matches" : "ignition_select doesn't match");
-
-    radio_println("");
-    radio_print("button remote_vent_valve: ");
-    radio_print_char(state->remote_vent_valve + '0');
-    radio_print(", received remote_vent_valve: ");
-    radio_print_char(received.remote_vent_valve + '0');
-    radio_println("");
-#endif
     if(actuator_compare(state, &received)) {
-#ifdef RLCS_DEBUG
-        radio_println("they match");
-#endif
         client_ack();
     }
     else{
-#ifdef RLCS_DEBUG
-        radio_println("they don't match");
-#endif
         client_nack();
     }
 }
@@ -136,19 +90,11 @@ void push_radio_char(char input){
             buffer_index = 0;
             data_len = 1; //only one byte in an ack request. It's a state byte
             return;
-#ifdef RLCS_DEBUG
         case '!':
-            radio_println("");
-            radio_print("button: ");
-            radio_println(get_button_state()->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
-            radio_println(get_button_state()->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
-            radio_println(get_button_state()->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
-            radio_println(get_button_state()->injector_valve ? "injector_valve open" : "injector_valve closed");
-            radio_println(get_button_state()->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
-            radio_println(get_button_state()->ignition_power ? "ignition_power open" : "ignition_power closed");
-            radio_println(get_button_state()->ignition_select ? "ignition_select open" : "ignition_select closed");
+            state = REC_ERROR;
+            buffer_index = 0;
+            data_len = 13;
             break;
-#endif
         default:
             break;
     }
@@ -176,6 +122,29 @@ void push_radio_char(char input){
         case REC_ACK:
             handle_ack_request(buffer, get_button_state());
             break;
+        case REC_ERROR:
+            buffer[13] = 0;
+            char error_to_display[21];
+            error_to_display[0] = buffer[0];
+            error_to_display[1] = buffer[1];
+            error_to_display[2] = buffer[2];
+            error_to_display[3] = ' ';
+            error_to_display[4] = buffer[3];
+            error_to_display[5] = buffer[4];
+            error_to_display[6] = ' ';
+            error_to_display[7] = buffer[5];
+            error_to_display[8] = buffer[6];
+            error_to_display[9] = ' ';
+            error_to_display[10] = buffer[7];
+            error_to_display[11] = buffer[8];
+            error_to_display[12] = ' ';
+            error_to_display[13] = buffer[9];
+            error_to_display[14] = buffer[10];
+            error_to_display[15] = ' ';
+            error_to_display[16] = buffer[11];
+            error_to_display[17] = buffer[12];
+            error_to_display[18] = '\0';
+            display_new_error(error_to_display);
         default:
             break;
     }

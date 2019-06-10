@@ -19,6 +19,8 @@ extern "C" {
 //set [ to ackknowledge
 void radio_init();
 
+void write_to_xbee(char x);
+
 int xbee_bytes_available();
 char xbee_get_byte();
 

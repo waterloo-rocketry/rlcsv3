@@ -86,7 +86,7 @@ static void marquee_next_error();
 
 //static variables we keep track of in order to show marquee error msgs
 static bool currently_marqueeing_error = false;
-static char buffer_to_marquee[10][50];
+static char buffer_to_marquee[10][20];
 static uint8_t marquee_buffer_index = 0;
 static uint8_t num_errors_queued = 0;
 static long time_last_error_displayed = 0;
@@ -131,7 +131,7 @@ void lcd_update(daq_holder_t *input)
     if (currently_marqueeing_error) {
         marquee_current_error();
     } else if (num_errors_queued != 0 &&
-               millis() - time_last_error_displayed > 4000) {
+               millis() - time_last_error_displayed > 9000) {
         marquee_next_error();
     } else {
         if (display_first_line) {
@@ -148,6 +148,7 @@ void display_new_error(const char *error)
         return;
     uint8_t write_index = (marquee_buffer_index + num_errors_queued ) % 10;
     strncpy(buffer_to_marquee[write_index], error, sizeof(buffer_to_marquee[0]));
+    Serial.println(error);
     num_errors_queued++;
 }
 
@@ -237,7 +238,7 @@ static void display_rocket_batt_line(uint16_t flight_bus_batt,
 static void marquee_current_error()
 {
     //exit conditions
-    if (millis() - time_last_error_displayed > 2000) {
+    if (millis() - time_last_error_displayed > 5000) {
         currently_marqueeing_error = false;
         num_errors_queued--;
         marquee_buffer_index++;
@@ -245,9 +246,8 @@ static void marquee_current_error()
             marquee_buffer_index = 0;
     }
 
-    //TODO, make this actually marquee
     char line[21];
-    snprintf(line, 21, "%s", buffer_to_marquee[marquee_buffer_index]);
+    snprintf(line, 20, "%s", buffer_to_marquee[marquee_buffer_index]);
     lcd.setCursor(0, 3);
     lcd.print(line);
 }
@@ -257,4 +257,5 @@ static void marquee_next_error()
     time_last_error_displayed = millis();
     lcd.setCursor(0, 3);
     lcd.print("                    ");
+    currently_marqueeing_error = true;
 }

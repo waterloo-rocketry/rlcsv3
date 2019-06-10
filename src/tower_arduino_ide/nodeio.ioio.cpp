@@ -1,6 +1,7 @@
 #include "nodeio.ioio.h"
 #include "Arduino.h"
 #include "sd_handler.h"
+#include "radio_comms.h"
 #define NODE_GROUND
 
 //copied from RocketCAN
@@ -54,6 +55,7 @@ static char binary_to_base64(uint8_t binary);
 static uint8_t base64_to_binary(char base64);
 static char checksum(char *cmd);
 static bool deserialize_state(system_state *state, const char *str);
+static bool deserialize_error(error_t *state, const char *str);
 static bool create_state_command(char *cmd, const system_state *state);
 
 
@@ -141,7 +143,8 @@ void nio_refresh()
                 break;
             case NIO_ERROR_COMMAND_HEADER:
                 current_fsm_state = STATE_ERROR_RECEIVE;
-                message_buffer_index = 0;
+                message_buffer_index = 1;
+                message_received_buffer[0] = x;
                 break;
             default:
                 //check if the character is a base 64 one
@@ -173,8 +176,20 @@ void nio_refresh()
                             current_fsm_state = STATE_NONE;
                         }
                     } else if (current_fsm_state == STATE_ERROR_RECEIVE) {
-                        if (message_buffer_index == ERROR_COMMAND_LENGTH) {
-                            //TODO, decode errors
+                        if (message_buffer_index == 9) {
+                            uint8_t expected_sum = message_received_buffer[8];
+                            message_received_buffer[8] = '\0';
+                            uint8_t sum = checksum(message_received_buffer);
+                            error_t err;
+                            if (sum == expected_sum && deserialize_error(&err, message_received_buffer + 1)) {
+                                char buffer[80];
+                                sprintf(buffer, "%03x%02x%02x%02x%02x%02x", err.board_id, err.err_type, err.byte4, err.byte5, err.byte6, err.byte7);
+                                write_to_xbee('!');
+                                char *i = buffer;
+                                while(*i) {
+                                    write_to_xbee(*i++);
+                                }
+                            }
                             current_fsm_state = STATE_NONE;
                         }
                     }

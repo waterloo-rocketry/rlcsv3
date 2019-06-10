@@ -2,7 +2,7 @@
 #include "Arduino.h"
 
 
-#define XBEE_INTERFACE Serial
+#define XBEE_INTERFACE Serial3
 #include "client_globals.h"
 
 
