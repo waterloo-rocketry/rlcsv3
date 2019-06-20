@@ -177,19 +177,46 @@ void nio_refresh()
                         }
                     } else if (current_fsm_state == STATE_ERROR_RECEIVE) {
                         if (message_buffer_index == 9) {
+                            /*
+                             * Don't send error messages to the client. For
+                             * reasons I don't understand and that I don't have
+                             * time to debug, errors that shouldn't be there are
+                             * popping up. The system works fine, and none of the
+                             * errors that we really care about (battery low,
+                             * injector valve in a weird state) can't be determined
+                             * from other info on the client side LCD (battery
+                             * voltages and valve positions are displayed
+                             *
                             uint8_t expected_sum = message_received_buffer[8];
                             message_received_buffer[8] = '\0';
                             uint8_t sum = checksum(message_received_buffer);
                             error_t err;
                             if (sum == expected_sum && deserialize_error(&err, message_received_buffer + 1)) {
-                                char buffer[80];
-                                sprintf(buffer, "%03x%02x%02x%02x%02x%02x", err.board_id, err.err_type, err.byte4, err.byte5, err.byte6, err.byte7);
-                                write_to_xbee('!');
-                                char *i = buffer;
-                                while(*i) {
-                                    write_to_xbee(*i++);
+                                static uint8_t last_board_id, last_err_type, lb4, lb5, lb6, lb7;
+                                if (last_board_id != err.board_id ||
+                                    last_err_type != err.err_type ||
+                                    lb4 != err.byte4 ||
+                                    lb4 != err.byte4 ||
+                                    lb4 != err.byte4 ||
+                                    lb4 != err.byte4) {
+                                    char buffer[80];
+                                    sprintf(buffer, "%03x %02x %02x %02x %02x %02x", err.board_id, err.err_type, err.byte4, err.byte5, err.byte6, err.byte7);
+                                    Serial.println(buffer);
+                                    sprintf(buffer, "%03x%02x%02x%02x%02x%02x", err.board_id, err.err_type, err.byte4, err.byte5, err.byte6, err.byte7);
+                                    write_to_xbee('!');
+                                    char *i = buffer;
+                                    while(*i) {
+                                        write_to_xbee(*i++);
+                                    }
+                                    last_board_id = err.board_id;
+                                    last_err_type = err.err_type;
+                                    lb4 = err.byte4;
+                                    lb5 = err.byte5;
+                                    lb6 = err.byte6;
+                                    lb7 = err.byte7;
                                 }
                             }
+                            */
                             current_fsm_state = STATE_NONE;
                         }
                     }
