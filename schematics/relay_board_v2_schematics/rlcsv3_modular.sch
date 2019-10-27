@@ -1,0 +1,376 @@
+EESchema Schematic File Version 4
+LIBS:rlcsv3_modular-cache
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 2
+Title "RLCSv3"
+Date "2019-10-27"
+Rev "C"
+Comp "Waterloo Rocketry Team"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text GLabel 8000 2400 2    60   Input ~ 0
+CS_1
+Text GLabel 8000 2550 2    60   Input ~ 0
+CS_2
+$Sheet
+S 5050 2350 1550 750 
+U 59790E94
+F0 "Relays" 60
+F1 "Relay_assembly.sch" 60
+F2 "PWR" I L 5050 2500 60 
+F3 "SEL" I L 5050 2650 60 
+F4 "P1" I R 6600 2700 60 
+F5 "P2" I R 6600 2800 60 
+F6 "G1" I R 6600 2900 60 
+F7 "G2" I R 6600 3000 60 
+F8 "CS2" I R 6600 2550 60 
+F9 "CS1" I R 6600 2400 60 
+F10 "VIN" I L 5050 2900 60 
+$EndSheet
+Text GLabel 3200 2500 0    60   Input ~ 0
+POWER
+Text GLabel 3200 2650 0    60   Input ~ 0
+SELECT
+$Comp
+L rlcsv3_modular-rescue:CONN_01X02 P1
+U 1 1 597C33DA
+P 3000 2950
+F 0 "P1" H 3000 3100 50  0000 C CNN
+F 1 "ACT_PWR" V 3100 2950 50  0000 C CNN
+F 2 "Terminal_Blocks:TerminalBlock_Pheonix_MKDS1.5-2pol" H 3000 2950 50  0001 C CNN
+F 3 "" H 3000 2950 50  0000 C CNN
+	1    3000 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:FUSE F1
+U 1 1 597C3625
+P 3575 2900
+F 0 "F1" H 3675 2950 50  0000 C CNN
+F 1 "FUSE" H 3475 2850 50  0000 C CNN
+F 2 "custom:littlefuse_01000020Z" H 3575 2900 50  0001 C CNN
+F 3 "" H 3575 2900 50  0000 C CNN
+	1    3575 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:GND #PWR01
+U 1 1 597C370B
+P 3850 3300
+F 0 "#PWR01" H 3850 3050 50  0001 C CNN
+F 1 "GND" H 3850 3150 50  0000 C CNN
+F 2 "" H 3850 3300 50  0000 C CNN
+F 3 "" H 3850 3300 50  0000 C CNN
+	1    3850 3300
+	1    0    0    -1  
+$EndComp
+Text GLabel 5400 4550 0    60   Output ~ 0
+POWER
+Text GLabel 5400 4650 0    60   Output ~ 0
+SELECT
+Text GLabel 5400 4750 0    60   Output ~ 0
+CS_1
+Text GLabel 5400 4850 0    60   Output ~ 0
+CS_2
+$Comp
+L rlcsv3_modular-rescue:+5V #PWR02
+U 1 1 597C8AF0
+P 6050 3900
+F 0 "#PWR02" H 6050 3750 50  0001 C CNN
+F 1 "+5V" H 6050 4040 50  0000 C CNN
+F 2 "" H 6050 3900 50  0000 C CNN
+F 3 "" H 6050 3900 50  0000 C CNN
+	1    6050 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:+12V #PWR03
+U 1 1 597C8B44
+P 5800 3900
+F 0 "#PWR03" H 5800 3750 50  0001 C CNN
+F 1 "+12V" H 5800 4040 50  0000 C CNN
+F 2 "" H 5800 3900 50  0000 C CNN
+F 3 "" H 5800 3900 50  0000 C CNN
+	1    5800 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:GND #PWR04
+U 1 1 597C8C73
+P 5500 4100
+F 0 "#PWR04" H 5500 3850 50  0001 C CNN
+F 1 "GND" H 5500 3950 50  0000 C CNN
+F 2 "" H 5500 4100 50  0000 C CNN
+F 3 "" H 5500 4100 50  0000 C CNN
+	1    5500 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:TEST_1P TP2
+U 1 1 597CB557
+P 7850 4900
+F 0 "TP2" H 7850 5170 50  0000 C CNN
+F 1 "TEST_1P" H 7850 5100 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01_Pitch2.54mm" H 8050 4900 50  0001 C CNN
+F 3 "" H 8050 4900 50  0000 C CNN
+	1    7850 4900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:TEST_1P TP3
+U 1 1 597CB5DF
+P 4400 3000
+F 0 "TP3" H 4400 3270 50  0000 C CNN
+F 1 "TEST_1P" H 4400 3200 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01_Pitch2.54mm" H 4600 3000 50  0001 C CNN
+F 3 "" H 4600 3000 50  0000 C CNN
+	1    4400 3000
+	-1   0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:TEST_1P TP1
+U 1 1 597CB649
+P 7500 4900
+F 0 "TP1" H 7500 5170 50  0000 C CNN
+F 1 "TEST_1P" H 7500 5100 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01_Pitch2.54mm" H 7700 4900 50  0001 C CNN
+F 3 "" H 7700 4900 50  0000 C CNN
+	1    7500 4900
+	-1   0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:TEST_1P TP0
+U 1 1 597CB866
+P 7150 4850
+F 0 "TP0" H 7150 5120 50  0000 C CNN
+F 1 "TEST_1P" H 7150 5050 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x01_Pitch2.54mm" H 7350 4850 50  0001 C CNN
+F 3 "" H 7350 4850 50  0000 C CNN
+	1    7150 4850
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:GND #PWR05
+U 1 1 597CBAB1
+P 7150 4950
+F 0 "#PWR05" H 7150 4700 50  0001 C CNN
+F 1 "GND" H 7150 4800 50  0000 C CNN
+F 2 "" H 7150 4950 50  0000 C CNN
+F 3 "" H 7150 4950 50  0000 C CNN
+	1    7150 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:+12V #PWR06
+U 1 1 597CBB0B
+P 7500 4800
+F 0 "#PWR06" H 7500 4650 50  0001 C CNN
+F 1 "+12V" H 7500 4940 50  0000 C CNN
+F 2 "" H 7500 4800 50  0000 C CNN
+F 3 "" H 7500 4800 50  0000 C CNN
+	1    7500 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:+5V #PWR07
+U 1 1 597CBB65
+P 7850 4800
+F 0 "#PWR07" H 7850 4650 50  0001 C CNN
+F 1 "+5V" H 7850 4940 50  0000 C CNN
+F 2 "" H 7850 4800 50  0000 C CNN
+F 3 "" H 7850 4800 50  0000 C CNN
+	1    7850 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:CONN_01X06 P3
+U 1 1 597CE787
+P 7950 2950
+F 0 "P3" H 7950 3300 50  0000 C CNN
+F 1 "ACTUATOR" V 8050 2950 50  0000 C CNN
+F 2 "Terminal_Blocks:TerminalBlock_Pheonix_MKDS1.5-6pol" H 7950 2950 50  0001 C CNN
+F 3 "" H 7950 2950 50  0000 C CNN
+	1    7950 2950
+	1    0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:R R10
+U 1 1 597CF0E0
+P 7650 3900
+F 0 "R10" V 7730 3900 50  0000 C CNN
+F 1 "10K" V 7650 3900 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 7580 3900 50  0001 C CNN
+F 3 "" H 7650 3900 50  0000 C CNN
+	1    7650 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:R R8
+U 1 1 597CF29F
+P 7400 3900
+F 0 "R8" V 7480 3900 50  0000 C CNN
+F 1 "10K" V 7400 3900 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 7330 3900 50  0001 C CNN
+F 3 "" H 7400 3900 50  0000 C CNN
+	1    7400 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:R R7
+U 1 1 597CF30F
+P 7400 3350
+F 0 "R7" V 7480 3350 50  0000 C CNN
+F 1 "20K" V 7400 3350 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 7330 3350 50  0001 C CNN
+F 3 "" H 7400 3350 50  0000 C CNN
+	1    7400 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:R R9
+U 1 1 597CF3BE
+P 7650 3350
+F 0 "R9" V 7730 3350 50  0000 C CNN
+F 1 "20K" V 7650 3350 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 7580 3350 50  0001 C CNN
+F 3 "" H 7650 3350 50  0000 C CNN
+	1    7650 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:GND #PWR08
+U 1 1 597D0207
+P 7400 4150
+F 0 "#PWR08" H 7400 3900 50  0001 C CNN
+F 1 "GND" H 7400 4000 50  0000 C CNN
+F 2 "" H 7400 4150 50  0000 C CNN
+F 3 "" H 7400 4150 50  0000 C CNN
+	1    7400 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:GND #PWR09
+U 1 1 597D0273
+P 7650 4150
+F 0 "#PWR09" H 7650 3900 50  0001 C CNN
+F 1 "GND" H 7650 4000 50  0000 C CNN
+F 2 "" H 7650 4150 50  0000 C CNN
+F 3 "" H 7650 4150 50  0000 C CNN
+	1    7650 4150
+	1    0    0    -1  
+$EndComp
+Text GLabel 7850 3550 2    60   Input ~ 0
+LIM1
+Text GLabel 7850 3700 2    60   Input ~ 0
+LIM2
+Wire Wire Line
+	6600 2400 8000 2400
+Wire Wire Line
+	6600 2550 8000 2550
+Wire Wire Line
+	3200 2650 5050 2650
+Wire Wire Line
+	3200 2500 5050 2500
+Wire Wire Line
+	3200 3000 3200 3250
+Wire Wire Line
+	3200 3250 3850 3250
+Wire Wire Line
+	3850 3250 3850 3300
+Wire Wire Line
+	5400 4350 6150 4350
+Wire Wire Line
+	5400 4450 6150 4450
+Wire Wire Line
+	5400 4550 6150 4550
+Wire Wire Line
+	5400 4650 6150 4650
+Wire Wire Line
+	6600 2700 7750 2700
+Wire Wire Line
+	6600 2800 7750 2800
+Wire Wire Line
+	6600 2900 7750 2900
+Wire Wire Line
+	6600 3000 7750 3000
+Wire Wire Line
+	6150 4050 6050 4050
+Wire Wire Line
+	6050 4050 6050 3900
+Wire Wire Line
+	6150 4150 5800 4150
+Wire Wire Line
+	5800 4150 5800 3900
+Wire Wire Line
+	6150 4250 5650 4250
+Wire Wire Line
+	5650 4250 5650 4000
+Wire Wire Line
+	5650 4000 5500 4000
+Wire Wire Line
+	5500 4000 5500 4100
+Wire Wire Line
+	4400 3000 4400 2900
+Connection ~ 4400 2900
+Wire Wire Line
+	7150 4850 7150 4950
+Wire Wire Line
+	7500 4800 7500 4900
+Wire Wire Line
+	7850 4800 7850 4900
+Wire Wire Line
+	7400 3500 7400 3550
+Wire Wire Line
+	7400 3200 7400 3100
+Wire Wire Line
+	7400 3100 7750 3100
+Wire Wire Line
+	7650 3200 7750 3200
+Wire Wire Line
+	7650 3500 7650 3700
+Wire Wire Line
+	7400 4150 7400 4050
+Wire Wire Line
+	7650 4150 7650 4050
+Wire Wire Line
+	7400 3550 7850 3550
+Connection ~ 7400 3550
+Wire Wire Line
+	7650 3700 7850 3700
+Connection ~ 7650 3700
+Text GLabel 5400 4450 0    60   Output ~ 0
+LIM1
+Text GLabel 5400 4350 0    60   Output ~ 0
+LIM2
+$Comp
+L rlcsv3_modular-rescue:CONN_01X09 P2
+U 1 1 597D18DA
+P 6350 4450
+F 0 "P2" H 6350 4950 50  0000 C CNN
+F 1 "CONN_01X09" V 6450 4450 50  0000 C CNN
+F 2 "Socket_Strips:Socket_Strip_Straight_1x09_Pitch2.54mm" H 6350 4450 50  0001 C CNN
+F 3 "" H 6350 4450 50  0000 C CNN
+	1    6350 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 4750 6150 4750
+Wire Wire Line
+	5400 4850 6150 4850
+Wire Wire Line
+	3200 2900 3325 2900
+Wire Wire Line
+	3825 2900 4400 2900
+Wire Wire Line
+	4400 2900 5050 2900
+Wire Wire Line
+	7400 3550 7400 3750
+Wire Wire Line
+	7650 3700 7650 3750
+$EndSCHEMATC
