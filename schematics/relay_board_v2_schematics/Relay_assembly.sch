@@ -4,7 +4,7 @@ EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 2
+Sheet 2 3
 Title "RLCSv3"
 Date "2019-10-27"
 Rev "C"
@@ -137,9 +137,9 @@ F 3 "" H 7100 3650 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	5350 3650 6950 3650
+	5350 3650 6850 3650
 Wire Wire Line
-	5350 3750 7700 3750
+	5350 3750 7600 3750
 Text HLabel 8950 3650 2    60   Input ~ 0
 P1
 Text HLabel 8950 3750 2    60   Input ~ 0
@@ -149,9 +149,9 @@ G1
 Text HLabel 8950 3950 2    60   Input ~ 0
 G2
 Wire Wire Line
-	7250 3650 8950 3650
+	7250 3650 7400 3650
 Wire Wire Line
-	8000 3750 8950 3750
+	8000 3750 8050 3750
 Wire Wire Line
 	8050 3100 8050 3750
 Connection ~ 8050 3750
@@ -236,7 +236,7 @@ F 3 "" H 3350 5250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3150 3050 3500 3050
+	3150 3050 3350 3050
 $Comp
 L rlcsv3_modular-rescue:+12V #PWR018
 U 1 1 596A63B0
@@ -270,7 +270,7 @@ Wire Wire Line
 Wire Wire Line
 	3350 4500 4750 4500
 Wire Wire Line
-	7600 1300 7600 1750
+	7600 1300 7600 1550
 $Comp
 L rlcsv3_modular-rescue:GND #PWR019
 U 1 1 596DCE68
@@ -308,7 +308,7 @@ F 3 "" H 8400 2500 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	8250 2250 8250 2700
+	8250 2250 8250 2500
 $Comp
 L rlcsv3_modular-rescue:GND #PWR021
 U 1 1 596DDA29
@@ -348,7 +348,7 @@ $EndComp
 Wire Wire Line
 	2250 5100 2300 5100
 Wire Wire Line
-	2600 5100 3050 5100
+	2600 5100 2650 5100
 $Comp
 L rlcsv3_modular-rescue:R R1
 U 1 1 59753FE7
@@ -363,13 +363,13 @@ $EndComp
 Wire Wire Line
 	2250 3300 2300 3300
 Wire Wire Line
-	2600 3300 3050 3300
+	2600 3300 2650 3300
 Text HLabel 4700 2850 2    60   Input ~ 0
 VIN
 Wire Wire Line
 	2250 2500 3350 2500
 Wire Wire Line
-	3350 2500 3350 2850
+	3350 2500 3350 2750
 $Comp
 L rlcsv3_modular-rescue:+12V #PWR022
 U 1 1 5976F798
@@ -433,4 +433,24 @@ Connection ~ 3350 3050
 Wire Wire Line
 	3150 2750 3350 2750
 Connection ~ 3350 2750
+Wire Wire Line
+	2650 5100 3050 5100
+Wire Wire Line
+	2650 3300 3050 3300
+Wire Wire Line
+	8050 3750 8950 3750
+Wire Wire Line
+	7400 3650 8950 3650
+Wire Wire Line
+	6850 3650 6950 3650
+Wire Wire Line
+	7600 3750 7700 3750
+Wire Wire Line
+	7600 1550 7600 1750
+Wire Wire Line
+	8250 2500 8250 2700
+Wire Wire Line
+	3350 3050 3500 3050
+Wire Wire Line
+	3350 2750 3350 2850
 $EndSCHEMATC
