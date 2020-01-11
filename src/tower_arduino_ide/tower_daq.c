@@ -26,6 +26,8 @@ static struct {
     uint8_t lsw_remotevent_cls;
     uint8_t lsw_linac_ext;
     uint8_t lsw_linac_ret;
+    uint8_t lsw_valve3_opn;
+    uint8_t lsw_valve3_cls;
 } window_holder[WINDOW_WIDTH];
 
 
@@ -43,6 +45,8 @@ void init_daq_pins() {
     pinMode(PIN_LIMITSW_REMOTEVENT_CLS, INPUT);
     pinMode(PIN_LIMITSW_LINAC_EXT, INPUT);
     pinMode(PIN_LIMITSW_LINAC_RET, INPUT);
+    pinMode(PIN_LIMITSW_VALVE3_OPN, INPUT);
+    pinMode(PIN_LIMITSW_VALVE3_CLS, INPUT);
 
     //set all the values in our window holder to 0
     memset(&window_holder, 0, sizeof(window_holder));
@@ -79,6 +83,10 @@ void read_daq_pins() {
         digitalRead(PIN_LIMITSW_LINAC_EXT);
     window_holder[window_holder_index].lsw_linac_ret =
         digitalRead(PIN_LIMITSW_LINAC_RET);
+    window_holder[window_holder_index].lsw_valve3_opn =
+        digitalRead(PIN_LIMITSW_VALVE3_OPN);
+    window_holder[window_holder_index].lsw_valve3_cls =
+        digitalRead(PIN_LIMITSW_VALVE3_CLS);
 
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0

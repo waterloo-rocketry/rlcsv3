@@ -152,6 +152,8 @@ void init_outputs(){
     pinMode(PIN_REMOTEVENT_SELECT, OUTPUT);
     pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
     pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
+    pinMode(PIN_VALVE3_POWER, OUTPUT);
+    pinMode(PIN_VALVE3_SELECT, OUTPUT);
 
     pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
     pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
@@ -166,6 +168,10 @@ void init_outputs(){
     //vent valve
     digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
     digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
+
+    //valve 3
+    digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
 
     //run tank valve
     //TODO, figure out how the run tank valve is going to work
