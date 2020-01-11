@@ -113,6 +113,8 @@ void compute_daq_values(daq_holder_t* output) {
         output->rvent_lsw_closed    += window_holder[i].lsw_remotevent_cls;
         output->linac_lsw_extend    += window_holder[i].lsw_linac_ext;
         output->linac_lsw_retract   += window_holder[i].lsw_linac_ret;
+        output->valve3_lsw_open     += window_holder[i].lsw_valve3_opn;
+        output->valve3_lsw_closed   += window_holder[i].lsw_valve3_cls;
     }
 
     //apply scaling values. These need calibration, so I'll just use

@@ -69,6 +69,20 @@ void apply_state(){
         }
     }
 
+    if(global_requested_state.valve3_valve != global_current_state.valve3_valve){
+        //we need to change the valve3_valve to what requested wants
+        global_current_state.valve3_valve = global_requested_state.valve3_valve;
+        if(global_current_state.valve3_valve){
+            //open the valve3_valve
+            digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_VALVE3_SELECT, LOW);
+        } else {
+            //close the valve3_valve
+            digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
+        }
+    }
+
     global_current_state.run_tank_valve = global_requested_state.run_tank_valve;
     //tell nodeio.ioio that we want the vent to change
     if(global_requested_state.run_tank_valve){
