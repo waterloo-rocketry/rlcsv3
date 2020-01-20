@@ -59,7 +59,8 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
     state->injector_valve = ((binary & 1) != 0);
     state->remote_vent_valve = ((binary & 2) != 0);
     state->run_tank_valve    = ((binary & 4) != 0);
-    state->linear_actuator   = ((binary & 8) != 0);
+    state->linear_actuator   = ((binary & 8) != 0); // not used
+    state->valve3_valve      = ((binary & 8) != 0);
     state->ignition_power    = ((binary & 16) != 0);
     if(state->ignition_power){
         state->ignition_select   = ((binary & 32) != 0);
@@ -77,7 +78,7 @@ int convert_state_to_radio(const actuator_state_t* state, char* binary)
     *binary += state->injector_valve ? 1 : 0;
     *binary += state->remote_vent_valve ? 2 : 0;
     *binary += state->run_tank_valve    ? 4 : 0;
-    *binary += state->linear_actuator   ? 8 : 0;
+    *binary += state->valve3_valve      ? 8 : 0; //Used to be linear_actuator
     *binary += state->ignition_power    ? 16 : 0;
     if(state->ignition_power){
         *binary += state->ignition_select   ? 32 : 0;
@@ -98,6 +99,7 @@ int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
             s->run_tank_valve == q->run_tank_valve &&
             s->injector_valve == q->injector_valve &&
             s->linear_actuator == q->linear_actuator &&
+            s->valve3_valve == q->valve3_valve &&
             s->ignition_power == q->ignition_power &&
             s->ignition_select == q->ignition_select;
 }

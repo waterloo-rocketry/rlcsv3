@@ -96,15 +96,16 @@ void lcd_update(daq_holder_t *input)
     //two of the LCD lines switch back and forth between two lines
     //every two seconds. We use this variable to keep track of which
     //line should be displayed at the current time
-    static bool display_first_line = true;
+    static bool display_first_line = false; // changed to false per my evil scemes mentioned below.
     //timer to keep track of when to switch between lines
     static long time_last_line_switch = 0;
     //if we need to switch lines, do so
+/*                                            // I have hijacked these lines so I can always see what the state of the valve connected to disconnect is. Bwa ha ha ha ha!
     if (millis() - time_last_line_switch > 2000) {
-        display_first_line = !display_first_line;
+        display_first_line = !display_first_line; 
         time_last_line_switch = millis();
     }
-
+*/
 
     //display the top line
     display_valves_line(input->rfill_lsw_open, input->rfill_lsw_closed,
@@ -213,8 +214,8 @@ static void display_disconnect_line(valve_state_t injector_state,
              (injector_state == DAQ_VALVE_CLOSED) ? "CLS" :
              (injector_state == DAQ_VALVE_UNK) ? "UNK" : "ILL",
              fill_line_pressure,
-             (linac_extend && !linac_retract) ? "DIS" :
-             (!linac_extend && linac_retract) ? "CON" : "UNK");
+             (linac_extend && !linac_retract) ? "OPN" :           //Being used as 3rd valve, not disconnect
+             (!linac_extend && linac_retract) ? "CLS" : "UNK");
     lcd.print(line);
 }
 

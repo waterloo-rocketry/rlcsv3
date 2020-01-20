@@ -14,7 +14,8 @@ static actuator_state_t global_current_state = {
     .injector_valve = 0,
     .linear_actuator = 0,
     .ignition_power = 0,
-    .ignition_select = 0
+    .ignition_select = 0,
+    .valve3_valve = 0   // pretty sure we want this?
 };
 
 static daq_holder_t global_current_daq;
