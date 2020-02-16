@@ -28,6 +28,8 @@ static struct {
     uint8_t lsw_linac_ret;
     uint8_t lsw_valve3_opn;
     uint8_t lsw_valve3_cls;
+    uint8_t lsw_valve4_opn;
+    uint8_t lsw_valve4_cls;
 } window_holder[WINDOW_WIDTH];
 
 
@@ -115,6 +117,8 @@ void compute_daq_values(daq_holder_t* output) {
         output->linac_lsw_retract   += window_holder[i].lsw_linac_ret;
         output->valve3_lsw_open     += window_holder[i].lsw_valve3_opn;
         output->valve3_lsw_closed   += window_holder[i].lsw_valve3_cls;
+        output->valve4_lsw_open     += window_holder[i].lsw_valve4_opn;
+        output->valve4_lsw_closed   += window_holder[i].lsw_valve4_cls;
     }
 
     //apply scaling values. These need calibration, so I'll just use

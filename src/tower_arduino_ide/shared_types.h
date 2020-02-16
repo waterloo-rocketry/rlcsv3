@@ -18,6 +18,7 @@ typedef struct {
     unsigned char remote_fill_valve;    //1 = open, 0 = closed
     unsigned char remote_vent_valve;    //1 = open, 0 = closed
     unsigned char valve3_valve;         //1 = open, 0 = closed
+    unsigned char valve4_valve;         //1 = open, 0 = closed
     unsigned char run_tank_valve;       //1 = open, 0 = closed
     unsigned char injector_valve;       //1 = open, 0 = closed
     unsigned char linear_actuator;      //1 = retracted, 0 = extended
@@ -53,6 +54,8 @@ typedef struct {
     unsigned char linac_lsw_retract;    //0 when low, 1 when high (which means the actuator is retracted)
     unsigned char valve3_lsw_open;      //0 when low, 1 when high (which means remote fill is open)
     unsigned char valve3_lsw_closed;    //0 when low, 1 when high (which means remote fill is closed)
+    unsigned char valve4_lsw_open;      //0 when low, 1 when high (which means valve4 is open)
+    unsigned char valve4_lsw_closed;    //0 when low, 1 when high (which means valve4 fill is closed)
 
     // new data fields for RocketCAN stuff
     unsigned char num_boards_connected;

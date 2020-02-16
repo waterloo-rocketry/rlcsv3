@@ -15,7 +15,8 @@ static actuator_state_t global_current_state = {
     .linear_actuator = 0,
     .ignition_power = 0,
     .ignition_select = 0,
-    .valve3_valve = 0   // pretty sure we want this?
+    .valve3_valve = 0,   // pretty sure we want this?
+    .valve4_valve = 0
 };
 
 static daq_holder_t global_current_daq;
@@ -83,6 +84,20 @@ void apply_state(){
             digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
         }
     }
+
+    if (global_requested_state.valve4_valve != global_current_state.valve4_valve){
+        //we need to change the valve4_valve to what requested wants
+        global_current_state.valve4_valve = global_requested_state.valve4_valve;
+        if (global_current_state.valve4_valve){
+            //open the valve4_valve
+            digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_VALVE4_SELECT, LOW);
+        } else {
+            //close the valve4_valve
+            digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_VALVE4_SELECT, HIGH);
+        } // else
+    } // if
 
     global_current_state.run_tank_valve = global_requested_state.run_tank_valve;
     //tell nodeio.ioio that we want the vent to change
@@ -169,6 +184,8 @@ void init_outputs(){
     pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
     pinMode(PIN_VALVE3_POWER, OUTPUT);
     pinMode(PIN_VALVE3_SELECT, OUTPUT);
+    pinMode(PIN_VALVE4_POWER, OUTPUT);
+    pinMode(PIN_VALVE4_SELECT, OUTPUT);
 
     pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
     pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
@@ -187,6 +204,10 @@ void init_outputs(){
     //valve 3
     digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
     digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
+
+    //valve 4
+    digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_VALVE4_SELECT, HIGH);
 
     //run tank valve
     //TODO, figure out how the run tank valve is going to work
