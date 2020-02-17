@@ -62,7 +62,7 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
     state->remote_vent_valve = ((binary & 2) != 0);
     state->run_tank_valve    = ((binary & 4) != 0);
     state->linear_actuator   = ((binary & 8) != 0); // not used
-    state->valve3_valve      = ((binary & 8) != 0);
+    state->ox_pres_valve      = ((binary & 8) != 0);
     state->ignition_power    = ((binary & 16) != 0);
     if(state->ignition_power){
         state->ignition_select   = ((binary & 32) != 0);
@@ -71,7 +71,7 @@ int convert_radio_to_state(actuator_state_t* state, char binary)
         state->ignition_select = 0;
         state->remote_fill_valve = ((binary & 32) != 0);
     }
-    state->valve4_valve      =((binary & 64) != 0);
+    state->fuel_pres_valve      =((binary & 64) != 0);
     return 1;
 }
 
@@ -81,14 +81,14 @@ int convert_state_to_radio(const actuator_state_t* state, char* binary)
     *binary += state->injector_valve ? 1 : 0;
     *binary += state->remote_vent_valve ? 2 : 0;
     *binary += state->run_tank_valve    ? 4 : 0;
-    *binary += state->valve3_valve      ? 8 : 0; //Used to be linear_actuator
+    *binary += state->ox_pres_valve      ? 8 : 0; //Used to be linear_actuator
     *binary += state->ignition_power    ? 16 : 0;
     if(state->ignition_power){
         *binary += state->ignition_select   ? 32 : 0;
     } else {
         *binary += state->remote_fill_valve ? 32 : 0;
     }
-    *binary += state->valve4_valve      ? 64 : 0;
+    *binary += state->fuel_pres_valve      ? 64 : 0;
 //    if ( (*binary = toBase64(*binary)) < 0)
 //        return 0; //we do this on failure
     return 1;
@@ -102,8 +102,8 @@ int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
             s->run_tank_valve == q->run_tank_valve &&
             s->injector_valve == q->injector_valve &&
             s->linear_actuator == q->linear_actuator &&
-            s->valve3_valve == q->valve3_valve &&
-            s->valve4_valve == q->valve4_valve &&
+            s->ox_pres_valve == q->ox_pres_valve &&
+            s->fuel_pres_valve == q->fuel_pres_valve &&
             s->ignition_power == q->ignition_power &&
             s->ignition_select == q->ignition_select;
 }

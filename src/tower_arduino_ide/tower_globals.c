@@ -15,8 +15,8 @@ static actuator_state_t global_current_state = {
     .linear_actuator = 0,
     .ignition_power = 0,
     .ignition_select = 0,
-    .valve3_valve = 0,   // pretty sure we want this?
-    .valve4_valve = 0
+    .ox_pres_valve = 0,   // pretty sure we want this?
+    .fuel_pres_valve = 0
 };
 
 static daq_holder_t global_current_daq;
@@ -71,31 +71,31 @@ void apply_state(){
         }
     }
 
-    if(global_requested_state.valve3_valve != global_current_state.valve3_valve){
-        //we need to change the valve3_valve to what requested wants
-        global_current_state.valve3_valve = global_requested_state.valve3_valve;
-        if(global_current_state.valve3_valve){
-            //open the valve3_valve
-            digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE3_SELECT, LOW);
+    if(global_requested_state.ox_pres_valve != global_current_state.ox_pres_valve){
+        //we need to change the ox_pres_valve to what requested wants
+        global_current_state.ox_pres_valve = global_requested_state.ox_pres_valve;
+        if(global_current_state.ox_pres_valve){
+            //open the ox_pres_valve
+            digitalWrite((uint8_t) PIN_OX_PRES_VALVE_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_OX_PRES_VALVE_SELECT, LOW);
         } else {
-            //close the valve3_valve
-            digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
+            //close the ox_pres_valve
+            digitalWrite((uint8_t) PIN_OX_PRES_VALVE_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_OX_PRES_VALVE_SELECT, HIGH);
         }
     }
 
-    if (global_requested_state.valve4_valve != global_current_state.valve4_valve){
-        //we need to change the valve4_valve to what requested wants
-        global_current_state.valve4_valve = global_requested_state.valve4_valve;
-        if (global_current_state.valve4_valve){
-            //open the valve4_valve
-            digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE4_SELECT, LOW);
+    if (global_requested_state.fuel_pres_valve != global_current_state.fuel_pres_valve){
+        //we need to change the fuel_pres_valve to what requested wants
+        global_current_state.fuel_pres_valve = global_requested_state.fuel_pres_valve;
+        if (global_current_state.fuel_pres_valve){
+            //open the fuel_pres_valve
+            digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_SELECT, LOW);
         } else {
-            //close the valve4_valve
-            digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE4_SELECT, HIGH);
+            //close the fuel_pres_valve
+            digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_SELECT, HIGH);
         } // else
     } // if
 
@@ -182,10 +182,10 @@ void init_outputs(){
     pinMode(PIN_REMOTEVENT_SELECT, OUTPUT);
     pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
     pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
-    pinMode(PIN_VALVE3_POWER, OUTPUT);
-    pinMode(PIN_VALVE3_SELECT, OUTPUT);
-    pinMode(PIN_VALVE4_POWER, OUTPUT);
-    pinMode(PIN_VALVE4_SELECT, OUTPUT);
+    pinMode(PIN_OX_PRES_VALVE_POWER, OUTPUT);
+    pinMode(PIN_OX_PRES_VALVE_SELECT, OUTPUT);
+    pinMode(PIN_FUEL_PRES_VALVE_POWER, OUTPUT);
+    pinMode(PIN_FUEL_PRES_VALVE_SELECT, OUTPUT);
 
     pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
     pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
@@ -201,13 +201,13 @@ void init_outputs(){
     digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
     digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
 
-    //valve 3
-    digitalWrite((uint8_t) PIN_VALVE3_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE3_SELECT, HIGH);
+    // oxidizer pressurant valve
+    digitalWrite((uint8_t) PIN_OX_PRES_VALVE_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_OX_PRES_VALVE_SELECT, HIGH);
 
-    //valve 4
-    digitalWrite((uint8_t) PIN_VALVE4_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE4_SELECT, HIGH);
+    // fuel pressurant valve
+    digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_FUEL_PRES_VALVE_SELECT, HIGH);
 
     //run tank valve
     //TODO, figure out how the run tank valve is going to work

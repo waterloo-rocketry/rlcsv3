@@ -26,10 +26,8 @@ static struct {
     uint8_t lsw_remotevent_cls;
     uint8_t lsw_linac_ext;
     uint8_t lsw_linac_ret;
-    uint8_t lsw_valve3_opn;
-    uint8_t lsw_valve3_cls;
-    uint8_t lsw_valve4_opn;
-    uint8_t lsw_valve4_cls;
+    uint8_t lsw_ox_pres_valve_opn;
+    uint8_t lsw_ox_pres_valve_cls;
 } window_holder[WINDOW_WIDTH];
 
 
@@ -47,8 +45,8 @@ void init_daq_pins() {
     pinMode(PIN_LIMITSW_REMOTEVENT_CLS, INPUT);
     pinMode(PIN_LIMITSW_LINAC_EXT, INPUT);
     pinMode(PIN_LIMITSW_LINAC_RET, INPUT);
-    pinMode(PIN_LIMITSW_VALVE3_OPN, INPUT);
-    pinMode(PIN_LIMITSW_VALVE3_CLS, INPUT);
+    pinMode(PIN_LIMITSW_OX_PRES_VALVE_OPN, INPUT);
+    pinMode(PIN_LIMITSW_OX_PRES_VALVE_CLS, INPUT);
 
     //set all the values in our window holder to 0
     memset(&window_holder, 0, sizeof(window_holder));
@@ -85,10 +83,10 @@ void read_daq_pins() {
         digitalRead(PIN_LIMITSW_LINAC_EXT);
     window_holder[window_holder_index].lsw_linac_ret =
         digitalRead(PIN_LIMITSW_LINAC_RET);
-    window_holder[window_holder_index].lsw_valve3_opn =
-        digitalRead(PIN_LIMITSW_VALVE3_OPN);
-    window_holder[window_holder_index].lsw_valve3_cls =
-        digitalRead(PIN_LIMITSW_VALVE3_CLS);
+    window_holder[window_holder_index].lsw_ox_pres_valve_opn =
+        digitalRead(PIN_LIMITSW_OX_PRES_VALVE_OPN);
+    window_holder[window_holder_index].lsw_ox_pres_valve_cls =
+        digitalRead(PIN_LIMITSW_OX_PRES_VALVE_CLS);
 
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0
@@ -102,23 +100,21 @@ void compute_daq_values(daq_holder_t* output) {
     //max value of analog read is 2^10, so we can add up up to 2^6
     //samples in a uint16_t without worrying about overflow
     for(int i = 0; i < WINDOW_WIDTH; i++){
-        output->pressure1           += window_holder[i].pressure1;
-        output->pressure2           += window_holder[i].pressure2;
-        output->rocket_mass         += window_holder[i].mass;
-        output->ign_pri_current     += window_holder[i].curr_ignition_pri;
-        output->ign_sec_current     += window_holder[i].curr_ignition_sec;
-        output->rlcs_main_batt_mv   += window_holder[i].battery_main;
-        output->rlcs_actuator_batt_mv += window_holder[i].battery_actuators;
-        output->rfill_lsw_open      += window_holder[i].lsw_remotefill_opn;
-        output->rfill_lsw_closed    += window_holder[i].lsw_remotefill_cls;
-        output->rvent_lsw_open      += window_holder[i].lsw_remotevent_opn;
-        output->rvent_lsw_closed    += window_holder[i].lsw_remotevent_cls;
-        output->linac_lsw_extend    += window_holder[i].lsw_linac_ext;
-        output->linac_lsw_retract   += window_holder[i].lsw_linac_ret;
-        output->valve3_lsw_open     += window_holder[i].lsw_valve3_opn;
-        output->valve3_lsw_closed   += window_holder[i].lsw_valve3_cls;
-        output->valve4_lsw_open     += window_holder[i].lsw_valve4_opn;
-        output->valve4_lsw_closed   += window_holder[i].lsw_valve4_cls;
+        output->pressure1                  += window_holder[i].pressure1;
+        output->pressure2                  += window_holder[i].pressure2;
+        output->rocket_mass                += window_holder[i].mass;
+        output->ign_pri_current            += window_holder[i].curr_ignition_pri;
+        output->ign_sec_current            += window_holder[i].curr_ignition_sec;
+        output->rlcs_main_batt_mv          += window_holder[i].battery_main;
+        output->rlcs_actuator_batt_mv      += window_holder[i].battery_actuators;
+        output->rfill_lsw_open             += window_holder[i].lsw_remotefill_opn;
+        output->rfill_lsw_closed           += window_holder[i].lsw_remotefill_cls;
+        output->rvent_lsw_open             += window_holder[i].lsw_remotevent_opn;
+        output->rvent_lsw_closed           += window_holder[i].lsw_remotevent_cls;
+        output->linac_lsw_extend           += window_holder[i].lsw_linac_ext;
+        output->linac_lsw_retract          += window_holder[i].lsw_linac_ret;
+        output->ox_pres_valve_lsw_open     += window_holder[i].lsw_ox_pres_valve_opn;
+        output->ox_pres_valve_lsw_closed   += window_holder[i].lsw_ox_pres_valve_cls;
     }
 
     //apply scaling values. These need calibration, so I'll just use

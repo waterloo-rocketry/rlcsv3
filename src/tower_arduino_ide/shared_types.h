@@ -17,8 +17,8 @@ char toBase64(char binary);
 typedef struct {
     unsigned char remote_fill_valve;    //1 = open, 0 = closed
     unsigned char remote_vent_valve;    //1 = open, 0 = closed
-    unsigned char valve3_valve;         //1 = open, 0 = closed
-    unsigned char valve4_valve;         //1 = open, 0 = closed
+    unsigned char ox_pres_valve;         //1 = open, 0 = closed
+    unsigned char fuel_pres_valve;         //1 = open, 0 = closed
     unsigned char run_tank_valve;       //1 = open, 0 = closed
     unsigned char injector_valve;       //1 = open, 0 = closed
     unsigned char linear_actuator;      //1 = retracted, 0 = extended
@@ -43,19 +43,17 @@ typedef struct {
     uint16_t pressure1; //fill tank pressure
     uint16_t pressure2; //fill line pressure
     uint16_t pressure3; //rocket tank pressure
-    uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
-    uint16_t ign_pri_current;           //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
-    uint16_t ign_sec_current;           //between 0 and 999 (measured in centiamps)
-    unsigned char rfill_lsw_open;       //0 when low, 1 when high (which means remote fill is open)
-    unsigned char rfill_lsw_closed;     //0 when low, 1 when high (which means remote fill is closed)
-    unsigned char rvent_lsw_open;       //0 when low, 1 when high (which means remote vent is open)
-    unsigned char rvent_lsw_closed;     //0 when low, 1 when high (which means remote vent is closed)
-    unsigned char linac_lsw_extend;     //0 when low, 1 when high (which means the actuator is extended)
-    unsigned char linac_lsw_retract;    //0 when low, 1 when high (which means the actuator is retracted)
-    unsigned char valve3_lsw_open;      //0 when low, 1 when high (which means remote fill is open)
-    unsigned char valve3_lsw_closed;    //0 when low, 1 when high (which means remote fill is closed)
-    unsigned char valve4_lsw_open;      //0 when low, 1 when high (which means valve4 is open)
-    unsigned char valve4_lsw_closed;    //0 when low, 1 when high (which means valve4 fill is closed)
+    uint16_t rocket_mass;                      //between 0 and 999 (measured in decipounds. Don't judge me)
+    uint16_t ign_pri_current;                  //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
+    uint16_t ign_sec_current;                  //between 0 and 999 (measured in centiamps)
+    unsigned char rfill_lsw_open;              //0 when low, 1 when high (which means remote fill is open)
+    unsigned char rfill_lsw_closed;            //0 when low, 1 when high (which means remote fill is closed)
+    unsigned char rvent_lsw_open;              //0 when low, 1 when high (which means remote vent is open)
+    unsigned char rvent_lsw_closed;            //0 when low, 1 when high (which means remote vent is closed)
+    unsigned char linac_lsw_extend;            //0 when low, 1 when high (which means the actuator is extended)
+    unsigned char linac_lsw_retract;           //0 when low, 1 when high (which means the actuator is retracted)
+    unsigned char ox_pres_valve_lsw_open;      //0 when low, 1 when high (which means remote fill is open)
+    unsigned char ox_pres_valve_lsw_closed;    //0 when low, 1 when high (which means remote fill is closed)
 
     // new data fields for RocketCAN stuff
     unsigned char num_boards_connected;
