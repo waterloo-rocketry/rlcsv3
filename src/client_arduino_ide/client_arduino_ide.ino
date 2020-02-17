@@ -68,11 +68,18 @@ void loop()
     else
         set_radio_status(1);
 
+    /*
+     * Unfortunately, with the transition to serialization lib, I removed
+     * the convert_state_to_radio function, so I can't display anything on the
+     * seven segment display. I intend to fix that at some point, but in this first
+     * PR, I don't have time
+     *
     //refresh the seven segment display
     char button_for_sevseg;
     convert_state_to_radio(get_button_state(), &button_for_sevseg);
     setNewNum_SevSeg(fromBase64(button_for_sevseg));
     refresh_SevSeg();
+    */
 
     //log the current button state - doesn't write if no change
     if(sd_active){

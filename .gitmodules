@@ -1,0 +1,3 @@
+[submodule "src/serialization_lib"]
+	path = src/serialization_lib
+	url = git@github.com:waterloo-rocketry/serialization_lib.git
