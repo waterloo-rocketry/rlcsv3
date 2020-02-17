@@ -12,14 +12,14 @@ extern "C" {
 //can be used for desired or actual actuator state
 //the definition of these in these comments are the canon
 typedef struct {
-    unsigned char remote_fill_valve;    //1 = open, 0 = closed
-    unsigned char remote_vent_valve;    //1 = open, 0 = closed
-    unsigned char run_tank_valve;       //1 = open, 0 = closed
-    unsigned char injector_valve;       //1 = open, 0 = closed
-    unsigned char linear_actuator;      //1 = retracted, 0 = extended
-    unsigned char ignition_power;       //1 = firing, 0 = not firing
-    unsigned char ignition_select;      //1 = secondary; 0 = primary
-} actuator_state_t;
+    unsigned char remote_fill_valve : 1;    //1 = open, 0 = closed
+    unsigned char remote_vent_valve : 1;    //1 = open, 0 = closed
+    unsigned char run_tank_valve : 1;       //1 = open, 0 = closed
+    unsigned char injector_valve : 1;       //1 = open, 0 = closed
+    unsigned char linear_actuator : 1;      //1 = retracted, 0 = extended
+    unsigned char ignition_power : 1;       //1 = firing, 0 = not firing
+    unsigned char ignition_select : 1;      //1 = secondary; 0 = primary
+} __attribute__((packed)) actuator_state_t;
 
 int actuator_compare(const actuator_state_t* s, const actuator_state_t* q);
 

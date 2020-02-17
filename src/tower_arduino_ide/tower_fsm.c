@@ -7,7 +7,7 @@
 
 //we need to receive state_commands. Those should be the only things
 //the tower receives
-//
+
 // Private variables
 static wsdl_ctx_t state_ctx;
 actuator_state_t state_recv;
@@ -43,6 +43,7 @@ void push_radio_char(char input){
 		case RADIO_STATE_ASSIGN:
             time_last_contact = millis_offset();
 			state = REC_STATE;
+            wsdl_begin_deserialization(&state_ctx, (uint8_t*) &state_recv, sizeof(state_recv));
 			return;
         case RADIO_STATE_REQ:
             time_last_contact = millis_offset();
@@ -74,8 +75,4 @@ void push_radio_char(char input){
             }
             break;
     }
-
-    //we've received a full command, we've processed a full command, go back to
-    //the default state and reset the buffer index
-    state = REC_NOTHING;
 }

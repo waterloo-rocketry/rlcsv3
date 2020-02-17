@@ -104,7 +104,7 @@ void push_radio_char(char input)
                 state = REC_NOTHING;
             } else if (deserialize_result == 0) {
                 // Deserialization finished
-                handle_daq_update(&state_recv, get_tower_state());
+                handle_daq_update(&daq_recv, get_tower_daq());
                 state = REC_NOTHING;
             } else {
                 // still going
