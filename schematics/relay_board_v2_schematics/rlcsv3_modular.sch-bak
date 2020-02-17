@@ -961,7 +961,7 @@ Wire Wire Line
 	6290 4750 6140 4750
 Connection ~ 6140 4750
 Wire Wire Line
-	6790 4650 6790 4350
+	6790 4650 6790 4500
 Wire Wire Line
 	6790 4350 6690 4350
 Wire Wire Line
@@ -1188,4 +1188,29 @@ Wire Wire Line
 	4800 1000 4800 1500
 Wire Wire Line
 	4800 1500 3750 1500
+$Comp
+L rlcsv3_modular-rescue:CONN_01X02 P2
+U 1 1 5E6558C8
+P 7540 4700
+F 0 "P2" H 7540 4850 50  0000 C CNN
+F 1 "ACT_PWR" V 7640 4700 50  0000 C CNN
+F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 7540 4700 50  0001 C CNN
+F 3 "" H 7540 4700 50  0000 C CNN
+	1    7540 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6790 4500 7340 4500
+Wire Wire Line
+	7340 4500 7340 4650
+Connection ~ 6790 4500
+Wire Wire Line
+	6790 4500 6790 4350
+Wire Wire Line
+	6790 4750 6790 4910
+Wire Wire Line
+	6790 4910 7340 4910
+Wire Wire Line
+	7340 4910 7340 4750
+Connection ~ 6790 4750
 $EndSCHEMATC
