@@ -1,15 +1,10 @@
-#define TOWER
 #include "radio_comms.h"
 #include "Arduino.h"
+#include "wrt_sdl.h"
 
-#ifdef CLIENT
-#define XBEE_INTERFACE Serial
-#include "client_globals.h"
-#endif
-#ifdef TOWER
+// Tower specific things
 #define XBEE_INTERFACE Serial2
 #include "tower_globals.h"
-#endif
 
 const unsigned long millis_between_state_req = 200;
 const unsigned long millis_between_daq_req = 1000;
@@ -71,65 +66,51 @@ int client_push_state(const actuator_state_t* state)
     if (millis_offset() - time_last_state_push_sent < millis_between_state_push) 
         //called too soon, so don't send anything
         return 0;
-    time_last_state_push_sent = millis_offset();
-    char binary;
-    if (!convert_state_to_radio(state, &binary))
+
+    // Assume that 100 bytes is enough to send a state change
+    // In practice, it's like 10 bytes. If you want, feel free
+    // to reduce this number
+    char bytes[100];
+
+    size_t bytes_to_send = wsdl_serialize((uint8_t*) state, sizeof(*state), bytes, sizeof(bytes));
+
+    if (bytes_to_send == 0) {
+        // Error - return 0
         return 0;
+    }
+
     write_to_xbee(RADIO_STATE_ASSIGN);
-    write_to_xbee(binary);
+    for (int i = 0; i < bytes_to_send; i++)
+        write_to_xbee(bytes[i]);
+
+    time_last_state_push_sent = millis_offset();
     return 1;
 }
-
-//don't send acknowledgements more than twice per second
-unsigned long time_last_client_ack_sent = 0;
-int client_ack()
-{
-    if (millis_offset() - time_last_client_ack_sent < millis_between_client_ack)
-        return 0;
-    write_to_xbee(RADIO_ACK_BYTE);
-    time_last_client_ack_sent = millis_offset();
-    return 1;
-}
-
-//don't send nacknowledgements more than twice per second
-unsigned long time_last_client_nack_sent = 0;
-int client_nack()
-{
-    if (millis_offset() - time_last_client_nack_sent < millis_between_client_nack)
-        return 0;
-    write_to_xbee(RADIO_NACK_BYTE);
-    time_last_client_nack_sent = millis_offset();
-    return 1;
-}
-
-
 
 //now for the tower side radio sending functions
-
-unsigned long time_last_tower_ack_req = 0;
-int tower_request_ack(const actuator_state_t* state)
-{
-    if (millis_offset() - time_last_tower_ack_req < millis_between_tower_ack_req)
-        return 0;
-    char binary;
-    if (!convert_state_to_radio(state, &binary))
-        return 0;
-    write_to_xbee(RADIO_ACK_BYTE);
-    write_to_xbee(binary);
-    time_last_tower_ack_req = millis_offset();
-    return 1;
-}
 
 unsigned long time_last_tower_send_state = 0;
 int tower_send_state(const actuator_state_t* state)
 {
     if (millis_offset() - time_last_tower_send_state < millis_between_tower_send_state)
         return 0;
-    char binary;
-    if (!convert_state_to_radio(state, &binary))
+
+    // Assume that 100 bytes is enough to send a state change
+    // In practice, it's like 10 bytes. If you want, feel free
+    // to reduce this number
+    char bytes[100];
+
+    size_t bytes_to_send = wsdl_serialize((uint8_t*) state, sizeof(*state), bytes, sizeof(bytes));
+
+    if (bytes_to_send == 0) {
+        // Error - return 0
         return 0;
+    }
+
     write_to_xbee(RADIO_STATE_REQ);
-    write_to_xbee(binary);
+    for (int i = 0; i < bytes_to_send; i++)
+        write_to_xbee(bytes[i]);
+
     time_last_tower_send_state = millis_offset();
     return 1;
 }
@@ -139,12 +120,16 @@ int tower_send_daq(daq_holder_t* daq)
 {
     if (millis_offset() - time_last_tower_send_daq < millis_between_tower_send_daq)
         return 0;
-    daq_radio_value_t output;
-    if (!convert_daq_to_radio(daq, &output))
-        return 0;
+
+    // Here's hoping that 100 bytes is enough to send a daq update
+    char bytes[100];
+
+    size_t bytes_to_send = wsdl_serialize((uint8_t*) daq, sizeof(*daq), bytes, sizeof(bytes));
+
     write_to_xbee(RADIO_DAQ_REQ);
-    for (int i = 0; i < DAQ_RADIO_LEN; i++)
-        write_to_xbee(output.data[i]);
+    for (int i = 0; i < bytes_to_send; i++)
+        write_to_xbee(bytes[i]);
+
     time_last_tower_send_daq = millis_offset();
     return 1;
 }

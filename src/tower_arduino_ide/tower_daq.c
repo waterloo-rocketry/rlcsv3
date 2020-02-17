@@ -158,7 +158,6 @@ void compute_daq_values(daq_holder_t* output) {
     output->linac_lsw_retract = (output->linac_lsw_retract / WINDOW_WIDTH) != 0;
 
     //log what we just computed
-    daq_radio_value_t to_log;
-    convert_daq_to_radio(output, &to_log);
-    rlcslog_log_daq_values(&to_log);
+    // TODO
+    rlcslog_log_daq_values(output);
 }

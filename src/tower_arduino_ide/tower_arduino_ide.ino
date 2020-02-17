@@ -59,11 +59,6 @@ void loop() {
         nio_power_bus();
     }
 
-    //if the requested state and the current state aren't the same,
-    //then request an acknowledgement for 
-    if(!actuator_compare(get_requested_state(), get_current_state()))
-        tower_request_ack(get_requested_state());
-
     //deal with the nodeio.ioio stuff
     nio_refresh();
     
@@ -71,12 +66,17 @@ void loop() {
 
     linac_refresh();
 
+    /*
+     * Unfortunately, without convert_state_to_radio, we can't display on the 7seg
+     * so.... Gonna skip that for now
+     *
     //put the current state on the the seven segment display
     char to_put_on_sevenseg;
     if( convert_state_to_radio(get_current_state(), &to_put_on_sevenseg) ) {
         setNewNum_SevSeg( (uint8_t) fromBase64(to_put_on_sevenseg) );
     }
     refresh_SevSeg();
+    */
 
     //check how long it's been since we flushed the log
     if(millis() - global_time_last_output_flush > global_output_flush_interval){
