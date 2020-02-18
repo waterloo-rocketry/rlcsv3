@@ -1,3 +1,6 @@
-[submodule "src/serialization_lib"]
-	path = src/serialization_lib
+[submodule "src/client_arduino_ide/serialization_lib"]
+	path = src/client_arduino_ide/serialization_lib
+	url = git@github.com:waterloo-rocketry/serialization_lib.git
+[submodule "src/tower_arduino_ide/serialization_lib"]
+	path = src/tower_arduino_ide/serialization_lib
 	url = git@github.com:waterloo-rocketry/serialization_lib.git

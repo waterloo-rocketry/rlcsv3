@@ -3,7 +3,7 @@
 #include "radio_comms.h"
 #include "tower_globals.h"
 #include "Arduino.h"
-#include "wrt_sdl.h"
+#include "serialization_lib/wrt_sdl.h"
 
 //we need to receive state_commands. Those should be the only things
 //the tower receives

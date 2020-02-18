@@ -5,7 +5,7 @@
 #include "sd_handler.h"
 #include "client_globals.h"
 #include "LCD.h"
-#include "wrt_sdl.h"
+#include "serialization_lib/wrt_sdl.h"
 
 //we need to receive ack requests, we need to receive state updates,
 //and we need to receive daq updates. Those should be the only things

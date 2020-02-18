@@ -1,6 +1,6 @@
 #include "radio_comms.h"
 #include "Arduino.h"
-#include "wrt_sdl.h"
+#include "serialization_lib/wrt_sdl.h"
 
 // Tower specific things
 #define XBEE_INTERFACE Serial2
