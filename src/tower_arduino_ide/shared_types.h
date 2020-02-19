@@ -8,25 +8,18 @@ extern "C" {
 #include<stdint.h>
 #include<stdbool.h>
 
-char fromBase64(char base64);
-char toBase64(char binary);
-
 //the main type for holding the state of the actuators
 //can be used for desired or actual actuator state
 //the definition of these in these comments are the canon
 typedef struct {
-    unsigned char remote_fill_valve;    //1 = open, 0 = closed
-    unsigned char remote_vent_valve;    //1 = open, 0 = closed
-    unsigned char run_tank_valve;       //1 = open, 0 = closed
-    unsigned char injector_valve;       //1 = open, 0 = closed
-    unsigned char linear_actuator;      //1 = retracted, 0 = extended
-    unsigned char ignition_power;       //1 = firing, 0 = not firing
-    unsigned char ignition_select;      //1 = secondary; 0 = primary
-} actuator_state_t;
-
-//these functions return 0 on failure, 1 on success.
-int convert_radio_to_state(actuator_state_t* state, char binary);
-int convert_state_to_radio(const actuator_state_t* state, char* binary);
+    unsigned char remote_fill_valve : 1;    //1 = open, 0 = closed
+    unsigned char remote_vent_valve : 1;    //1 = open, 0 = closed
+    unsigned char run_tank_valve : 1;       //1 = open, 0 = closed
+    unsigned char injector_valve : 1;       //1 = open, 0 = closed
+    unsigned char linear_actuator : 1;      //1 = retracted, 0 = extended
+    unsigned char ignition_power : 1;       //1 = firing, 0 = not firing
+    unsigned char ignition_select : 1;      //1 = secondary; 0 = primary
+} __attribute__((packed)) actuator_state_t;
 
 int actuator_compare(const actuator_state_t* s, const actuator_state_t* q);
 
@@ -63,14 +56,6 @@ typedef struct {
     uint32_t rlcs_main_batt_mv;
     uint32_t rlcs_actuator_batt_mv;
 } daq_holder_t;
-
-#define DAQ_RADIO_LEN 25
-typedef struct {
-	char data[DAQ_RADIO_LEN];
-} daq_radio_value_t;
-//these functions return 0 on failure, 1 on success.
-int convert_radio_to_daq(daq_holder_t* daq, const daq_radio_value_t* radio);
-int convert_daq_to_radio(const daq_holder_t* daq, daq_radio_value_t* radio);
 
 #ifdef __cplusplus
 }

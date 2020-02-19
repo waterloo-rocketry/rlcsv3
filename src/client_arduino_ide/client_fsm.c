@@ -5,21 +5,17 @@
 #include "sd_handler.h"
 #include "client_globals.h"
 #include "LCD.h"
+#include "serialization_lib/wrt_sdl.h"
 
 //we need to receive ack requests, we need to receive state updates,
 //and we need to receive daq updates. Those should be the only things
 //clients receive
 
-static char buffer[50]; //the daq radio input should be the longest thing we get
-static unsigned short buffer_index = 0;
-static unsigned short data_len = 0;
-enum {
-    REC_NOTHING,
-    REC_STATE,
-    REC_DAQ,
-    REC_ACK,
-    REC_ERROR
-} state;
+// Private variables
+static wsdl_ctx_t state_ctx, daq_ctx;
+daq_holder_t daq_recv;
+actuator_state_t state_recv;
+
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
 static int valid_data_byte(char data)
@@ -36,166 +32,85 @@ static int valid_data_byte(char data)
 }
 
 extern unsigned long global_time_last_tower_state_req;
-static void handle_state_update(char *state_buffer, actuator_state_t *state)
+static void handle_state_update(const actuator_state_t *new_state, actuator_state_t *old_state)
 {
     //log the last received tower state
     if (sd_active()) {
-        rlcslog_client_tower_state(state_buffer[0]);
+        rlcslog_client_tower_state(new_state);
     }
-    //unpack buffer, copy values into state
-    convert_radio_to_state(state, *state_buffer);
+    memcpy(old_state, new_state, sizeof(*old_state));
     global_time_last_tower_state_req = millis_offset();
 }
 
 extern unsigned long global_time_last_tower_daq_req;
-static void handle_daq_update(char *buffer, daq_holder_t *daq)
+static void handle_daq_update(const daq_holder_t *new_daq, daq_holder_t *old_daq)
 {
-    //unpack buffer, copy values into daq
-    daq_radio_value_t s;
-    for (int i = 0; i < DAQ_RADIO_LEN; i++) {
-        //check that all bytes are valid
-        if (fromBase64(buffer[i]) < 0)
-            return;
+    if (sd_active()) {
+        rlcslog_log_daq_values(new_daq);
     }
-    strncpy(s.data, buffer, DAQ_RADIO_LEN);
-    rlcslog_log_daq_values(&s);
-    convert_radio_to_daq(daq, &s);
+    memcpy(old_daq, new_daq, sizeof(*old_daq));
     global_time_last_tower_daq_req = millis_offset();
-}
-
-static void handle_ack_request(char *buffer, actuator_state_t *state)
-{
-    //if the decoded state from buffer[0] is the same as state, then send an ack over the radio
-    //if they aren't the same, send a nack
-    actuator_state_t received;
-    convert_radio_to_state(&received, *buffer);
-    if (actuator_compare(state, &received)) {
-        client_ack();
-    } else {
-        client_nack();
-    }
 }
 
 void push_radio_char(char input)
 {
+    static enum {
+        REC_NOTHING,
+        REC_STATE,
+        REC_DAQ,
+        REC_ERROR,
+    } state;
+
     switch (input) {
         case RADIO_STATE_REQ:
             state = REC_STATE;
-            buffer_index = 0;
-            data_len = 1; //only one byte in a state update
+            wsdl_begin_deserialization(&state_ctx, &state_recv, sizeof(state_recv));
             return;
         case RADIO_DAQ_REQ:
             state = REC_DAQ;
-            buffer_index = 0;
-            data_len = DAQ_RADIO_LEN; //takes this many bytes for a daq update
-            return;
-        case RADIO_ACK_BYTE:
-            state = REC_ACK;
-            buffer_index = 0;
-            data_len = 1; //only one byte in an ack request. It's a state byte
+            wsdl_begin_deserialization(&daq_ctx, &daq_recv, sizeof(daq_recv));
             return;
         case '!':
             state = REC_ERROR;
-            buffer_index = 0;
-            data_len = 13;
+            // TODO, deal with errors at some point
             break;
         default:
             break;
     }
+
     if (!valid_data_byte(input) || state == REC_NOTHING)
         //we either received a byte that wansn't data, or we weren't expecting any data
         return;
 
-    //at this point, we assume that we just want to push the input into the buffer. We will also assume
-    //that this won't overflow. Maybe eventually put in a check that this won't overflow.
-    buffer[buffer_index++] = input;
-
-    //check if we're still waiting for more bytes in the current command. If so, return to wait for more
-    if (buffer_index < data_len)
-        return;
-
-    //now we assume that we've received a full command, and it's stored in buffer starting at index 0.
-    //so now we just call the appropriate handler
+    int deserialize_result;
     switch (state) {
         case REC_STATE:
-            handle_state_update(buffer, get_tower_state());
+            deserialize_result = wsdl_deserialize_byte(&state_ctx, input);
+            if (deserialize_result < 0) {
+                // An error occurred
+                state = REC_NOTHING;
+            } else if (deserialize_result == 0) {
+                // Deserialization finished
+                handle_state_update(&state_recv, get_tower_state());
+                state = REC_NOTHING;
+            } else {
+                // still going
+            }
             break;
         case REC_DAQ:
-            handle_daq_update(buffer, get_tower_daq());
-            break;
-        case REC_ACK:
-            handle_ack_request(buffer, get_button_state());
-            break;
-        case REC_ERROR:
-            buffer[13] = 0;
-            char error_to_display[21];
-            if (buffer[2] == '1' || buffer[2] == '2') {
-                error_to_display[0] = 'I';
-                error_to_display[1] = 'N';
-                error_to_display[2] = 'J';
-            } else if (buffer[2] == '3' || buffer[2] == '4') {
-                error_to_display[0] = 'L';
-                error_to_display[1] = 'O';
-                error_to_display[2] = 'G';
-            } else if (buffer[2] == '5' || buffer[2] == '6') {
-                error_to_display[0] = 'R';
-                error_to_display[1] = 'A';
-                error_to_display[2] = 'D';
-            } else if (buffer[2] == '7' || buffer[2] == '8') {
-                error_to_display[0] = 'S';
-                error_to_display[1] = 'E';
-                error_to_display[2] = 'N';
-            } else if (buffer[2] == '9' ||
-                       buffer[2] == 'A' ||
-                       buffer[2] == 'a') {
-                error_to_display[0] = 'U';
-                error_to_display[1] = 'S';
-                error_to_display[2] = 'B';
-            } else if (buffer[2] == 'B' ||
-                       buffer[2] == 'b' ||
-                       buffer[2] == 'C' ||
-                       buffer[2] == 'c') {
-                error_to_display[0] = 'V';
-                error_to_display[1] = 'N';
-                error_to_display[2] = 'T';
-            } else if (buffer[2] == 'D' ||
-                       buffer[2] == 'd' ||
-                       buffer[2] == 'E' ||
-                       buffer[2] == 'e') {
-                error_to_display[0] = 'G';
-                error_to_display[1] = 'P';
-                error_to_display[2] = 'S';
+            deserialize_result = wsdl_deserialize_byte(&daq_ctx, input);
+            if (deserialize_result < 0) {
+                // An error occurred
+                state = REC_NOTHING;
+            } else if (deserialize_result == 0) {
+                // Deserialization finished
+                handle_daq_update(&daq_recv, get_tower_daq());
+                state = REC_NOTHING;
             } else {
-                error_to_display[0] = 'U';
-                error_to_display[1] = 'N';
-                error_to_display[2] = 'K';
+                // still going
             }
-
-            error_to_display[3] = ' ';
-            error_to_display[4] = buffer[3];
-            error_to_display[5] = buffer[4];
-            error_to_display[6] = ' ';
-            error_to_display[7] = ' ';
-            error_to_display[8] = ' ';
-            error_to_display[9] = buffer[5];
-            error_to_display[10] = buffer[6];
-            error_to_display[11] = ' ';
-            error_to_display[12] = buffer[7];
-            error_to_display[13] = buffer[8];
-            error_to_display[14] = ' ';
-            error_to_display[15] = buffer[9];
-            error_to_display[16] = buffer[10];
-            error_to_display[17] = ' ';
-            error_to_display[18] = buffer[11];
-            error_to_display[19] = buffer[12];
-            error_to_display[20] = '\0';
-            display_new_error(error_to_display);
+            break;
         default:
             break;
     }
-
-    //we've received a full command, we've processed a full command, go back to
-    //the default state and reset the buffer index
-    state = REC_NOTHING;
-    buffer_index = 0;
 }

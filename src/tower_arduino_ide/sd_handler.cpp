@@ -1,4 +1,3 @@
-#define TOWER
 #include "sd_handler.h"
 #include "tower_pin_defines.h"
 #include <SPI.h>
@@ -151,87 +150,40 @@ static actuator_state_t last_buttons;
 void rlcslog_client_button(const actuator_state_t* buttons){
     if(!working)
         return;
-    if(!actuator_compare(&last_buttons, buttons)){
-        //buttons have changed - log it
-        char message[sizeof(BUTTON_HEADER) + 2] = BUTTON_HEADER;
-        convert_state_to_radio(buttons, message + sizeof(BUTTON_HEADER) - 1);
-        message[sizeof(BUTTON_HEADER) + 1] = 0;
-#ifdef SD_SERIAL_LOG
-        Serial.print("buttons changed: ");
-        Serial.println(message);
-        Serial.flush();
-#endif
-        rlcslog(message);
-        //copy what we just received to the last_buttons
-        memcpy(&last_buttons, buttons, sizeof(last_buttons));
-    }
+
+    // TODO: logging format
 }
 
 #define TOWER_STATE_HEADER "tstate - "
-static char last_tower_state = 'A';
 void rlcslog_client_tower_state(char input){
     if(!working)
         return;
-    if(last_tower_state != input){
-#ifdef SD_SERIAL_LOG
-        Serial.print("call to rlcslog_client_tower_state  (");
-        Serial.print(input,HEX);
-        Serial.print(TOWER_STATE_HEADER);
-        Serial.println(sizeof(TOWER_STATE_HEADER));
-#endif
-        last_tower_state = input;
-        char message[sizeof(TOWER_STATE_HEADER) + 1] = TOWER_STATE_HEADER;
-        message[sizeof(TOWER_STATE_HEADER)-1] = input;
-        message[sizeof(TOWER_STATE_HEADER)] = 0;
-        rlcslog(message);
-    }
+
+    // TODO: logging format
 }
 #endif
 
-#ifdef TOWER
 #define APPLY_HEADER "app state - "
-static char last_logged_state = 'Z';
 void rlcslog_tower_apply_state(char input){
     if(!working)
         return;
-    if(last_logged_state == input)
-        return;
-    last_logged_state = input;
-#ifdef SD_SERIAL_LOG
-    Serial.print("call to rlcslog_tower_apply_state (");
-    Serial.print(input, HEX);
-    Serial.print(APPLY_HEADER);
-    Serial.println(sizeof(APPLY_HEADER));
-#endif
-    char message[sizeof(APPLY_HEADER) + 1] = APPLY_HEADER;
-    message[sizeof(APPLY_HEADER) - 1] = input;
-    message[sizeof(APPLY_HEADER)] = 0;
-    rlcslog(message);
+    // TODO: logging format
 }
 
 #define NIO_VENT_HEADER "lorelai - "
 
 #define NIO_INJ_HEADER "rory - "
 
-#endif
-
 #define DAQ_HEADER "daq values - "
 extern unsigned long global_time_last_logged_daq;
 //log all daq values every 100 ms
 static const unsigned long daq_log_interval = 100;
-void rlcslog_log_daq_values(const daq_radio_value_t* to_log){
+void rlcslog_log_daq_values(const daq_holder_t* to_log){
     if(!working)
         return;
     if( (millis() - global_time_last_logged_daq) < daq_log_interval)
         return;
     global_time_last_logged_daq = millis();
 
-    //log all 15 characters of DAQ, plus the header, plus
-    //the null terminator
-    char message[sizeof(DAQ_HEADER) + DAQ_RADIO_LEN + 1] = DAQ_HEADER;
-
-    strncpy(message + sizeof(DAQ_HEADER) - 1, to_log->data, DAQ_RADIO_LEN);
-
-    message[sizeof(DAQ_HEADER) + DAQ_RADIO_LEN] = '\0';
-    rlcslog(message);
+    // TODO: Need to find a logging format
 }
