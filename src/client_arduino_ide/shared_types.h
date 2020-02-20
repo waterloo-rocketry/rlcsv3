@@ -14,6 +14,8 @@ extern "C" {
 typedef struct {
     unsigned char remote_fill_valve : 1;    //1 = open, 0 = closed
     unsigned char remote_vent_valve : 1;    //1 = open, 0 = closed
+    unsigned char ox_pres_valve : 1;         //1 = open, 0 = closed
+    unsigned char fuel_pres_valve : 1;         //1 = open, 0 = closed
     unsigned char run_tank_valve : 1;       //1 = open, 0 = closed
     unsigned char injector_valve : 1;       //1 = open, 0 = closed
     unsigned char linear_actuator : 1;      //1 = retracted, 0 = extended
