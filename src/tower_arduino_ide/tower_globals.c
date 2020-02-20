@@ -37,11 +37,6 @@ daq_holder_t* get_global_current_daq(){
 //copies requested_state to current_state, then applies requested state
 //to the outputs
 void apply_state(){
-    //log this transition to the sd card
-    char tolog;
-    if(convert_state_to_radio(get_requested_state(), &tolog))
-        if(sd_active())
-            rlcslog_tower_apply_state(tolog);
 
     if(global_requested_state.remote_fill_valve != global_current_state.remote_fill_valve){
         //we need to change the remote_fill_valve to what requested wants

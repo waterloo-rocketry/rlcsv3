@@ -7,7 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define TOWER
+
 
 void sd_init();
 
@@ -22,20 +22,13 @@ void rlcslog(const char* message);
 void flush();
 
 //logs daq values
-void rlcslog_log_daq_values(const daq_radio_value_t* to_log);
+void rlcslog_log_daq_values(const daq_holder_t *to_log);
 
 //client only functions
-#ifdef CLIENT
 //log the current button state
 void rlcslog_client_button(const actuator_state_t* buttons);
-void rlcslog_client_tower_state(char state);
-#endif
+void rlcslog_client_tower_state(const actuator_state_t *to_log);
 
-//tower only functions
-#ifdef TOWER
-#include "nodeio.ioio.h"
-void rlcslog_tower_apply_state(char input);
-#endif
 
 #ifdef __cplusplus
 }

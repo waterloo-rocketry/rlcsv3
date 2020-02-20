@@ -3,16 +3,14 @@
 #include "radio_comms.h"
 #include "tower_globals.h"
 #include "Arduino.h"
+#include "serialization_lib/wrt_sdl.h"
 
-//we need to receive state_commands, we need to receive daq_commands,
-//and we need to receive acknowledgements. Those should be the only things
+//we need to receive state_commands. Those should be the only things
 //the tower receives
 
-//all commands that the tower receives have at most one 
-static enum {
-    REC_NOTHING,
-    REC_STATE,
-} state;
+// Private variables
+static wsdl_ctx_t state_ctx;
+actuator_state_t state_recv;
 
 //returns 1 if data is a base 64 digit that's ok to come over the radio
 static int valid_data_byte(char data) {
@@ -27,18 +25,25 @@ static int valid_data_byte(char data) {
     return 0;
 }
 
-static void handle_state_command(char buffer, const actuator_state_t* state){
-    //decode buffer, copy values into state. The Ack requesting is handled in the main loop
-    convert_radio_to_state(state, buffer);
+static void handle_state_command(const actuator_state_t* recvd_state){
+    actuator_state_t *req_state = get_requested_state();
+    *req_state = *recvd_state;
+    apply_state();
 }
 
 extern unsigned long time_last_contact;
 
 void push_radio_char(char input){
+    static enum {
+        REC_NOTHING,
+        REC_STATE
+    } state;
+
     switch (input) {
 		case RADIO_STATE_ASSIGN:
             time_last_contact = millis_offset();
 			state = REC_STATE;
+            wsdl_begin_deserialization(&state_ctx, (uint8_t*) &state_recv, sizeof(state_recv));
 			return;
         case RADIO_STATE_REQ:
             time_last_contact = millis_offset();
@@ -47,27 +52,6 @@ void push_radio_char(char input){
         case RADIO_DAQ_REQ:
             tower_send_daq(get_global_current_daq());
             return;
-        case RADIO_ACK_BYTE:
-            //copy the value from requested state to held state,
-            //then make the actuators do the things requested of them in held state
-			apply_state();
-            return;
-		case RADIO_NACK_BYTE:
-			reset_request();
-			return;
-#ifdef RLCS_DEBUG
-        case '!':
-            radio_println("");
-            radio_print("button: ");
-            radio_println(get_current_state()->remote_fill_valve ? "remote_fill_valve open" : "remote_fill_valve closed");
-            radio_println(get_current_state()->remote_vent_valve ? "remote_vent_valve open" : "remote_vent_valve closed");
-            radio_println(get_current_state()->run_tank_valve ? "run_tank_valve open" : "run_tank_valve closed");
-            radio_println(get_current_state()->injector_valve ? "injector_valve open" : "injector_valve closed");
-            radio_println(get_current_state()->linear_actuator ? "linear_actuator open" : "linear_actuator closed");
-            radio_println(get_current_state()->ignition_power ? "ignition_power open" : "ignition_power closed");
-            radio_println(get_current_state()->ignition_select ? "ignition_select open" : "ignition_select closed");
-            break;
-#endif
         default:
             break;
     }
@@ -75,12 +59,20 @@ void push_radio_char(char input){
         //we either received a byte that wansn't data, or we weren't expecting any data
         return;
     
-    //at this point, we assume that we have received a state command, and that the state it
-    //wants us to become is held in the char input. We should really put in asserts for all 
-    //these assumptions that we're making
-    handle_state_command(input, get_requested_state());
-
-    //we've received a full command, we've processed a full command, go back to
-    //the default state and reset the buffer index
-    state = REC_NOTHING;
+    int deserialize_result;
+    switch (state) {
+        case REC_STATE:
+            deserialize_result = wsdl_deserialize_byte(&state_ctx, input);
+            if (deserialize_result < 0) {
+                // An error occurred
+                state = REC_NOTHING;
+            } else if (deserialize_result == 0) {
+                // Deserialization finished
+                handle_state_command(&state_recv);
+                state = REC_NOTHING;
+            } else {
+                // still going
+            }
+            break;
+    }
 }
