@@ -15,7 +15,7 @@ static actuator_state_t global_current_state = {
     .linear_actuator = 0,
     .ignition_power = 0,
     .ignition_select = 0,
-    .ox_pres_valve = 0,   // pretty sure we want this?
+    .ox_pres_valve = 0,
     .fuel_pres_valve = 0
 };
 
@@ -207,6 +207,7 @@ void init_outputs(){
     //run tank valve
     //TODO, figure out how the run tank valve is going to work
     //likely involve a serial link to another arduino
+    //I don't think this should be here, we have RocketCAN - Zach 2020-02-20
 
     linac_init();
 

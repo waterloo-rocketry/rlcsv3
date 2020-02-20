@@ -73,11 +73,15 @@ actuator_state_t *get_button_state()
             remotevent ? 1 : 0;
         global_button_state.run_tank_valve =
             rocketvalve ? 1 : 0;
+        global_button_state.ox_pres_valve =   // we don't have any extra switches and we aren't using the Rocket CAN tank vent, so let's hijack it.
+            rocketvalve ? 1 : 0;
         global_button_state.injector_valve =
             injector ? 1 : 0;
         global_button_state.linear_actuator =
             linactuator ? 1 : 0;
-
+        global_button_state.fuel_pres_valve =   // we don't have any extra switches and we aren't using fill disconnect, so let's hijack it.
+            linactuator ? 1 : 0;
+        
         //by default, ignition relays are both off
         global_button_state.ignition_power = global_button_state.ignition_select = 0;
         if (ignition_fire) {

@@ -49,6 +49,7 @@ void loop()
   //update the LCD
   lcd_update(get_tower_daq());
 
+
   //check how long since we received tower state
 
   if (millis_offset() - global_time_last_tower_state_req > global_tower_update_interval){

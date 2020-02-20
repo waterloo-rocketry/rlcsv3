@@ -8,17 +8,17 @@
 #define PIN_REMOTEVENT_SELECT 24
 
 #define PIN_LINACTUATOR_POWER 2    // set thease to some unused pins.
-#define PIN_LINACTUATOR_SELECT 3
+#define PIN_LINACTUATOR_SELECT 3   // because we aren't using disconnect
 
 #define PIN_OX_PRES_VALVE_POWER 22
 #define PIN_OX_PRES_VALVE_SELECT 23
 
-#define PIN_FUEL_PRES_VALVE_POWER 11
-#define PIN_FUEL_PRES_VALVE_SELECT 12
+#define PIN_FUEL_PRES_VALVE_POWER 9
+#define PIN_FUEL_PRES_VALVE_SELECT 8
 
 #define PIN_IGNITION_PRIMARY_POWER 28
 #define PIN_IGNITION_PRIMARY_SELECT 29
-#define PIN_IGNITION_SECONDARY_POWER 37
+#define PIN_IGNITION_SECONDARY_POWER 37 // no
 #define PIN_IGNITION_SECONDARY_SELECT 36
 
 //daq pins
@@ -36,10 +36,12 @@
 #define PIN_LIMITSW_REMOTEFILL_CLS 35
 #define PIN_LIMITSW_REMOTEVENT_OPN 33
 #define PIN_LIMITSW_REMOTEVENT_CLS 32
-#define PIN_LIMITSW_LINAC_EXT 31
+#define PIN_LIMITSW_LINAC_EXT 31    //It's probably ok if we just leave thease pointing at the same pins as what is now the ox pres valve
 #define PIN_LIMITSW_LINAC_RET 30
 #define PIN_LIMITSW_OX_PRES_VALVE_OPN 31
 #define PIN_LIMITSW_OX_PRES_VALVE_CLS 30
+#define PIN_LIMITSW_FUEL_PRES_VALVE_OPN 10
+#define PIN_LIMITSW_FUEL_PRES_VALVE_CLS 11
 
 //pins for the seven segment display
 #define PIN_SEVENSEG_D1 47

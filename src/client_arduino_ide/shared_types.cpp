@@ -9,5 +9,7 @@ int actuator_compare(const actuator_state_t* s, const actuator_state_t* q)
             s->injector_valve == q->injector_valve &&
             s->linear_actuator == q->linear_actuator &&
             s->ignition_power == q->ignition_power &&
-            s->ignition_select == q->ignition_select;
+            s->ignition_select == q->ignition_select &&
+            s->ox_pres_valve == q->ox_pres_valve &&
+            s->fuel_pres_valve == q->fuel_pres_valve;
 }
