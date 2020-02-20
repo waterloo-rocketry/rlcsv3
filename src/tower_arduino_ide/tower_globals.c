@@ -109,9 +109,15 @@ void apply_state(){
     if(global_requested_state.injector_valve){
         //we want it open
         nio_set_inj_desired(VALVE_OPEN);
+
+        //ox injector valve opened
+        //set a coutdown that will run in a heartbeat function
     }
     else {
         nio_set_inj_desired(VALVE_CLOSED);
+        
+        //Ox valve closed
+        //fuel valve closed
     }
 
     if(global_requested_state.linear_actuator != global_current_state.linear_actuator){
@@ -134,23 +140,17 @@ void apply_state(){
             //decide whether to write to primary or secondary ignition
             if(global_requested_state.ignition_select) {
                 //write to secondary
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
             } else {
                 //write to primary
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SELECT, HIGH);
+
             }
         } else {
             //remove power from ignition circuit
-            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
         }
     }
 
@@ -182,10 +182,10 @@ void init_outputs(){
     pinMode(PIN_FUEL_PRES_VALVE_POWER, OUTPUT);
     pinMode(PIN_FUEL_PRES_VALVE_SELECT, OUTPUT);
 
-    pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
-    pinMode(PIN_IGNITION_SECONDARY_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_SECONDARY_SELECT, OUTPUT);
+    pinMode(PIN_IGNITION_POWER, OUTPUT);
+    pinMode(PIN_IGNITION_SELECT, OUTPUT);
+    pinMode(PIN_OX_INJECTOR_VALVE_POWER, OUTPUT);
+    pinMode(PIN_OX_INJECTOR_VALVE_SELECT, OUTPUT);
 
     //close the valves. This is the safest startup state
     //fill valve
@@ -212,10 +212,8 @@ void init_outputs(){
     linac_init();
 
     //ignition, set to off by default
-    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
 
     //turn off the pin 13 LED
     pinMode(13, OUTPUT);
