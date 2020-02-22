@@ -36,16 +36,24 @@ typedef struct {
     uint16_t pressure1; //fill tank pressure
     uint16_t pressure2; //fill line pressure
     uint16_t pressure3; //rocket tank pressure
-    uint16_t rocket_mass;               //between 0 and 999 (measured in decipounds. Don't judge me)
-    uint16_t ign_pri_current;           //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
-    uint16_t ign_sec_current;           //between 0 and 999 (measured in centiamps)
-    unsigned char rfill_lsw_open;       //0 when low, 1 when high (which means remote fill is open)
-    unsigned char rfill_lsw_closed;     //0 when low, 1 when high (which means remote fill is closed)
-    unsigned char rvent_lsw_open;       //0 when low, 1 when high (which means remote vent is open)
-    unsigned char rvent_lsw_closed;     //0 when low, 1 when high (which means remote vent is closed)
-    unsigned char linac_lsw_extend;     //0 when low, 1 when high (which means the actuator is extended)
-    unsigned char linac_lsw_retract;    //0 when low, 1 when high (which means the actuator is retracted)
-
+    uint16_t rocket_mass;                      //between 0 and 999 (measured in decipounds. Don't judge me)
+    uint16_t ign_pri_current;                  //between 0 and 999 (measured in centiamps. these dumb units are for easy human readable output)
+    uint16_t ign_sec_current;                  //between 0 and 999 (measured in centiamps)
+    unsigned char rfill_lsw_open;              //0 when low, 1 when high (which means remote fill is open)
+    unsigned char rfill_lsw_closed;            //0 when low, 1 when high (which means remote fill is closed)
+    unsigned char rvent_lsw_open;              //0 when low, 1 when high (which means remote vent is open)
+    unsigned char rvent_lsw_closed;            //0 when low, 1 when high (which means remote vent is closed)
+    unsigned char linac_lsw_extend;            //0 when low, 1 when high (which means the actuator is extended)
+    unsigned char linac_lsw_retract;           //0 when low, 1 when high (which means the actuator is retracted)
+    unsigned char ox_pres_valve_lsw_open;      //0 when low, 1 when high (which means ox pressurant is open)
+    unsigned char ox_pres_valve_lsw_closed;    //0 when low, 1 when high (which means ox pressurant is closed)
+    unsigned char fuel_pres_valve_lsw_open;      //0 when low, 1 when high (which means fuel pressurant is open)
+    unsigned char fuel_pres_valve_lsw_closed;    //0 when low, 1 when high (which means fuel pressurant is closed)
+    unsigned char ox_injector_valve_lsw_open;      //0 when low, 1 when high (which means ox injector is open)
+    unsigned char ox_injector_valve_lsw_closed;    //0 when low, 1 when high (which means ox injector is closed)
+    unsigned char fuel_injector_valve_lsw_open;      //0 when low, 1 when high (which means fuel injector is open)
+    unsigned char fuel_injector_valve_lsw_closed;    //0 when low, 1 when high (which means fuel injector is closed)
+    
     // new data fields for RocketCAN stuff
     unsigned char num_boards_connected;
     unsigned char bus_is_powered;

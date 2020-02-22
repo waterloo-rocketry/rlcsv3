@@ -9,6 +9,9 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 #include "linac.h"
+#include "injector.h"
+
+
 
 void setup() {
     //initialize all outputs
@@ -65,6 +68,10 @@ void loop() {
     //deal with linear actuator
 
     linac_refresh();
+
+    //deal with the injector
+
+    fuel_injector_refresh();
 
     /*
      * Unfortunately, without convert_state_to_radio, we can't display on the 7seg

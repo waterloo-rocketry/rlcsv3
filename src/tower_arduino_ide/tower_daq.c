@@ -28,6 +28,12 @@ static struct {
     uint8_t lsw_linac_ret;
     uint8_t lsw_ox_pres_valve_opn;
     uint8_t lsw_ox_pres_valve_cls;
+    uint8_t lsw_fuel_pres_valve_opn;
+    uint8_t lsw_fuel_pres_valve_cls;
+    uint8_t lsw_ox_injector_valve_opn;
+    uint8_t lsw_ox_injector_valve_cls;
+    uint8_t lsw_fuel_injector_valve_opn;
+    uint8_t lsw_fuel_injector_valve_cls;
 } window_holder[WINDOW_WIDTH];
 
 
@@ -47,7 +53,13 @@ void init_daq_pins() {
     pinMode(PIN_LIMITSW_LINAC_RET, INPUT);
     pinMode(PIN_LIMITSW_OX_PRES_VALVE_OPN, INPUT);
     pinMode(PIN_LIMITSW_OX_PRES_VALVE_CLS, INPUT);
-
+    pinMode(PIN_LIMITSW_FUEL_PRES_VALVE_OPN, INPUT);
+    pinMode(PIN_LIMITSW_FUEL_PRES_VALVE_CLS, INPUT);
+    pinMode(PIN_LIMITSW_OX_INJECTOR_VALVE_OPN, INPUT);
+    pinMode(PIN_LIMITSW_OX_INJECTOR_VALVE_CLS, INPUT);
+    pinMode(PIN_LIMITSW_FUEL_INJECTOR_VALVE_OPN, INPUT);
+    pinMode(PIN_LIMITSW_FUEL_INJECTOR_VALVE_CLS, INPUT);
+    
     //set all the values in our window holder to 0
     memset(&window_holder, 0, sizeof(window_holder));
 }
@@ -87,7 +99,19 @@ void read_daq_pins() {
         digitalRead(PIN_LIMITSW_OX_PRES_VALVE_OPN);
     window_holder[window_holder_index].lsw_ox_pres_valve_cls =
         digitalRead(PIN_LIMITSW_OX_PRES_VALVE_CLS);
-
+    window_holder[window_holder_index].lsw_fuel_pres_valve_opn =
+        digitalRead(PIN_LIMITSW_FUEL_PRES_VALVE_OPN);
+    window_holder[window_holder_index].lsw_fuel_pres_valve_cls =
+        digitalRead(PIN_LIMITSW_FUEL_PRES_VALVE_CLS);
+    window_holder[window_holder_index].lsw_ox_injector_valve_opn =
+        digitalRead(PIN_LIMITSW_OX_INJECTOR_VALVE_OPN);
+    window_holder[window_holder_index].lsw_ox_injector_valve_cls =
+        digitalRead(PIN_LIMITSW_OX_INJECTOR_VALVE_CLS);
+    window_holder[window_holder_index].lsw_fuel_injector_valve_opn =
+        digitalRead(PIN_LIMITSW_FUEL_INJECTOR_VALVE_OPN);
+    window_holder[window_holder_index].lsw_fuel_injector_valve_cls =
+        digitalRead(PIN_LIMITSW_FUEL_INJECTOR_VALVE_CLS);
+    
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0
     if(++window_holder_index >= WINDOW_WIDTH)
@@ -115,6 +139,13 @@ void compute_daq_values(daq_holder_t* output) {
         output->linac_lsw_retract          += window_holder[i].lsw_linac_ret;
         output->ox_pres_valve_lsw_open     += window_holder[i].lsw_ox_pres_valve_opn;
         output->ox_pres_valve_lsw_closed   += window_holder[i].lsw_ox_pres_valve_cls;
+        output->fuel_pres_valve_lsw_open     += window_holder[i].lsw_fuel_pres_valve_opn;
+        output->fuel_pres_valve_lsw_closed   += window_holder[i].lsw_fuel_pres_valve_cls;
+        output->ox_injector_valve_lsw_open     += window_holder[i].lsw_ox_injector_valve_opn;
+        output->ox_injector_valve_lsw_closed   += window_holder[i].lsw_ox_injector_valve_cls;
+        output->fuel_injector_valve_lsw_open     += window_holder[i].lsw_fuel_injector_valve_opn;
+        output->fuel_injector_valve_lsw_closed   += window_holder[i].lsw_fuel_injector_valve_cls;
+        
     }
 
     //apply scaling values. These need calibration, so I'll just use
@@ -166,7 +197,15 @@ void compute_daq_values(daq_holder_t* output) {
     output->rvent_lsw_closed = (output->rvent_lsw_closed / WINDOW_WIDTH) != 0;
     output->linac_lsw_extend = (output->linac_lsw_extend / WINDOW_WIDTH) != 0;
     output->linac_lsw_retract = (output->linac_lsw_retract / WINDOW_WIDTH) != 0;
-
+    output->ox_pres_valve_lsw_open = (output->ox_pres_valve_lsw_open / WINDOW_WIDTH) != 0;
+    output->ox_pres_valve_lsw_closed = (output->ox_pres_valve_lsw_closed / WINDOW_WIDTH) != 0;
+    output->fuel_pres_valve_lsw_open = (output->fuel_pres_valve_lsw_open / WINDOW_WIDTH) != 0;
+    output->fuel_pres_valve_lsw_closed = (output->fuel_pres_valve_lsw_closed / WINDOW_WIDTH) != 0;
+    output->ox_injector_valve_lsw_open = (output->ox_injector_valve_lsw_open / WINDOW_WIDTH) != 0;
+    output->ox_injector_valve_lsw_closed = (output->ox_injector_valve_lsw_closed / WINDOW_WIDTH) != 0;
+    output->fuel_injector_valve_lsw_open = (output->fuel_injector_valve_lsw_open / WINDOW_WIDTH) != 0;
+    output->fuel_injector_valve_lsw_closed = (output->fuel_injector_valve_lsw_closed / WINDOW_WIDTH) != 0;
+    
     //log what we just computed
     // TODO
     rlcslog_log_daq_values(output);

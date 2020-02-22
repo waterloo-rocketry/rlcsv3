@@ -4,6 +4,7 @@
 #include "nodeio.ioio.h"
 #include "sd_handler.h"
 #include "linac.h"
+#include "injector.h"
 #include "Arduino.h"
 
 static actuator_state_t global_requested_state;
@@ -105,19 +106,23 @@ void apply_state(){
     }
 
     global_current_state.injector_valve = global_requested_state.injector_valve;
-    //tell nodeio.ioio that we want the injector to change
+    //tell nodeio.ioio that we want the injector to change and change the injector valves
     if(global_requested_state.injector_valve){
         //we want it open
         nio_set_inj_desired(VALVE_OPEN);
 
-        //ox injector valve opened
-        //set a coutdown that will run in a heartbeat function
+        //open the injector valves
+        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_POWER, HIGH);
+        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_SELECT, LOW);
+        open_fuel_injector();
     }
     else {
         nio_set_inj_desired(VALVE_CLOSED);
         
-        //Ox valve closed
-        //fuel valve closed
+        //close the injector valves
+        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_POWER, HIGH);
+        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_SELECT, HIGH);
+        close_fuel_injector();
     }
 
     if(global_requested_state.linear_actuator != global_current_state.linear_actuator){
@@ -186,7 +191,9 @@ void init_outputs(){
     pinMode(PIN_IGNITION_SELECT, OUTPUT);
     pinMode(PIN_OX_INJECTOR_VALVE_POWER, OUTPUT);
     pinMode(PIN_OX_INJECTOR_VALVE_SELECT, OUTPUT);
-
+    pinMode(PIN_FUEL_INJECTOR_VALVE_POWER, OUTPUT);
+    pinMode(PIN_FUEL_INJECTOR_VALVE_SELECT, OUTPUT);
+    
     //close the valves. This is the safest startup state
     //fill valve
     digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
