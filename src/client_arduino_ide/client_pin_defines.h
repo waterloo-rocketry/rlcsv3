@@ -38,4 +38,7 @@
 //pins for the SD card
 #define PIN_SD_SS 53
 
+//pin for batter monitoring
+#define PIN_BATTERY A0
+
 #endif //ifndef CLIENT_PIN_DEFINES_H

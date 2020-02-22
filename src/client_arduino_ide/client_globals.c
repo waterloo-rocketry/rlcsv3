@@ -153,6 +153,9 @@ void init_buttons()
     //zero out all the buttons
     memset(&button_debounce, 0, sizeof(button_debounce));
 
+    //battery sensing
+    pinMode(PIN_BATTERY, INPUT);
+
     //LEDs. Turn on the red one first
     pinMode(PIN_LED_RED, OUTPUT);
     pinMode(PIN_LED_GREEN, OUTPUT);
