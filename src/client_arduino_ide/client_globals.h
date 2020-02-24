@@ -12,6 +12,8 @@ extern "C" {
 
 #define millis_offset() (millis() + 5000)
 
+extern unsigned int client_battery;
+
 //returns the global button state
 actuator_state_t* get_button_state();
 

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "client_pin_defines.h"
 
+
 /* We have a 4x20 LCD to work with, we need to display the following data
  *
  *x fill tank pressure -not for liquid tests
@@ -109,7 +110,7 @@ void lcd_update(daq_holder_t *input)
     display_current_line(input->ign_pri_current, input->ign_sec_current);
 
     //display the fourth line
-    display_battery_line(input->rlcs_actuator_batt_mv, input->rlcs_main_batt_mv, analogRead(PIN_BATTERY*7.63));
+    display_battery_line(input->rlcs_actuator_batt_mv, input->rlcs_main_batt_mv, client_battery);
 
     // the code bellow was used with the old alternating system
     /*if (display_first_line) {

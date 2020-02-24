@@ -3,6 +3,7 @@
 #include "shared_types.h"
 #include "Arduino.h"
 
+
 static actuator_state_t global_button_state, global_tower_state;
 static daq_holder_t global_current_daq = {
     .pressure1 = 999,
@@ -187,8 +188,7 @@ unsigned long global_time_last_tower_state_req = 0;
 const unsigned long global_tower_update_interval = 1000; //request every second
 const unsigned long global_radio_timeout = 5000; //we've lost radio contact
 unsigned long global_time_last_tower_daq_req = 0;
-const unsigned long global_tower_daq_update_interval =
-    1000; //request daq every 1 seconds
+const unsigned long global_tower_daq_update_interval = 1000; //request daq every 1 seconds
 //how often to flush the buffered output to the SD card
 unsigned long global_time_last_output_flush = 0;
 const unsigned long global_output_flush_interval = 30000; //every 30 seconds

@@ -6,6 +6,7 @@
 #include "LCD.h"
 #include "Arduino.h"
 #include "sd_handler.h"
+#include "client_pin_defines.h"
 
 
 void setup()
@@ -19,6 +20,8 @@ void setup()
         rlcslog("start of operations");
     }
 }
+
+unsigned int client_battery = 0;
 
 extern unsigned long
         global_time_last_tower_state_req,
@@ -59,6 +62,7 @@ void loop()
   //check how long since we received tower daq information
   if (millis_offset() - global_time_last_tower_daq_req > global_tower_daq_update_interval){
     client_request_daq();
+    client_battery = analogRead(PIN_BATTERY)*14.65;
   }
 
 

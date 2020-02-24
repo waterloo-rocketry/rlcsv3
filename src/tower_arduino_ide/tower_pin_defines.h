@@ -30,7 +30,7 @@
 #define PIN_DAQ_PRESSURE2 A0
 //current sensor pins
 #define PIN_CURRENT_IGNITION_PRI A9
-#define PIN_CURRENT_IGNITION_SEC A15
+#define PIN_CURRENT_IGNITION_SEC A8
 //battery voltage pins
 #define PIN_BATTERY_MAIN A3
 #define PIN_BATTERY_ACTUATORS A2
