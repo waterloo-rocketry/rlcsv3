@@ -236,9 +236,13 @@ void goto_safe_mode()
     //state, and then call apply_state
     actuator_state_t* requested = get_requested_state();
 
-    //close both valves we have direct control over
-    requested->remote_fill_valve = get_current_state()->remote_fill_valve;
-    requested->remote_vent_valve = get_current_state()->remote_vent_valve;
+    //close fill
+    requested->remote_fill_valve = 0;
+    //open vent
+    requested->remote_vent_valve = 1;
+    //close pressurant
+    requested->ox_pres_valve = 0;
+    requested->fuel_pres_valve = 0;
 
     //open the rocket vent valve
     requested->run_tank_valve = 1;
