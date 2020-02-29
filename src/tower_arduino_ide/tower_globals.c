@@ -112,16 +112,14 @@ void apply_state(){
         nio_set_inj_desired(VALVE_OPEN);
 
         //open the injector valves
-        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_POWER, HIGH);
-        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_SELECT, LOW);
+        open_ox_injector();
         open_fuel_injector();
     }
     else {
         nio_set_inj_desired(VALVE_CLOSED);
         
         //close the injector valves
-        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_POWER, HIGH);
-        digitalWrite((uint8_t) PIN_OX_INJECTOR_VALVE_SELECT, HIGH);
+        close_ox_injector();
         close_fuel_injector();
     }
 

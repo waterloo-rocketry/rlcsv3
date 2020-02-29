@@ -72,6 +72,7 @@ void loop() {
     //deal with the injector
 
     fuel_injector_refresh();
+    ox_injector_refresh();
 
     /*
      * Unfortunately, without convert_state_to_radio, we can't display on the 7seg
