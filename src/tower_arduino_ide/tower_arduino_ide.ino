@@ -9,6 +9,7 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 #include "linac.h"
+#include "relay_bus.h"
 
 void setup() {
     //initialize all outputs
