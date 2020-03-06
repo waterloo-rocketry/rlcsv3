@@ -8,8 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
+#include <pic16f1826.h>
+#include "mcc_generated_files/adc.h"
+#include "mcc_generated_files/mcc.h"
 
 typedef char bool;
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
 
 #define TRUE 1
 #define FALSE 0
@@ -22,11 +27,29 @@ typedef char bool;
 #define DIP2 (1)
 #define DIP3 (1 << 2)
 #define DIP4 (1 << 3)
+#define LED3 (1 << 5)
+#define CURR_SENSE1 (1 << 1)
+#define CURR_SENSE2 (1)
 
 #pragma config WDTE = OFF
 #pragma FOSC = INTOSCIO
 
 bool d1, d2, d3, d4;
+uint16_t result;
+
+void readAnalogInputs() {
+    for (int i = 0; i < 1000; i++) {}
+    ADCON0 = 0x01; // Turn ADC on
+    ADCON0 |= 1 << 1; // set b[1] "go" bit
+    uint8_t doneBit;
+    do { //wait for ADC to complete (go bit switches to 0 automatically when done)
+        doneBit = ADCON0 & (1 << 1);
+    } while (doneBit); //while go bit is on (AD conversion in progress)
+
+    result = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
+
+    ADCON0 = 0x00; //Turn ADC off return;
+}
 
 void setPower(bool out) { 
     if (out) { LATA |= POWER;} 
@@ -44,8 +67,13 @@ void setLim1(bool out) { // XXX
 }
 
 void setLim2(bool out) {
-    if (out) { LATA |= LIM2;} 
+    if (out) { LATA |= LIM2; } 
     else { LATA &= ~LIM2; }
+}
+
+void setLed3(bool out) {
+    if (out) { LATB |= LED3; }
+    else { LATB &= ~LED3; }
 }
 
 bool readDIP1() { return (PORTA & DIP1) ? 1 : 0; }
@@ -54,10 +82,15 @@ bool readDIP3() { return (PORTB & DIP3) ? 1 : 0; }
 bool readDIP4() { return (PORTB & DIP4) ? 1 : 0; }
 
 void setup() {
-    TRISA = DIP1;
-    ANSELA = 0;
-    ANSELB = 0;
+    TRISA = CURR_SENSE1 | CURR_SENSE2 | DIP1;
     TRISB = DIP2 | DIP3 | DIP4;
+    ANSELA = CURR_SENSE1 | CURR_SENSE2; //Set RA0 and RA1 as analog inputs.
+
+    // Configure ADC module 
+    // b[7] sets right justification, b[6:4] sets CS = FRC,
+    // b[2]+b[1:0] sets Vss and Vdd as references.
+
+    ADCON1 = 0b11110000;
 }
 
 int main(int argc, char** argv) {
@@ -72,6 +105,7 @@ int main(int argc, char** argv) {
         d2 = readDIP2();
         d3 = readDIP3();
         d4 = readDIP4();
+        readAnalogInputs();
     }
     return (EXIT_SUCCESS);
 }
