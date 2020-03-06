@@ -1,0 +1,24 @@
+#ifndef RELAY_BUS_DEFINES_H
+#define RELAY_BUS_DEFINES_H
+
+#define PRIMARY_IGNITION_ADDR   1
+#define SECONDARY_IGNITION_ADDR 2
+#define REMOTE_FILL_ADDR        3
+#define REMOTE_VENT_ADDR        4
+#define LINAC_ADDR              5
+
+#define PRIMARY_IGNITION_PWR     1
+#define PRIMARY_IGNITION_SEL     2
+#define SECONDARY_IGNITION_PWR   1
+#define SECONDARY_IGNITION_SEL   2
+#define REMOTE_FILL_PWR 1
+#define REMOTE_FILL_SEL 2
+#define REMOTE_VENT_PWR 1
+#define REMOTE_VENT_SEL 2
+#define LINAC_PWR_HIGH  1
+#define LINAC_PWR_LOW   2
+#define LINAC_SEL_HIGH  4
+#define LINAC_SEL_LOW   8
+
+
+#endif //ifndef TOWER_PIN_DEFINES_H

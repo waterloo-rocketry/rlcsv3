@@ -3,6 +3,7 @@
 #include "tower_pin_defines.h"
 #include "Arduino.h"
 #include "sd_handler.h"
+#include "relay_bus.h"
 
 //used for holding intermediate values
 static struct {
@@ -66,19 +67,31 @@ void read_daq_pins() {
     window_holder[window_holder_index].battery_actuators =
         analogRead(PIN_BATTERY_ACTUATORS);
 
-    //now read in all the digital values
+    // now read in all the digital values
+    // Relay board write 1 byte, 
+    // where bit 1 represents lsw_remotefill_cls
+    // and bit 0 represents lsw_remotefill_opn
+    // similar for vent
+    // for linac, board sends 1 bit. 1 if ext, 0 if retracted
+
     window_holder[window_holder_index].lsw_remotefill_opn =
-        digitalRead(PIN_LIMITSW_REMOTEFILL_OPN);
+        (relay_bus_read(REMOTE_FILL_ADDR) % 2 == 1);
+        //digitalRead(PIN_LIMITSW_REMOTEFILL_OPN);
     window_holder[window_holder_index].lsw_remotefill_cls =
-        digitalRead(PIN_LIMITSW_REMOTEFILL_CLS);
+        ((relay_bus_read(REMOTE_FILL_ADDR) >> 1) % 2 == 1);
+        //digitalRead(PIN_LIMITSW_REMOTEFILL_CLS);
     window_holder[window_holder_index].lsw_remotevent_opn =
-        digitalRead(PIN_LIMITSW_REMOTEVENT_OPN);
+        (relay_bus_read(REMOTE_VENT_ADDR) % 2 == 1);
+        //digitalRead(PIN_LIMITSW_REMOTEVENT_OPN);
     window_holder[window_holder_index].lsw_remotevent_cls =
-        digitalRead(PIN_LIMITSW_REMOTEVENT_CLS);
+        ((relay_bus_read(REMOTE_VENT_ADDR) >> 1) % 2 == 1);
+        //digitalRead(PIN_LIMITSW_REMOTEVENT_CLS);
     window_holder[window_holder_index].lsw_linac_ext =
-        digitalRead(PIN_LIMITSW_LINAC_EXT);
+        (relay_bus_read(LINAC_ADDR) == 1) ? 1 : 0;
+        //digitalRead(PIN_LIMITSW_LINAC_EXT);
     window_holder[window_holder_index].lsw_linac_ret =
-        digitalRead(PIN_LIMITSW_LINAC_RET);
+        (relay_bus_read(LINAC_ADDR) == 1) ? 0 : 1;
+        //digitalRead(PIN_LIMITSW_LINAC_RET);
 
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0

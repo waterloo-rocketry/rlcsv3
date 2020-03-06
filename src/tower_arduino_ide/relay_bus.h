@@ -1,12 +1,16 @@
-#include <Wire.h>
-#include <stdint.h>
-
 #ifndef RELAY_BUS_H
 #define RELAY_BUS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <Wire.h>
+#include <stdint.h>
+#include "relay_bus_defines.h"
+#include "shared_types.h"
+
+void relay_bus_init();
 
 /*Write instruction on the I2C bus for the relay boards.
 uint8_t addr is slave address

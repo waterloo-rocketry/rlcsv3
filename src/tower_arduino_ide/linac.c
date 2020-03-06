@@ -1,6 +1,7 @@
 #include "linac.h"
 #include "tower_pin_defines.h"
 #include "Arduino.h"
+#include "relay_bus.h"
 
 //macros
 #define LINAC_POWERED_TIME_MOVING 2000 // who needs duty cycling time anyways
@@ -32,10 +33,12 @@ static unsigned long cycles_remaining_in_move = 0;
 //public functions
 void linac_init()
 {
-    pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
-    digitalWrite(PIN_LINACTUATOR_POWER, LOW);
-    pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
-    digitalWrite(PIN_LINACTUATOR_SELECT, LOW);
+    // pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
+    // digitalWrite(PIN_LINACTUATOR_POWER, LOW);
+    // pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
+    // digitalWrite(PIN_LINACTUATOR_SELECT, LOW);
+    relay_bus_write(LINAC_ADDR, LINAC_PWR_LOW + LINAC_SEL_LOW);
+    
 }
 
 void linac_refresh()
@@ -46,7 +49,8 @@ void linac_refresh()
         //state exit conditions
         if(millis() >= next_state_transition){
             //stop sending power to the linear actuator
-            digitalWrite(PIN_LINACTUATOR_POWER, LOW);
+            //digitalWrite(PIN_LINACTUATOR_POWER, LOW);
+            relay_bus_write(LINAC_ADDR, LINAC_PWR_LOW);
             //setup next state
             current_timer_state = LINAC_MOVING_UNPOWERED;
             //we become ready after LINAC_COOLDOWN_TIME seconds
@@ -62,7 +66,8 @@ void linac_refresh()
                 next_state_transition = millis() + LINAC_COOLDOWN_TIME;
             } else {
                 //power up again
-                digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+                //digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+                relay_bus_write(LINAC_ADDR, LINAC_PWR_HIGH);
                 //setup time to come back to unpowered mode
                 current_timer_state = LINAC_MOVING_POWERED;
                 next_state_transition = millis() + LINAC_POWERED_TIME_MOVING;
@@ -98,8 +103,9 @@ uint8_t linac_extend()
     //at this point, we know that we're allowed to extend the linear
     //actuator. So do that. the select pin needs to be written high
     //for this to work right
-    digitalWrite(PIN_LINACTUATOR_SELECT, HIGH); 
-    digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+    //digitalWrite(PIN_LINACTUATOR_SELECT, HIGH); 
+    //digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+    relay_bus_write(LINAC_ADDR, LINAC_PWR_HIGH + LINAC_SEL_HIGH);
 
     //remember to stop moving after a certain amount of time
     current_timer_state = LINAC_MOVING_POWERED;
@@ -119,8 +125,9 @@ uint8_t linac_retract()
     if(current_linac_state == LINAC_RETRACTED)
         return true;
 
-    digitalWrite(PIN_LINACTUATOR_SELECT, LOW); 
-    digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+    // digitalWrite(PIN_LINACTUATOR_SELECT, LOW); 
+    // digitalWrite(PIN_LINACTUATOR_POWER, HIGH);
+    relay_bus_write(LINAC_ADDR, LINAC_PWR_HIGH + LINAC_SEL_LOW);
 
     current_timer_state = LINAC_MOVING_POWERED;
     cycles_remaining_in_move = LINAC_CYCLES_MOVING;

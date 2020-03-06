@@ -13,6 +13,7 @@
 
 void setup() {
     //initialize all outputs
+    relay_bus_init();
     init_outputs();
     init_daq_pins();
     radio_init();

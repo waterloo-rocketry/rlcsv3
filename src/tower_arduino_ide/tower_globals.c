@@ -5,6 +5,7 @@
 #include "sd_handler.h"
 #include "linac.h"
 #include "Arduino.h"
+#include "relay_bus.h"
 
 static actuator_state_t global_requested_state;
 static actuator_state_t global_current_state = {
@@ -41,12 +42,15 @@ void apply_state(){
         global_current_state.remote_fill_valve = global_requested_state.remote_fill_valve;
         if(global_current_state.remote_fill_valve){
             //open the remote_fill_valve
-            digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, LOW);
+            // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, LOW);
+            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR);
         } else {
             //close the remote_fill_valve
-            digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH);
+            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR + REMOTE_FILL_SEL);
+            
         }
     }
 
@@ -55,12 +59,14 @@ void apply_state(){
         global_current_state.remote_vent_valve = global_requested_state.remote_vent_valve;
         if(global_current_state.remote_vent_valve){
             //open the remote_vent_valve
-            digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, LOW);
+            // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, LOW);
+            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_VENT_PWR);
         } else {
             //close the remote_vent_valve
-            digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+            // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
+            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_VENT_PWR + REMOTE_VENT_SEL);
         }
     }
 
@@ -104,23 +110,29 @@ void apply_state(){
             //decide whether to write to primary or secondary ignition
             if(global_requested_state.ignition_select) {
                 //write to secondary
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
+                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+                relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
+                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
+                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
+                relay_bus_write(SECONDARY_IGNITION_ADDR, SECONDARY_IGNITION_PWR + SECONDARY_IGNITION_SEL);
             } else {
                 //write to primary
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
+                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
+                relay_bus_write(PRIMARY_IGNITION_ADDR, PRIMARY_IGNITION_PWR + PRIMARY_IGNITION_SEL);
+                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+                relay_bus_write(SECONDARY_IGNITION_ADDR, 0);
             }
         } else {
             //remove power from ignition circuit
-            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+            // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+            // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+            relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
+            // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+            // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+            relay_bus_write(SECONDARY_IGNITION_ADDR, 0);
         }
     }
 
@@ -141,26 +153,16 @@ void reset_request(){
 }
 
 void init_outputs(){
-    pinMode(PIN_REMOTEFILL_POWER, OUTPUT);
-    pinMode(PIN_REMOTEFILL_SELECT, OUTPUT);
-    pinMode(PIN_REMOTEVENT_POWER, OUTPUT);
-    pinMode(PIN_REMOTEVENT_SELECT, OUTPUT);
-    pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
-    pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
-
-    pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
-    pinMode(PIN_IGNITION_SECONDARY_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_SECONDARY_SELECT, OUTPUT);
-
     //close the valves. This is the safest startup state
     //fill valve
-    digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH); //select pin going high should set it to close, if it's wired right
+    // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+    // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH); //select pin going high should set it to close, if it's wired right
+    relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR + REMOTE_FILL_ADDR);
 
     //vent valve
-    digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
+    // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+    // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
+    relay_bus_write(REMOTE_VENT_ADDR, REMOTE_VENT_PWR + REMOTE_VENT_SEL);
 
     //run tank valve
     //TODO, figure out how the run tank valve is going to work
@@ -169,11 +171,12 @@ void init_outputs(){
     linac_init();
 
     //ignition, set to off by default
-    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
-
+    // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+    // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+    // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+    // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+    relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
+    relay_bus_write(REMOTE_VENT_ADDR, 0);
     //turn off the pin 13 LED
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
