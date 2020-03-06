@@ -1,9 +1,9 @@
 #ifndef RELAY_BUS_H
 #define RELAY_BUS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
 
 #include <Wire.h>
 #include <stdint.h>
@@ -23,8 +23,8 @@ uint8_t addr is slave address
 */
 uint8_t relay_bus_read(uint8_t addr);
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
 #endif //ifndef RELAY_BUS_H

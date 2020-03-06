@@ -33,10 +33,11 @@ const unsigned long global_min_time_between_contacts = 10000;
 //used for the SD card handler
 extern unsigned long global_time_last_output_flush;
 //flush the rlcslog to sd card every 10 seconds
-extern const unsigned long global_output_flush_interval;
+const unsigned long global_output_flush_interval = 10000;
 
 extern unsigned long global_time_last_logged_daq;
-extern const unsigned long global_time_between_daq_logs;
+const unsigned long global_time_between_daq_logs = 1000;
+
 
 void loop() {
     //check for inputs from radio

@@ -221,8 +221,8 @@ void tower_handle_rocketcan_update(const system_state *update)
     global_current_daq.num_boards_connected = update->num_boards_connected;
     global_current_daq.any_errors_detected = update->any_errors_detected;
     global_current_daq.pressure3 = update->tank_pressure;
-    global_current_daq.injector_valve_state = update->injector_valve_state;
-    global_current_daq.rocketvent_valve_state = update->vent_valve_state;
+    global_current_daq.injector_valve_state = (valve_state_t)update->injector_valve_state;
+    global_current_daq.rocketvent_valve_state = (valve_state_t)update->vent_valve_state;
     global_current_daq.bus_batt_mv = update->bus_battery_voltage_mv;
     global_current_daq.vent_batt_mv = update->vent_battery_voltage_mv;
     //TODO, log to rlcslog
@@ -231,7 +231,5 @@ void tower_handle_rocketcan_update(const system_state *update)
 //global for how long it's been since the output log was flushed
 //to the SD card
 unsigned long global_time_last_output_flush = 0;
-const unsigned long global_output_flush_interval = 10000;
 //global for how long it's been since we logged daq values
 unsigned long global_time_last_logged_daq = 0;
-const unsigned long global_time_between_daq_logs = 1000;
