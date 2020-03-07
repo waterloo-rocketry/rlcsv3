@@ -22,5 +22,6 @@
 
 # MPLAB Project Folders
 build
+debug
 dist
 nbproject
