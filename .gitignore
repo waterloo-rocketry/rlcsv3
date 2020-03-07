@@ -42,5 +42,6 @@ fp-info-cache
 
 # MPLAB Project Folders
 build
+debug
 dist
 nbproject
