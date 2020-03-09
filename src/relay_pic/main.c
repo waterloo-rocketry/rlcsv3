@@ -17,7 +17,7 @@ typedef unsigned short uint16_t;
 #define DIP2 (1)
 #define DIP3 (1 << 2)
 #define DIP4 (1 << 3)
-#define LED3 (1 << 5)
+#define LED (1 << 5)
 #define CURR_SENSE1 (1 << 1)
 #define CURR_SENSE2 (1)
 
@@ -108,9 +108,9 @@ void setLim2(bool out) {
     else { LATA &= ~LIM2; }
 }
 
-void setLed3(bool out) {
-    if (out) { LATB |= LED3; }
-    else { LATB &= ~LED3; }
+void setLed(bool out) {
+    if (out) { LATB |= LED; }
+    else { LATB &= ~LED; }
 }
 
 void readDipInputs() {
@@ -144,6 +144,7 @@ int main(int argc, char** argv) {
     i2cSlaveInit(dipInputs);
     while (1) {
         // Infinite Loop
+        setLed(1);
         readDipInputs();
         //readAnalogInputs();
     }
