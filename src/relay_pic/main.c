@@ -1,10 +1,3 @@
-/* 
- * File:   pinConfigMain.c
- * Author: zacha
- *
- * Created on March 1, 2020, 3:21 PM
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -27,9 +20,6 @@ typedef unsigned short uint16_t;
 #define LED3 (1 << 5)
 #define CURR_SENSE1 (1 << 1)
 #define CURR_SENSE2 (1)
-
-#pragma config WDTE = OFF
-#pragma FOSC = INTOSC
 
 uint16_t dipInputs;
 uint16_t adcResult;
