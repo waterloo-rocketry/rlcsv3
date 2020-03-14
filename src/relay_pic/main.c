@@ -143,12 +143,13 @@ void setup() {
     TRISAbits.TRISA1 = 1;
     TRISAbits.TRISA4 = 1;
     TRISBbits.TRISB5 = 0;
-    TRISBbits.TRISB0 = 1;
     TRISBbits.TRISB2 = 1;
     TRISBbits.TRISB3 = 1;
+    TRISBbits.TRISB0 = 1;
+    
     //TRISB = DIP2 | DIP3 | DIP4;
     ANSELA = CURR_SENSE1 | CURR_SENSE2; //Set RA0 and RA1 as analog inputs.
-
+    ANSELB = 0;
     // Configure ADC module 
     // b[7] sets right justification, b[6:4] sets CS = FRC,
     // b[2]+b[1:0] sets Vss and Vdd as references.
@@ -179,7 +180,7 @@ int main(int argc, char** argv) {
         }
 
         readDipInputs();
-        if(dipInputs == 3) {
+        if(dipInputs == 6) {
             setLed(1);
         } else {
             setLed(0);
