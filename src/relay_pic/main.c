@@ -1,11 +1,13 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <xc.h>
 #include <pic16f1826.h>
+#include "i2c.h"
+#include "relay_general.h"
 #include "timer.h"
-#include "mcc_generated_files/adc.h"
-#include "mcc_generated_files/mcc.h"
+
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -18,126 +20,17 @@ typedef unsigned short uint16_t;
 #define LINAC_BOARD       4
 
 uint16_t dipInputs;
-uint16_t adcResult;
-uint16_t i2cSlaveRecv; // Data received on i2c
-uint16_t i2cSlaveSend; // Data to be sent on i2c
-
-void i2cSlaveInit(uint16_t address) {
-    SSPSTAT = 0x80;
-    SSPADD = address;
-    SSPCON = 0x36;
-    SSPCON2 = 0x01;
-    //TRISB1 = 1; // SDA
-    //TRISB4 = 1; // SCL
-    GIE = 1;
-    PEIE = 1;
-    SSP1IF = 0;
-    SSP1IE = 1;
-}
-
 
 static void __interrupt() interrupt_handler() {
+    //We received a i2c request from master, handle it.
     if (SSP1IF == 1) {
-        uint16_t temp;
-        SSPCONbits.CKP = 0;
-       
-        // If overflow or collision.
-        if ((SSPCONbits.SSPOV) || (SSPCONbits.WCOL)) {
-            temp = SSPBUF; // Read the previous value to clear the buffer
-            SSPCONbits.SSPOV = 0; // Clear the overflow flag
-            SSPCONbits.WCOL = 0;   // Clear the collision bit
-            SSPCONbits.CKP = 1;
-        }
-
-        // If last byte was Address + write
-        if (!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-            temp = SSPBUF;
-            while(!BF);
-            i2cSlaveRecv = SSPBUF;
-            SSPCONbits.CKP = 1;
-            SSPM3 = 0;
-       }
-        
-       // If last byte was Address + read
-       else if(!SSPSTATbits.D_nA && SSPSTATbits.R_nW) {
-           temp = SSPBUF;
-           BF = 0;
-           SSPBUF = i2cSlaveSend;
-           SSPCONbits.CKP = 1;
-           while(SSPSTATbits.BF);
-       }
-       
-       SSP1IF = 0;
-    } // if
+       i2c_handle_interrupt();
+    }
     // Timer0 has overflowed - update millis() function
     // This happens approximately every 500us
     if (INTCONbits.TMR0IE == 1 && INTCONbits.TMR0IF == 1) {
         timer0_handle_interrupt();
         INTCONbits.TMR0IF = 0;
-    }
-}
-//void readAnalogInputs() {
-//    for (int i = 0; i < 1000; i++) {}
-//    ADCON0 = 0x01; // Turn ADC on
-//    ADCON0 |= 1 << 1; // set b[1] "go" bit
-//    uint8_t doneBit;
-//    do { //wait for ADC to complete (go bit switches to 0 automatically when done)
-//        doneBit = ADCON0 & (1 << 1);
-//    } while (doneBit); //while go bit is on (AD conversion in progress)
-//
-//    adcResult = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
-//
-//    ADCON0 = 0x00; //Turn ADC off return;
-//}
-
-void setPower(bool out) { 
-    if (out) {
-        LATAbits.LATA2 = 1;
-    } else {
-        LATAbits.LATA2 = 0;
-    }
-}
-
-void setSelect(bool out) {
-    if (out) {
-        LATAbits.LATA3 = 1;
-    } else {
-        LATAbits.LATA3 = 1;
-    }
-}
-
-void setLim1(bool out) {
-    if (out) {
-        LATAbits.LATA7 = 1;
-    } else {
-        LATAbits.LATA7 = 0;
-    }
-}
-
-void setLim2(bool out) {
-    if (out) {
-        LATAbits.LATA6 = 1;
-    } else {
-        LATAbits.LATA6 = 1;
-    }
-}
-
-void setLed(bool out) {
-    if (out) {
-        LATBbits.LATB5 = 1;
-    } else {
-        LATBbits.LATB5 = 0;
-    }
-}
-
-void led_heartbeat(void) {
-    static bool led_on = true;
-    if (led_on) {
-        setLed(0);
-        led_on = false;
-    } else {
-        setLed(1);
-        led_on = true;
     }
 }
 
@@ -147,7 +40,10 @@ void readDipInputs() {
     newDip |= (!PORTBbits.RB2) ? (1 << 1) : 0;  
     newDip |= (!PORTBbits.RB0) ? (1 << 2) : 0;
     newDip |= (!PORTAbits.RA4) ? (1 << 3) : 0;  //MSB
-    dipInputs = newDip;
+    if(dipInputs != newDip) {
+        dipInputs = newDip;
+        i2c_slave_init(dipInputs); //reinitialize i2c slave module with new slave address
+    }
 }
 
 void setup() {
@@ -176,28 +72,36 @@ void setup() {
 }
 
 int main(int argc, char** argv) {
-    setup();
-    timer0_init();
-    readDipInputs();
-//    i2cSlaveInit(dipInputs);
+    setup();                    //Set up digital + analog I/O
+    timer0_init();              //Initialize timer
+    set_power_off();
+    set_power_off();
+    set_select_off();
+    set_lim1_off();
+    set_lim2_off();
+    readDipInputs();            //Get dip switch value to set slave address
+    i2c_slave_init(dipInputs);  //Set board as i2c slave with dipswitch address
     
     uint32_t last_millis = millis();
-    setLed(0);
+    set_led_off();
     while (1) {
-        //Blink the LED
+        //Heartbeat
         if (millis() - last_millis > MAX_LOOP_TIME_DIFF_CONST) {
             //One day I will configure this correctly, but ATM we only need the LED to blink ;-;
             //led_heartbeat();
             last_millis = millis();
         }
 
-        readDipInputs(); //4fun
+        readDipInputs(); //Check if dip switch input has changed
+        
+        //Some test code to be removed later
         if(dipInputs == REMOTE_FILL_BOARD) {
-            setLed(1);
+            set_led_on();
         } else {
-            setLed(0);
+            set_led_off();
         }
-        //readAnalogInputs();
+        
+        uint16_t curr = readAnalogInputs();
     }
     return (EXIT_SUCCESS);
 }
