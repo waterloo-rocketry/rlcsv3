@@ -2,6 +2,8 @@
 #define	TIMER_H
 
 #include <stdint.h>
+#include <xc.h>
+#include <pic16f1826.h>
 
 // utilities for handling the timer used in millis()
 void timer0_init(void);
