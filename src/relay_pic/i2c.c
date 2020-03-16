@@ -5,7 +5,7 @@ uint16_t i2cSlaveSend; // Data to be sent on i2c
 
 void i2c_slave_init(uint16_t address) {
     SSPSTAT = 0x80;
-    SSPADD = address;
+    SSPADDbits.SSPADD = address << 1; //7 bit addressing, LSB is unused
     SSPCON = 0x36;
     SSPCON2 = 0x01;
     TRISB1 = 1; // SDA
@@ -30,11 +30,22 @@ void i2c_handle_interrupt(void) {
 
         // If last byte was Address + write
         if (!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-            temp = SSPBUF;
             while(!BF);
-            i2cSlaveRecv = SSPBUF;
+            temp = SSP1BUF;
+            //while(!BF);
+            BF = 0;
             SSPCONbits.CKP = 1;
-            SSPM3 = 0;
+            while(!BF);
+            i2cSlaveRecv = SSP1BUF;
+            if(i2cSlaveRecv == 2) {
+                set_led_off();
+            } else {
+                set_led_on();
+            }
+            SSPCONbits.CKP = 1;
+            BF = 0;
+            //SSPM3 = 0;
+            SSP1IF = 0;
        }
         
        // If last byte was Address + read

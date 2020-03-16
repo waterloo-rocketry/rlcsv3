@@ -57,17 +57,6 @@ void set_led_off(void) {
     set_led(false);
 }
 
-void led_heartbeat(void) {
-    static bool led_on = true;
-    if (led_on) {
-        set_led(false);
-        led_on = false;
-    } else {
-        set_led(true);
-        led_on = true;
-    }
-}
-
 void set_power(bool out) { 
     if (out) {
         LATAbits.LATA2 = 1;
@@ -108,4 +97,14 @@ void set_led(bool out) {
     }
 }
 
+void led_heartbeat(void) {
+    static bool led_on = false;
+    if (led_on) {
+        set_led_off();
+        led_on = false;
+    } else {
+        set_led_on();
+        led_on = true;
+    }
+}
 

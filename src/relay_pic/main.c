@@ -19,12 +19,12 @@ typedef unsigned short uint16_t;
 #define REMOTE_VENT_BOARD 3
 #define LINAC_BOARD       4
 
-uint16_t dipInputs;
+uint16_t dip_inputs;
 
 static void __interrupt() interrupt_handler() {
     //We received a i2c request from master, handle it.
     if (SSP1IF == 1) {
-       i2c_handle_interrupt();
+       i2c_handle_interrupt();                                                                                                         
     }
     // Timer0 has overflowed - update millis() function
     // This happens approximately every 500us
@@ -40,9 +40,9 @@ void readDipInputs() {
     newDip |= (!PORTBbits.RB2) ? (1 << 1) : 0;  
     newDip |= (!PORTBbits.RB0) ? (1 << 2) : 0;
     newDip |= (!PORTAbits.RA4) ? (1 << 3) : 0;  //MSB
-    if(dipInputs != newDip) {
-        dipInputs = newDip;
-        i2c_slave_init(dipInputs); //reinitialize i2c slave module with new slave address
+    if(dip_inputs != newDip) {
+        dip_inputs = newDip;
+        i2c_slave_init(dip_inputs); //reinitialize i2c slave module with new slave address
     }
 }
 
@@ -80,28 +80,22 @@ int main(int argc, char** argv) {
     set_lim1_off();
     set_lim2_off();
     readDipInputs();            //Get dip switch value to set slave address
-    i2c_slave_init(dipInputs);  //Set board as i2c slave with dipswitch address
+    set_led_off();
+    i2c_slave_init(3);
+    //i2c_slave_init(dip_inputs);  //Set board as i2c slave with dipswitch address
     
     uint32_t last_millis = millis();
-    set_led_off();
+    
     while (1) {
         //Heartbeat
         if (millis() - last_millis > MAX_LOOP_TIME_DIFF_CONST) {
             //One day I will configure this correctly, but ATM we only need the LED to blink ;-;
-            //led_heartbeat();
             last_millis = millis();
         }
-
+        
         readDipInputs(); //Check if dip switch input has changed
         
-        //Some test code to be removed later
-        if(dipInputs == REMOTE_FILL_BOARD) {
-            set_led_on();
-        } else {
-            set_led_off();
-        }
-        
-        uint16_t curr = readAnalogInputs();
+        //uint16_t curr = readAnalogInputs();
     }
     return (EXIT_SUCCESS);
 }
