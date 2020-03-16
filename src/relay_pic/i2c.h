@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <xc.h>
 #include <pic16f1826.h>
+#include "relay_general.h"
 
 //Initializes i2c module
 void i2c_slave_init(uint16_t address);
