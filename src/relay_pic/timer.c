@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-#include <xc.h>
-#include <pic16f1826.h>
-=======
->>>>>>> c3e52b6e525e49769b34bb5829597c2958ff53c1
 #include "timer.h"
 
 /*
@@ -37,11 +32,7 @@ void timer0_init(void) {
 /*
  * Based on Bresenham's algorithm and described here: http://romanblack.com/one_sec.htm
  */
-<<<<<<< HEAD
-void timer0_handle_interrupt() {
-=======
 void timer0_handle_interrupt(void) {
->>>>>>> c3e52b6e525e49769b34bb5829597c2958ff53c1
     static uint8_t internal_count = 0;
 
     millis_counter += MILLIS_INCREMENT;
