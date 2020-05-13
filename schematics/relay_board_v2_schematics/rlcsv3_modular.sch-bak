@@ -1249,13 +1249,9 @@ $EndComp
 Wire Wire Line
 	7200 4100 7200 4200
 Wire Wire Line
-	7200 3400 7200 3700
+	7200 3300 6700 3300
 Wire Wire Line
 	7200 3400 7200 3300
 Wire Wire Line
-	7200 3300 6700 3300
-Connection ~ 7200 3400
-Wire Wire Line
 	7200 3800 7200 3700
-Connection ~ 7200 3700
 $EndSCHEMATC

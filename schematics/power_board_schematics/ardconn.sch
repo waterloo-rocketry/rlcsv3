@@ -14,17 +14,6 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Connector:Conn_01x08_Male J8
-U 1 1 5E6FC39B
-P 4150 3350
-F 0 "J8" H 4258 3831 50  0000 C CNN
-F 1 "Conn_01x08_Male" H 4258 3740 50  0000 C CNN
-F 2 "" H 4150 3350 50  0001 C CNN
-F 3 "~" H 4150 3350 50  0001 C CNN
-	1    4150 3350
-	1    0    0    -1  
-$EndComp
 Text Notes 650  3150 0    60   ~ 0
 Arduino Pins 14 - 21
 Text Notes 4750 900  0    60   ~ 0
@@ -187,12 +176,12 @@ $EndComp
 $Comp
 L custom:conn_8_to_13 U2
 U 1 1 5E7B5F51
-P 2050 2200
-F 0 "U2" H 1912 2797 60  0000 C CNN
-F 1 "conn_8_to_13" H 1912 2691 60  0000 C CNN
-F 2 "" H 2050 3100 60  0001 C CNN
-F 3 "" H 2050 3100 60  0001 C CNN
-	1    2050 2200
+P 2000 2250
+F 0 "U2" H 1862 2847 60  0000 C CNN
+F 1 "conn_8_to_13" H 1862 2741 60  0000 C CNN
+F 2 "" H 2000 3150 60  0001 C CNN
+F 3 "" H 2000 3150 60  0001 C CNN
+	1    2000 2250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -242,218 +231,160 @@ Wire Wire Line
 	4100 6250 5250 6250
 Wire Wire Line
 	4100 6100 5150 6100
-Text GLabel 9550 1450 2    60   Input ~ 0
-Remotefill_Select
-Text GLabel 9550 1250 2    60   Input ~ 0
-Remotevent_Power
 Text GLabel 9550 1050 2    60   Input ~ 0
 Linactuator_Select
-Text GLabel 9550 1650 2    60   Input ~ 0
-Ignition_Primary_Select
-Text GLabel 9550 2450 2    60   Input ~ 0
-Ignition_Secondary_Power
-Text GLabel 9550 2250 2    60   Input ~ 0
-Limitsw_Remotefill_CLS
-Text GLabel 9550 2050 2    60   Input ~ 0
-Limitsw_Remotevent_OPN
-Text GLabel 9550 3450 2    60   Input ~ 0
-Sevenseg_D1
-Text GLabel 9550 2650 2    60   Input ~ 0
-Sevenseg_A
-Text GLabel 9550 3050 2    60   Input ~ 0
-Sevenseg_C
-Text GLabel 9550 3250 2    60   Input ~ 0
-Sevenseg_D
-Text GLabel 9550 2850 2    60   Input ~ 0
-Sevenseg_F
-Text GLabel 9550 3650 2    60   Input ~ 0
-SD_SS
-Wire Wire Line
-	7650 2600 7650 3450
-Wire Wire Line
-	7600 2500 7600 3250
-Wire Wire Line
-	7550 2400 7550 3050
-Wire Wire Line
-	7500 2300 7500 2850
-Text GLabel 6550 1450 0    60   Input ~ 0
-Remotefill_Power
 Text GLabel 6550 1050 0    60   Input ~ 0
 Linactuator_Power
-Text GLabel 6550 1650 0    60   Input ~ 0
-Ignition_Primary_Power
-Text GLabel 6550 2450 0    60   Input ~ 0
-Ignition_Secondary_Select
-Text GLabel 6550 2250 0    60   Input ~ 0
-Limitsw_Remotefill_OPN
-Text GLabel 6550 2050 0    60   Input ~ 0
-Limitsw_Removevent_CLS
-Text GLabel 6550 1850 0    60   Input ~ 0
-Limitsw_Linac_Ret
-Text GLabel 6550 3450 0    60   Input ~ 0
-Sevenseg_D2
-Text GLabel 6550 2850 0    60   Input ~ 0
-Sevenseg_B
-Text GLabel 6550 3050 0    60   Input ~ 0
-Sevenseg_E
-Text GLabel 6550 2650 0    60   Input ~ 0
-Sevenseg_G
-Text GLabel 6550 3250 0    60   Input ~ 0
-Sevenseg_DP
-Text GLabel 6550 1250 0    60   Input ~ 0
-Remotevent_Select
 Wire Wire Line
 	7400 1050 6550 1050
-Wire Wire Line
-	7350 1500 7350 1250
-Wire Wire Line
-	7350 1250 6550 1250
-Wire Wire Line
-	7300 1600 7300 1450
-Wire Wire Line
-	7300 1450 6550 1450
-Wire Wire Line
-	7250 1700 7250 1650
-Wire Wire Line
-	7250 1650 6550 1650
-Wire Wire Line
-	7250 1800 7250 1850
-Wire Wire Line
-	7250 1850 6550 1850
-Wire Wire Line
-	7300 1900 7300 2050
-Wire Wire Line
-	7300 2050 6550 2050
-Wire Wire Line
-	7350 2250 6550 2250
-Wire Wire Line
-	7350 2000 7350 2250
-Wire Wire Line
-	7400 2450 6550 2450
-Wire Wire Line
-	7450 2650 6550 2650
-Wire Wire Line
-	7500 2850 6550 2850
-Wire Wire Line
-	7550 3050 6550 3050
-Wire Wire Line
-	7600 3250 6550 3250
-Wire Wire Line
-	7650 3450 6550 3450
-Wire Wire Line
-	7450 2200 7450 2650
-Wire Wire Line
-	7400 2100 7400 2450
 Wire Wire Line
 	7400 1400 7400 1050
 Wire Wire Line
 	7400 1400 7800 1400
 Wire Wire Line
-	7350 1500 7800 1500
-Wire Wire Line
-	7300 1600 7800 1600
-Wire Wire Line
-	7250 1700 7800 1700
-Wire Wire Line
-	7250 1800 7800 1800
-Wire Wire Line
-	7300 1900 7800 1900
-Wire Wire Line
-	7350 2000 7800 2000
-Wire Wire Line
-	7400 2100 7800 2100
-Wire Wire Line
-	7450 2200 7800 2200
-Wire Wire Line
-	7500 2300 7800 2300
-Wire Wire Line
-	7550 2400 7800 2400
-Wire Wire Line
-	7600 2500 7800 2500
-Wire Wire Line
-	7650 2600 7800 2600
-Wire Wire Line
 	8700 1050 9550 1050
-Wire Wire Line
-	8750 1250 9550 1250
-Wire Wire Line
-	8800 1600 8800 1450
-Wire Wire Line
-	8800 1450 9550 1450
-Wire Wire Line
-	8850 1700 8850 1650
-Wire Wire Line
-	8850 1650 9550 1650
-Wire Wire Line
-	8850 1800 8850 1850
-Wire Wire Line
-	8850 1850 9550 1850
-Wire Wire Line
-	8800 1900 8800 2050
-Wire Wire Line
-	8800 2050 9550 2050
-Wire Wire Line
-	8450 2600 8300 2600
-Wire Wire Line
-	8500 2500 8300 2500
-Wire Wire Line
-	8550 2400 8300 2400
-Wire Wire Line
-	8600 2300 8300 2300
-Wire Wire Line
-	8650 2200 8300 2200
-Wire Wire Line
-	8700 2100 8300 2100
-Wire Wire Line
-	8750 2000 8300 2000
-Wire Wire Line
-	8800 1900 8300 1900
-Wire Wire Line
-	8850 1800 8300 1800
-Wire Wire Line
-	8850 1700 8300 1700
-Wire Wire Line
-	8800 1600 8300 1600
-Wire Wire Line
-	8750 1500 8300 1500
 Wire Wire Line
 	8700 1400 8300 1400
 Wire Wire Line
 	8700 1400 8700 1050
+$Comp
+L custom:conn_power U?
+U 1 1 5EB571D4
+P 4450 2900
+F 0 "U?" H 4337 3097 60  0000 C CNN
+F 1 "conn_power" H 4337 2991 60  0000 C CNN
+F 2 "" H 4450 3100 60  0001 C CNN
+F 3 "" H 4450 3100 60  0001 C CNN
+	1    4450 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push Button
+U 1 1 5EB5D71A
+P 5000 3150
+F 0 "Button" H 5000 3435 50  0000 C CNN
+F 1 "SW_Push" H 5000 3344 50  0000 C CNN
+F 2 "" H 5000 3350 50  0001 C CNN
+F 3 "~" H 5000 3350 50  0001 C CNN
+	1    5000 3150
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	8700 2100 8700 2450
+	5350 3450 4550 3450
 Wire Wire Line
-	8650 2200 8650 2650
+	4800 3150 4550 3150
+Text GLabel 9000 3000 2    60   Input ~ 0
+SD_SS
+Text GLabel 9000 2200 2    60   Input ~ 0
+Sevenseg_F
+Text GLabel 9000 2600 2    60   Input ~ 0
+Sevenseg_D
+Text GLabel 9000 2400 2    60   Input ~ 0
+Sevenseg_C
+Text GLabel 9000 2000 2    60   Input ~ 0
+Sevenseg_A
+Text GLabel 9000 2800 2    60   Input ~ 0
+Sevenseg_D1
 Wire Wire Line
-	8450 3450 9550 3450
+	7450 2200 7800 2200
+Text GLabel 6750 2900 0    60   Input ~ 0
+Sevenseg_D2
+Text GLabel 6750 2300 0    60   Input ~ 0
+Sevenseg_B
+Text GLabel 6750 2500 0    60   Input ~ 0
+Sevenseg_E
+Text GLabel 6750 2100 0    60   Input ~ 0
+Sevenseg_G
+Text GLabel 6750 2700 0    60   Input ~ 0
+Sevenseg_DP
 Wire Wire Line
-	8500 3250 9550 3250
+	5350 3150 5350 3450
 Wire Wire Line
-	8550 3050 9550 3050
+	5200 3150 5350 3150
 Wire Wire Line
-	8600 2850 9550 2850
+	7450 2200 7450 2100
 Wire Wire Line
-	8650 2650 9550 2650
+	7450 2100 6750 2100
 Wire Wire Line
-	8700 2450 9550 2450
+	6750 2300 7800 2300
 Wire Wire Line
-	8750 2000 8750 2250
+	7250 2400 7250 2500
 Wire Wire Line
-	8750 2250 9550 2250
+	7250 2500 6750 2500
 Wire Wire Line
-	8750 1500 8750 1250
+	7250 2400 7800 2400
 Wire Wire Line
-	8600 2300 8600 2850
+	7300 2500 7300 2700
 Wire Wire Line
-	8550 2400 8550 3050
+	7300 2700 6750 2700
 Wire Wire Line
-	8500 2500 8500 3250
+	7300 2500 7800 2500
 Wire Wire Line
-	8450 2600 8450 3450
-Text GLabel 9550 1850 2    60   Input ~ 0
-Limitsw_Linac_EXT
+	7350 2600 7350 2900
 Wire Wire Line
-	8300 2900 8300 3650
+	7350 2900 6750 2900
 Wire Wire Line
-	8300 3650 9550 3650
+	7350 2600 7800 2600
+Wire Wire Line
+	8300 2900 8650 2900
+Wire Wire Line
+	8300 2400 9000 2400
+Wire Wire Line
+	8750 2200 8750 2000
+Wire Wire Line
+	8750 2000 9000 2000
+Wire Wire Line
+	8300 2200 8750 2200
+Wire Wire Line
+	8800 2300 8800 2200
+Wire Wire Line
+	8800 2200 9000 2200
+Wire Wire Line
+	8300 2300 8800 2300
+Wire Wire Line
+	8800 2500 8800 2600
+Wire Wire Line
+	8800 2600 9000 2600
+Wire Wire Line
+	8300 2500 8800 2500
+Wire Wire Line
+	8750 2600 8750 2800
+Wire Wire Line
+	8750 2800 9000 2800
+Wire Wire Line
+	8300 2600 8750 2600
+Wire Wire Line
+	8650 2900 8650 3000
+Wire Wire Line
+	8650 3000 9000 3000
+$Comp
+L power:GND #PWR?
+U 1 1 5EBCBE4C
+P 7500 3250
+F 0 "#PWR?" H 7500 3000 50  0001 C CNN
+F 1 "GND" H 7505 3077 50  0000 C CNN
+F 2 "" H 7500 3250 50  0001 C CNN
+F 3 "" H 7500 3250 50  0001 C CNN
+	1    7500 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7800 3100 7500 3100
+Wire Wire Line
+	7500 3100 7500 3250
+Wire Wire Line
+	8300 3100 8600 3100
+$Comp
+L power:GND #PWR?
+U 1 1 5EBD1205
+P 8600 3250
+F 0 "#PWR?" H 8600 3000 50  0001 C CNN
+F 1 "GND" H 8605 3077 50  0000 C CNN
+F 2 "" H 8600 3250 50  0001 C CNN
+F 3 "" H 8600 3250 50  0001 C CNN
+	1    8600 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8600 3100 8600 3250
 $EndSCHEMATC

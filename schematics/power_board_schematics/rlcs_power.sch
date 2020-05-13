@@ -305,17 +305,6 @@ F 3 "" H 9900 5550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+15V #PWR017
-U 1 1 59C65520
-P 9900 5950
-F 0 "#PWR017" H 9900 5800 50  0001 C CNN
-F 1 "+15V" H 9900 6090 50  0000 C CNN
-F 2 "" H 9900 5950 50  0001 C CNN
-F 3 "" H 9900 5950 50  0001 C CNN
-	1    9900 5950
-	1    0    0    -1  
-$EndComp
-$Comp
 L rlcs_power-rescue:CONN_01X02 J4
 U 1 1 59C68325
 P 10200 4850
@@ -338,7 +327,7 @@ F 3 "" H 6800 2700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Sheet
-S 850  6950 1150 600 
+S 900  7100 1150 600 
 U 59C6DB4C
 F0 "Arduino Connections" 60
 F1 "ardconn.sch" 60
@@ -351,8 +340,6 @@ Text GLabel 1950 2550 0    60   Input ~ 0
 ARD_CON_SD_SCL
 Text GLabel 1950 3100 0    60   Input ~ 0
 ARD_CON_SD_MISO
-Text GLabel 1950 3900 0    60   Input ~ 0
-ARD_CON_7SEG_D1
 $Comp
 L rlcs_power-rescue:TEST_1P TP3
 U 1 1 59C7485E
@@ -410,17 +397,6 @@ F 1 "CONN_01X02" V 10300 5450 50  0000 C CNN
 F 2 "Connectors_Molex:Molex_KK-6410-02_02x2.54mm_Straight" H 10200 5450 50  0001 C CNN
 F 3 "" H 10200 5450 50  0001 C CNN
 	1    10200 5450
-	1    0    0    -1  
-$EndComp
-$Comp
-L rlcs_power-rescue:CONN_01X02 J5
-U 1 1 59C7C50E
-P 10200 6050
-F 0 "J5" H 10200 6200 50  0000 C CNN
-F 1 "CONN_01X02" V 10300 6050 50  0000 C CNN
-F 2 "Connectors_Molex:Molex_KK-6410-02_02x2.54mm_Straight" H 10200 6050 50  0001 C CNN
-F 3 "" H 10200 6050 50  0001 C CNN
-	1    10200 6050
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -620,14 +596,6 @@ Wire Wire Line
 Wire Wire Line
 	10450 1850 10450 1800
 Wire Wire Line
-	10000 6000 9900 6000
-Wire Wire Line
-	9900 6000 9900 5950
-Wire Wire Line
-	10000 6100 9900 6100
-Wire Wire Line
-	9900 6100 9900 6150
-Wire Wire Line
 	10000 5500 9900 5500
 Wire Wire Line
 	9900 5500 9900 5550
@@ -688,17 +656,6 @@ Wire Wire Line
 Connection ~ 2650 1250
 Wire Wire Line
 	9050 2050 9400 2050
-$Comp
-L power:GNDREF #PWR026
-U 1 1 59D5CCF0
-P 9900 6150
-F 0 "#PWR026" H 9900 5900 50  0001 C CNN
-F 1 "GNDREF" H 9900 6000 50  0000 C CNN
-F 2 "" H 9900 6150 50  0001 C CNN
-F 3 "" H 9900 6150 50  0001 C CNN
-	1    9900 6150
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:R R15
 U 1 1 5A5952A0
@@ -823,35 +780,6 @@ F 3 "" H 4300 5300 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	2750 5750 2750 5600
-Wire Wire Line
-	3350 5750 2750 5750
-Wire Wire Line
-	3350 5500 2750 5500
-Wire Wire Line
-	3350 5400 2750 5400
-Wire Wire Line
-	3350 5300 2750 5300
-Wire Wire Line
-	3350 5200 2750 5200
-Wire Wire Line
-	3350 5100 2750 5100
-Wire Wire Line
-	3350 5000 2750 5000
-Wire Wire Line
-	3350 4900 2750 4900
-$Comp
-L Connector:Conn_01x08_Male Header1
-U 1 1 5E6E5A01
-P 2550 5200
-F 0 "Header1" H 2658 5681 50  0000 C CNN
-F 1 "Conn_01x08_Male" H 2658 5590 50  0000 C CNN
-F 2 "" H 2550 5200 50  0001 C CNN
-F 3 "~" H 2550 5200 50  0001 C CNN
-	1    2550 5200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	4250 6600 4250 6150
 Wire Wire Line
 	3650 6600 4250 6600
@@ -973,4 +901,74 @@ F 3 "" H 3450 4900 50  0001 C CNN
 	1    3450 4900
 	0    -1   -1   0   
 $EndComp
+Text GLabel 1950 3900 0    60   Input ~ 0
+ARD_CON_7SEG_D1
+$Comp
+L Connector:Conn_01x05_Female J?
+U 1 1 5EBB93B2
+P 6850 4750
+F 0 "J?" H 6878 4776 50  0000 L CNN
+F 1 "Conn_01x05_Female" H 6878 4685 50  0000 L CNN
+F 2 "" H 6850 4750 50  0001 C CNN
+F 3 "~" H 6850 4750 50  0001 C CNN
+	1    6850 4750
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 4550 7450 4550
+Wire Wire Line
+	7050 4650 7450 4650
+Wire Wire Line
+	7050 4750 7450 4750
+Wire Wire Line
+	7050 4850 7450 4850
+Wire Wire Line
+	7050 4950 7450 4950
+Wire Wire Line
+	7450 4650 7450 4550
+Connection ~ 7450 4550
+Wire Wire Line
+	7450 4550 7450 4400
+Wire Wire Line
+	7450 4750 7450 4850
+Connection ~ 7450 4850
+Wire Wire Line
+	7450 4850 7450 4950
+Connection ~ 7450 4950
+Wire Wire Line
+	7450 4950 7450 5150
+Wire Wire Line
+	7450 4850 7700 4850
+Wire Wire Line
+	7450 4950 7700 4950
+Wire Wire Line
+	7450 4550 7700 4550
+$Comp
+L power:GND #PWR?
+U 1 1 5EBFE204
+P 7450 5150
+F 0 "#PWR?" H 7450 4900 50  0001 C CNN
+F 1 "GND" H 7455 4977 50  0000 C CNN
+F 2 "" H 7450 5150 50  0001 C CNN
+F 3 "" H 7450 5150 50  0001 C CNN
+	1    7450 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5EBFECC0
+P 7450 4400
+F 0 "#PWR?" H 7450 4250 50  0001 C CNN
+F 1 "+5V" H 7465 4573 50  0000 C CNN
+F 2 "" H 7450 4400 50  0001 C CNN
+F 3 "" H 7450 4400 50  0001 C CNN
+	1    7450 4400
+	1    0    0    -1  
+$EndComp
+Text Label 7700 4550 0    60   ~ 0
+MCLR
+Text Label 7700 4850 0    60   ~ 0
+ICSPDAT
+Text Label 7700 4950 0    60   ~ 0
+ICSPCLK
 $EndSCHEMATC
