@@ -36,17 +36,6 @@ F 3 "" H 8200 950 50  0000 C CNN
 	1    8200 950 
 	1    0    0    -1  
 $EndComp
-$Comp
-L rlcsv3_modular-rescue:CONN_01x05 U5
-U 1 1 5DD7AFDF
-P 3600 1900
-F 0 "U5" H 3688 1775 60  0000 L CNN
-F 1 "CONN_01x05" H 3688 1669 60  0000 L CNN
-F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 3600 2000 60  0001 C CNN
-F 3 "" H 3600 2000 60  0001 C CNN
-	1    3600 1900
-	-1   0    0    1   
-$EndComp
 Connection ~ 1400 2700
 Wire Wire Line
 	1400 2600 1400 2700
@@ -1036,100 +1025,6 @@ Wire Wire Line
 Wire Wire Line
 	7000 2850 6700 2850
 Connection ~ 7500 2500
-Text Label 4700 900  0    60   ~ 0
-SCL
-Text Label 4800 1000 0    60   ~ 0
-SDA
-$Comp
-L rlcsv3_modular-rescue:+12V #PWR03
-U 1 1 5DD80B39
-P 4100 700
-F 0 "#PWR03" H 4100 550 50  0001 C CNN
-F 1 "+12V" H 4100 840 50  0000 C CNN
-F 2 "" H 4100 700 50  0000 C CNN
-F 3 "" H 4100 700 50  0000 C CNN
-	1    4100 700 
-	1    0    0    -1  
-$EndComp
-$Comp
-L rlcsv3_modular-rescue:+5V #PWR02
-U 1 1 5DD80B33
-P 4300 700
-F 0 "#PWR02" H 4300 550 50  0001 C CNN
-F 1 "+5V" H 4300 840 50  0000 C CNN
-F 2 "" H 4300 700 50  0000 C CNN
-F 3 "" H 4300 700 50  0000 C CNN
-	1    4300 700 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4600 600  4600 700 
-Wire Wire Line
-	4500 600  4600 600 
-$Comp
-L rlcsv3_modular-rescue:GND #PWR04
-U 1 1 5DD8888A
-P 4600 700
-F 0 "#PWR04" H 4600 450 50  0001 C CNN
-F 1 "GND" H 4600 550 50  0000 C CNN
-F 2 "" H 4600 700 50  0000 C CNN
-F 3 "" H 4600 700 50  0000 C CNN
-	1    4600 700 
-	1    0    0    -1  
-$EndComp
-$Comp
-L rlcsv3_modular-rescue:CONN_01x05 U7
-U 1 1 5E36C206
-P 3600 1400
-F 0 "U7" H 3688 1275 60  0000 L CNN
-F 1 "CONN_01x05" H 3688 1169 60  0000 L CNN
-F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 3600 1500 60  0001 C CNN
-F 3 "" H 3600 1500 60  0001 C CNN
-	1    3600 1400
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	3750 1400 4100 1400
-Wire Wire Line
-	4100 1400 4100 700 
-Wire Wire Line
-	4300 700  4300 1300
-Wire Wire Line
-	4300 1300 3750 1300
-Wire Wire Line
-	3750 1200 4500 1200
-Wire Wire Line
-	4500 1200 4500 600 
-Wire Wire Line
-	3750 1100 4700 1100
-Wire Wire Line
-	4700 1100 4700 900 
-Wire Wire Line
-	3750 1000 4800 1000
-Wire Wire Line
-	4100 1400 4100 1900
-Wire Wire Line
-	4100 1900 3750 1900
-Connection ~ 4100 1400
-Wire Wire Line
-	4300 1300 4300 1800
-Wire Wire Line
-	4300 1800 3750 1800
-Connection ~ 4300 1300
-Wire Wire Line
-	4500 1200 4500 1700
-Wire Wire Line
-	4500 1700 3750 1700
-Connection ~ 4500 1200
-Wire Wire Line
-	4700 1100 4700 1600
-Wire Wire Line
-	4700 1600 3750 1600
-Connection ~ 4700 1100
-Wire Wire Line
-	4800 1000 4800 1500
-Wire Wire Line
-	4800 1500 3750 1500
 $Comp
 L rlcsv3_modular-rescue:CONN_01X02 P2
 U 1 1 5E6558C8
@@ -1255,4 +1150,109 @@ Wire Wire Line
 	1800 1300 2500 1300
 Wire Wire Line
 	1800 1400 2500 1400
+Wire Wire Line
+	4800 1000 4800 1500
+Text Label 4800 1000 0    60   ~ 0
+SDA
+Wire Wire Line
+	4700 1600 3750 1600
+Wire Wire Line
+	4500 1700 3750 1700
+Wire Wire Line
+	4300 1800 3750 1800
+Wire Wire Line
+	4100 1900 3750 1900
+Text Label 4700 900  0    60   ~ 0
+SCL
+$Comp
+L rlcsv3_modular-rescue:+12V #PWR03
+U 1 1 5DD80B39
+P 4100 700
+F 0 "#PWR03" H 4100 550 50  0001 C CNN
+F 1 "+12V" H 4100 840 50  0000 C CNN
+F 2 "" H 4100 700 50  0000 C CNN
+F 3 "" H 4100 700 50  0000 C CNN
+	1    4100 700 
+	1    0    0    -1  
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:+5V #PWR02
+U 1 1 5DD80B33
+P 4300 700
+F 0 "#PWR02" H 4300 550 50  0001 C CNN
+F 1 "+5V" H 4300 840 50  0000 C CNN
+F 2 "" H 4300 700 50  0000 C CNN
+F 3 "" H 4300 700 50  0000 C CNN
+	1    4300 700 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4600 600  4600 700 
+Wire Wire Line
+	4500 600  4600 600 
+$Comp
+L rlcsv3_modular-rescue:GND #PWR04
+U 1 1 5DD8888A
+P 4600 700
+F 0 "#PWR04" H 4600 450 50  0001 C CNN
+F 1 "GND" H 4600 550 50  0000 C CNN
+F 2 "" H 4600 700 50  0000 C CNN
+F 3 "" H 4600 700 50  0000 C CNN
+	1    4600 700 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 1400 4100 1400
+Wire Wire Line
+	4100 1400 4100 700 
+Wire Wire Line
+	4300 700  4300 1300
+Wire Wire Line
+	4300 1300 3750 1300
+Wire Wire Line
+	3750 1200 4500 1200
+Wire Wire Line
+	4500 1200 4500 600 
+Wire Wire Line
+	3750 1100 4700 1100
+Wire Wire Line
+	4700 1100 4700 900 
+Wire Wire Line
+	3750 1000 4800 1000
+Wire Wire Line
+	4100 1400 4100 1900
+Connection ~ 4100 1400
+Wire Wire Line
+	4300 1300 4300 1800
+Connection ~ 4300 1300
+Wire Wire Line
+	4500 1200 4500 1700
+Connection ~ 4500 1200
+Wire Wire Line
+	4700 1100 4700 1600
+Connection ~ 4700 1100
+Wire Wire Line
+	4800 1500 3750 1500
+$Comp
+L rlcsv3_modular-rescue:CONN_01x05 U7
+U 1 1 5E36C206
+P 3600 1400
+F 0 "U7" H 3688 1275 60  0000 L CNN
+F 1 "CONN_01x05" H 3688 1169 60  0000 L CNN
+F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 3600 1500 60  0001 C CNN
+F 3 "" H 3600 1500 60  0001 C CNN
+	1    3600 1400
+	-1   0    0    1   
+$EndComp
+$Comp
+L rlcsv3_modular-rescue:CONN_01x05 U5
+U 1 1 5DD7AFDF
+P 3600 1900
+F 0 "U5" H 3688 1775 60  0000 L CNN
+F 1 "CONN_01x05" H 3688 1669 60  0000 L CNN
+F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 3600 2000 60  0001 C CNN
+F 3 "" H 3600 2000 60  0001 C CNN
+	1    3600 1900
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC

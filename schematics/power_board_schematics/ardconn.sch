@@ -119,18 +119,18 @@ Wire Wire Line
 $Comp
 L Switch:SW_Push Button
 U 1 1 5EB5D71A
-P 4900 3350
-F 0 "Button" H 4900 3635 50  0000 C CNN
-F 1 "SW_Push" H 4900 3544 50  0000 C CNN
-F 2 "" H 4900 3550 50  0001 C CNN
-F 3 "~" H 4900 3550 50  0001 C CNN
-	1    4900 3350
+P 4900 3250
+F 0 "Button" H 4900 3535 50  0000 C CNN
+F 1 "SW_Push" H 4900 3444 50  0000 C CNN
+F 2 "" H 4900 3450 50  0001 C CNN
+F 3 "~" H 4900 3450 50  0001 C CNN
+	1    4900 3250
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	5250 3650 4450 3650
 Wire Wire Line
-	4700 3350 4450 3350
+	4700 3250 4450 3250
 Text GLabel 9000 2200 2    60   Input ~ 0
 Sevenseg_F
 Text GLabel 9000 2600 2    60   Input ~ 0
@@ -148,9 +148,7 @@ Sevenseg_E
 Text GLabel 7100 2600 0    60   Input ~ 0
 Sevenseg_DP
 Wire Wire Line
-	5250 3350 5250 3650
-Wire Wire Line
-	5100 3350 5250 3350
+	5100 3250 5250 3250
 Wire Wire Line
 	8750 2800 9000 2800
 $Comp
@@ -292,14 +290,16 @@ Wire Wire Line
 Wire Wire Line
 	8600 3000 8300 3000
 $Comp
-L custom:conn_power U?
+L custom:conn_power J6
 U 1 1 5ED49DCC
 P 4350 3000
-F 0 "U?" H 4237 3197 60  0000 C CNN
+F 0 "J6" H 4237 3197 60  0000 C CNN
 F 1 "conn_power" H 4237 3091 60  0000 C CNN
 F 2 "" H 4350 3200 60  0001 C CNN
 F 3 "" H 4350 3200 60  0001 C CNN
 	1    4350 3000
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	5250 3250 5250 3650
 $EndSCHEMATC

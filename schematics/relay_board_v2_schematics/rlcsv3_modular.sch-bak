@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:rlcsv3_modular-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -46,65 +47,6 @@ F 3 "" H 3600 2000 60  0001 C CNN
 	1    3600 1900
 	-1   0    0    1   
 $EndComp
-$Comp
-L Connector:Conn_01x05_Female J?
-U 1 1 5DFBEBF4
-P 1600 1200
-AR Path="/5DCB71CA/5DFBEBF4" Ref="J?"  Part="1" 
-AR Path="/5DFBEBF4" Ref="J1"  Part="1" 
-F 0 "J1" H 1628 1226 50  0000 L CNN
-F 1 "Programming Header" H 1628 1135 50  0000 L CNN
-F 2 "rlcs:PinHeader_5x2.54_SMD_90deg_952-3198-1-ND" H 1600 1200 50  0001 C CNN
-F 3 "~" H 1600 1200 50  0001 C CNN
-	1    1600 1200
-	-1   0    0    1   
-$EndComp
-$Comp
-L power:+5V #PWR?
-U 1 1 5DFBEBFA
-P 2290 960
-AR Path="/5DCB71CA/5DFBEBFA" Ref="#PWR?"  Part="1" 
-AR Path="/5DFBEBFA" Ref="#PWR011"  Part="1" 
-F 0 "#PWR011" H 2290 810 50  0001 C CNN
-F 1 "+5V" H 2305 1133 50  0000 C CNN
-F 2 "" H 2290 960 50  0001 C CNN
-F 3 "" H 2290 960 50  0001 C CNN
-	1    2290 960 
-	1    0    0    -1  
-$EndComp
-Text Label 2500 1000 0    60   ~ 0
-~MCLR
-Wire Wire Line
-	2290 960  2290 1100
-Wire Wire Line
-	2290 1100 1800 1100
-Wire Wire Line
-	1800 1000 2500 1000
-$Comp
-L power:GND #PWR?
-U 1 1 5DFBEC04
-P 2290 1480
-AR Path="/5DCB71CA/5DFBEC04" Ref="#PWR?"  Part="1" 
-AR Path="/5DFBEC04" Ref="#PWR012"  Part="1" 
-F 0 "#PWR012" H 2290 1230 50  0001 C CNN
-F 1 "GND" H 2295 1307 50  0000 C CNN
-F 2 "" H 2290 1480 50  0001 C CNN
-F 3 "" H 2290 1480 50  0001 C CNN
-	1    2290 1480
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1800 1200 2290 1200
-Wire Wire Line
-	2290 1200 2290 1480
-Text Label 2500 1300 0    60   ~ 0
-ICSPDAT
-Text Label 2500 1400 0    60   ~ 0
-ICSPCLK
-Wire Wire Line
-	1800 1300 2500 1300
-Wire Wire Line
-	1800 1400 2500 1400
 Connection ~ 1400 2700
 Wire Wire Line
 	1400 2600 1400 2700
@@ -1254,4 +1196,63 @@ Wire Wire Line
 	7200 3400 7200 3300
 Wire Wire Line
 	7200 3800 7200 3700
+Text Label 2500 1400 0    60   ~ 0
+ICSPCLK
+Text Label 2500 1300 0    60   ~ 0
+ICSPDAT
+Text Label 2500 1000 0    60   ~ 0
+~MCLR
+$Comp
+L Connector:Conn_01x05_Female J?
+U 1 1 5DFBEBF4
+P 1600 1200
+AR Path="/5DCB71CA/5DFBEBF4" Ref="J?"  Part="1" 
+AR Path="/5DFBEBF4" Ref="J1"  Part="1" 
+F 0 "J1" H 1628 1226 50  0000 L CNN
+F 1 "Programming Header" H 1628 1135 50  0000 L CNN
+F 2 "rlcs:PinHeader_5x2.54_SMD_90deg_952-3198-1-ND" H 1600 1200 50  0001 C CNN
+F 3 "~" H 1600 1200 50  0001 C CNN
+	1    1600 1200
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5DFBEBFA
+P 2290 960
+AR Path="/5DCB71CA/5DFBEBFA" Ref="#PWR?"  Part="1" 
+AR Path="/5DFBEBFA" Ref="#PWR011"  Part="1" 
+F 0 "#PWR011" H 2290 810 50  0001 C CNN
+F 1 "+5V" H 2305 1133 50  0000 C CNN
+F 2 "" H 2290 960 50  0001 C CNN
+F 3 "" H 2290 960 50  0001 C CNN
+	1    2290 960 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2290 960  2290 1100
+Wire Wire Line
+	2290 1100 1800 1100
+Wire Wire Line
+	1800 1000 2500 1000
+$Comp
+L power:GND #PWR?
+U 1 1 5DFBEC04
+P 2290 1480
+AR Path="/5DCB71CA/5DFBEC04" Ref="#PWR?"  Part="1" 
+AR Path="/5DFBEC04" Ref="#PWR012"  Part="1" 
+F 0 "#PWR012" H 2290 1230 50  0001 C CNN
+F 1 "GND" H 2295 1307 50  0000 C CNN
+F 2 "" H 2290 1480 50  0001 C CNN
+F 3 "" H 2290 1480 50  0001 C CNN
+	1    2290 1480
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1800 1200 2290 1200
+Wire Wire Line
+	2290 1200 2290 1480
+Wire Wire Line
+	1800 1300 2500 1300
+Wire Wire Line
+	1800 1400 2500 1400
 $EndSCHEMATC

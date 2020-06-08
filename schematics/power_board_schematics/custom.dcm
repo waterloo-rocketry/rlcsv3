@@ -1,3 +1,9 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP Conn_01x05_male_
+D Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
 #End Doc Library
