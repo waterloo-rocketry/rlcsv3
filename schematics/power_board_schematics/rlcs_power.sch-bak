@@ -977,28 +977,6 @@ Wire Wire Line
 	7550 4350 7550 4450
 Wire Wire Line
 	7650 4850 7650 5350
-$Comp
-L rlcsv3_modular-rescue:CONN_01x05 U?
-U 1 1 5EE2AA68
-P 8250 5900
-F 0 "U?" H 8338 5775 60  0000 L CNN
-F 1 "CONN_01x05" H 8338 5669 60  0000 L CNN
-F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 8250 6000 60  0001 C CNN
-F 3 "" H 8250 6000 60  0001 C CNN
-	1    8250 5900
-	-1   0    0    1   
-$EndComp
-$Comp
-L rlcsv3_modular-rescue:CONN_01x05 U?
-U 1 1 5EE2AA62
-P 5950 4550
-F 0 "U?" H 6038 4425 60  0000 L CNN
-F 1 "CONN_01x05" H 6038 4319 60  0000 L CNN
-F 2 "Connector_JST:JST_XH_S5B-XH-A-1_1x05_P2.50mm_Horizontal" H 5950 4650 60  0001 C CNN
-F 3 "" H 5950 4650 60  0001 C CNN
-	1    5950 4550
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	7750 5250 6700 5250
 Connection ~ 7450 4950
@@ -1026,41 +1004,8 @@ Wire Wire Line
 	7050 5150 7050 4450
 Wire Wire Line
 	6700 5150 7050 5150
-$Comp
-L rlcsv3_modular-rescue:GND #PWR?
-U 1 1 5EE2AA4A
-P 8450 4300
-F 0 "#PWR?" H 8450 4050 50  0001 C CNN
-F 1 "GND" H 8450 4150 50  0000 C CNN
-F 2 "" H 8450 4300 50  0000 C CNN
-F 3 "" H 8450 4300 50  0000 C CNN
-	1    8450 4300
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7450 4350 7550 4350
-$Comp
-L rlcsv3_modular-rescue:+5V #PWR?
-U 1 1 5EE2AA42
-P 7350 4050
-F 0 "#PWR?" H 7350 3900 50  0001 C CNN
-F 1 "+5V" H 7350 4190 50  0000 C CNN
-F 2 "" H 7350 4050 50  0000 C CNN
-F 3 "" H 7350 4050 50  0000 C CNN
-	1    7350 4050
-	1    0    0    -1  
-$EndComp
-$Comp
-L rlcsv3_modular-rescue:+12V #PWR?
-U 1 1 5EE2AA3C
-P 6550 3900
-F 0 "#PWR?" H 6550 3750 50  0001 C CNN
-F 1 "+12V" H 6550 4040 50  0000 C CNN
-F 2 "" H 6550 3900 50  0000 C CNN
-F 3 "" H 6550 3900 50  0000 C CNN
-	1    6550 3900
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7050 5650 6700 5650
 Wire Wire Line
@@ -1073,10 +1018,10 @@ Connection ~ 7650 4850
 Wire Wire Line
 	7650 4850 7650 4650
 $Comp
-L Connector:Conn_01x05_Male U
+L Connector:Conn_01x05_Male J8
 U 1 1 5EE7917B
 P 6500 5450
-F 0 "U" H 6100 5650 50  0000 C CNN
+F 0 "J8" H 6100 5650 50  0000 C CNN
 F 1 "Conn_01x05_Male" H 6100 5500 50  0000 C CNN
 F 2 "" H 6500 5450 50  0001 C CNN
 F 3 "~" H 6500 5450 50  0001 C CNN
@@ -1095,17 +1040,6 @@ F 3 "" H 7050 4450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+12V #PWR?
-U 1 1 5EE7D5D1
-P 7250 4450
-F 0 "#PWR?" H 7250 4300 50  0001 C CNN
-F 1 "+12V" H 7265 4623 50  0000 C CNN
-F 2 "" H 7250 4450 50  0001 C CNN
-F 3 "" H 7250 4450 50  0001 C CNN
-	1    7250 4450
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR?
 U 1 1 5EE7EB92
 P 7550 4450
@@ -1117,14 +1051,25 @@ F 3 "" H 7550 4450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x05_Male U
+L Connector:Conn_01x05_Male J7
 U 1 1 5EE77E1A
 P 6500 4950
-F 0 "U" H 6100 5050 50  0000 C CNN
+F 0 "J7" H 6100 5050 50  0000 C CNN
 F 1 "Conn_01x05_Male" H 6100 4950 50  0000 C CNN
 F 2 "" H 6500 4950 50  0001 C CNN
 F 3 "~" H 6500 4950 50  0001 C CNN
 	1    6500 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5EE5F18B
+P 7250 4450
+F 0 "#PWR?" H 7250 4300 50  0001 C CNN
+F 1 "+5V" H 7265 4623 50  0000 C CNN
+F 2 "" H 7250 4450 50  0001 C CNN
+F 3 "" H 7250 4450 50  0001 C CNN
+	1    7250 4450
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
