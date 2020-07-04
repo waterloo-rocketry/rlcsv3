@@ -12,6 +12,7 @@ schematics/power_board_schematics/*.bak
 schematics/power_board_schematics/*.kicad_pcb-bak
 schematics/power_board_schematics/*.dwl
 schematics/power_board_schematics/*.dwl2
+schematics/power_board_schematics/*.sch-bak
 
 
 #My mac keeps putting these files everywhere
