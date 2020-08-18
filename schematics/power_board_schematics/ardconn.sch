@@ -43,67 +43,67 @@ ARD_CON_SD_WP
 Text GLabel 2450 3800 2    60   Input ~ 0
 ARD_CON_SD_SCL
 $Comp
-L custom:conn_22_to_53 J7
+L custom:conn_22_to_53 J14
 U 1 1 5E7AFC08
 P 8050 2200
-F 0 "J7" H 8050 3239 60  0000 C CNN
+F 0 "J14" H 8050 3239 60  0000 C CNN
 F 1 "conn_22_to_53" H 8050 3133 60  0000 C CNN
-F 2 "" H 8000 3250 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_2x18_P2.54mm_Vertical" H 8000 3250 60  0001 C CNN
 F 3 "" H 8000 3250 60  0001 C CNN
 	1    8050 2200
 	1    0    0    -1  
 $EndComp
 $Comp
-L custom:Conn_0_to_7 J1
+L custom:Conn_0_to_7 J8
 U 1 1 5E7B26E9
 P 2000 1100
-F 0 "J1" H 1937 1597 60  0000 C CNN
+F 0 "J8" H 1937 1597 60  0000 C CNN
 F 1 "Conn_0_to_7" H 1937 1491 60  0000 C CNN
-F 2 "" H 1900 1800 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 1900 1800 60  0001 C CNN
 F 3 "" H 1900 1800 60  0001 C CNN
 	1    2000 1100
 	1    0    0    -1  
 $EndComp
 $Comp
-L custom:conn_8_to_13 J2
+L custom:conn_8_to_13 J9
 U 1 1 5E7B5F51
 P 2000 2250
-F 0 "J2" H 1862 2847 60  0000 C CNN
+F 0 "J9" H 1862 2847 60  0000 C CNN
 F 1 "conn_8_to_13" H 1862 2741 60  0000 C CNN
-F 2 "" H 2000 3150 60  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical" H 2000 3150 60  0001 C CNN
 F 3 "" H 2000 3150 60  0001 C CNN
 	1    2000 2250
 	1    0    0    -1  
 $EndComp
 $Comp
-L custom:Conn_14_to_21 J3
+L custom:Conn_14_to_21 J10
 U 1 1 5E7B8C25
 P 2050 3350
-F 0 "J3" H 1912 3847 60  0000 C CNN
+F 0 "J10" H 1912 3847 60  0000 C CNN
 F 1 "Conn_14_to_21" H 1912 3741 60  0000 C CNN
-F 2 "" H 1950 4250 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 1950 4250 60  0001 C CNN
 F 3 "" H 1950 4250 60  0001 C CNN
 	1    2050 3350
 	1    0    0    -1  
 $EndComp
 $Comp
-L custom:conn_A0_to_A7 J4
+L custom:conn_A0_to_A7 J13
 U 1 1 5E7C0D80
 P 4500 1250
-F 0 "J4" H 4112 1847 60  0000 C CNN
+F 0 "J13" H 4112 1847 60  0000 C CNN
 F 1 "conn_A0_to_A7" H 4112 1741 60  0000 C CNN
-F 2 "" H 4500 1850 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 4500 1850 60  0001 C CNN
 F 3 "" H 4500 1850 60  0001 C CNN
 	1    4500 1250
 	1    0    0    -1  
 $EndComp
 $Comp
-L custom:conn_A8_to_A15 J5
+L custom:conn_A8_to_A15 J12
 U 1 1 5E7C1AAF
 P 4400 2250
-F 0 "J5" H 3962 2847 60  0000 C CNN
+F 0 "J12" H 3962 2847 60  0000 C CNN
 F 1 "conn_A8_to_A15" H 3962 2741 60  0000 C CNN
-F 2 "" H 4450 2850 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 4450 2850 60  0001 C CNN
 F 3 "" H 4450 2850 60  0001 C CNN
 	1    4400 2250
 	1    0    0    -1  
@@ -122,7 +122,7 @@ U 1 1 5EB5D71A
 P 4900 3250
 F 0 "S1" H 4900 3535 50  0000 C CNN
 F 1 "SW_Push" H 4900 3444 50  0000 C CNN
-F 2 "" H 4900 3450 50  0001 C CNN
+F 2 "Button_Switch_SMD:SW_DIP_SPSTx01_Slide_9.78x4.72mm_W8.61mm_P2.54mm" H 4900 3450 50  0001 C CNN
 F 3 "~" H 4900 3450 50  0001 C CNN
 	1    4900 3250
 	1    0    0    -1  
@@ -152,10 +152,10 @@ Wire Wire Line
 Wire Wire Line
 	8750 2800 9000 2800
 $Comp
-L power:GND #PWR?
+L power:GND #PWR027
 U 1 1 5EBCBE4C
 P 7750 3250
-F 0 "#PWR?" H 7750 3000 50  0001 C CNN
+F 0 "#PWR027" H 7750 3000 50  0001 C CNN
 F 1 "GND" H 7755 3077 50  0000 C CNN
 F 2 "" H 7750 3250 50  0001 C CNN
 F 3 "" H 7750 3250 50  0001 C CNN
@@ -165,10 +165,10 @@ $EndComp
 Wire Wire Line
 	7750 3100 7750 3250
 $Comp
-L power:GND #PWR?
+L power:GND #PWR028
 U 1 1 5EBD1205
 P 8350 3250
-F 0 "#PWR?" H 8350 3000 50  0001 C CNN
+F 0 "#PWR028" H 8350 3000 50  0001 C CNN
 F 1 "GND" H 8355 3077 50  0000 C CNN
 F 2 "" H 8350 3250 50  0001 C CNN
 F 3 "" H 8350 3250 50  0001 C CNN
@@ -178,10 +178,10 @@ $EndComp
 Wire Wire Line
 	8350 3100 8350 3250
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR026
 U 1 1 5ECC7808
 P 7400 1050
-F 0 "#PWR?" H 7400 900 50  0001 C CNN
+F 0 "#PWR026" H 7400 900 50  0001 C CNN
 F 1 "+5V" H 7415 1223 50  0000 C CNN
 F 2 "" H 7400 1050 50  0001 C CNN
 F 3 "" H 7400 1050 50  0001 C CNN
@@ -189,10 +189,10 @@ F 3 "" H 7400 1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR029
 U 1 1 5ECC83F1
 P 8700 1050
-F 0 "#PWR?" H 8700 900 50  0001 C CNN
+F 0 "#PWR029" H 8700 900 50  0001 C CNN
 F 1 "+5V" H 8715 1223 50  0000 C CNN
 F 2 "" H 8700 1050 50  0001 C CNN
 F 3 "" H 8700 1050 50  0001 C CNN
@@ -290,12 +290,12 @@ Wire Wire Line
 Wire Wire Line
 	8600 3000 8300 3000
 $Comp
-L custom:conn_power J6
+L custom:conn_power J11
 U 1 1 5ED49DCC
 P 4350 3000
-F 0 "J6" H 4237 3197 60  0000 C CNN
+F 0 "J11" H 4237 3197 60  0000 C CNN
 F 1 "conn_power" H 4237 3091 60  0000 C CNN
-F 2 "" H 4350 3200 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 4350 3200 60  0001 C CNN
 F 3 "" H 4350 3200 60  0001 C CNN
 	1    4350 3000
 	1    0    0    -1  

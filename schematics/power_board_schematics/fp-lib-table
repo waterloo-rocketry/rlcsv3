@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name rlcs_power_footprints)(type KiCad)(uri ${KIPRJMOD}/rlcs_power_footprints.pretty)(options "")(descr ""))
+)
