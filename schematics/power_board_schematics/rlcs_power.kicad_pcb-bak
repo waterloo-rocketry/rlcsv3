@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 16)
+    (drawings 11)
     (tracks 0)
     (zones 0)
     (modules 55)
@@ -369,7 +369,7 @@
   )
 
   (module Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical (layer F.Cu) (tedit 59FED5CC) (tstamp 5F313957)
-    (at 144.78 69.85)
+    (at 146.05 85.09)
     (descr "Through hole straight pin header, 1x10, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x10 2.54mm single row")
     (path /59C6DB4C/5E7B5F51)
@@ -418,7 +418,7 @@
   )
 
   (module rlcs_power:LTD-4608JR (layer F.Cu) (tedit 59C83089) (tstamp 59C6CF23)
-    (at 115.57 93.98 90)
+    (at 115.57 96.52 90)
     (descr http://www.everlight.com/file/ProductFile/D426SYGWA-S530-E2.pdf)
     (tags "Double digit 7 segment brilliant yellow green LED")
     (path /59C5BADA)
@@ -478,7 +478,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 59C6D16D)
-    (at 137.16 78.74 90)
+    (at 139.7 73.66 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /5A5952A0)
@@ -839,7 +839,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer F.Cu) (tedit 5B36C52B) (tstamp 5A5940D5)
-    (at 114.3 88.655 270)
+    (at 114.3 91.195 270)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BE8C)
@@ -875,7 +875,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer F.Cu) (tedit 5B36C52B) (tstamp 5A5940C4)
-    (at 116.84 88.655 90)
+    (at 116.84 91.195 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BDE8)
@@ -911,7 +911,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer F.Cu) (tedit 5B36C52B) (tstamp 5A5940B3)
-    (at 119.38 88.655 90)
+    (at 119.38 91.195 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BD47)
@@ -947,7 +947,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 59C6D1C2)
-    (at 137.16 82.55 90)
+    (at 139.7 77.47 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BCA9)
@@ -983,7 +983,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 59C6D1B1)
-    (at 139.7 82.55 90)
+    (at 142.24 77.47 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BC0E)
@@ -1019,7 +1019,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer F.Cu) (tedit 5B36C52B) (tstamp 59C6D1A0)
-    (at 124.46 88.9 90)
+    (at 124.46 91.195 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5BB74)
@@ -1055,7 +1055,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer F.Cu) (tedit 5B36C52B) (tstamp 59C6D18F)
-    (at 121.92 88.9 90)
+    (at 121.92 91.44 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C5B971)
@@ -1091,7 +1091,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 59C6D17E)
-    (at 139.7 74.93 90)
+    (at 142.24 69.85 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /59C44DB4)
@@ -1163,7 +1163,7 @@
   )
 
   (module Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 59C6D13A)
-    (at 139.7 78.74 90)
+    (at 142.24 73.66 90)
     (descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "resistor handsolder")
     (path /5A596C23)
@@ -1722,7 +1722,7 @@
   )
 
   (module Button_Switch_SMD:SW_DIP_SPSTx01_Slide_9.78x4.72mm_W8.61mm_P2.54mm (layer F.Cu) (tedit 5A4E1404) (tstamp 5F313BB3)
-    (at 96.52 151.13 90)
+    (at 96.52 82.55 90)
     (descr "SMD 1x-dip-switch SPST , Slide, row spacing 8.61 mm (338 mils), body size 9.78x4.72mm (see e.g. https://www.ctscorp.com/wp-content/uploads/204.pdf), SMD")
     (tags "SMD DIP Switch SPST Slide 8.61mm 338mil SMD")
     (path /59C6DB4C/5EB5D71A)
@@ -1908,7 +1908,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23-5_HandSoldering (layer F.Cu) (tedit 5A0AB76C) (tstamp 5F313A57)
-    (at 124.46 97.79)
+    (at 124.46 100.33)
     (descr "5-pin SOT23 package")
     (tags "SOT-23-5 hand-soldering")
     (path /59CA20EF)
@@ -1949,7 +1949,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23-5_HandSoldering (layer F.Cu) (tedit 5F3306C3) (tstamp 5F313A42)
-    (at 124.46 80.01 180)
+    (at 124.46 78.74 180)
     (descr "5-pin SOT23 package")
     (tags "SOT-23-5 hand-soldering")
     (path /59CA1E66)
@@ -1990,7 +1990,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_2x18_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A42A) (tstamp 5F313A01)
-    (at 102.87 163.83 90)
+    (at 102.87 161.29 90)
     (descr "Through hole straight socket strip, 2x18, 2.54mm pitch, double cols (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 2x18 2.54mm double row")
     (path /59C6DB4C/5E7AFC08)
@@ -2079,7 +2079,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A420) (tstamp 5F3139C7)
-    (at 96.52 93.98)
+    (at 95.25 118.11)
     (descr "Through hole straight socket strip, 1x08, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x08 2.54mm single row")
     (path /59C6DB4C/5E7C0D80)
@@ -2123,7 +2123,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A420) (tstamp 5F3139AB)
-    (at 96.52 118.11)
+    (at 95.25 140.97)
     (descr "Through hole straight socket strip, 1x08, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x08 2.54mm single row")
     (path /59C6DB4C/5E7C1AAF)
@@ -2167,7 +2167,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A420) (tstamp 5F31398F)
-    (at 96.52 69.85)
+    (at 95.25 95.25)
     (descr "Through hole straight socket strip, 1x08, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x08 2.54mm single row")
     (path /59C6DB4C/5ED49DCC)
@@ -2218,7 +2218,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A420) (tstamp 5F313973)
-    (at 144.78 120.65)
+    (at 146.05 135.89)
     (descr "Through hole straight socket strip, 1x08, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x08 2.54mm single row")
     (path /59C6DB4C/5E7B8C25)
@@ -2262,7 +2262,7 @@
   )
 
   (module Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical (layer F.Cu) (tedit 5A19A420) (tstamp 5F31393B)
-    (at 144.78 96.52)
+    (at 146.05 113.03)
     (descr "Through hole straight socket strip, 1x08, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x08 2.54mm single row")
     (path /59C6DB4C/5E7B26E9)
@@ -2370,7 +2370,7 @@
   )
 
   (module Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder (layer B.Cu) (tedit 5B36C52B) (tstamp 5F3A3B4A)
-    (at 137.16 74.93 270)
+    (at 139.7 69.85 270)
     (descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
     (tags "capacitor handsolder")
     (path /59C604AB)
@@ -2406,7 +2406,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23-5_HandSoldering (layer F.Cu) (tedit 5A0AB76C) (tstamp 5F3A3B5A)
-    (at 119.38 80.01 270)
+    (at 118.11 78.74 270)
     (descr "5-pin SOT23 package")
     (tags "SOT-23-5 hand-soldering")
     (path /59CA1E66)
@@ -2447,7 +2447,7 @@
   )
 
   (module Package_TO_SOT_SMD:SOT-23-5_HandSoldering (layer F.Cu) (tedit 5A0AB76C) (tstamp 5F3A3B6E)
-    (at 115.57 97.79)
+    (at 115.57 100.33)
     (descr "5-pin SOT23 package")
     (tags "SOT-23-5 hand-soldering")
     (path /59CA20EF)
@@ -2632,11 +2632,11 @@
   )
 
   (module Connector_PinSocket_2.00mm:PinSocket_1x01_P2.00mm_Vertical (layer F.Cu) (tedit 5A19A430) (tstamp 5F3A3BC3)
-    (at 128.27 87.63)
+    (at 133.35 90.17)
     (descr "Through hole straight socket strip, 1x01, 2.00mm pitch, single row (from Kicad 4.0.7), script generated")
     (tags "Through hole socket strip THT 1x01 2.00mm single row")
     (path /59C761F8)
-    (fp_text reference TP3 (at 0 -2.5) (layer F.SilkS)
+    (fp_text reference TP3 (at 0 -2.54) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value GND_test (at 0 2.5) (layer F.Fab)
@@ -2672,26 +2672,19 @@
   (gr_line (start 147.32 167.64) (end 147.32 66.04) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 93.98 167.64) (end 147.32 167.64) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 93.98 66.04) (end 93.98 167.64) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 218.44 74.93) (end 168.91 74.93) (layer Edge.Cuts) (width 0.15) (tstamp 5F314044))
-  (gr_line (start 218.44 149.86) (end 218.44 74.93) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 168.91 149.86) (end 218.44 149.86) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 168.91 78.74) (end 168.91 153.67) (layer Edge.Cuts) (width 0.15))
   (gr_text Arduino (at 138.745 131.425 -90) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text +15v- (at 104 101.95) (layer F.SilkS) (tstamp 59D59B9B)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text 5v (at 138.8 82.545) (layer F.SilkS) (tstamp 59D59B1D)
+  (gr_text 5v (at 141.34 77.465) (layer F.SilkS) (tstamp 59D59B1D)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text 3v3 (at 115.6 109.84) (layer F.SilkS) (tstamp 59D2E7C1)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text "RLCSv2\nPower Board r2\n2018-01-12" (at 116.84 153.67) (layer F.SilkS)
-    (effects (font (size 1 1) (thickness 0.15)))
-  )
-  (gr_text 3v3 (at 102.08 155.37 270) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text +15v- (at 104.92 76.2) (layer F.SilkS)

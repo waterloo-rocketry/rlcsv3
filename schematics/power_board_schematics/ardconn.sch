@@ -70,7 +70,7 @@ U 1 1 5E7B5F51
 P 2000 2250
 F 0 "J9" H 1862 2847 60  0000 C CNN
 F 1 "conn_8_to_13" H 1862 2741 60  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical" H 2000 3150 60  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical" H 2000 3150 60  0001 C CNN
 F 3 "" H 2000 3150 60  0001 C CNN
 	1    2000 2250
 	1    0    0    -1  
