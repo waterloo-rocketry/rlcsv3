@@ -69,7 +69,7 @@ void set_select(bool out) {
     if (out) {
         LATAbits.LATA3 = 1;
     } else {
-        LATAbits.LATA3 = 1;
+        LATAbits.LATA3 = 0;
     }
 }
 
