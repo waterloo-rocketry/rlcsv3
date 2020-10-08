@@ -52,8 +52,8 @@ void setup() {
     TRISAbits.TRISA2 = 0;   //POWER
     TRISAbits.TRISA3 = 0;   //SELECT
     TRISAbits.TRISA4 = 1;   //DIP_1
-    TRISAbits.TRISA6 = 0;   //LIM2
-    TRISAbits.TRISA7 = 0;   //LIM1
+    TRISAbits.TRISA6 = 1;   //LIM2
+    TRISAbits.TRISA7 = 1;   //LIM1
     TRISBbits.TRISB0 = 1;   //DIP_2
     TRISBbits.TRISB2 = 1;   //DIP_3
     TRISBbits.TRISB3 = 1;   //DIP_4 
@@ -74,11 +74,11 @@ void setup() {
 int main(int argc, char** argv) {
     setup();                    //Set up digital + analog I/O
     timer0_init();              //Initialize timer
-    set_power_off();
-    set_power_off();
+    //set_power_off();
+    set_power_on();
     set_select_off();
-    set_lim1_off();
-    set_lim2_off();
+//    set_lim1_off();
+//    set_lim2_off();
     readDipInputs();            //Get dip switch value to set slave address
     set_led_off();
     i2c_slave_init(3);
