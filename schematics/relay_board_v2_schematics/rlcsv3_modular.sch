@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:rlcsv3_modular-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -1254,4 +1255,6 @@ Wire Wire Line
 	7200 3400 7200 3300
 Wire Wire Line
 	7200 3800 7200 3700
+Text Notes 6500 5300 0    60   ~ 0
+Fuse: \nBlowout Current = 20 A\nType = Glass Cartridge\nSize = 5mm x 20 mm
 $EndSCHEMATC
