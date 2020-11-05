@@ -79,15 +79,12 @@ void setup() {
 int main(int argc, char** argv) {
     setup();                    //Set up digital + analog I/O
     timer0_init();              //Initialize timer
-    //set_power_off();
     set_power_on();
     set_select_off();
-//    set_lim1_off();
-//    set_lim2_off();
-    readDipInputs();            //Get dip switch value to set slave address
     set_led_off();
-    i2c_slave_init(3);
-    //i2c_slave_init(dip_inputs);  //Set board as i2c slave with dipswitch address
+    dip_inputs = 0;
+    i2c_slave_init(dip_inputs);
+    readDipInputs();            //Get actual dip switch value to set slave address, init i2c
     
     uint32_t last_millis = millis();
     
@@ -96,12 +93,14 @@ int main(int argc, char** argv) {
         if (millis() - last_millis > MAX_LOOP_TIME_DIFF_CONST) {
             //One day I will configure this correctly, but ATM we only need the LED to blink ;-;
             last_millis = millis();
+            
+            led_heartbeat();
         }
         
         readAnalogInputs(1); // CURR_SENSE_1
         readAnalogInputs(0); // CURR_SENSE_2
-        readDipInputs(); //Check if dip switch input has changed
         
+        readDipInputs(); //Check if dip switch input has changed, re-init i2c if so
     }
     return (EXIT_SUCCESS);
 }
