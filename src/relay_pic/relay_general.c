@@ -1,9 +1,10 @@
 #include "relay_general.h"
 
-uint16_t readAnalogInputs() {
+static uint16_t analog_inputs[2];
+uint16_t readAnalogInputs(uint8_t port) {
     uint16_t adc_result = 0;
     for (int i = 0; i < 1000; i++) {}
-    ADCON0 = 0x01; // Turn ADC on
+    ADCON0 = 0x01 | (port << 2); // Turn ADC on, select port to read from
     ADCON0 |= 1 << 1; // set b[1] "go" bit
     uint8_t done_bit;
     do { //wait for ADC to complete (go bit switches to 0 automatically when done)
@@ -11,6 +12,7 @@ uint16_t readAnalogInputs() {
     } while (done_bit); //while go bit is on (AD conversion in progress)
 
     adc_result = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
+    analog_inputs[port] = adc_result;
 
     ADCON0 = 0x00; //Turn ADC off return;
     
