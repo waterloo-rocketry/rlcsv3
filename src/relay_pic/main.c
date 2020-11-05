@@ -65,10 +65,15 @@ void setup() {
     
     ANSELB = 0;             //DISABLE ANALOG INPUT ON PORT B
     
+    // Configure FVR module
+    // b[7] enables FVR
+    // b[1:0] sets the reference to 4.096
+    FVRCON = 0b10000011;
+    
     // Configure ADC module 
     // b[7] sets right justification, b[6:4] sets CS = FRC,
-    // b[2]+b[1:0] sets Vss and Vdd as references.
-    ADCON1 = 0b11110000;
+    // b[2]+b[1:0] sets Vss and FVR as references.
+    ADCON1 = 0b11110011;
 }
 
 int main(int argc, char** argv) {
@@ -93,9 +98,10 @@ int main(int argc, char** argv) {
             last_millis = millis();
         }
         
+        readAnalogInputs(1); // CURR_SENSE_1
+        readAnalogInputs(0); // CURR_SENSE_2
         readDipInputs(); //Check if dip switch input has changed
         
-        //uint16_t curr = readAnalogInputs();
     }
     return (EXIT_SUCCESS);
 }

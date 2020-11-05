@@ -7,7 +7,9 @@
 #include <xc.h>
 #include <pic16f1826.h>
 
-uint16_t readAnalogInputs(void);
+uint16_t analog_inputs[2];
+
+uint16_t readAnalogInputs(uint8_t port);
 
 void set_power_on(void);
 
