@@ -33,22 +33,6 @@ void set_select_off(void) {
     set_select(false);
 }
 
-void set_lim1_on(void) {
-    set_lim1(true);
-}
-
-void set_lim1_off(void) {
-    set_lim1(false);
-}
-
-void set_lim2_on(void) {
-    set_lim2(true);
-}
-
-void set_lim2_off(void) {
-    set_lim2(false);
-}
-
 void set_led_on(void) {
     set_led(true);
 }
@@ -73,22 +57,6 @@ void set_select(bool out) {
     }
 }
 
-void set_lim1(bool out) {
-    if (out) {
-        LATAbits.LATA7 = 1;
-    } else {
-        LATAbits.LATA7 = 0;
-    }
-}
-
-void set_lim2(bool out) {
-    if (out) {
-        LATAbits.LATA6 = 1;
-    } else {
-        LATAbits.LATA6 = 1;
-    }
-}
-
 void set_led(bool out) {
     if (out) {
         LATBbits.LATB5 = 1;
@@ -106,5 +74,13 @@ void led_heartbeat(void) {
         set_led_on();
         led_on = true;
     }
+}
+
+bool get_lim1(void) {
+    return PORTAbits.RA7;
+}
+
+bool get_lim2(void) {
+    return PORTAbits.RA6;
 }
 

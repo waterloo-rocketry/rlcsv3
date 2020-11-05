@@ -17,25 +17,19 @@ void set_select_on(void);
 
 void set_select_off(void);
 
-void set_lim1_on(void);
-
-void set_lim1_off(void);
-
-void set_lim2_on(void);
-
-void set_lim2_off(void);
-
 void set_led_on(void);
 
 void set_led_off(void);
 
 void led_heartbeat(void);
 
+bool get_lim1(void);
+
+bool get_lim2(void);
+
 //internal functions
 void set_power(bool out);
 void set_select(bool out);
-void set_lim1(bool out);
-void set_lim2(bool out);
 void set_led(bool out);
 
 
