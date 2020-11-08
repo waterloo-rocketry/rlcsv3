@@ -160,8 +160,43 @@ void init_buttons()
     //LEDs. Turn on the red one first
     pinMode(PIN_LED_RED, OUTPUT);
     pinMode(PIN_LED_GREEN, OUTPUT);
+    pinMode(PIN_LED_BLUE, OUTPUT);
     digitalWrite(PIN_LED_RED, HIGH);
     digitalWrite(PIN_LED_GREEN, LOW);
+    digitalWrite(PIN_LED_BLUE, LOW);
+
+    //switch LEDS
+    pinMode(PIN_LED_SWITCH_1, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_1, HIGH);
+    pinMode(PIN_LED_SWITCH_2, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_2, HIGH);
+    pinMode(PIN_LED_SWITCH_3, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_3, HIGH);
+    pinMode(PIN_LED_SWITCH_4, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_4, HIGH);
+    pinMode(PIN_LED_SWITCH_5, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_5, HIGH);
+    pinMode(PIN_LED_SWITCH_6, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_6, HIGH);
+    pinMode(PIN_LED_SWITCH_7, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_7, HIGH);
+    pinMode(PIN_LED_SWITCH_8, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_8, HIGH);
+    pinMode(PIN_LED_SWITCH_IGNITION_PRI, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_IGNITION_PRI, HIGH);
+    pinMode(PIN_LED_SWITCH_IGNITION_SEC, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_IGNITION_SEC, HIGH);
+    pinMode(PIN_LED_SWITCH_IGNITION_FIRE, OUTPUT);
+    digitalWrite(PIN_LED_SWITCH_IGNITION_FIRE, HIGH);
+    
+}
+
+void key_switch_init(){
+  // tie the pin to GND
+  pinMode(PIN_KEY_SWITCH_GND, OUTPUT);
+  digitalWrite(PIN_KEY_SWITCH_GND, LOW);
+  //set as input with pullup
+  pinMode(PIN_KEY_SWITCH_INPUT, INPUT_PULLUP);
 }
 
 static int led_state = 0;
@@ -182,6 +217,20 @@ void set_radio_status(int state)
     led_state = state;
 }
 
+void set_switch_LEDs(bool state){
+  digitalWrite(PIN_LED_SWITCH_1, !state);
+  digitalWrite(PIN_LED_SWITCH_2, !state);
+  digitalWrite(PIN_LED_SWITCH_3, !state);
+  digitalWrite(PIN_LED_SWITCH_4, !state);
+  digitalWrite(PIN_LED_SWITCH_5, !state);
+  digitalWrite(PIN_LED_SWITCH_6, !state);
+  digitalWrite(PIN_LED_SWITCH_7, !state);
+  digitalWrite(PIN_LED_SWITCH_8, !state);
+  digitalWrite(PIN_LED_SWITCH_IGNITION_PRI, !state);
+  digitalWrite(PIN_LED_SWITCH_IGNITION_SEC, !state);
+  digitalWrite(PIN_LED_SWITCH_IGNITION_FIRE, !state);
+  
+}
 
 //globals for how long it's been since we've made requests to the tower
 unsigned long global_time_last_tower_state_req = 0;

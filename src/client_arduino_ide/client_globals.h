@@ -14,6 +14,12 @@ extern "C" {
 
 extern unsigned int client_battery;
 
+//sets the pin mode for the arming key pins
+void key_switch_init();
+
+//sets the pin mode for all the button pins to input
+void init_buttons();
+
 //returns the global button state
 actuator_state_t* get_button_state();
 
@@ -27,12 +33,13 @@ daq_holder_t* get_tower_daq();
 //in client_pin_defines.h
 void read_all_buttons();
 
-//sets the pin mode for all the button pins to input
-void init_buttons();
-
 //state = 0, turn red led on
 //else, turn green led on
 void set_radio_status(int state);
+
+//sets the state of the LEDs on the switches
+//true for on, false for off
+void set_switch_LEDs(bool state);
 
 #ifdef __cplusplus
 }
