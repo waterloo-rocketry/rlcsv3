@@ -3,6 +3,8 @@
 #include "tower_pin_defines.h"
 #include "tower_globals.h"
 
+// don't want to delete, but we aren't using liquid any time soon
+/*
 #define FUEL_OPEN_DELAY 0 //time between open comand, and beginning of opening, in ms
 #define OX_OPEN_DELAY 800 //time between open comand, and beginning of opening, in ms
 #define START_MOVE_LENGTH 400 // for fuel
@@ -130,3 +132,5 @@ void close_ox_injector(){
       ox_injector_state = OX_OFF;
 
 }
+
+*/

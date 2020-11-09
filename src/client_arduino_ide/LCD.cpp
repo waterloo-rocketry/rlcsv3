@@ -97,14 +97,14 @@ void lcd_update(daq_holder_t *input)
 */
 
     //display the top line
-    display_valves_line(input->rfill_lsw_open, input->rfill_lsw_closed,
-                        input->rvent_lsw_open, input->rvent_lsw_closed,
-                        input->ox_pres_valve_lsw_open, input->ox_pres_valve_lsw_closed);
+    display_valves_line(input->valve_1_lsw_open, input->valve_1_lsw_closed,
+                        input->valve_2_lsw_open, input->valve_2_lsw_closed,
+                        input->valve_3_lsw_open, input->valve_3_lsw_closed);
 
     //display the second line
-    display_valves_line2(input->ox_injector_valve_lsw_open, input->ox_injector_valve_lsw_closed,
-                         input->fuel_injector_valve_lsw_open, input->fuel_injector_valve_lsw_closed,
-                         input->fuel_pres_valve_lsw_open, input->fuel_pres_valve_lsw_closed);
+    display_valves_line2(input->valve_4_lsw_open, input->valve_4_lsw_closed,
+                         input->injector_valve_lsw_open, input->injector_valve_lsw_closed,
+                         input->valve_3_lsw_open, input->valve_3_lsw_closed);
 
     //display the third line
     display_current_line(input->ign_pri_current, input->ign_sec_current);
@@ -120,8 +120,8 @@ void lcd_update(daq_holder_t *input)
     } else {
         //the one with the remote disconnect status
         display_disconnect_line(input->injector_valve_state, input->pressure2,
-                                input->linac_lsw_extend,
-                                input->linac_lsw_retract);
+                                input->valve_3_lsw_open,
+                                input->valve_3_lsw_closed);
     }
     
 
@@ -152,33 +152,33 @@ void display_new_error(const char *error)
     num_errors_queued++;
 }
 
-static void display_valves_line(unsigned char fill_open, unsigned char fill_closed, 
-                                unsigned char vent_open, unsigned char vent_closed,
-                                unsigned char ox_pres_open, unsigned char ox_pres_closed)
+static void display_valves_line(unsigned char valve_1_open, unsigned char valve_1_closed, 
+                                unsigned char valve_2_open, unsigned char valve_2_closed,
+                                unsigned char valve_3_open, unsigned char valve_3_closed)
 {
     lcd.setCursor(0, 0);
     char line[21];
-    snprintf(line, 21, "RF:%s RV:%s OP:%s",
-             (fill_open && !fill_closed) ? "OPN" :
-             (!fill_open && fill_closed) ? "CLS" : "UNK",
-             (vent_open && !vent_closed) ? "OPN" :
-             (!vent_open && vent_closed) ? "CLS" : "UNK",
-             (ox_pres_open && !ox_pres_closed) ? "OPN" :
-             (!ox_pres_open && ox_pres_closed) ? "CLS" : "UNK");
+    snprintf(line, 21, "V1:%s V2:%s V3:%s",
+             (valve_1_open && !valve_1_closed) ? "OPN" :
+             (!valve_1_open && valve_1_closed) ? "CLS" : "UNK",
+             (valve_2_open && !valve_2_closed) ? "OPN" :
+             (!valve_2_open && valve_2_closed) ? "CLS" : "UNK",
+             (valve_3_open && !valve_3_closed) ? "OPN" :
+             (!valve_3_open && valve_3_closed) ? "CLS" : "UNK");
     lcd.print(line);
 }
 
-static void display_valves_line2(unsigned char ox_injector_open, unsigned char ox_injector_closed, 
-                                 unsigned char fuel_injector_open, unsigned char fuel_injector_closed,
+static void display_valves_line2(unsigned char valve_4_open, unsigned char valve_4_closed, 
+                                 unsigned char injector_open, unsigned char injector_closed,
                                  unsigned char fuel_pres_open, unsigned char fuel_pres_closed)
 {
     lcd.setCursor(0, 1);
     char line[21];
-    snprintf(line, 21, "OI:%s FI:%s FP:%s",
-             (ox_injector_open && !ox_injector_closed) ? "OPN" :
-             (!ox_injector_open && ox_injector_closed) ? "CLS" : "UNK",
-             (fuel_injector_open && !fuel_injector_closed) ? "OPN" :
-             (!fuel_injector_open && fuel_injector_closed) ? "CLS" : "UNK",
+    snprintf(line, 21, "V4:%s IJ:%s FP:%s",
+             (valve_4_open && !valve_4_closed) ? "OPN" :
+             (!valve_4_open && valve_4_closed) ? "CLS" : "UNK",
+             (injector_open && !injector_closed) ? "OPN" :
+             (!injector_open && injector_closed) ? "CLS" : "UNK",
              (fuel_pres_open && !fuel_pres_closed) ? "OPN" :
              (!fuel_pres_open && fuel_pres_closed) ? "CLS" : "UNK");
     lcd.print(line);
