@@ -39,3 +39,8 @@ fp-info-cache
 # Autorouter files (exported from Pcbnew)
 *.dsn
 *.ses
+
+# MPLAB Project Folders
+build
+dist
+nbproject
