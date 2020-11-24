@@ -1,3 +1,4 @@
+#include <xc.h>
 #include "timer.h"
 
 /*
@@ -26,7 +27,6 @@ void timer0_init(void) {
     INTCONbits.TMR0IE = 1; //Enable timer interrupt
     OPTION_REGbits.TMR0CS = 0; //Use internal instruction clock cycle
     OPTION_REGbits.PSA = 1; //Utilize prescalar assignment bit
-    //OPTION_REGbits.PS = 1; //Set prescalar rate value to 32
 }
 
 /*

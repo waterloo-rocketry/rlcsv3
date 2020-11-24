@@ -1,7 +1,8 @@
+#include <xc.h>
 #include "relay_general.h"
 
 static uint16_t analog_inputs[2];
-uint16_t readAnalogInputs(uint8_t port) {
+uint16_t read_analog_inputs(uint8_t port) {
     uint16_t adc_result = 0;
     for (int i = 0; i < 1000; i++) {}
     ADCON0 = 0x01 | (port << 2); // Turn ADC on, select port to read from
@@ -15,7 +16,7 @@ uint16_t readAnalogInputs(uint8_t port) {
     analog_inputs[port] = adc_result;
 
     ADCON0 = 0x00; //Turn ADC off return;
-    
+
     return adc_result;
 }
 
@@ -43,7 +44,7 @@ void set_led_off(void) {
     set_led(false);
 }
 
-void set_power(bool out) { 
+void set_power(bool out) {
     if (out) {
         LATAbits.LATA2 = 1;
     } else {
@@ -85,4 +86,3 @@ bool get_lim1(void) {
 bool get_lim2(void) {
     return PORTAbits.RA6;
 }
-

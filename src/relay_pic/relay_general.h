@@ -1,15 +1,13 @@
 #ifndef RELAY_GENERAL_H
-#define	RELAY_GENERAL_H
+#define RELAY_GENERAL_H
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <xc.h>
-#include <pic16f1826.h>
 
 uint16_t analog_inputs[2];
 
-uint16_t readAnalogInputs(uint8_t port);
+uint16_t read_analog_inputs(uint8_t port);
 
 void set_power_on(void);
 
@@ -35,5 +33,5 @@ void set_select(bool out);
 void set_led(bool out);
 
 
-#endif	/* RELAY_GENERAL_H */
+#endif /* RELAY_GENERAL_H */
 
