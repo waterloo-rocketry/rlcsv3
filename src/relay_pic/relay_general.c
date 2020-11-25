@@ -3,8 +3,6 @@
 
 static uint16_t analog_inputs[2];
 uint16_t read_analog_inputs(uint8_t port) {
-    uint16_t adc_result = 0;
-    for (int i = 0; i < 1000; i++) {}
     ADCON0 = 0x01 | (port << 2); // Turn ADC on, select port to read from
     ADCON0 |= 1 << 1; // set b[1] "go" bit
     uint8_t done_bit;
@@ -12,7 +10,7 @@ uint16_t read_analog_inputs(uint8_t port) {
         done_bit = ADCON0 & (1 << 1);
     } while (done_bit); //while go bit is on (AD conversion in progress)
 
-    adc_result = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
+    uint16_t adc_result = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
     analog_inputs[port] = adc_result;
 
     ADCON0 = 0x00; //Turn ADC off return;
