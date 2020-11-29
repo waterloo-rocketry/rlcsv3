@@ -5,7 +5,6 @@
 #include "sd_handler.h"
 #include "linac.h"
 #include "Arduino.h"
-#include "relay_bus.h"
 
 static actuator_state_t global_requested_state;
 static actuator_state_t global_current_state = {
@@ -42,15 +41,12 @@ void apply_state(){
         global_current_state.remote_fill_valve = global_requested_state.remote_fill_valve;
         if(global_current_state.remote_fill_valve){
             //open the remote_fill_valve
-            // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-            // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, LOW);
-            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR);
+            digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, LOW);
         } else {
             //close the remote_fill_valve
-            // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-            // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH);
-            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR + REMOTE_FILL_SEL);
-            
+            digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH);
         }
     }
 
@@ -59,14 +55,12 @@ void apply_state(){
         global_current_state.remote_vent_valve = global_requested_state.remote_vent_valve;
         if(global_current_state.remote_vent_valve){
             //open the remote_vent_valve
-            // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-            // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, LOW);
-            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_VENT_PWR);
+            digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, LOW);
         } else {
             //close the remote_vent_valve
-            // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-            // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
-            relay_bus_write(REMOTE_FILL_ADDR, REMOTE_VENT_PWR + REMOTE_VENT_SEL);
+            digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+            digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
         }
     }
 
@@ -110,29 +104,23 @@ void apply_state(){
             //decide whether to write to primary or secondary ignition
             if(global_requested_state.ignition_select) {
                 //write to secondary
-                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-                relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
-                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
-                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
-                relay_bus_write(SECONDARY_IGNITION_ADDR, SECONDARY_IGNITION_PWR + SECONDARY_IGNITION_SEL);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, HIGH);
             } else {
                 //write to primary
-                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
-                // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
-                relay_bus_write(PRIMARY_IGNITION_ADDR, PRIMARY_IGNITION_PWR + PRIMARY_IGNITION_SEL);
-                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-                // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
-                relay_bus_write(SECONDARY_IGNITION_ADDR, 0);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, HIGH);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+                digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
             }
         } else {
             //remove power from ignition circuit
-            // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-            // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-            relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
-            // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-            // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
-            relay_bus_write(SECONDARY_IGNITION_ADDR, 0);
+            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+            digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
         }
     }
 
@@ -153,16 +141,26 @@ void reset_request(){
 }
 
 void init_outputs(){
+    pinMode(PIN_REMOTEFILL_POWER, OUTPUT);
+    pinMode(PIN_REMOTEFILL_SELECT, OUTPUT);
+    pinMode(PIN_REMOTEVENT_POWER, OUTPUT);
+    pinMode(PIN_REMOTEVENT_SELECT, OUTPUT);
+    pinMode(PIN_LINACTUATOR_POWER, OUTPUT);
+    pinMode(PIN_LINACTUATOR_SELECT, OUTPUT);
+
+    pinMode(PIN_IGNITION_PRIMARY_POWER, OUTPUT);
+    pinMode(PIN_IGNITION_PRIMARY_SELECT, OUTPUT);
+    pinMode(PIN_IGNITION_SECONDARY_POWER, OUTPUT);
+    pinMode(PIN_IGNITION_SECONDARY_SELECT, OUTPUT);
+
     //close the valves. This is the safest startup state
     //fill valve
-    // digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
-    // digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH); //select pin going high should set it to close, if it's wired right
-    relay_bus_write(REMOTE_FILL_ADDR, REMOTE_FILL_PWR + REMOTE_FILL_ADDR);
+    digitalWrite((uint8_t) PIN_REMOTEFILL_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_REMOTEFILL_SELECT, HIGH); //select pin going high should set it to close, if it's wired right
 
     //vent valve
-    // digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
-    // digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
-    relay_bus_write(REMOTE_VENT_ADDR, REMOTE_VENT_PWR + REMOTE_VENT_SEL);
+    digitalWrite((uint8_t) PIN_REMOTEVENT_POWER, HIGH);
+    digitalWrite((uint8_t) PIN_REMOTEVENT_SELECT, HIGH);
 
     //run tank valve
     //TODO, figure out how the run tank valve is going to work
@@ -171,12 +169,11 @@ void init_outputs(){
     linac_init();
 
     //ignition, set to off by default
-    // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
-    // digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
-    // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
-    // digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
-    relay_bus_write(PRIMARY_IGNITION_ADDR, 0);
-    relay_bus_write(REMOTE_VENT_ADDR, 0);
+    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_POWER, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_PRIMARY_SELECT, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_POWER, LOW);
+    digitalWrite((uint8_t) PIN_IGNITION_SECONDARY_SELECT, LOW);
+
     //turn off the pin 13 LED
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
@@ -221,8 +218,8 @@ void tower_handle_rocketcan_update(const system_state *update)
     global_current_daq.num_boards_connected = update->num_boards_connected;
     global_current_daq.any_errors_detected = update->any_errors_detected;
     global_current_daq.pressure3 = update->tank_pressure;
-    global_current_daq.injector_valve_state = (valve_state_t)update->injector_valve_state;
-    global_current_daq.rocketvent_valve_state = (valve_state_t)update->vent_valve_state;
+    global_current_daq.injector_valve_state = update->injector_valve_state;
+    global_current_daq.rocketvent_valve_state = update->vent_valve_state;
     global_current_daq.bus_batt_mv = update->bus_battery_voltage_mv;
     global_current_daq.vent_batt_mv = update->vent_battery_voltage_mv;
     //TODO, log to rlcslog
@@ -231,5 +228,7 @@ void tower_handle_rocketcan_update(const system_state *update)
 //global for how long it's been since the output log was flushed
 //to the SD card
 unsigned long global_time_last_output_flush = 0;
+const unsigned long global_output_flush_interval = 10000;
 //global for how long it's been since we logged daq values
 unsigned long global_time_last_logged_daq = 0;
+const unsigned long global_time_between_daq_logs = 1000;

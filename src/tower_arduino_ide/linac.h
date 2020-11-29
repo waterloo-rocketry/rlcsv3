@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //linear actuator handling library
 //depends on PIN_LINACTUATOR_{POWER,SELECT} being defined
@@ -25,8 +25,8 @@ void linac_refresh();
 uint8_t linac_extend();
 uint8_t linac_retract();
 
-// #ifdef __cplusplus
-// }
-// #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif //ifnde LINAC_H_

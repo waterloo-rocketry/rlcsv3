@@ -1,37 +1,10 @@
 #include <stdint.h>
-<<<<<<< HEAD
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <xc.h>
-#include <pic16f1826.h>
-=======
 #include <stdlib.h>
 #include <xc.h>
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
 #include "i2c.h"
 #include "relay_general.h"
 #include "timer.h"
 
-<<<<<<< HEAD
-
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-
-#define MAX_LOOP_TIME_DIFF_CONST 100
-
-#define IGNITION_BOARD    1
-#define REMOTE_FILL_BOARD 2
-#define REMOTE_VENT_BOARD 3
-#define LINAC_BOARD       4
-
-uint16_t dip_inputs;
-
-static void __interrupt() interrupt_handler() {
-    //We received a i2c request from master, handle it.
-    if (SSP1IF == 1) {
-       i2c_handle_interrupt();                                                                                                         
-=======
 #define MAX_LOOP_TIME_DIFF_CONST 100
 
 #define CURR_SENSE_1 1
@@ -43,7 +16,6 @@ static void __interrupt() interrupt_handler(void) {
     //We received a i2c request from master, handle it.
     if (SSP1IF == 1) {
        i2c_handle_interrupt();
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
     }
     // Timer0 has overflowed - update millis() function
     // This happens approximately every 500us
@@ -53,16 +25,6 @@ static void __interrupt() interrupt_handler(void) {
     }
 }
 
-<<<<<<< HEAD
-void readDipInputs() {
-    uint16_t newDip = 0;
-    newDip |= (!PORTBbits.RB3) ? (1) : 0;       //LSB
-    newDip |= (!PORTBbits.RB2) ? (1 << 1) : 0;  
-    newDip |= (!PORTBbits.RB0) ? (1 << 2) : 0;
-    newDip |= (!PORTAbits.RA4) ? (1 << 3) : 0;  //MSB
-    if(dip_inputs != newDip) {
-        dip_inputs = newDip;
-=======
 void read_dip_inputs(void) {
     uint16_t new_dip = 0;
     new_dip |= (!PORTBbits.RB3) ? (1) : 0;       //LSB
@@ -71,40 +33,16 @@ void read_dip_inputs(void) {
     new_dip |= (!PORTAbits.RA4) ? (1 << 3) : 0;  //MSB
     if(dip_inputs != new_dip) {
         dip_inputs = new_dip;
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
         i2c_slave_init(dip_inputs); //reinitialize i2c slave module with new slave address
     }
 }
 
-<<<<<<< HEAD
-void setup() {
-=======
 void setup(void) {
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
     TRISAbits.TRISA0 = 1;   //CURR_SENSE_2
     TRISAbits.TRISA1 = 1;   //CURR_SENSE_1
     TRISAbits.TRISA2 = 0;   //POWER
     TRISAbits.TRISA3 = 0;   //SELECT
     TRISAbits.TRISA4 = 1;   //DIP_1
-<<<<<<< HEAD
-    TRISAbits.TRISA6 = 0;   //LIM2
-    TRISAbits.TRISA7 = 0;   //LIM1
-    TRISBbits.TRISB0 = 1;   //DIP_2
-    TRISBbits.TRISB2 = 1;   //DIP_3
-    TRISBbits.TRISB3 = 1;   //DIP_4 
-    TRISBbits.TRISB5 = 0;   //LED
-    
-    ANSELA = 0;             //DISABLE ANALOG INPUT ON PORT A, then enable port 0 and 1
-    ANSELAbits.ANSA0 = 1;   //CURR_SENSE_2
-    ANSELAbits.ANSA1 = 1;   //CURR_SENSE_1
-    
-    ANSELB = 0;             //DISABLE ANALOG INPUT ON PORT B
-    
-    // Configure ADC module 
-    // b[7] sets right justification, b[6:4] sets CS = FRC,
-    // b[2]+b[1:0] sets Vss and Vdd as references.
-    ADCON1 = 0b11110000;
-=======
     TRISAbits.TRISA6 = 1;   //LIM2
     TRISAbits.TRISA7 = 1;   //LIM1
     TRISBbits.TRISB0 = 1;   //DIP_2
@@ -127,26 +65,11 @@ void setup(void) {
     // b[7] sets right justification, b[6:4] sets CS = FRC,
     // b[2]+b[1:0] sets Vss and FVR as references.
     ADCON1 = 0b11110011;
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
 }
 
 int main(int argc, char** argv) {
     setup();                    //Set up digital + analog I/O
     timer0_init();              //Initialize timer
-<<<<<<< HEAD
-    set_power_off();
-    set_power_off();
-    set_select_off();
-    set_lim1_off();
-    set_lim2_off();
-    readDipInputs();            //Get dip switch value to set slave address
-    set_led_off();
-    i2c_slave_init(3);
-    //i2c_slave_init(dip_inputs);  //Set board as i2c slave with dipswitch address
-    
-    uint32_t last_millis = millis();
-    
-=======
     set_power_on();
     set_select_off();
     set_led_off();
@@ -156,19 +79,11 @@ int main(int argc, char** argv) {
 
     uint32_t last_millis = millis();
 
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
     while (1) {
         //Heartbeat
         if (millis() - last_millis > MAX_LOOP_TIME_DIFF_CONST) {
             //One day I will configure this correctly, but ATM we only need the LED to blink ;-;
             last_millis = millis();
-<<<<<<< HEAD
-        }
-        
-        readDipInputs(); //Check if dip switch input has changed
-        
-        //uint16_t curr = readAnalogInputs();
-=======
 
             led_heartbeat();
         }
@@ -177,7 +92,6 @@ int main(int argc, char** argv) {
         read_analog_inputs(CURR_SENSE_2);
 
         read_dip_inputs(); //Check if dip switch input has changed, re-init i2c if so
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
     }
     return (EXIT_SUCCESS);
 }

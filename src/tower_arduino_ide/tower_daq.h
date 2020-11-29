@@ -6,9 +6,9 @@
 //how many samples to hold in our sliding window average
 #define WINDOW_WIDTH 16
 
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 //call at startup. Sets pin modes, allocates space, whatever
 void init_daq_pins();
 
@@ -20,9 +20,9 @@ void compute_daq_values(daq_holder_t* output);
 
 //scaling factors and other constants
 
-// #ifdef __cplusplus
-// }
-// #endif
+#ifdef __cplusplus
+}
+#endif
 /*
  * BASED ON CALIBRATION DONE ON JUNE 8TH
  * AT 12.49Vbatt:

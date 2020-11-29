@@ -4,9 +4,9 @@
 #include "shared_types.h"
 #include "nodeio.ioio.h"
 
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define millis_offset millis
 
@@ -27,8 +27,8 @@ void goto_safe_mode();
 //callback for nodeio.ioio to give us updates on stuff
 void tower_handle_rocketcan_update(const system_state *update);
 
-// #ifdef __cplusplus
-// }
-// #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif //ifndef TOWER_GLOBALS_H

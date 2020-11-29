@@ -9,11 +9,9 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 #include "linac.h"
-#include "relay_bus.h"
 
 void setup() {
     //initialize all outputs
-    relay_bus_init();
     init_outputs();
     init_daq_pins();
     radio_init();
@@ -33,11 +31,10 @@ const unsigned long global_min_time_between_contacts = 10000;
 //used for the SD card handler
 extern unsigned long global_time_last_output_flush;
 //flush the rlcslog to sd card every 10 seconds
-const unsigned long global_output_flush_interval = 10000;
+extern const unsigned long global_output_flush_interval;
 
 extern unsigned long global_time_last_logged_daq;
-const unsigned long global_time_between_daq_logs = 1000;
-
+extern const unsigned long global_time_between_daq_logs;
 
 void loop() {
     //check for inputs from radio
