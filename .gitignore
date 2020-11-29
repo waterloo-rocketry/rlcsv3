@@ -18,8 +18,6 @@ fp-info-cache
 /arduino_programs/tests/shared_type_tests
 /arduino_programs/tests/nodeio_ioio_tests
 
-<<<<<<< HEAD
-=======
 # For PCBs designed using KiCad: http://www.kicad-pcb.org/
 # Format documentation: http://kicad-pcb.org/help/file-formats/
 
@@ -42,7 +40,6 @@ fp-info-cache
 # Autorouter files (exported from Pcbnew)
 *.dsn
 *.ses
->>>>>>> 4e0c8d71b3290d9faf8db479f6ec01670aabe4c2
 
 # MPLAB Project Folders
 build
