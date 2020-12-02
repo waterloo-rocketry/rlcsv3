@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-uint16_t analog_inputs[2];
-
 uint16_t read_analog_inputs(uint8_t port);
+
+uint16_t get_analog_inputs(uint8_t port);
 
 void set_power_on(void);
 
