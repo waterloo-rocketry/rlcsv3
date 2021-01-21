@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:rlcs_power-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -967,27 +966,14 @@ Wire Wire Line
 	2650 5750 2650 5850
 Wire Wire Line
 	2650 5850 2500 5850
-Wire Wire Line
-	7750 4750 7750 5250
 Text Label 7750 4750 0    60   ~ 0
 SDA
 Text Label 7650 4650 0    60   ~ 0
 SCL
 Wire Wire Line
 	7550 4350 7550 4450
-Wire Wire Line
-	7650 4850 7650 5350
-Wire Wire Line
-	7750 5250 6700 5250
 Connection ~ 7450 4950
-Wire Wire Line
-	7450 4950 7450 5450
 Connection ~ 7250 5050
-Wire Wire Line
-	7250 5050 7250 5550
-Connection ~ 7050 5150
-Wire Wire Line
-	7050 5150 7050 5650
 Wire Wire Line
 	6700 4750 7750 4750
 Wire Wire Line
@@ -1007,25 +993,25 @@ Wire Wire Line
 Wire Wire Line
 	7450 4350 7550 4350
 Wire Wire Line
-	7050 5650 6700 5650
+	7050 6050 6700 6050
 Wire Wire Line
-	7250 5550 6700 5550
+	7250 5950 6700 5950
 Wire Wire Line
-	7450 5450 6700 5450
+	7450 5850 6700 5850
 Wire Wire Line
-	7650 5350 6700 5350
+	7650 5750 6700 5750
 Connection ~ 7650 4850
 Wire Wire Line
 	7650 4850 7650 4650
 $Comp
 L Connector:Conn_01x05_Male J3
 U 1 1 5EE7917B
-P 6500 5450
-F 0 "J3" H 6100 5650 50  0000 C CNN
-F 1 "Conn_01x05_Male" H 6100 5500 50  0000 C CNN
-F 2 "Connector_JST:JST_EH_B5B-EH-A_1x05_P2.50mm_Vertical" H 6500 5450 50  0001 C CNN
-F 3 "~" H 6500 5450 50  0001 C CNN
-	1    6500 5450
+P 6500 5850
+F 0 "J3" H 6100 6050 50  0000 C CNN
+F 1 "Conn_01x05_Male" H 6100 5900 50  0000 C CNN
+F 2 "Connector_JST:JST_EH_B5B-EH-A_1x05_P2.50mm_Vertical" H 6500 5850 50  0001 C CNN
+F 3 "~" H 6500 5850 50  0001 C CNN
+	1    6500 5850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1072,4 +1058,17 @@ F 3 "" H 7250 4450 50  0001 C CNN
 	1    7250 4450
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6700 5650 7750 5650
+Wire Wire Line
+	7050 5150 7050 6050
+Connection ~ 7050 5150
+Wire Wire Line
+	7250 5050 7250 5950
+Wire Wire Line
+	7450 4950 7450 5850
+Wire Wire Line
+	7650 4850 7650 5750
+Wire Wire Line
+	7750 4750 7750 5650
 $EndSCHEMATC

@@ -152,7 +152,7 @@ U 1 1 59C4FBF5
 P 3500 1250
 F 0 "JP1" H 3550 1150 50  0000 L CNN
 F 1 "Jumper_NC_Dual" H 3500 1350 50  0000 C BNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical_SMD_Pin1Left" H 3500 1250 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 3500 1250 50  0001 C CNN
 F 3 "" H 3500 1250 50  0001 C CNN
 	1    3500 1250
 	1    0    0    -1  
