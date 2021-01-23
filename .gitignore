@@ -5,6 +5,7 @@
 
 *.dwl
 *.dwl2
+fp-info-cache
 
 #My mac keeps putting these files everywhere
 .DS_Store
@@ -39,3 +40,11 @@ fp-info-cache
 # Autorouter files (exported from Pcbnew)
 *.dsn
 *.ses
+
+# MPLAB Project Folders
+build
+debug
+dist
+# nbproject
+src/relay_pic/nbproject/Makefile-*
+src/relay_pic/nbproject/private
