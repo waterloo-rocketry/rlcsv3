@@ -770,7 +770,7 @@ F 3 "" H 3550 6400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 2000 6400 0    60   Input ~ 0
-ARD_CON_7SEG_D2
+Sevenseg_D2
 $Comp
 L Device:R_Small R14
 U 1 1 59C5BE8C
@@ -860,7 +860,7 @@ F 3 "" H 3450 4900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 Text GLabel 1950 3900 0    60   Input ~ 0
-ARD_CON_7SEG_D1
+Sevenseg_D1
 $Comp
 L power:+12V #PWR018
 U 1 1 5ED7013C
@@ -966,10 +966,6 @@ Wire Wire Line
 	2650 5750 2650 5850
 Wire Wire Line
 	2650 5850 2500 5850
-Text Label 7750 4750 0    60   ~ 0
-SDA
-Text Label 7650 4650 0    60   ~ 0
-SCL
 Wire Wire Line
 	7550 4350 7550 4450
 Connection ~ 7450 4950
@@ -1001,8 +997,6 @@ Wire Wire Line
 Wire Wire Line
 	7650 5750 6700 5750
 Connection ~ 7650 4850
-Wire Wire Line
-	7650 4850 7650 4650
 $Comp
 L Connector:Conn_01x05_Male J3
 U 1 1 5EE7917B
@@ -1071,4 +1065,10 @@ Wire Wire Line
 	7650 4850 7650 5750
 Wire Wire Line
 	7750 4750 7750 5650
+Text GLabel 7750 4750 2    60   Input ~ 0
+ARD_CON_SDA
+Wire Wire Line
+	7650 4550 7650 4850
+Text GLabel 7650 4550 2    60   Input ~ 0
+ARD_CON_SD_SCL
 $EndSCHEMATC

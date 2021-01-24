@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:rlcs_power-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -28,18 +27,8 @@ Text Notes 2800 3150 0    60   ~ 0
 Arduino Pins Power
 Text Notes 700  950  0    60   ~ 0
 Arudino Pins 0 - 7
-Text GLabel 9000 3000 2    60   Input ~ 0
-ARD_CON_SD_MOSI
-Text GLabel 7100 3000 0    60   Input ~ 0
-ARD_CON_SD_MISO
-Text GLabel 9000 3200 2    60   Input ~ 0
-ARD_CON_SD_SS
 Text Notes 850  6200 0    60   ~ 0
 All Arduino connections put on this sheet\nso they can be reordered without screwing\nup the main sheet\n\n(this doesn't include power out)
-Text GLabel 7100 3200 0    60   Input ~ 0
-ARD_CON_SD_CD
-Text GLabel 9000 3350 2    60   Input ~ 0
-ARD_CON_SD_WP
 Text GLabel 2450 3800 2    60   Input ~ 0
 ARD_CON_SD_SCL
 $Comp
@@ -131,22 +120,6 @@ Wire Wire Line
 	5250 3650 4450 3650
 Wire Wire Line
 	4700 3250 4450 3250
-Text GLabel 9000 2200 2    60   Input ~ 0
-Sevenseg_F
-Text GLabel 9000 2600 2    60   Input ~ 0
-Sevenseg_D
-Text GLabel 9000 2400 2    60   Input ~ 0
-Sevenseg_C
-Text GLabel 9000 2000 2    60   Input ~ 0
-Sevenseg_A
-Text GLabel 9000 2800 2    60   Input ~ 0
-Sevenseg_D1
-Text GLabel 7100 2800 0    60   Input ~ 0
-Sevenseg_D2
-Text GLabel 7100 2400 0    60   Input ~ 0
-Sevenseg_E
-Text GLabel 7100 2600 0    60   Input ~ 0
-Sevenseg_DP
 Wire Wire Line
 	5100 3250 5250 3250
 Wire Wire Line
@@ -207,10 +180,6 @@ Wire Wire Line
 	8700 2800 8700 3000
 Wire Wire Line
 	8700 3000 9000 3000
-Text GLabel 7100 2000 0    60   Input ~ 0
-Sevenseg_G
-Text GLabel 7100 2200 0    60   Input ~ 0
-Sevenseg_B
 Wire Wire Line
 	8300 2600 8750 2600
 Wire Wire Line
@@ -236,31 +205,19 @@ Wire Wire Line
 Wire Wire Line
 	8300 2400 9000 2400
 Wire Wire Line
-	7350 2000 7100 2000
-Wire Wire Line
-	7800 2400 7100 2400
-Wire Wire Line
-	7350 2200 7350 2000
-Wire Wire Line
 	7800 2200 7350 2200
 Wire Wire Line
 	7300 2300 7300 2200
 Wire Wire Line
-	7300 2200 7100 2200
-Wire Wire Line
 	7800 2300 7300 2300
 Wire Wire Line
 	7300 2500 7300 2600
-Wire Wire Line
-	7300 2600 7100 2600
 Wire Wire Line
 	7800 2500 7300 2500
 Wire Wire Line
 	7350 2600 7350 2800
 Wire Wire Line
 	7800 2600 7350 2600
-Wire Wire Line
-	7350 2800 7100 2800
 Wire Wire Line
 	7800 2800 7400 2800
 Wire Wire Line
@@ -302,4 +259,54 @@ F 3 "" H 4350 3200 60  0001 C CNN
 $EndComp
 Wire Wire Line
 	5250 3250 5250 3650
+Text GLabel 7100 2600 0    60   Input ~ 0
+Sevenseg_D1
+Text GLabel 9000 2000 2    60   Input ~ 0
+Sevenseg_A
+Text GLabel 7100 2000 0    60   Input ~ 0
+Sevenseg_C
+Text GLabel 7100 2800 0    60   Input ~ 0
+Sevenseg_D
+Text GLabel 9000 2800 2    60   Input ~ 0
+Sevenseg_F
+Text GLabel 9000 3350 2    60   Input ~ 0
+ARD_CON_SD_WP
+Text GLabel 9000 3200 2    60   Input ~ 0
+ARD_CON_SD_SS
+Text GLabel 9000 3000 2    60   Input ~ 0
+ARD_CON_SD_MOSI
+Text GLabel 7100 3200 0    60   Input ~ 0
+ARD_CON_SD_CD
+Text GLabel 7100 3000 0    60   Input ~ 0
+ARD_CON_SD_MISO
+Wire Wire Line
+	7350 2200 7350 2000
+Text GLabel 7100 2200 0    60   Input ~ 0
+Sevenseg_D2
+Text GLabel 7100 2400 0    60   Input ~ 0
+Sevenseg_E
+Text GLabel 9000 2200 2    60   Input ~ 0
+Sevenseg_DP
+Text GLabel 9000 2600 2    60   Input ~ 0
+Sevenseg_G
+Text GLabel 9000 2400 2    60   Input ~ 0
+Sevenseg_B
+Wire Wire Line
+	7350 2800 7100 2800
+Wire Wire Line
+	7300 2600 7100 2600
+Wire Wire Line
+	7300 2200 7100 2200
+Wire Wire Line
+	7800 2400 7100 2400
+Wire Wire Line
+	7350 2000 7100 2000
+Text GLabel 2500 3650 2    60   Input ~ 0
+ARD_CON_SDA
+Wire Wire Line
+	2500 3650 2300 3650
+Wire Wire Line
+	2300 3650 2300 3700
+Wire Wire Line
+	2150 3700 2300 3700
 $EndSCHEMATC
