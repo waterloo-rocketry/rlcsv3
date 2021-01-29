@@ -23,14 +23,10 @@ Text Notes 2600 1950 0    60   ~ 0
 Arduino Pins A8 - A15
 Text Notes 700  2100 0    60   ~ 0
 Arduino Pins 8 - 13 \n+ some others\n
-Text Notes 2800 3150 0    60   ~ 0
-Arduino Pins Power
 Text Notes 700  950  0    60   ~ 0
 Arudino Pins 0 - 7
 Text Notes 850  6200 0    60   ~ 0
 All Arduino connections put on this sheet\nso they can be reordered without screwing\nup the main sheet\n\n(this doesn't include power out)
-Text GLabel 2450 3800 2    60   Input ~ 0
-ARD_CON_SD_SCL
 $Comp
 L custom:conn_22_to_53 J14
 U 1 1 5E7AFC08
@@ -105,23 +101,6 @@ Wire Wire Line
 	8700 1400 8300 1400
 Wire Wire Line
 	8700 1400 8700 1050
-$Comp
-L Switch:SW_Push S1
-U 1 1 5EB5D71A
-P 4900 3250
-F 0 "S1" H 4900 3535 50  0000 C CNN
-F 1 "SW_Push" H 4900 3444 50  0000 C CNN
-F 2 "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK" H 4900 3450 50  0001 C CNN
-F 3 "~" H 4900 3450 50  0001 C CNN
-	1    4900 3250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5250 3650 4450 3650
-Wire Wire Line
-	4700 3250 4450 3250
-Wire Wire Line
-	5100 3250 5250 3250
 Wire Wire Line
 	8750 2800 9000 2800
 $Comp
@@ -235,30 +214,7 @@ Wire Wire Line
 Wire Wire Line
 	2150 3800 2450 3800
 Wire Wire Line
-	7100 3200 7450 3200
-Wire Wire Line
-	7450 3200 7450 3000
-Wire Wire Line
-	7450 3000 7800 3000
-Wire Wire Line
-	9000 3350 8600 3350
-Wire Wire Line
-	8600 3350 8600 3000
-Wire Wire Line
-	8600 3000 8300 3000
-$Comp
-L custom:conn_power J11
-U 1 1 5ED49DCC
-P 4350 3000
-F 0 "J11" H 4237 3197 60  0000 C CNN
-F 1 "conn_power" H 4237 3091 60  0000 C CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 4350 3200 60  0001 C CNN
-F 3 "" H 4350 3200 60  0001 C CNN
-	1    4350 3000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5250 3250 5250 3650
+	7150 1750 7500 1750
 Text GLabel 7100 2600 0    60   Input ~ 0
 Sevenseg_D1
 Text GLabel 9000 2000 2    60   Input ~ 0
@@ -269,13 +225,13 @@ Text GLabel 7100 2800 0    60   Input ~ 0
 Sevenseg_D
 Text GLabel 9000 2800 2    60   Input ~ 0
 Sevenseg_F
-Text GLabel 9000 3350 2    60   Input ~ 0
+Text GLabel 8850 1750 2    60   Input ~ 0
 ARD_CON_SD_WP
 Text GLabel 9000 3200 2    60   Input ~ 0
 ARD_CON_SD_SS
 Text GLabel 9000 3000 2    60   Input ~ 0
 ARD_CON_SD_MOSI
-Text GLabel 7100 3200 0    60   Input ~ 0
+Text GLabel 7150 1750 0    60   Input ~ 0
 ARD_CON_SD_CD
 Text GLabel 7100 3000 0    60   Input ~ 0
 ARD_CON_SD_MISO
@@ -301,12 +257,56 @@ Wire Wire Line
 	7800 2400 7100 2400
 Wire Wire Line
 	7350 2000 7100 2000
-Text GLabel 2500 3650 2    60   Input ~ 0
-ARD_CON_SDA
 Wire Wire Line
 	2500 3650 2300 3650
 Wire Wire Line
 	2300 3650 2300 3700
 Wire Wire Line
 	2150 3700 2300 3700
+Text GLabel 2500 3650 2    60   Input ~ 0
+ARD_CON_SDA
+Wire Wire Line
+	5250 3250 5250 3650
+$Comp
+L custom:conn_power J11
+U 1 1 5ED49DCC
+P 4350 3000
+F 0 "J11" H 4237 3197 60  0000 C CNN
+F 1 "conn_power" H 4237 3091 60  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical" H 4350 3200 60  0001 C CNN
+F 3 "" H 4350 3200 60  0001 C CNN
+	1    4350 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 3250 5250 3250
+Wire Wire Line
+	4700 3250 4450 3250
+Wire Wire Line
+	5250 3650 4450 3650
+$Comp
+L Switch:SW_Push S1
+U 1 1 5EB5D71A
+P 4900 3250
+F 0 "S1" H 4900 3535 50  0000 C CNN
+F 1 "SW_Push" H 4900 3444 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK" H 4900 3450 50  0001 C CNN
+F 3 "~" H 4900 3450 50  0001 C CNN
+	1    4900 3250
+	1    0    0    -1  
+$EndComp
+Text GLabel 2450 3800 2    60   Input ~ 0
+ARD_CON_SD_SCL
+Text Notes 2800 3150 0    60   ~ 0
+Arduino Pins Power
+Wire Wire Line
+	7500 1750 7500 2000
+Wire Wire Line
+	7500 2000 7800 2000
+Wire Wire Line
+	8850 1750 8550 1750
+Wire Wire Line
+	8550 1750 8550 2000
+Wire Wire Line
+	8550 2000 8300 2000
 $EndSCHEMATC

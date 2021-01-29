@@ -198,12 +198,6 @@ Wire Wire Line
 Wire Wire Line
 	7800 2600 7350 2600
 Wire Wire Line
-	7800 2800 7400 2800
-Wire Wire Line
-	7400 2800 7400 3000
-Wire Wire Line
-	7400 3000 7100 3000
-Wire Wire Line
 	8300 3100 8350 3100
 Wire Wire Line
 	9000 3200 8650 3200
@@ -233,7 +227,7 @@ Text GLabel 9000 3000 2    60   Input ~ 0
 ARD_CON_SD_MOSI
 Text GLabel 7150 1750 0    60   Input ~ 0
 ARD_CON_SD_CD
-Text GLabel 7100 3000 0    60   Input ~ 0
+Text GLabel 7200 1550 0    60   Input ~ 0
 ARD_CON_SD_MISO
 Wire Wire Line
 	7350 2200 7350 2000
@@ -309,4 +303,10 @@ Wire Wire Line
 	8550 1750 8550 2000
 Wire Wire Line
 	8550 2000 8300 2000
+Wire Wire Line
+	7200 1550 7600 1550
+Wire Wire Line
+	7600 1550 7600 1900
+Wire Wire Line
+	7600 1900 7800 1900
 $EndSCHEMATC
