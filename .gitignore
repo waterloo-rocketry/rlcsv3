@@ -3,10 +3,9 @@
 *.hex
 *.elf
 
-*.bak
-*.kicad_pcb-bak
 *.dwl
 *.dwl2
+fp-info-cache
 
 schematics/power_board_schematics/*.bak
 schematics/power_board_schematics/*.kicad_pcb-bak
@@ -25,3 +24,34 @@ schematics/power_board_schematics/*.sch-bak
 #test executables shouldn't be tracked
 /arduino_programs/tests/shared_type_tests
 /arduino_programs/tests/nodeio_ioio_tests
+
+# For PCBs designed using KiCad: http://www.kicad-pcb.org/
+# Format documentation: http://kicad-pcb.org/help/file-formats/
+
+# Temporary files
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.sch-bak
+*~
+_autosave-*
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+fp-info-cache
+
+# Netlist files (exported from Eeschema)
+*.net
+
+# Autorouter files (exported from Pcbnew)
+*.dsn
+*.ses
+
+# MPLAB Project Folders
+build
+debug
+dist
+# nbproject
+src/relay_pic/nbproject/Makefile-*
+src/relay_pic/nbproject/private
