@@ -154,11 +154,7 @@ $EndComp
 Wire Wire Line
 	7750 3100 7800 3100
 Wire Wire Line
-	8300 2800 8700 2800
-Wire Wire Line
-	8700 2800 8700 3000
-Wire Wire Line
-	8700 3000 9000 3000
+	8700 3100 9000 3100
 Wire Wire Line
 	8300 2600 8750 2600
 Wire Wire Line
@@ -198,19 +194,9 @@ Wire Wire Line
 Wire Wire Line
 	7800 2600 7350 2600
 Wire Wire Line
-	7800 2800 7400 2800
-Wire Wire Line
-	7400 2800 7400 3000
-Wire Wire Line
-	7400 3000 7100 3000
-Wire Wire Line
 	8300 3100 8350 3100
 Wire Wire Line
-	9000 3200 8650 3200
-Wire Wire Line
-	8650 3200 8650 2900
-Wire Wire Line
-	8650 2900 8300 2900
+	9000 3300 8650 3300
 Wire Wire Line
 	2150 3800 2450 3800
 Wire Wire Line
@@ -227,14 +213,12 @@ Text GLabel 9000 2800 2    60   Input ~ 0
 Sevenseg_F
 Text GLabel 8850 1750 2    60   Input ~ 0
 ARD_CON_SD_WP
-Text GLabel 9000 3200 2    60   Input ~ 0
+Text GLabel 9000 3300 2    60   Input ~ 0
 ARD_CON_SD_SS
-Text GLabel 9000 3000 2    60   Input ~ 0
+Text GLabel 9000 3100 2    60   Input ~ 0
 ARD_CON_SD_MOSI
 Text GLabel 7150 1750 0    60   Input ~ 0
 ARD_CON_SD_CD
-Text GLabel 7100 3000 0    60   Input ~ 0
-ARD_CON_SD_MISO
 Wire Wire Line
 	7350 2200 7350 2000
 Text GLabel 7100 2200 0    60   Input ~ 0
@@ -296,7 +280,7 @@ F 3 "~" H 4900 3450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 2450 3800 2    60   Input ~ 0
-ARD_CON_SD_SCL
+ARD_CON_SCL
 Text Notes 2800 3150 0    60   ~ 0
 Arduino Pins Power
 Wire Wire Line
@@ -309,4 +293,28 @@ Wire Wire Line
 	8550 1750 8550 2000
 Wire Wire Line
 	8550 2000 8300 2000
+Wire Wire Line
+	8700 2900 8700 3100
+Wire Wire Line
+	8650 3300 8650 3000
+Wire Wire Line
+	8650 3000 8300 3000
+Wire Wire Line
+	8300 2900 8700 2900
+Wire Wire Line
+	7450 2900 7450 3000
+Wire Wire Line
+	7450 3000 7250 3000
+Wire Wire Line
+	7800 2900 7450 2900
+Text GLabel 7250 3000 0    60   Input ~ 0
+ARD_CON_SD_MISO
+Text GLabel 7200 3200 0    60   Input ~ 0
+ARD_CON_SD_SCL
+Wire Wire Line
+	7800 3000 7500 3000
+Wire Wire Line
+	7500 3000 7500 3200
+Wire Wire Line
+	7500 3200 7200 3200
 $EndSCHEMATC
