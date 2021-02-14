@@ -310,7 +310,7 @@ Wire Wire Line
 Text GLabel 7250 3000 0    60   Input ~ 0
 ARD_CON_SD_MISO
 Text GLabel 7200 3200 0    60   Input ~ 0
-ARD_CON_SD_SCL
+ARD_CON_SD_SCK
 Wire Wire Line
 	7800 3000 7500 3000
 Wire Wire Line
