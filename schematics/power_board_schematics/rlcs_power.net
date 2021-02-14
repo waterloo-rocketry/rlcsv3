@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source "D:\\OneDrive - University of Waterloo\\Documents\\Rocketry\\rlcs\\schematics\\power_board_schematics\\rlcs_power.sch")
-    (date "2021-02-14 5:35:56 PM")
+    (date "2021-02-14 5:44:59 PM")
     (tool "Eeschema (5.1.8)-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -326,7 +326,7 @@
       (tstamp 5ED49DCC))
     (comp (ref S1)
       (value SW_Push)
-      (footprint Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK)
+      (footprint Button_Switch_THT:SW_PUSH_6mm)
       (datasheet ~)
       (libsource (lib Switch) (part SW_Push) (description "Push button switch, generic, two pins"))
       (sheetpath (names "/Arduino Connections/") (tstamps /59C6DB4C/))
