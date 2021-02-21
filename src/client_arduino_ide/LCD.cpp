@@ -65,7 +65,7 @@ static void display_valves_line2(unsigned char ox_injector_open, unsigned char o
 static void display_current_line(uint16_t pri_current, uint16_t sec_current);
 static void display_battery_line(uint16_t tower_actuator_batt, uint16_t tower_main_batt, uint16_t client_batt);
 
-// not using thease
+// not using these
 static void display_ground_batt_line(uint16_t client_batt, uint16_t tower_batt);
 static void display_rocket_batt_line(uint16_t flight_bus_batt,
                                      uint16_t flight_vent_batt);
@@ -113,7 +113,7 @@ void lcd_update(daq_holder_t *input)
     //display the fourth line
     display_battery_line(input->rlcs_actuator_batt_mv, input->rlcs_main_batt_mv, client_battery);
 
-    // the code bellow was used with the old alternating system
+    // the code below was used with the old alternating system
     
     /*if (display_first_line) {
         //the one with the rocket mass in it

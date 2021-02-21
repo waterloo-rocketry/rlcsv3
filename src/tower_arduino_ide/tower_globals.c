@@ -4,7 +4,6 @@
 #include "nodeio.ioio.h"
 #include "sd_handler.h"
 #include "linac.h"
-#include "injector.h"
 #include "Arduino.h"
 
 static actuator_state_t global_requested_state;
@@ -92,7 +91,7 @@ void apply_state(){
             digitalWrite((uint8_t) PIN_VALVE_4_SELECT, HIGH);
         }
     }
-/*
+
     global_current_state.valve_3 = global_requested_state.valve_3;
     //tell nodeio.ioio that we want the vent to change
     if(global_requested_state.valve_3){
@@ -102,7 +101,7 @@ void apply_state(){
     else {
         nio_set_vent_desired(VALVE_CLOSED);
     }
-*/
+
     global_current_state.injector_valve = global_requested_state.injector_valve;
     //tell nodeio.ioio that we want the injector to change and change the injector valves
     if(global_requested_state.injector_valve){
