@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define CURR_SENSE_1 1
+#define CURR_SENSE_2 0
+
 uint16_t read_analog_inputs(uint8_t port);
 
 uint16_t get_analog_inputs(uint8_t port);

@@ -7,9 +7,6 @@
 
 #define MAX_LOOP_TIME_DIFF_CONST 100
 
-#define CURR_SENSE_1 1
-#define CURR_SENSE_2 0
-
 uint16_t dip_inputs;
 
 static void __interrupt() interrupt_handler(void) {
