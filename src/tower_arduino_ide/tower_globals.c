@@ -4,6 +4,7 @@
 #include "nodeio.ioio.h"
 #include "sd_handler.h"
 #include "linac.h"
+#include "i2c.h"
 #include "Arduino.h"
 
 static actuator_state_t global_requested_state;
@@ -41,12 +42,12 @@ void apply_state(){
         global_current_state.valve_1 = global_requested_state.valve_1;
         if(global_current_state.valve_1){
             //open the valve_1
-            digitalWrite((uint8_t) PIN_VALVE_1_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_1_SELECT, LOW);
+            i2c_set_valve_select(I2C_VALVE_1, 0);
+            i2c_set_valve_power(I2C_VALVE_1, 1);
         } else {
             //close the valve_1
-            digitalWrite((uint8_t) PIN_VALVE_1_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_1_SELECT, HIGH);
+            i2c_set_valve_select(I2C_VALVE_1, 1);
+            i2c_set_valve_power(I2C_VALVE_1, 1);
         }
     }
 
@@ -55,12 +56,12 @@ void apply_state(){
         global_current_state.valve_2 = global_requested_state.valve_2;
         if(global_current_state.valve_2){
             //open the valve_2
-            digitalWrite((uint8_t) PIN_VALVE_2_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_2_SELECT, LOW);
+            i2c_set_valve_select(I2C_VALVE_2, 0);
+            i2c_set_valve_power(I2C_VALVE_2, 1);
         } else {
             //close the valve_2
-            digitalWrite((uint8_t) PIN_VALVE_2_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_2_SELECT, HIGH);
+            i2c_set_valve_select(I2C_VALVE_2, 1);
+            i2c_set_valve_power(I2C_VALVE_2, 1);
         }
     }
 
@@ -69,12 +70,12 @@ void apply_state(){
         global_current_state.valve_3 = global_requested_state.valve_3;
         if(global_current_state.valve_3){
             //open the valve_3
-            digitalWrite((uint8_t) PIN_VALVE_3_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_3_SELECT, LOW);
+            i2c_set_valve_select(I2C_VALVE_3, 0);
+            i2c_set_valve_power(I2C_VALVE_3, 1);
         } else {
             //close the valve_3
-            digitalWrite((uint8_t) PIN_VALVE_3_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_3_SELECT, HIGH);
+            i2c_set_valve_select(I2C_VALVE_3, 1);
+            i2c_set_valve_power(I2C_VALVE_3, 1);
         }
     }
 
@@ -83,12 +84,12 @@ void apply_state(){
         global_current_state.valve_4 = global_requested_state.valve_4;
         if(global_current_state.valve_4){
             //open the valve_4
-            digitalWrite((uint8_t) PIN_VALVE_4_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_4_SELECT, LOW);
+            i2c_set_valve_select(I2C_VALVE_4, 0);
+            i2c_set_valve_power(I2C_VALVE_4, 1);
         } else {
             //close the valve_4
-            digitalWrite((uint8_t) PIN_VALVE_4_POWER, HIGH);
-            digitalWrite((uint8_t) PIN_VALVE_4_SELECT, HIGH);
+            i2c_set_valve_select(I2C_VALVE_4, 1);
+            i2c_set_valve_power(I2C_VALVE_4, 1);
         }
     }
 
@@ -108,17 +109,14 @@ void apply_state(){
         //we want it open
         nio_set_inj_desired(VALVE_OPEN);
         //open it
-        digitalWrite((uint8_t) PIN_INJECTOR_VALVE_POWER, HIGH);
-        digitalWrite((uint8_t) PIN_INJECTOR_VALVE_SELECT, LOW);
-
-        
+            i2c_set_valve_select(I2C_VALVE_INJECTOR, 0);
+            i2c_set_valve_power(I2C_VALVE_INJECTOR, 1);
     }
     else {
         nio_set_inj_desired(VALVE_CLOSED);
         // close it
-        digitalWrite((uint8_t) PIN_INJECTOR_VALVE_POWER, HIGH);
-        digitalWrite((uint8_t) PIN_INJECTOR_VALVE_SELECT, HIGH);
-        
+            i2c_set_valve_select(I2C_VALVE_INJECTOR, 1);
+            i2c_set_valve_power(I2C_VALVE_INJECTOR, 1);
     }
 
     if(global_requested_state.ignition_power != global_current_state.ignition_power){
@@ -128,17 +126,16 @@ void apply_state(){
             //decide whether to write to primary or secondary ignition
             if(global_requested_state.ignition_select) {
                 //write to secondary
-                digitalWrite((uint8_t) PIN_IGNITION_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
+                i2c_set_valve_select(I2C_IGNITION, 0);
+                i2c_set_valve_power(I2C_IGNITION, 1);
             } else {
                 //write to primary
-                digitalWrite((uint8_t) PIN_IGNITION_POWER, HIGH);
-                digitalWrite((uint8_t) PIN_IGNITION_SELECT, HIGH);
-
+                i2c_set_valve_select(I2C_IGNITION, 1);
+                i2c_set_valve_power(I2C_IGNITION, 1);
             }
         } else {
             //remove power from ignition circuit
-            digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
+            i2c_set_valve_power(I2C_IGNITION, 0);
         }
     }
 
@@ -173,30 +170,26 @@ void init_outputs(){
 
     pinMode(PIN_IGNITION_POWER, OUTPUT);
     pinMode(PIN_IGNITION_SELECT, OUTPUT);
-    
+
     //close the valves. This is the safest startup state
 
-    digitalWrite((uint8_t) PIN_VALVE_1_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE_1_SELECT, HIGH); //select pin going high should set it to close, if it's wired right
 
-    digitalWrite((uint8_t) PIN_VALVE_2_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE_2_SELECT, HIGH);
-    
-    digitalWrite((uint8_t) PIN_VALVE_3_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE_3_SELECT, HIGH);
-
-    digitalWrite((uint8_t) PIN_VALVE_4_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_VALVE_4_SELECT, HIGH);
-    
-    digitalWrite((uint8_t) PIN_INJECTOR_VALVE_POWER, HIGH);
-    digitalWrite((uint8_t) PIN_INJECTOR_VALVE_SELECT, HIGH);
+    i2c_set_valve_select(I2C_VALVE_1, 1);
+    i2c_set_valve_power(I2C_VALVE_1, 1);
+    i2c_set_valve_select(I2C_VALVE_2, 1);
+    i2c_set_valve_power(I2C_VALVE_2, 1);
+    i2c_set_valve_select(I2C_VALVE_3, 1);
+    i2c_set_valve_power(I2C_VALVE_3, 1);
+    i2c_set_valve_select(I2C_VALVE_4, 1);
+    i2c_set_valve_power(I2C_VALVE_4, 1);
+    i2c_set_valve_select(I2C_VALVE_INJECTOR, 1);
+    i2c_set_valve_power(I2C_VALVE_INJECTOR, 1);
 
     linac_init();
 
     //ignition, set to off by default
-    digitalWrite((uint8_t) PIN_IGNITION_POWER, LOW);
-    digitalWrite((uint8_t) PIN_IGNITION_SELECT, LOW);
-
+    i2c_set_valve_select(I2C_IGNITION, 0);
+    i2c_set_valve_power(I2C_IGNITION, 0);
 }
 
 //called when client hasn't told us to do anything for a while

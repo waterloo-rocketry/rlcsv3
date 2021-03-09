@@ -1,5 +1,5 @@
 #include "linac.h"
-#include "tower_pin_defines.h"
+#include "i2c.h"
 #include "Arduino.h"
 
 //macros
@@ -32,10 +32,8 @@ static unsigned long cycles_remaining_in_move = 0;
 //public functions
 void linac_init()
 {
-    pinMode(PIN_VALVE_3_POWER, OUTPUT);
-    digitalWrite(PIN_VALVE_3_POWER, LOW);
-    pinMode(PIN_VALVE_3_SELECT, OUTPUT);
-    digitalWrite(PIN_VALVE_3_SELECT, LOW);
+    i2c_set_valve_power(I2C_VALVE_3, 0);
+    i2c_set_valve_select(I2C_VALVE_3, 0);
 }
 
 void linac_refresh()
@@ -46,7 +44,7 @@ void linac_refresh()
         //state exit conditions
         if(millis() >= next_state_transition){
             //stop sending power to the linear actuator
-            digitalWrite(PIN_VALVE_3_POWER, LOW);
+            i2c_set_valve_power(I2C_VALVE_3, 0);
             //setup next state
             current_timer_state = LINAC_MOVING_UNPOWERED;
             //we become ready after LINAC_COOLDOWN_TIME seconds
@@ -62,7 +60,7 @@ void linac_refresh()
                 next_state_transition = millis() + LINAC_COOLDOWN_TIME;
             } else {
                 //power up again
-                digitalWrite(PIN_VALVE_3_POWER, HIGH);
+                i2c_set_valve_power(I2C_VALVE_3, 1);
                 //setup time to come back to unpowered mode
                 current_timer_state = LINAC_MOVING_POWERED;
                 next_state_transition = millis() + LINAC_POWERED_TIME_MOVING;
@@ -98,8 +96,8 @@ uint8_t linac_extend()
     //at this point, we know that we're allowed to extend the linear
     //actuator. So do that. the select pin needs to be written high
     //for this to work right
-    digitalWrite(PIN_VALVE_3_SELECT, HIGH); 
-    digitalWrite(PIN_VALVE_3_POWER, HIGH);
+    i2c_set_valve_select(I2C_VALVE_3, 1);
+    i2c_set_valve_power(I2C_VALVE_3, 1);
 
     //remember to stop moving after a certain amount of time
     current_timer_state = LINAC_MOVING_POWERED;
@@ -119,8 +117,8 @@ uint8_t linac_retract()
     if(current_linac_state == LINAC_RETRACTED)
         return true;
 
-    digitalWrite(PIN_VALVE_3_SELECT, LOW); 
-    digitalWrite(PIN_VALVE_3_POWER, HIGH);
+    i2c_set_valve_select(I2C_VALVE_3, 0);
+    i2c_set_valve_power(I2C_VALVE_3, 1);
 
     current_timer_state = LINAC_MOVING_POWERED;
     cycles_remaining_in_move = LINAC_CYCLES_MOVING;
