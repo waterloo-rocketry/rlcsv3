@@ -18,7 +18,7 @@ static struct {
     uint32_t battery_actuators;
 
     //all limit switches are digital values (either 1 or 0)
-    //these could be packed into a bit field, but I'm not 
+    //these could be packed into a bit field, but I'm not
     //at all worried about space, so am currently using uint8_t's
     uint8_t lsw_valve_1_opn;
     uint8_t lsw_valve_1_cls;
@@ -37,21 +37,9 @@ void init_daq_pins() {
     pinMode(PIN_DAQ_PRESSURE1, INPUT);
     pinMode(PIN_DAQ_PRESSURE2, INPUT);
     pinMode(PIN_DAQ_MASS, INPUT);
-    pinMode(PIN_CURRENT_IGNITION_PRI, INPUT);
-    pinMode(PIN_CURRENT_IGNITION_SEC, INPUT);
     pinMode(PIN_BATTERY_MAIN, INPUT);
     pinMode(PIN_BATTERY_ACTUATORS, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_1_OPN, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_1_CLS, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_2_OPN, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_2_CLS, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_3_OPN, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_3_CLS, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_4_OPN, INPUT);
-    pinMode(PIN_LIMITSW_VALVE_4_CLS, INPUT);
-    pinMode(PIN_LIMITSW_INJECTOR_VALVE_OPN, INPUT);
-    pinMode(PIN_LIMITSW_INJECTOR_VALVE_CLS, INPUT);
-    
+
     //set all the values in our window holder to 0
     memset(&window_holder, 0, sizeof(window_holder));
 }
@@ -59,43 +47,51 @@ void init_daq_pins() {
 static int window_holder_index = 0;
 void read_daq_pins() {
     //read all analog values into window holder
-    window_holder[window_holder_index].mass = 
+    window_holder[window_holder_index].mass =
         analogRead(PIN_DAQ_MASS);
-    window_holder[window_holder_index].pressure1 = 
+    window_holder[window_holder_index].pressure1 =
         analogRead(PIN_DAQ_PRESSURE1);
-    window_holder[window_holder_index].pressure2 = 
+    window_holder[window_holder_index].pressure2 =
         analogRead(PIN_DAQ_PRESSURE2);
-    window_holder[window_holder_index].curr_ignition_pri = 
-        analogRead(PIN_CURRENT_IGNITION_PRI);
-    window_holder[window_holder_index].curr_ignition_sec = 
-        analogRead(PIN_CURRENT_IGNITION_SEC);
+    i2c_get_currents(I2C_IGNITION,
+        &window_holder[window_holder_index].curr_ignition_pri,
+        &window_holder[window_holder_index].curr_ignition_sec);
     window_holder[window_holder_index].battery_main =
         analogRead(PIN_BATTERY_MAIN);
     window_holder[window_holder_index].battery_actuators =
         analogRead(PIN_BATTERY_ACTUATORS);
 
     //now read in all the digital values
+    valve_state_t valve_state = i2c_get_state(I2C_VALVE_1);
     window_holder[window_holder_index].lsw_valve_1_opn =
-        digitalRead(PIN_LIMITSW_VALVE_1_OPN);
+        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_1_cls =
-        digitalRead(PIN_LIMITSW_VALVE_1_CLS);
+        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+
+    valve_state = i2c_get_state(I2C_VALVE_2);
     window_holder[window_holder_index].lsw_valve_2_opn =
-        digitalRead(PIN_LIMITSW_VALVE_2_OPN);
+        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_2_cls =
-        digitalRead(PIN_LIMITSW_VALVE_2_CLS);
+        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+
+    valve_state = i2c_get_state(I2C_VALVE_3);
     window_holder[window_holder_index].lsw_valve_3_opn =
-        digitalRead(PIN_LIMITSW_VALVE_3_OPN);
+        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_3_cls =
-        digitalRead(PIN_LIMITSW_VALVE_3_CLS);
+        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+
+    valve_state = i2c_get_state(I2C_VALVE_4);
     window_holder[window_holder_index].lsw_valve_4_opn =
-        digitalRead(PIN_LIMITSW_VALVE_4_OPN);
+        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_4_cls =
-        digitalRead(PIN_LIMITSW_VALVE_4_CLS);
+        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+
+    valve_state = i2c_get_state(I2C_VALVE_INJECTOR);
     window_holder[window_holder_index].lsw_injector_valve_opn =
-        digitalRead(PIN_LIMITSW_INJECTOR_VALVE_OPN);
+        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_injector_valve_cls =
-        digitalRead(PIN_LIMITSW_INJECTOR_VALVE_CLS);
-    
+        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0
     if(++window_holder_index >= WINDOW_WIDTH)
@@ -125,7 +121,7 @@ void compute_daq_values(daq_holder_t* output) {
         output->valve_4_lsw_closed   += window_holder[i].lsw_valve_4_cls;
         output->injector_valve_lsw_open     += window_holder[i].lsw_injector_valve_opn;
         output->injector_valve_lsw_closed   += window_holder[i].lsw_injector_valve_cls;
-        
+
     }
 
     //apply scaling values. These need calibration, so I'll just use
@@ -181,7 +177,7 @@ void compute_daq_values(daq_holder_t* output) {
     output->valve_4_lsw_closed = (output->valve_4_lsw_closed / WINDOW_WIDTH) != 0;
     output->injector_valve_lsw_open = (output->injector_valve_lsw_open / WINDOW_WIDTH) != 0;
     output->injector_valve_lsw_closed = (output->injector_valve_lsw_closed / WINDOW_WIDTH) != 0;
-    
+
     //log what we just computed
     // TODO
     rlcslog_log_daq_values(output);
