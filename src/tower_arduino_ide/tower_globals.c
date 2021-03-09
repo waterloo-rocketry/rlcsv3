@@ -156,24 +156,8 @@ void reset_request(){
     global_requested_state.ignition_select = global_current_state.ignition_select;
 }
 
-void init_outputs(){
-    pinMode(PIN_VALVE_1_POWER, OUTPUT);
-    pinMode(PIN_VALVE_1_SELECT, OUTPUT);
-    pinMode(PIN_VALVE_2_POWER, OUTPUT);
-    pinMode(PIN_VALVE_2_SELECT, OUTPUT);
-    pinMode(PIN_VALVE_3_POWER, OUTPUT);
-    pinMode(PIN_VALVE_3_SELECT, OUTPUT);
-    pinMode(PIN_VALVE_4_POWER, OUTPUT);
-    pinMode(PIN_VALVE_4_SELECT, OUTPUT);
-    pinMode(PIN_INJECTOR_VALVE_POWER, OUTPUT);
-    pinMode(PIN_INJECTOR_VALVE_SELECT, OUTPUT);
-
-    pinMode(PIN_IGNITION_POWER, OUTPUT);
-    pinMode(PIN_IGNITION_SELECT, OUTPUT);
-
+void init_outputs() {
     //close the valves. This is the safest startup state
-
-
     i2c_set_valve_select(I2C_VALVE_1, 1);
     i2c_set_valve_power(I2C_VALVE_1, 1);
     i2c_set_valve_select(I2C_VALVE_2, 1);
