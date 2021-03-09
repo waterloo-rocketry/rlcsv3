@@ -40,10 +40,19 @@ void i2c_handle_interrupt(void) {
         SSPCONbits.CKP = 1;
         while(!BF);
         i2cSlaveRecv = SSP1BUF;
-        if (i2cSlaveRecv == 2) {
-            set_select_on();
-        } else {
-            set_select_off();
+        // LSB is 0 for power, 1 for select. Second bit is on/off.
+        if (i2cSlaveRecv & 1 == 0) {
+            if (i2cSlaveRecv >> 1 == 1) {
+                set_power_on();
+            } else {
+                set_power_off();
+            }
+        } else if (i2cSlaveRecv & 1 == 1) {
+            if (i2cSlaveRecv >> 1 == 1) {
+                set_select_on();
+            } else {
+                set_select_off();
+            }
         }
         SSPCONbits.CKP = 1;
         BF = 0;
