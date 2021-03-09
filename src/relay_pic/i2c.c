@@ -62,13 +62,13 @@ void i2c_handle_interrupt(void) {
         if (read_pointer == 0) {
             SSPBUF = (get_lim2() << 1) | get_lim1();
         } else if (read_pointer == 1) {
-            SSPBUF = (uint8_t)(get_analog_inputs(0));
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1));
         } else if (read_pointer == 2) {
-            SSPBUF = (uint8_t)(get_analog_inputs(0) >> 8);
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
         } else if (read_pointer == 3) {
-            SSPBUF = (uint8_t)(get_analog_inputs(1));
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2));
         } else if (read_pointer == 4) {
-            SSPBUF = (uint8_t)(get_analog_inputs(1) >> 8);
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
         }
         read_pointer++;
         SSPCONbits.CKP = 1;
