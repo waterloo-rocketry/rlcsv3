@@ -3,6 +3,7 @@
 #include "tower_pin_defines.h"
 #include "Arduino.h"
 #include "sd_handler.h"
+#include "i2c.h"
 
 //used for holding intermediate values
 static struct {
@@ -64,33 +65,33 @@ void read_daq_pins() {
     //now read in all the digital values
     valve_state_t valve_state = i2c_get_state(I2C_VALVE_1);
     window_holder[window_holder_index].lsw_valve_1_opn =
-        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_OPEN || valve_state == DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_1_cls =
-        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_CLOSED || valve_state == DAQ_VALVE_ILLEGAL;
 
     valve_state = i2c_get_state(I2C_VALVE_2);
     window_holder[window_holder_index].lsw_valve_2_opn =
-        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_OPEN || valve_state == DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_2_cls =
-        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_CLOSED || valve_state == DAQ_VALVE_ILLEGAL;
 
     valve_state = i2c_get_state(I2C_VALVE_3);
     window_holder[window_holder_index].lsw_valve_3_opn =
-        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_OPEN || valve_state == DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_3_cls =
-        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_CLOSED || valve_state == DAQ_VALVE_ILLEGAL;
 
     valve_state = i2c_get_state(I2C_VALVE_4);
     window_holder[window_holder_index].lsw_valve_4_opn =
-        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_OPEN || valve_state == DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_valve_4_cls =
-        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_CLOSED || valve_state == DAQ_VALVE_ILLEGAL;
 
     valve_state = i2c_get_state(I2C_VALVE_INJECTOR);
     window_holder[window_holder_index].lsw_injector_valve_opn =
-        valve_state == DAQ_VALVE_OPEN || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_OPEN || valve_state == DAQ_VALVE_ILLEGAL;
     window_holder[window_holder_index].lsw_injector_valve_cls =
-        valve_state == DAQ_VALVE_CLOSED || valve_state = DAQ_VALVE_ILLEGAL;
+        valve_state == DAQ_VALVE_CLOSED || valve_state == DAQ_VALVE_ILLEGAL;
 
     //increment window counter, check if it's bigger than the window,
     //if so, set it to 0

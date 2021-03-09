@@ -23,7 +23,7 @@ void i2c_set_valve_select(valve_id_t valve, bool value) {
 }
 
 valve_state_t i2c_get_state(valve_id_t valve) {
-  Wire.requestFrom((uint8_t)valve, 1);
+  Wire.requestFrom((uint8_t)valve, (uint8_t)1);
   uint8_t lims = Wire.read(); // bits 1 and 0 are lim2 and lim1 respectively
   if (lims == 0) return DAQ_VALVE_UNK;
   if (lims == 1) return DAQ_VALVE_OPEN; // TODO: Check if I got these limit switches right
@@ -32,7 +32,7 @@ valve_state_t i2c_get_state(valve_id_t valve) {
 }
 
 void i2c_get_currents(valve_id_t valve, uint16_t *cur1, uint16_t *cur2) {
-  Wire.requestFrom((uint8_t)valve, 5);
+  Wire.requestFrom((uint8_t)valve, (uint8_t)5);
   Wire.read(); // Limit switch values, ignore.
   uint8_t adcl = Wire.read();
   uint8_t adch = Wire.read();

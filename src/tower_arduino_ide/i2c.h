@@ -21,6 +21,7 @@ void i2c_init(void);
 void i2c_set_valve_power(valve_id_t valve, bool value);
 void i2c_set_valve_select(valve_id_t valve, bool value);
 valve_state_t i2c_get_state(valve_id_t valve);
+void i2c_get_currents(valve_id_t valve, uint16_t *cur1, uint16_t *cur2);
 
 #ifdef __cplusplus
 }
