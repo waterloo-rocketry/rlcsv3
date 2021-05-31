@@ -42,3 +42,4 @@ All PCB layouts and electrical schematics are in `/schematics`
 
 All gerber files (sent to fabs) are in `/gerbers` (these are the files PCB
 makers need to make PCBs).
+
