@@ -217,8 +217,8 @@ void goto_safe_mode()
     requested->valve_1 = 0;
     //open
     requested->valve_2 = 1;
-    //open
-    requested->valve_3 = 1;
+    //close
+    requested->valve_3 = 0;
     //close
     requested->valve_4 = 0;
     //close
