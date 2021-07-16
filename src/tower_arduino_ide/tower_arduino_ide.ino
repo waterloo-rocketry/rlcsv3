@@ -1,3 +1,10 @@
+/* switch keylock CKM12BFW01-001
+ *  14.2mmm new keyswitch diameter
+ *  old keyswitch 18.2mm idameter
+ *  
+ */
+
+
 #include "tower_pin_defines.h"
 #include "tower_fsm.h"
 #include "tower_globals.h"

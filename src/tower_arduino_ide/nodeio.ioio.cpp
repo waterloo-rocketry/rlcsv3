@@ -232,10 +232,9 @@ void nio_refresh()
         last_received_rocket_state.injector_valve_state ||
         desired_rocket_state.vent_valve_state !=
         last_received_rocket_state.vent_valve_state ||
-        millis() - time_last_received_rocket_state > 5000) && (digitalRead(PIN_KEY_SWITCH_INPUT))) {
+        millis() - time_last_received_rocket_state > 5000)){
         send_desired_system_state();
-        Serial.print("Keyswitch bool: ");
-        Serial.println(digitalRead(PIN_KEY_SWITCH_INPUT));
+
     }
 
     //every three seconds we need to ask for what their current system state is
