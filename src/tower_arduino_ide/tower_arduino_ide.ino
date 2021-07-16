@@ -12,6 +12,7 @@
 
 void setup() {
     //initialize all outputs
+    key_switch_init();
     init_outputs();
     init_daq_pins();
     radio_init();

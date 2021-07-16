@@ -248,6 +248,15 @@ void tower_handle_rocketcan_update(const system_state *update)
     //TODO, log to rlcslog
 }
 
+
+void key_switch_init(){
+    // tie the pin to GND
+    pinMode(PIN_KEY_SWITCH_GND, OUTPUT);
+    digitalWrite(PIN_KEY_SWITCH_GND, LOW);
+    //set as input with pullup
+    pinMode(PIN_KEY_SWITCH_INPUT, INPUT_PULLUP);
+}
+
 //global for how long it's been since the output log was flushed
 //to the SD card
 unsigned long global_time_last_output_flush = 0;

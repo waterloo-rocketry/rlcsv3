@@ -27,6 +27,9 @@ void goto_safe_mode();
 //callback for nodeio.ioio to give us updates on stuff
 void tower_handle_rocketcan_update(const system_state *update);
 
+//sets the pin mode for the arming key pins
+void key_switch_init();
+
 #ifdef __cplusplus
 }
 #endif

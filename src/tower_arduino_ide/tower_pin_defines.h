@@ -19,6 +19,10 @@
 #define PIN_IGNITION_POWER 28
 #define PIN_IGNITION_SELECT 29
 
+//pins for the arming key
+#define PIN_KEY_SWITCH_GND    10
+#define PIN_KEY_SWITCH_INPUT  9
+
 //daq pins
 #define PIN_DAQ_MASS A0 //A0 is being used as a placeholder for a bunch of sensors we aren't using
 #define PIN_DAQ_PRESSURE1 A0  

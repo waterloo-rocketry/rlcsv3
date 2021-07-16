@@ -2,6 +2,8 @@
 #include "Arduino.h"
 #include "sd_handler.h"
 #include "radio_comms.h"
+#include "tower_pin_defines.h"
+
 #define NODE_GROUND
 
 //copied from RocketCAN
@@ -226,12 +228,14 @@ void nio_refresh()
     }
 
     //if the desired state and last received state don't match, send a new command
-    if (desired_rocket_state.injector_valve_state !=
+    if ((desired_rocket_state.injector_valve_state !=
         last_received_rocket_state.injector_valve_state ||
         desired_rocket_state.vent_valve_state !=
         last_received_rocket_state.vent_valve_state ||
-        millis() - time_last_received_rocket_state > 5000) {
+        millis() - time_last_received_rocket_state > 5000) && (digitalRead(PIN_KEY_SWITCH_INPUT))) {
         send_desired_system_state();
+        Serial.print("Keyswitch bool: ");
+        Serial.println(digitalRead(PIN_KEY_SWITCH_INPUT));
     }
 
     //every three seconds we need to ask for what their current system state is
