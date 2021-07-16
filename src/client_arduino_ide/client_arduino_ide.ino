@@ -6,12 +6,10 @@
 #include "LCD.h"
 #include "Arduino.h"
 #include "sd_handler.h"
-#include "client_pin_defines.h"
 
 
 void setup()
 {
-    key_switch_init();
     lcd_init();
     start_SevSeg();
     radio_init();
@@ -21,8 +19,6 @@ void setup()
         rlcslog("start of operations");
     }
 }
-
-unsigned int client_battery = 0;
 
 extern unsigned long
         global_time_last_tower_state_req,
@@ -36,20 +32,13 @@ extern const unsigned long
 
 void loop()
 {
-  
   //check for inputs from radio
   while(xbee_bytes_available()){
     //update FSM, which does the command processing
     push_radio_char(xbee_get_byte());
   }
-
-  //if the system is armed
-  if(!digitalRead(PIN_KEY_SWITCH_INPUT)){
-    //read all the buttons/inputs, store in a global button state
-    read_all_buttons();
-  }
-  //if armed turn on LEDs
-  set_switch_LEDs(!digitalRead(PIN_KEY_SWITCH_INPUT));
+  //read all the buttons/inputs, store in a global button state
+  read_all_buttons();
 
   //check if button state matches last received tower state
   if (! actuator_compare(get_button_state(), get_tower_state())){
@@ -60,7 +49,6 @@ void loop()
   //update the LCD
   lcd_update(get_tower_daq());
 
-
   //check how long since we received tower state
 
   if (millis_offset() - global_time_last_tower_state_req > global_tower_update_interval){
@@ -70,7 +58,6 @@ void loop()
   //check how long since we received tower daq information
   if (millis_offset() - global_time_last_tower_daq_req > global_tower_daq_update_interval){
     client_request_daq();
-    client_battery = analogRead(PIN_BATTERY)*14.65;
   }
 
 
@@ -104,3 +91,4 @@ void loop()
         flush();
     }
 }
+
