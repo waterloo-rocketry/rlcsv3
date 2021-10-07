@@ -85,17 +85,6 @@ void lcd_update(daq_holder_t *input)
     //every two seconds. We used this variable to keep track of which
     //line should be displayed at the current time
     static bool display_first_line = false; // changed to false per my evil scemes mentioned below.
-    //timer to keep track of when to switch between lines
-    //static long time_last_line_switch = 0;
-    //if we need to switch lines, do so
-
-    // I have hijacked these lines so I can always see what the state of the valve connected to disconnect is. Bwa ha ha ha ha!
-     /*
-    if (millis() - time_last_line_switch > 2000) {
-        display_first_line = !display_first_line;
-        time_last_line_switch = millis();
-    }
-    */
 
     //display the top line
     display_valves_line(input->valve_1_lsw_open, input->valve_1_lsw_closed,

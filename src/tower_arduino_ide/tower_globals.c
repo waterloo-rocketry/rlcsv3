@@ -192,10 +192,6 @@ void init_outputs(){
     digitalWrite((uint8_t) PIN_INJECTOR_VALVE_SELECT, HIGH);
 
     //run tank valve
-    //TODO, figure out how the run tank valve is going to work
-    //likely involve a serial link to another arduino
-    //I don't think this should be here, we have RocketCAN - Zach 2020-02-20
-
     linac_init();
 
     //ignition, set to off by default

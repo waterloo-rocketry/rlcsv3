@@ -19,8 +19,6 @@ static daq_holder_t global_current_daq = {
     .rocketvent_valve_state = DAQ_VALVE_UNK,
     .injector_valve_state = DAQ_VALVE_UNK,
 
-    //.linac_lsw_extend = 0,
-    //.linac_lsw_retract = 0
     // TODO: make this part interchangeable in loadout PR
     .valve_3_lsw_open = 0,
     .valve_3_lsw_closed = 0

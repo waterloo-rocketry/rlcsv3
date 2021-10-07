@@ -1,6 +1,6 @@
 /* switch keylock CKM12BFW01-001
  *  14.2mmm new keyswitch diameter
- *  old keyswitch 18.2mm idameter
+ *  old keyswitch 18.2mm diameter
  *  
  */
 
