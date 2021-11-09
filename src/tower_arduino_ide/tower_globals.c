@@ -191,7 +191,6 @@ void init_outputs(){
     digitalWrite((uint8_t) PIN_INJECTOR_VALVE_POWER, HIGH);
     digitalWrite((uint8_t) PIN_INJECTOR_VALVE_SELECT, HIGH);
 
-    //run tank valve
     linac_init();
 
     //ignition, set to off by default
@@ -205,20 +204,16 @@ void init_outputs(){
 //rocket tank vent valve)
 void goto_safe_mode()
 {
+    enum {CLOSED = 0, OPEN} valve_states;
     //take the current requested state, set it to the safest possible
     //state, and then call apply_state
     actuator_state_t* requested = get_requested_state();
 
-    //close
-    requested->valve_1 = 0;
-    //open
-    requested->valve_2 = 1;
-    //close
-    requested->valve_3 = 0;
-    //close
-    requested->valve_4 = 0;
-    //close
-    requested->injector_valve = 0;
+    requested->valve_1 = CLOSED;
+    requested->valve_2 = OPEN;
+    requested->valve_3 = CLOSED;
+    requested->valve_4 = OPEN;
+    requested->injector_valve = CLOSED;
 
     //turn off ignition
     requested->ignition_power = 0;

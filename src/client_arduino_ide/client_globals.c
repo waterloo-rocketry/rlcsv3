@@ -68,16 +68,11 @@ actuator_state_t *get_button_state()
         }
 
         //now decode the debounced button states into an actuator_state_t
-        global_button_state.valve_1 =
-            valve_1 ? 1 : 0;
-        global_button_state.valve_2 =
-            valve_2 ? 1 : 0;
-        global_button_state.valve_3 =
-            valve_3 ? 1 : 0;
-        global_button_state.injector_valve =
-            injector ? 1 : 0;
-        global_button_state.valve_4 =
-            valve_4 ? 1 : 0;
+        global_button_state.valve_1 = valve_1;
+        global_button_state.valve_2 = valve_2;
+        global_button_state.valve_3 = valve_3;
+        global_button_state.injector_valve = injector;
+        global_button_state.valve_4 = valve_4;
 
         //by default, ignition relays are both off
         global_button_state.ignition_power = global_button_state.ignition_select = 0;
