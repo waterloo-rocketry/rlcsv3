@@ -1,3 +1,10 @@
+/* switch keylock CKM12BFW01-001
+ *  14.2mmm new keyswitch diameter
+ *  old keyswitch 18.2mm diameter
+ *  
+ */
+
+
 #include "tower_pin_defines.h"
 #include "tower_fsm.h"
 #include "tower_globals.h"
@@ -12,6 +19,7 @@
 
 void setup() {
     //initialize all outputs
+    key_switch_init();
     init_outputs();
     init_daq_pins();
     radio_init();
@@ -73,7 +81,7 @@ void loop() {
     //put the current state on the the seven segment display
     char to_put_on_sevenseg;
     if( convert_state_to_radio(get_current_state(), &to_put_on_sevenseg) ) {
-        setNewNum_SevSeg( (uint8_t) fromBase64(to_put_on_sevenseg) );
+        setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg);
     }
     refresh_SevSeg();
     */

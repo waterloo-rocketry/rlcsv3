@@ -4,6 +4,7 @@
 #include "tower_globals.h"
 #include "Arduino.h"
 #include "serialization_lib/wrt_sdl.h"
+#include "tower_pin_defines.h"
 
 //we need to receive state_commands. Those should be the only things
 //the tower receives
@@ -28,7 +29,9 @@ static int valid_data_byte(char data) {
 static void handle_state_command(const actuator_state_t* recvd_state){
     actuator_state_t *req_state = get_requested_state();
     *req_state = *recvd_state;
-    apply_state();
+    if(digitalRead(PIN_KEY_SWITCH_INPUT)) {
+        apply_state();
+    }
 }
 
 extern unsigned long time_last_contact;
