@@ -1,4 +1,5 @@
 (sym_lib_table
-  (lib (name rlcs_power-rescue)(type Legacy)(uri ${KIPRJMOD}/rlcs_power-rescue.lib)(options "")(descr ""))
-  (lib (name custom)(type Legacy)(uri ${KIPRJMOD}/custom.lib)(options "")(descr ""))
+  (lib (name "rlcs_power-rescue")(type "Legacy")(uri "${KIPRJMOD}/rlcs_power-rescue.lib")(options "")(descr ""))
+  (lib (name "custom")(type "Legacy")(uri "${KIPRJMOD}/custom.lib")(options "")(descr ""))
+  (lib (name "arduino_mega")(type "KiCad")(uri "${KIPRJMOD}/arduino_mega.kicad_sym")(options "")(descr ""))
 )
