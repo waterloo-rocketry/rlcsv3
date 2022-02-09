@@ -1,26 +1,17 @@
 #ifndef TOWER_PIN_DEFINES_H
 #define TOWER_PIN_DEFINES_H
 
-#define PIN_IGNITION_POWER 28
-#define PIN_IGNITION_SELECT 29
-
 //pins for the arming key
 #define PIN_KEY_SWITCH_GND    19
 #define PIN_KEY_SWITCH_INPUT  18
 
 //daq pins
-#define PIN_DAQ_MASS A0 //A0 is being used as a placeholder for a bunch of sensors we aren't using
-#define PIN_DAQ_PRESSURE1 A0
-#define PIN_DAQ_PRESSURE2 A0
-//current sensor pins
-#define PIN_CURRENT_IGNITION_PRI A9
-#define PIN_CURRENT_IGNITION_SEC A8
+#define PIN_DAQ_MASS A15 //A15 is being used as a placeholder for a bunch of sensors we aren't using
+#define PIN_DAQ_PRESSURE1 A15
+#define PIN_DAQ_PRESSURE2 A15
 //battery voltage pins
-#define PIN_BATTERY_MAIN A3
-#define PIN_BATTERY_ACTUATORS A2
-//limit switch pins
-//#define PIN_LIMITSW_FUEL_INJECTOR_VALVE_OPN 4
-//#define PIN_LIMITSW_FUEL_INJECTOR_VALVE_CLS 5
+#define PIN_BATTERY_MAIN A0
+#define PIN_BATTERY_ACTUATORS A3
 
 //pins for the seven segment display
 #define PIN_SEVENSEG_D1 47
