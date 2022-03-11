@@ -46,7 +46,7 @@ static const unsigned segmentPinsIn[] = {
 static void setDigitCodes(uint8_t digits);
 
 void start_SevSeg () {//sets the values of the digitpin and segment pins in the struct, pinmode all of the pins, and turns them all off
-  return;
+  //return;
   pinMode(digitPinsIn[0], OUTPUT);
   pinMode(digitPinsIn[1], OUTPUT);
 
@@ -57,7 +57,7 @@ void start_SevSeg () {//sets the values of the digitpin and segment pins in the 
 }
 
 void refresh_SevSeg() {//refreshes display and lights up the segments
-  return;
+  //return;
   //write to pin 1
   digitalWrite(digitPinsIn[0], HIGH);//turns first segment pin on
   digitalWrite(digitPinsIn[1], LOW);//turns off second digit
@@ -82,14 +82,6 @@ static void setDigitCodes(uint8_t numToShow) { //this function gets the digit co
   digitCodes[1] = digitCodeMap + ((numToShow >> 4) & 0xF);
 
   //if sd card is not active, turn on the decimal points
-  if(!sd_active())
-  {
-    *digitCodes[0] |= 0x80;
-    *digitCodes[1] |= 0x80;
-  }
-  else
-  {
-    *digitCodes[0] &= ~(0x80);
-    *digitCodes[1] &= ~(0x80);
-  }
+  *digitCodes[0] &= ~(0x80);
+  *digitCodes[1] &= ~(0x80);
 }

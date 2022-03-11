@@ -31,6 +31,8 @@ void setup() {
     if(sd_active()){
         rlcslog("I'm the tower");
     }
+
+
 }
 
 //updated by the FSM whenever the client requests state or daq
@@ -45,6 +47,9 @@ extern const unsigned long global_output_flush_interval;
 
 extern unsigned long global_time_last_logged_daq;
 extern const unsigned long global_time_between_daq_logs;
+
+char to_put_on_sevenseg = 0b00000000;
+char seven_seg_counter = 0;
 
 void loop() {
     //check for inputs from radio
@@ -79,14 +84,14 @@ void loop() {
     /*
      * Unfortunately, without convert_state_to_radio, we can't display on the 7seg
      * so.... Gonna skip that for now
-     *
+     */
     //put the current state on the the seven segment display
-    char to_put_on_sevenseg;
-    if( convert_state_to_radio(get_current_state(), &to_put_on_sevenseg) ) {
-        setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg);
-    }
+    setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg);
     refresh_SevSeg();
-    */
+    //delay(10);
+    if(millis() % 100 == 0) {
+      to_put_on_sevenseg += 0b00000001;
+    }
 
     //check how long it's been since we flushed the log
     if(millis() - global_time_last_output_flush > global_output_flush_interval){

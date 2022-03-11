@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "radio_comms.h": "c",
+        "shared_types.h": "c"
+    }
+}
