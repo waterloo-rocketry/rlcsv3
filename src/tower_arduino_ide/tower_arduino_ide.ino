@@ -48,8 +48,7 @@ extern const unsigned long global_output_flush_interval;
 extern unsigned long global_time_last_logged_daq;
 extern const unsigned long global_time_between_daq_logs;
 
-char to_put_on_sevenseg = 0b00000000;
-char seven_seg_counter = 0;
+uint8_t to_put_on_sevenseg = 0b00000000;
 
 void loop() {
     //check for inputs from radio
@@ -81,17 +80,11 @@ void loop() {
 
     linac_refresh();
 
-    /*
-     * Unfortunately, without convert_state_to_radio, we can't display on the 7seg
-     * so.... Gonna skip that for now
-     */
-    //put the current state on the the seven segment display
-    setNewNum_SevSeg( (uint8_t) to_put_on_sevenseg);
+    //TODO: If the state us unknown change the display to 'UU'
+    //put the current state on the the seven segment display. see convert_state_to_segment for formatting documentation
+    to_put_on_sevenseg = convert_state_to_segment(*get_current_state());
+    setNewNum_SevSeg(to_put_on_sevenseg);
     refresh_SevSeg();
-    //delay(10);
-    if(millis() % 100 == 0) {
-      to_put_on_sevenseg += 0b00000001;
-    }
 
     //check how long it's been since we flushed the log
     if(millis() - global_time_last_output_flush > global_output_flush_interval){

@@ -81,7 +81,24 @@ static void setDigitCodes(uint8_t numToShow) { //this function gets the digit co
   digitCodes[0] = digitCodeMap + (numToShow & 0xF);
   digitCodes[1] = digitCodeMap + ((numToShow >> 4) & 0xF);
 
-  //if sd card is not active, turn on the decimal points
+  // Disable decimal points 
   *digitCodes[0] &= ~(0x80);
   *digitCodes[1] &= ~(0x80);
+}
+
+// Accept a rocket state (current_state) and convert it into a displayable format for the 7-segment.
+// The method splits the two 7seg digits between the leftmost and rightmost group of 3 relay boards, with each board representing a bit.
+//  The bitfield format looks like 0b0RRR|0RRR, where 'R' represents the relay board's state and 0 is an unused bit,
+//  '|' is a delimiter 
+uint8_t convert_state_to_segment(actuator_state_t current_state) {
+  uint8_t output = 0b0;
+
+  output |= current_state.valve_1;              // create the lower nibble
+  output |= (current_state.valve_2 << 1);
+  output |= (current_state.valve_3 << 2);
+  output |= (current_state.valve_4 << 4);       // create the upper nibble
+  output |= (current_state.injector_valve << 5);
+  output |= (current_state.ignition_power << 6);
+
+  return output;
 }
