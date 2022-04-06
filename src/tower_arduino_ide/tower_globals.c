@@ -213,7 +213,7 @@ void goto_safe_mode()
     requested->valve_2 = OPEN;
     requested->valve_3 = CLOSED;
     requested->valve_4 = OPEN;
-    requested->injector_valve = CLOSED;
+    requested->injector_valve = requested->injector_valve;
 
     //turn off ignition
     requested->ignition_power = 0;

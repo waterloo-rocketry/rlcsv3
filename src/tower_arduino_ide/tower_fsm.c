@@ -29,7 +29,7 @@ static int valid_data_byte(char data) {
 static void handle_state_command(const actuator_state_t* recvd_state){
     actuator_state_t *req_state = get_requested_state();
     *req_state = *recvd_state;
-    if(digitalRead(PIN_KEY_SWITCH_INPUT)) {
+    if(!digitalRead(PIN_KEY_SWITCH_INPUT)) {
         apply_state();
     }
 }
