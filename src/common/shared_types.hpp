@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include "config.hpp"
+#include "communicator.hpp"
+#include "debug.hpp"
 
 #define VERSION 1
 
@@ -12,6 +14,49 @@ enum class ActuatorPosition {
   open = 1,
   closed = 2,
   error = 3
+};
+
+class ActuatorCommand: Serializable {
+  const static uint8_t SIZE = (NUM_ACTUATORS + 7) / 8;
+  uint8_t actuator_states[SIZE]; // pack the actuators in a bit field
+  public:
+    ActuatorCommand() {}
+    void set_actuator(ActuatorID::ActuatorID id, bool value) {
+      uint8_t i = id / 8;
+      uint8_t bit = 1 << (id % 8);
+      if (value) {
+        actuator_states[i] |= bit;
+      } else {
+        actuator_states[i] &= ~bit; // bitwise not
+      }
+    }
+    bool get_actuator(ActuatorID::ActuatorID id) {
+      uint8_t i = id / 8;
+      uint8_t bit = 1 << (id % 8);
+      return actuator_states[i] | bit;
+    }
+    bool operator==(const ActuatorCommand &other) {
+      for (int i = 0; i < SIZE; i++) {
+        if (actuator_states[i] != other.actuator_states[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    static const uint8_t DATA_LENGTH = SIZE;
+    bool decode(const uint8_t *buf) override {
+      for (int i = 0; i < SIZE; i++) {
+        actuator_states[i] = buf[i];
+      }
+      return true;
+    }
+    bool encode(uint8_t *buf) override {
+      for (int i = 0; i < SIZE; i++) {
+        buf[i] = actuator_states[i];
+      }
+      return true;
+    }
 };
 
 /*
