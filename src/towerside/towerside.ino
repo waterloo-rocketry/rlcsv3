@@ -3,17 +3,16 @@
 #include "config.hpp"
 #include "command_handler.hpp"
 
-MessageProcessor<ActuatorCommand> *receiver;
-ActuatorCommandHandler *handler;
 void setup() {
   Config::setup();
   SerialConnection connection(Serial);
   auto handler = new ActuatorCommandHandler(Config::get_default_states());
-  auto processor = new MessageProcessor<ActuatorCommand>(handler);
+  auto receiver = new MessageReceiver<ActuatorCommand>{handler, handler};
 
   while (true) {
     if (connection.char_available()) {
-      processor->handle_char(connection.get_char());
+      char c = connection.get_char();
+      receiver->handle_char(c);
     }
   }
 }

@@ -24,8 +24,5 @@ run: ${EXEC}
 grind: ${EXEC}
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./${EXEC}
 
-test: ${EXEC}
-	cd tests; ../../../runSuite ${SUITE} ../${EXEC}
-
 clean:
 	rm ${OBJECTS} ${DEPENDS} ${EXEC}

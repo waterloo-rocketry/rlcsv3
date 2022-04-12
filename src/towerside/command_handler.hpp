@@ -8,7 +8,8 @@ class ActuatorCommandHandler: public MessageHandler<ActuatorCommand> {
   ActuatorCommand last_command;
   public:
     ActuatorCommandHandler(ActuatorCommand initial_states): last_command{initial_states} {}
-    void handle(ActuatorCommand cmd) override {
+    void handle(const ActuatorCommand &cmd) override {
+      DEBUG("Got command.");
       if (cmd == last_command) {
       }
       last_command = cmd;
