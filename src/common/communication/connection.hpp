@@ -1,8 +1,10 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include "mock_arduino.hpp"
-#include "stdint.h"
+#include <stdint.h>
+#include "../mock_arduino.hpp"
+
+namespace Communication {
 
 class Connection {
   unsigned long last_recv_timestamp = 0;
@@ -41,5 +43,7 @@ class SerialConnection: public Connection {
       return stream.write(c);
     }
 };
+
+}
 
 #endif

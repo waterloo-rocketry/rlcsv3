@@ -7,12 +7,15 @@
 
 namespace Config {
 
-void setup();
-Actuator *get_actuator(ActuatorID::ActuatorID id);
-Sensor *get_sensor(SensorID::SensorID id);
+extern const uint16_t SEND_STATUS_INTERVAL_MS;
+extern const uint16_t TIME_TO_SAFE_STATE;
 
-ActuatorCommand get_default_states();
-ActuatorCommand get_safe_states();
+void setup();
+Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id);
+Sensor::Sensor *get_sensor(SensorID::SensorID id);
+
+const ActuatorCommand &get_default_states();
+const ActuatorCommand &get_safe_states();
 
 }
 

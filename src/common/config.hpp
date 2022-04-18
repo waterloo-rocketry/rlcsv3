@@ -11,8 +11,7 @@ enum ActuatorID {
   vent_valve,
   // linear_actuator,
   injector_valve,
-  ignition_primary,
-  ignition_secondary,
+  ignition,
   NUM_ACTUATORS
 };
 
@@ -27,6 +26,8 @@ enum SensorID {
   // Battery voltages
   rlcs_main_batt_mv,
   rlcs_actuator_batt_mv,
+  // Actuator health
+  healthy_actuators,
   // Ignition currents
   ignition_primary_ma,
   ignition_secondary_ma,

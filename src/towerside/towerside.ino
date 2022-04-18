@@ -1,18 +1,37 @@
 #include "common/mock_arduino.hpp"
-#include "common/connection.hpp"
+#include "common/communication/receiver.hpp"
+#include "common/communication/sender.hpp"
+#include "common/tickable.hpp"
 #include "config.hpp"
 #include "command_handler.hpp"
+#include "daq.hpp"
 
 void setup() {
+  Wire.begin();
   Config::setup();
-  SerialConnection connection(Serial);
-  auto handler = new ActuatorCommandHandler(Config::get_default_states());
-  auto receiver = new MessageReceiver<ActuatorCommand>{handler, handler};
+  auto connection = Communication::SerialConnection(Serial);
+  auto actuators_handler = CommandHandler::Actuators(Config::get_default_states());
+  auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_default_states());
+  auto encoder = Communication::HexEncoder<SensorData>();
+  auto decoder = Communication::HexDecoder<ActuatorCommand>();
+  auto receiver = Communication::MessageReceiver<ActuatorCommand>(decoder, connection,
+                                                                  &actuators_handler,
+                                                                  &seven_seg_handler);
+  auto sender = Communication::MessageSender<SensorData>(encoder, connection);
 
+  unsigned long last_message_sent = 0;
   while (true) {
-    if (connection.char_available()) {
-      char c = connection.get_char();
-      receiver->handle_char(c);
+    Tickable::trigger_tick();
+    if (connection.seconds_since_contact() >= Config::TIME_TO_SAFE_STATE) {
+      actuators_handler.apply(Config::get_safe_states());
+      seven_seg_handler.set_contact(false);
+    } else {
+      seven_seg_handler.set_contact(true);
+    }
+    if (millis() - last_message_sent > Config::SEND_STATUS_INTERVAL_MS) {
+      last_message_sent = millis();
+
+      sender.send(DAQ::get_sensor_message());
     }
   }
 }

@@ -1,23 +1,25 @@
-#ifndef COMMUNICATOR_H
-#define COMMUNICATOR_H
+#ifndef DECODER_H
+#define DECODER_H
 
 #include <stdint.h>
-#include "debug.hpp"
 
-class Serializable {
+namespace Communication {
+
+template <typename T>
+class Decoder {
   public:
-    static const uint8_t DATA_LENGTH;
-    virtual bool encode(uint8_t *buf) = 0;
-    virtual bool decode(const uint8_t *buf) = 0;
+    virtual void push_char(char c) = 0;
+    virtual const uint8_t *get_data() = 0;
+    virtual bool message_available() = 0;
 };
 
-// A HexReciever gets templated by the length of message to look for
+// A HexDecoder gets templated by the length of message to look for
 // (so that it can initialize its buffer on the stack). It then scans
 // for that many hex byte enclosed in the message guards 'W' and 'R'.
 // (so full messages take the form W<hex>R).
-template <uint8_t MESSAGE_SIZE>
-class HexReciever {
-  uint8_t buf[MESSAGE_SIZE];
+template <typename T>
+class HexDecoder: public Decoder<T> {
+  uint8_t buf[T::DATA_LENGTH];
   bool message_in_progress = false;
   uint8_t i = 0; // index of the next nibble to decode
   bool valid_hex_char(char c) {
@@ -33,7 +35,7 @@ class HexReciever {
     }
   }
   public:
-    HexReciever() {}
+    HexDecoder() {}
     void push_char(char c) {
       // DEBUG(message_in_progress << " " << (int)i << " " << c << " " << (int)(buf[0]));
       if (c == 'W') {
@@ -46,7 +48,7 @@ class HexReciever {
         // no ongoing message and not a 'W', ignore.
         return;
       }
-      if (i == MESSAGE_SIZE * 2) {
+      if (i == T::DATA_LENGTH * 2) {
         // Should be the end of a message
         if (c == 'R') {
           // message complete!
@@ -77,33 +79,11 @@ class HexReciever {
       return buf;
     }
     bool message_available() {
-      return i == MESSAGE_SIZE * 2 && !message_in_progress;
+      return i == T::DATA_LENGTH * 2 && !message_in_progress;
     }
 };
 
-template <typename T>
-class MessageHandler {
-  public:
-    virtual void handle(T message) = 0;
-};
 
-// A MessageProcessor takes a Serializable class and a handler, which gets
-// called whenever a complete message is recieved.
-template <typename T>
-class MessageProcessor {
-  HexReciever<T::DATA_LENGTH> receiver;
-  MessageHandler<T> *handler;
-  public:
-    MessageProcessor(MessageHandler<T> *handler): handler{handler} {}
-    void handle_char(char c) {
-      receiver.push_char(c);
-      if (receiver.message_available()) {
-        T t;
-        if (t.decode(receiver.get_data())) {
-          handler->handle(t);
-        }
-      }
-    }
-};
+}
 
 #endif
