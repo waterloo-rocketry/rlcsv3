@@ -55,5 +55,11 @@ void digitalWrite(uint8_t, bool);
 void pinMode(uint8_t, bool);
 #define INPUT true
 
+#else
+
+#include <Arduino.h>
+#include <Wire.h>
+
 #endif
+
 #endif

@@ -33,7 +33,8 @@ class I2C: public Actuator {
       Wire.clearWireTimeoutFlag();
     }
     ActuatorPosition get_position() override {
-      healthy = Wire.requestFrom(slave_address, 1) == 1;
+      // Cast to uint8_t to avoid warning about ambiguous overload
+      healthy = Wire.requestFrom(slave_address, static_cast<uint8_t>(1)) == 1;
       if (!healthy) {
         return ActuatorPosition::error;
       }
@@ -47,7 +48,8 @@ class I2C: public Actuator {
       if (index > 1) {
         return SENSOR_ERR_VAL;
       }
-      healthy = Wire.requestFrom(slave_address, 5) == 5;
+      // Cast to uint8_t to avoid warning about ambiguous overload
+      healthy = Wire.requestFrom(slave_address, static_cast<uint8_t>(5)) == 5;
       if (!healthy) {
         return SENSOR_ERR_VAL;
       }
