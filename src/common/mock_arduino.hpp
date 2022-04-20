@@ -54,6 +54,8 @@ bool digitalRead(uint8_t);
 void digitalWrite(uint8_t, bool);
 void pinMode(uint8_t, bool);
 #define INPUT true
+#define INPUT_PULLUP true
+#define OUTPUT false
 
 #else
 

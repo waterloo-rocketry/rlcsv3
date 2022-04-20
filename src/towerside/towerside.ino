@@ -5,12 +5,14 @@
 #include "config.hpp"
 #include "command_handler.hpp"
 #include "daq.hpp"
+#include "hardware.hpp"
+#include "pinout.hpp"
 
 void setup() {
-  Wire.begin();
+  Hardware::setup();
   Config::setup();
   auto connection = Communication::SerialConnection(Serial);
-  auto actuators_handler = CommandHandler::Actuators(Config::get_default_states());
+  auto actuators_handler = CommandHandler::Actuators(Config::get_default_states(), Pinout::KEY_SWITCH_IN, Pinout::KEY_SWITCH_GND);
   auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_default_states());
   auto encoder = Communication::HexEncoder<SensorData>();
   auto decoder = Communication::HexDecoder<ActuatorCommand>();

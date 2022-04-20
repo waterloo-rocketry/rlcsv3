@@ -23,11 +23,19 @@ class DoubleCommandHandler: public Communication::MessageHandler<ActuatorCommand
 };
 
 class Actuators: public DoubleCommandHandler {
+  uint8_t disarm_pin;
   public:
-    Actuators(const ActuatorCommand &initial_states): DoubleCommandHandler{initial_states} {
+    Actuators(const ActuatorCommand &initial_states, uint8_t disarm_pin, uint8_t gnd_pin):
+        DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
+      pinMode(disarm_pin, INPUT_PULLUP);
+      pinMode(gnd_pin, OUTPUT);
+      digitalWrite(gnd_pin, false);
       apply(initial_states);
     }
     void apply(const ActuatorCommand &cmd) override {
+      if (!digitalRead(disarm_pin)) {
+        return; // we are disarmed (pin is pulled low), don't do anything
+      }
       for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
         ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
         Config::get_actuator(id)->set(cmd.get_actuator(id));
