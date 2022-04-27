@@ -4,7 +4,6 @@
  *  
  */
 
-
 #include "tower_pin_defines.h"
 #include "tower_fsm.h"
 #include "tower_globals.h"
@@ -18,6 +17,17 @@
 #include "linac.h"
 #include "i2c.h"
 
+// Current state of serial libraries
+// Changed buffer to 16 bits
+// Disabled Serial1
+/*
+// Disable serial ports we don't use (3 and 4) (Reference HardwareSerial.h)
+#undef UBRR2H
+#undef UBRR3H
+// We only send single characters through wire, except for debugging.  
+#define SERIAL_TX_BUFFER_SIZE 10
+#define SERIAL_RX_BUFFER_SIZE 10
+*/
 void setup() {
     //initialize all outputs
     key_switch_init();
@@ -43,10 +53,12 @@ const unsigned long global_min_time_between_contacts = 10000;
 //used for the SD card handler
 extern unsigned long global_time_last_output_flush;
 //flush the rlcslog to sd card every 10 seconds
-extern const unsigned long global_output_flush_interval;
+extern PROGMEM const unsigned long global_output_flush_interval;
 
+/* Disable DAQ for SF6
 extern unsigned long global_time_last_logged_daq;
-extern const unsigned long global_time_between_daq_logs;
+extern PROGMEM const unsigned long global_time_between_daq_logs;
+*/
 
 uint8_t to_put_on_sevenseg = 0b00000000;
 
@@ -56,6 +68,8 @@ void loop() {
         //update FSM, which will deal with command processing
         push_radio_char(xbee_get_byte());
     }
+    // --- disable DAQ for SF6 ---
+    /*
     //get all the daq updates
     read_daq_pins();
     //if we haven't calculated (and thus logged) the daq values in some
@@ -63,6 +77,7 @@ void loop() {
     if (millis() - global_time_last_logged_daq > global_time_between_daq_logs) {
         get_global_current_daq();
     }
+    */
 
     //check time last contact
     if (millis_offset() - time_last_contact > global_min_time_between_contacts) {
@@ -77,7 +92,6 @@ void loop() {
     nio_refresh();
 
     //deal with linear actuator
-
     linac_refresh();
 
     //TODO: If the state us unknown change the display to 'UU'
@@ -86,8 +100,10 @@ void loop() {
     setNewNum_SevSeg(to_put_on_sevenseg);
     refresh_SevSeg();
 
+    /* Disable SD Card for SF6
     //check how long it's been since we flushed the log
     if(millis() - global_time_last_output_flush > global_output_flush_interval){
         flush();
     }
+    */
 }
