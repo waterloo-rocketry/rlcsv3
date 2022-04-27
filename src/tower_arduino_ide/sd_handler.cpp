@@ -4,6 +4,7 @@
 #include <SD.h>
 
 //remember kids, always do development in 4K
+//TODO: Main culprit for SRAM optimization
 #define SD_BUFFER_SIZE 4096
 
 //#define SD_SERIAL_LOG
