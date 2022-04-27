@@ -30,6 +30,7 @@ typedef enum {
     DAQ_VALVE_ILLEGAL
 } valve_state_t;
 
+// 48 bytes
 typedef struct {
     uint16_t pressure1; //fill tank pressure
     uint16_t pressure2; //fill line pressure
