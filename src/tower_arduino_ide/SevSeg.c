@@ -6,7 +6,7 @@
 
 //array of segements that must be displayed to display the correct number
 static uint8_t digitCodeMap[] = {
-  //GFEDCBA  Segments      7-segment map:
+  // GFEDCBA  Segments      7-segment map:
   0b00111111, // 0   "0"          AAA
   0b00000110, // 1   "1"         F   B
   0b01011011, // 2   "2"         F   B
@@ -17,15 +17,19 @@ static uint8_t digitCodeMap[] = {
   0b00000111, // 7   "7"
   0b01111111, // 8   "8"
   0b01101111, // 9   "9"
-  0b01110111, // A "A"
-  0b01111100, // b "b"
-  0b00111001, // C "C"
-  0b01011110, // d "d"
-  0b01111001, // E "E"
-  0b01110001 // F "F"
+  0b01110111, // A   "A"
+  0b01111100, // b   "b"
+  0b00111001, // C   "C"
+  0b01011110, // d   "d"
+  0b01111001, // E   "E"
+  0b01110001, // F   "F"
+  0b00111110  // U   "U" 
 };
 
 static uint8_t * digitCodes[2];
+
+// tracking if we are in a lost connection state, updated by tower_globals::goto_safe_mode()
+bool lost_connection_state = 0;
 
 static const unsigned digitPinsIn[] = {
     PIN_SEVENSEG_D1,
@@ -66,9 +70,10 @@ void refresh_SevSeg() {//refreshes display and lights up the segments
       digitalWrite(segmentPinsIn[j], (*digitCodes[i] & (1<<j)) ? LOW : HIGH);
     }
     delay(10);//this is so that 2 numbers can be displayed instantaneously
+              //blocking delay
     //swap two digits, on next iteration of loop we write to other two digits
-    digitalWrite(digitPinsIn[0], LOW);//turns off first digit
-    digitalWrite(digitPinsIn[1], HIGH);//turns on second digit
+    digitalWrite(digitPinsIn[0], LOW);  //turns off first digit
+    digitalWrite(digitPinsIn[1], HIGH); //turns on second digit
   }
 }
 
@@ -77,6 +82,13 @@ void setNewNum_SevSeg (uint8_t numToShow) {//sets the number the user wants
 }
 
 static void setDigitCodes(uint8_t numToShow) { //this function gets the digit code of each number in the 'digit' array
+  // Display UU if the state is unknown
+  if(lost_connection_state) {
+    digitCodes[0] = 0b00111110;
+    digitCodes[1] = 0b00111110;
+    return;
+  }
+
   // Set the digitCode for each digit in the display(digit array)
   digitCodes[0] = digitCodeMap + (numToShow & 0xF);
   digitCodes[1] = digitCodeMap + ((numToShow >> 4) & 0xF);
@@ -84,6 +96,8 @@ static void setDigitCodes(uint8_t numToShow) { //this function gets the digit co
   // Disable decimal points 
   *digitCodes[0] &= ~(0x80);
   *digitCodes[1] &= ~(0x80);
+
+
 }
 
 // Accept a rocket state (current_state) and convert it into a displayable format for the 7-segment.
@@ -101,4 +115,11 @@ uint8_t convert_state_to_segment(actuator_state_t current_state) {
   output |= (current_state.ignition_power << 6);
 
   return output;
+}
+
+// Update local variable in SevSe tracking our connection state
+void set_sevseg_lost_conn(bool new_value) {
+  if (lost_connection_state != new_value) {
+    lost_connection_state = new_value;
+  }
 }

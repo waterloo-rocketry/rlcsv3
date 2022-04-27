@@ -20,6 +20,7 @@ void start_SevSeg ();//function that runs at the beginning. this sets up the dis
 void refresh_SevSeg();
 void setNewNum_SevSeg (uint8_t);//sets desired integer
 uint8_t convert_state_to_segment(actuator_state_t current_state);
+void set_sevseg_lost_conn(bool new_value);
 
 #ifdef __cplusplus
 }
