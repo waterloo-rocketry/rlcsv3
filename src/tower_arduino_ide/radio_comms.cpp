@@ -2,18 +2,18 @@
 #include "Arduino.h"
 #include "serialization_lib/wrt_sdl.h"
 
-// Tower specific things
+// Chose one of 4 Arduino mega UART ports to be used with XBee
 #define XBEE_INTERFACE Serial2
 #include "tower_globals.h"
 
-const unsigned long millis_between_state_req = 200;
-const unsigned long millis_between_daq_req = 1000;
-const unsigned long millis_between_state_push = 200;
-const unsigned long millis_between_client_ack = 200;
-const unsigned long millis_between_client_nack = 200;
-const unsigned long millis_between_tower_ack_req = 200;
-const unsigned long millis_between_tower_send_state = 200;
-const unsigned long millis_between_tower_send_daq = 1000;
+PROGMEM const unsigned long millis_between_state_req = 200;
+PROGMEM const unsigned long millis_between_daq_req = 1000;
+PROGMEM const unsigned long millis_between_state_push = 200;
+PROGMEM const unsigned long millis_between_client_ack = 200;
+PROGMEM const unsigned long millis_between_client_nack = 200;
+PROGMEM const unsigned long millis_between_tower_ack_req = 200;
+PROGMEM const unsigned long millis_between_tower_send_state = 200;
+PROGMEM const unsigned long millis_between_tower_send_daq = 1000;
 
 void radio_init(){
     while(!XBEE_INTERFACE);
