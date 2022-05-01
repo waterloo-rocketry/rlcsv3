@@ -22,7 +22,7 @@ class Connection {
       if (last_recv_timestamp > 65535*1000) {
         return 65535;
       }
-      return last_recv_timestamp / 1000;
+      return (millis() - last_recv_timestamp) / 1000;
     }
   private:
     virtual char _get_char() = 0;

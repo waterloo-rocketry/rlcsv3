@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -MMD -g
-EXEC = towerside
+EXEC = clientside
 SOURCES = $(wildcard ./*.cpp ./*.ino)
 ALLCPP = ${SOURCES:.ino=.cpp}
 OBJECTS = ${ALLCPP:.cpp=.o}
@@ -14,7 +14,7 @@ ${EXEC}: ${OBJECTS}
 %.o: %.ino
 	${CXX} ${CXXFLAGS} -c -x c++ $<
 
-.PHONY: run grind clean build flash monitor
+.PHONY: run grind clean
 
 run: ${EXEC}
 	./${EXEC}
@@ -24,12 +24,3 @@ grind: ${EXEC}
 
 clean:
 	rm ${OBJECTS} ${DEPENDS} ${EXEC}
-
-build:
-	arduino-cli compile --fqbn arduino:avr:mega:cpu=atmega2560
-
-flash: build
-	arduino-cli upload -p /dev/ttyUSB* --fqbn arduino:avr:mega:cpu=atmega2560
-
-monitor:
-	arduino-cli monitor -p /dev/ttyUSB* -c baudrate=115200

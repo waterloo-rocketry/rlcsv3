@@ -35,6 +35,7 @@ class MessageReceiver: public Tickable {
         return;
       }
       char c = connection.get_char();
+      Serial.println((int)c);
       decoder.push_char(c);
       if (decoder.message_available()) {
         T t;

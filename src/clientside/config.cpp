@@ -12,10 +12,10 @@ ActuatorCommand default_states;
 ActuatorCommand safe_states;
 
 void setup() {
-  actuators[ActuatorID::fill_valve] = new Actuator::OldI2C(1);
-  actuators[ActuatorID::vent_valve] = new Actuator::OldI2C(2);
-  actuators[ActuatorID::injector_valve] = new Actuator::OldI2C(3);
-  actuators[ActuatorID::ignition] = new Actuator::OldI2C(4);
+  actuators[ActuatorID::fill_valve] = new Actuator::I2C(1);
+  actuators[ActuatorID::vent_valve] = new Actuator::I2C(2);
+  actuators[ActuatorID::injector_valve] = new Actuator::I2C(3);
+  actuators[ActuatorID::ignition] = new Actuator::I2C(4);
 
   default_states.set_actuator(ActuatorID::fill_valve, false);
   default_states.set_actuator(ActuatorID::vent_valve, false);

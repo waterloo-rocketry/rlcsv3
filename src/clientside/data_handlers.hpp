@@ -4,7 +4,6 @@
 #include "common/mock_arduino.hpp"
 #include "common/communication/receiver.hpp"
 #include "common/shared_types.hpp"
-#include "common/tickable.hpp"
 #include "config.hpp"
 #include "pinout.hpp"
 
@@ -23,10 +22,8 @@ class DoubleCommandHandler: public Communication::MessageHandler<ActuatorCommand
     virtual void apply(const ActuatorCommand &cmd) = 0;
 };
 
-class Actuators: public DoubleCommandHandler, public Tickable {
+class Actuators: public DoubleCommandHandler {
   uint8_t disarm_pin;
-  ActuatorCommand last_command;
-  uint8_t tick_count = 0;
   public:
     Actuators(const ActuatorCommand &initial_states, uint8_t disarm_pin, uint8_t gnd_pin):
         DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
@@ -39,16 +36,9 @@ class Actuators: public DoubleCommandHandler, public Tickable {
       if (!digitalRead(disarm_pin)) {
         return; // we are disarmed (pin is pulled low), don't do anything
       }
-      last_command = cmd;
-    }
-    void tick() override {
-      tick_count++;
-      if (tick_count > 10) {
-        tick_count = 0;
-        for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
-          ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
-          Config::get_actuator(id)->set(last_command.get_actuator(id));
-        }
+      for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
+        ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
+        Config::get_actuator(id)->set(cmd.get_actuator(id));
       }
     }
 };
@@ -61,21 +51,15 @@ class SevenSeg: public DoubleCommandHandler, public Tickable {
     digitalWrite(Pinout::SEVENSEG_D1, digit == 0);
     digitalWrite(Pinout::SEVENSEG_D2, digit == 1);
     for (uint8_t i = 0; i < 7; i++) {
-      digitalWrite(pinoutMap[i], !(digitMap[value] & (1 << i))); // pins active low
+      digitalWrite(pinoutMap[i], digitMap[value] & (1 << i));
     }
-    digitalWrite(Pinout::SEVENSEG_DP, has_contact); // show points if there is an issue, active low
+    digitalWrite(Pinout::SEVENSEG_DP, !has_contact);
   }
   bool has_contact = true;
   uint8_t current_digit = 0;
   uint8_t digit_values[2] = {0, 0};
   public:
     SevenSeg(const ActuatorCommand &initial_states): DoubleCommandHandler{initial_states} {
-      pinMode(Pinout::SEVENSEG_D1, OUTPUT);
-      pinMode(Pinout::SEVENSEG_D2, OUTPUT);
-      for (uint8_t i = 0; i < 7; i++) {
-        pinMode(pinoutMap[i], OUTPUT);
-      }
-      pinMode(Pinout::SEVENSEG_DP, OUTPUT);
       apply(initial_states);
     }
     void apply(const ActuatorCommand &cmd) override {

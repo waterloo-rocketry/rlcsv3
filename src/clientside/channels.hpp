@@ -66,11 +66,10 @@ class Analog: public Sensor, Tickable {
       for (uint8_t i = 0; i < rolling_avg_width; i++) {
         rolling_avg[i] = 0;
       }
-      digitalWrite(pin, false);
       pinMode(pin, INPUT);
     }
     uint16_t get_value() override {
-      return rolling_sum / rolling_avg_width * 5 * m_num / m_den + b;
+      return rolling_sum / rolling_avg_width * m_num / m_den + b;
     }
     void tick() override {
       rolling_avg_index += 1;

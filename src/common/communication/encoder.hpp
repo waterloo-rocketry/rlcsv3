@@ -32,6 +32,7 @@ class HexEncoder: public Encoder<T> {
         success &= connection.push_char(get_nibble(data[i] & 0xF));
       }
       success &= connection.push_char('R');
+      success &= connection.push_char('\n');
       return success;
     }
 };

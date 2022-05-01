@@ -31,7 +31,7 @@ class MockSerial: public Stream {
     }
 };
 
-extern MockSerial Serial;
+extern MockSerial Serial2;
 
 class TwoWire {
   public:

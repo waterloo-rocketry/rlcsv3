@@ -1,5 +1,7 @@
 #include "mock_arduino.hpp"
 
+#ifndef ARDUINO
+
 extern void setup();
 extern void loop();
 
@@ -28,3 +30,5 @@ int main() {
     loop();
   }
 }
+
+#endif
