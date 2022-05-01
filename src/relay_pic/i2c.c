@@ -64,7 +64,6 @@ void i2c_handle_interrupt(void) {
     else if (SSPSTATbits.R_nW) {
         for (uint8_t read_pointer = 0; read_pointer < 4; read_pointer++) {
             temp = SSPBUF;
-            BF = 0;
             if (read_pointer == 0) {
             SSPBUF = (get_lim2() << 1) | get_lim1();
             } else if (read_pointer == 1) {

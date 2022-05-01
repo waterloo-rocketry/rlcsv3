@@ -25,8 +25,9 @@
 
 void timer0_init(void) {
     INTCONbits.TMR0IE = 1; //Enable timer interrupt
-    OPTION_REGbits.TMR0CS = 0; //Use internal instruction clock cycle
-    OPTION_REGbits.PSA = 1; //Utilize prescalar assignment bit
+    OPTION_REGbits.TMR0CS = 0; //Use internal instruction clock cycle (4 mHz / 4))
+    OPTION_REGbits.PS = 0b000; // Set 1:2 prescaler for 500 kHz
+    OPTION_REGbits.PSA = 0; //Utilize prescalar assignment bit
 }
 
 /*
