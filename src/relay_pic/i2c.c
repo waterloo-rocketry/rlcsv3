@@ -17,6 +17,7 @@ void i2c_slave_init(uint16_t address) {
     SSP1IE = 1;
 }
 
+#define TIMEOUT 200
 void i2c_handle_interrupt(void) {
     uint16_t temp;
     uint16_t timeout = 0;
@@ -35,20 +36,20 @@ void i2c_handle_interrupt(void) {
 
     // If last byte was Address + write
     if (!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-        while(!BF && timeout < 1000) timeout++;
+        while(!BF && timeout < TIMEOUT) timeout++;
         temp = SSP1BUF;
         BF = 0;
         SSPCONbits.CKP = 1;
-        while(!BF && timeout < 1000) timeout++;
+        while(!BF && timeout < TIMEOUT) timeout++;
         i2cSlaveRecv = SSP1BUF;
         // LSB is 0 for power, 1 for select. Second bit is on/off.
-        if (timeout < 1000 && i2cSlaveRecv & 1 == 0) {
+        if (timeout < TIMEOUT && i2cSlaveRecv & 1 == 0) {
             if (i2cSlaveRecv >> 1 == 1) {
                 set_power_on();
             } else {
                 set_power_off();
             }
-        } else if (timeout < 1000 && i2cSlaveRecv & 1 == 1) {
+        } else if (timeout < TIMEOUT && i2cSlaveRecv & 1 == 1) {
             if (i2cSlaveRecv >> 1 == 1) {
                 set_select_on();
             } else {
@@ -62,27 +63,26 @@ void i2c_handle_interrupt(void) {
     }
     // If this is a read
     else if (SSPSTATbits.R_nW) {
-        static uint8_t read_pointer;
-        // If this is the first byte in a read
-        if (!SSPSTATbits.D_nA) {
-            read_pointer = 0;
-        }
-        temp = SSPBUF;
-        BF = 0;
-        if (read_pointer == 0) {
+        for (uint8_t read_pointer = 0; read_pointer < 4; read_pointer++) {
+            temp = SSPBUF;
+            BF = 0;
+            if (read_pointer == 0) {
             SSPBUF = (get_lim2() << 1) | get_lim1();
-        } else if (read_pointer == 1) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1));
-        } else if (read_pointer == 2) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
-        } else if (read_pointer == 3) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2));
-        } else if (read_pointer == 4) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
+            } else if (read_pointer == 1) {
+                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1));
+            } else if (read_pointer == 2) {
+                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
+            } else if (read_pointer == 3) {
+                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2));
+            } else if (read_pointer == 4) {
+                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
+            }
+            SSPCONbits.CKP = 1;
+            while(SSPSTATbits.BF && timeout < TIMEOUT) timeout++;
+            if (SSP1CON2bits.ACKSTAT) {
+                break;
+            }
         }
-        read_pointer++;
-        SSPCONbits.CKP = 1;
-        while(SSPSTATbits.BF && timeout < 1000) timeout++;
     }
     SSPCONbits.CKP = 1;
 }
