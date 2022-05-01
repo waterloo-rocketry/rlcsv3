@@ -19,6 +19,7 @@ void i2c_slave_init(uint16_t address) {
 
 void i2c_handle_interrupt(void) {
     uint16_t temp;
+    uint16_t timeout = 0;
     SSPCONbits.CKP = 0;
 
     SSP1IF = 0;
@@ -34,20 +35,20 @@ void i2c_handle_interrupt(void) {
 
     // If last byte was Address + write
     if (!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-        while(!BF);
+        while(!BF && timeout < 1000) timeout++;
         temp = SSP1BUF;
         BF = 0;
         SSPCONbits.CKP = 1;
-        while(!BF);
+        while(!BF && timeout < 1000) timeout++;
         i2cSlaveRecv = SSP1BUF;
         // LSB is 0 for power, 1 for select. Second bit is on/off.
-        if (i2cSlaveRecv & 1 == 0) {
+        if (timeout < 1000 && i2cSlaveRecv & 1 == 0) {
             if (i2cSlaveRecv >> 1 == 1) {
                 set_power_on();
             } else {
                 set_power_off();
             }
-        } else if (i2cSlaveRecv & 1 == 1) {
+        } else if (timeout < 1000 && i2cSlaveRecv & 1 == 1) {
             if (i2cSlaveRecv >> 1 == 1) {
                 set_select_on();
             } else {
@@ -81,6 +82,7 @@ void i2c_handle_interrupt(void) {
         }
         read_pointer++;
         SSPCONbits.CKP = 1;
-        while(SSPSTATbits.BF);
+        while(SSPSTATbits.BF && timeout < 1000) timeout++;
     }
+    SSPCONbits.CKP = 1;
 }
