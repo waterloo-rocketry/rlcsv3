@@ -35,7 +35,6 @@ class MessageReceiver: public Tickable {
         return;
       }
       char c = connection.get_char();
-      Serial.println((int)c);
       decoder.push_char(c);
       if (decoder.message_available()) {
         T t;
@@ -44,6 +43,12 @@ class MessageReceiver: public Tickable {
             handlers[i]->handle(t);
           }
         }
+      }
+    }
+    // Force the handlers to handle a specific message
+    void force(const T &msg) {
+      for (uint8_t i = 0; i < n; i++) {
+        handlers[i]->handle(msg);
       }
     }
 };

@@ -17,6 +17,7 @@ class MockSerial: public Stream {
     MockSerial() {
       std::cin >> std::noskipws;
     }
+    void begin(int baud) {}
     bool available() override {
       return true;
     }
@@ -31,11 +32,13 @@ class MockSerial: public Stream {
     }
 };
 
+extern MockSerial Serial;
 extern MockSerial Serial2;
 
 class TwoWire {
   public:
     void begin() {};
+    void setClock(uint16_t clock) {}
     void setWireTimeout(uint32_t timeout, bool reset_with_timeout) {}
     bool getWireTimeoutFlag() { return false; }
     void clearWireTimeoutFlag() {}
@@ -56,6 +59,8 @@ void pinMode(uint8_t, bool);
 #define INPUT true
 #define INPUT_PULLUP true
 #define OUTPUT false
+
+int main();
 
 #else
 

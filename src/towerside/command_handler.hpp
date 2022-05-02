@@ -26,7 +26,7 @@ class DoubleCommandHandler: public Communication::MessageHandler<ActuatorCommand
 class Actuators: public DoubleCommandHandler, public Tickable {
   uint8_t disarm_pin;
   ActuatorCommand last_command;
-  uint8_t tick_count = 0;
+  unsigned long last_command_dispatch_timestamp = 0;
   public:
     Actuators(const ActuatorCommand &initial_states, uint8_t disarm_pin, uint8_t gnd_pin):
         DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
@@ -36,20 +36,23 @@ class Actuators: public DoubleCommandHandler, public Tickable {
       apply(initial_states);
     }
     void apply(const ActuatorCommand &cmd) override {
-      if (!digitalRead(disarm_pin)) {
-        return; // we are disarmed (pin is pulled low), don't do anything
-      }
       last_command = cmd;
     }
-    void tick() override {
-      tick_count++;
-      if (tick_count > 10) {
-        tick_count = 0;
-        for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
-          ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
-          Config::get_actuator(id)->set(last_command.get_actuator(id));
-        }
+    void dispatch() {
+      if (digitalRead(disarm_pin)) {
+        return; // we are disarmed (pin is not pulled low), don't do anything
       }
+      if (millis() - last_command_dispatch_timestamp < Config::ACTUATOR_DISPATCH_INTERVAL_MS) {
+        return;
+      }
+      last_command_dispatch_timestamp = millis();
+      for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
+        ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
+        Config::get_actuator(id)->set(last_command.get_actuator(id));
+      }
+    }
+    void tick() override {
+      dispatch();
     }
 };
 
@@ -58,18 +61,25 @@ class SevenSeg: public DoubleCommandHandler, public Tickable {
   const static uint8_t digitMap[];
   const static uint8_t pinoutMap[];
   void set_digit(uint8_t digit, uint8_t value) {
-    digitalWrite(Pinout::SEVENSEG_D1, digit == 0);
-    digitalWrite(Pinout::SEVENSEG_D2, digit == 1);
+    digitalWrite(Pinout::SEVENSEG_D1, false); // Turn both digits off to avoid cross-talk during the switch
+    digitalWrite(Pinout::SEVENSEG_D2, false);
     for (uint8_t i = 0; i < 7; i++) {
       digitalWrite(pinoutMap[i], !(digitMap[value] & (1 << i))); // pins active low
     }
-    digitalWrite(Pinout::SEVENSEG_DP, has_contact); // show points if there is an issue, active low
+    if (digit == 0) {
+      digitalWrite(Pinout::SEVENSEG_DP, has_contact); // show point if there is a connection issue, active low
+    } else {
+      digitalWrite(Pinout::SEVENSEG_DP, !digitalRead(disarm_pin)); // show point if disarmed, active low
+    }
+    digitalWrite(Pinout::SEVENSEG_D1, digit == 0);
+    digitalWrite(Pinout::SEVENSEG_D2, digit == 1);
   }
   bool has_contact = true;
+  uint8_t disarm_pin;
   uint8_t current_digit = 0;
   uint8_t digit_values[2] = {0, 0};
   public:
-    SevenSeg(const ActuatorCommand &initial_states): DoubleCommandHandler{initial_states} {
+    SevenSeg(const ActuatorCommand &initial_states, uint8_t disarm_pin): DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
       pinMode(Pinout::SEVENSEG_D1, OUTPUT);
       pinMode(Pinout::SEVENSEG_D2, OUTPUT);
       for (uint8_t i = 0; i < 7; i++) {

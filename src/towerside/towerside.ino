@@ -13,7 +13,7 @@ void setup() {
   Config::setup();
   auto connection = Communication::SerialConnection(Serial);
   auto actuators_handler = CommandHandler::Actuators(Config::get_default_states(), Pinout::KEY_SWITCH_IN, Pinout::KEY_SWITCH_GND);
-  auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_default_states());
+  auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_default_states(), Pinout::KEY_SWITCH_IN); // TODO: Make a generic arming class to pass around
   auto encoder = Communication::HexEncoder<SensorData>();
   auto decoder = Communication::HexDecoder<ActuatorCommand>();
   auto receiver = Communication::MessageReceiver<ActuatorCommand>(decoder, connection,
@@ -24,8 +24,8 @@ void setup() {
   unsigned long last_message_sent = 0;
   while (true) {
     Tickable::trigger_tick();
-    if (connection.seconds_since_contact() >= Config::TIME_TO_SAFE_STATE) {
-      actuators_handler.apply(Config::get_safe_states());
+    if (connection.seconds_since_contact() >= Config::TIME_TO_SAFE_STATE_S) {
+      receiver.force(Config::get_safe_states());
       seven_seg_handler.set_contact(false);
     } else {
       seven_seg_handler.set_contact(true);

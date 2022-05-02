@@ -16,8 +16,9 @@ class Actuator {
 };
 
 class I2C: public Actuator {
-  uint8_t slave_address;
-  bool healthy = true;
+  protected: // TODO: get rid of OldI2C and make these private
+    uint8_t slave_address;
+    bool healthy = true;
   public:
     I2C(uint8_t slave_address): slave_address{slave_address} {}
     bool health_check() override {
@@ -63,14 +64,10 @@ class I2C: public Actuator {
     }
 };
 
-class OldI2C: public Actuator {
-  uint8_t slave_address;
-  bool healthy = true;
+// Actuator that uses the old I2C protocol (to be compatible with the old towerside relay board code)
+class OldI2C: public I2C {
   public:
-    OldI2C(uint8_t slave_address): slave_address{slave_address} {}
-    bool health_check() override {
-      return healthy;
-    }
+    OldI2C(uint8_t slave_address): I2C(slave_address) {}
     void set(bool value) override {
       healthy = true;
       Wire.beginTransmission(slave_address);
@@ -83,36 +80,6 @@ class OldI2C: public Actuator {
       healthy &= Wire.endTransmission() == 0;
       healthy &= !Wire.getWireTimeoutFlag();
       Wire.clearWireTimeoutFlag();
-    }
-    ActuatorPosition get_position() override {
-      // Cast to uint8_t to avoid warning about ambiguous overload
-      healthy = Wire.requestFrom(slave_address, static_cast<uint8_t>(1)) == 1;
-      if (!healthy) {
-        Serial.println("unhealthy requestfrom");
-        return ActuatorPosition::error;
-      }
-      uint8_t lims = Wire.read();
-      if (lims == 0) return ActuatorPosition::unknown;
-      if (lims == 1) return ActuatorPosition::open;
-      if (lims == 2) return ActuatorPosition::closed;
-      return ActuatorPosition::error;
-    }
-    uint16_t get_current(uint8_t index) override {
-      if (index > 1) {
-        return SENSOR_ERR_VAL;
-      }
-      // Cast to uint8_t to avoid warning about ambiguous overload
-      healthy = Wire.requestFrom(slave_address, static_cast<uint8_t>(5)) == 5;
-      if (!healthy) {
-        return SENSOR_ERR_VAL;
-      }
-      Wire.read(); // limit switch values, ignore
-      if (index == 1) {
-        Wire.read(); Wire.read(); // ignore the first (primary) current value;
-      }
-      uint16_t adcl = Wire.read();
-      uint16_t adch = Wire.read();
-      return ((adch << 8) | adcl) * 2; // scaling factor of 2
     }
 };
 

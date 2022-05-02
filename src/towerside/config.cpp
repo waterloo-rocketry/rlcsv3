@@ -4,7 +4,8 @@
 namespace Config {
 
 const uint16_t SEND_STATUS_INTERVAL_MS = 300;
-const uint16_t TIME_TO_SAFE_STATE = 10;
+const uint16_t TIME_TO_SAFE_STATE_S = 10;
+const uint16_t ACTUATOR_DISPATCH_INTERVAL_MS = 10;
 
 Actuator::Actuator *actuators[NUM_ACTUATORS];
 Sensor::Sensor *sensors[NUM_SENSORS];

@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -Wall -MMD -g
 EXEC = towerside
-SOURCES = $(wildcard ./*.cpp ./*.ino)
+SOURCES = $(wildcard ./*.cpp ./*.ino ./common/mock_arduino.cpp)
 ALLCPP = ${SOURCES:.ino=.cpp}
 OBJECTS = ${ALLCPP:.cpp=.o}
 DEPENDS = ${OBJECTS:.o=.d}
