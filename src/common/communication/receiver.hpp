@@ -8,20 +8,20 @@
 
 namespace Communication {
 
+// MessageHandlers get registered with a MessageReceiver to get callbacks when a message is received.
 template <typename T>
 class MessageHandler {
   public:
     virtual void handle(const T &message) = 0;
 };
 
-// A MessageReceiver takes a Serializable class and a handler, which gets
-// called whenever a complete message is recieved.
+// A MessageReceiver handles interfacing a Connection and a Decoder, and calling out to a set of Handlers to handle the message.
 template <typename T>
 class MessageReceiver: public Tickable {
   Decoder<T> &decoder;
   Connection &connection;
   uint8_t n;
-  MessageHandler<T> **handlers;
+  MessageHandler<T> **handlers; // Array of MessageHandler pointers
   public:
     // To let us take a variable number of args we use a templated constructor.
     // Actual typechecking is enforced by the fact that we shove the arguments directly into a MessageHandler<T> array.
@@ -45,7 +45,7 @@ class MessageReceiver: public Tickable {
         }
       }
     }
-    // Force the handlers to handle a specific message
+    // Force the handlers to handle a specific message (eg when transitioning to safe state)
     void force(const T &msg) {
       for (uint8_t i = 0; i < n; i++) {
         handlers[i]->handle(msg);

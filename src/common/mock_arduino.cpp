@@ -10,6 +10,7 @@ TwoWire Wire;
 
 unsigned long millis() {
   static unsigned long n;
+  // increment the time every call to millis() so stuff happens
   n += 80;
   return n;
 }

@@ -5,6 +5,8 @@ SOURCES = $(wildcard ./*.cpp ./*.ino ./common/mock_arduino.cpp)
 ALLCPP = ${SOURCES:.ino=.cpp}
 OBJECTS = ${ALLCPP:.cpp=.o}
 DEPENDS = ${OBJECTS:.o=.d}
+ARDUINO_FQBN = arduino:avr:mega:cpu=atmega2560
+ARDUINO_PORT = /dev/ttyUSB*
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${OBJECTS} -o ${EXEC}
@@ -26,10 +28,10 @@ clean:
 	rm ${OBJECTS} ${DEPENDS} ${EXEC}
 
 build:
-	arduino-cli compile --fqbn arduino:avr:mega:cpu=atmega2560
+	arduino-cli compile --fqbn ${ARDUINO_FQBN}
 
 flash: build
-	arduino-cli upload -p /dev/ttyUSB* --fqbn arduino:avr:mega:cpu=atmega2560
+	arduino-cli upload -p ${ARDUINO_PORT} --fqbn ${ARDUINO_FQBN}
 
 monitor:
-	arduino-cli monitor -p /dev/ttyUSB* -c baudrate=115200
+	arduino-cli monitor -p ${ARDUINO_PORT} -c baudrate=115200

@@ -4,55 +4,38 @@
 namespace Config {
 
 const uint16_t SEND_STATUS_INTERVAL_MS = 300;
-const uint16_t TIME_TO_SAFE_STATE = 10;
 
-Actuator::Actuator *actuators[NUM_ACTUATORS];
-Sensor::Sensor *sensors[NUM_SENSORS];
-ActuatorCommand default_states;
-ActuatorCommand safe_states;
+Switch::Switch *switches[NUM_ACTUATORS];
+Channel::Channel *channels[NUM_SENSORS];
+
+Switch::Missile primary_arm {32};
+Switch::Missile secondary_arm {31};
+Switch::Missile fire {30, true};
 
 void setup() {
-  actuators[ActuatorID::fill_valve] = new Actuator::I2C(1);
-  actuators[ActuatorID::vent_valve] = new Actuator::I2C(2);
-  actuators[ActuatorID::injector_valve] = new Actuator::I2C(3);
-  actuators[ActuatorID::ignition] = new Actuator::I2C(4);
+  switches[ActuatorID::fill_valve] = new Switch::Missile(33);
+  switches[ActuatorID::vent_valve] = new Switch::Missile(37);
+  switches[ActuatorID::injector_valve] = new Switch::Missile(35);
+  switches[ActuatorID::ignition] = new Switch::Ignition(primary_arm, fire, secondary_arm);
 
-  default_states.set_actuator(ActuatorID::fill_valve, false);
-  default_states.set_actuator(ActuatorID::vent_valve, false);
-  default_states.set_actuator(ActuatorID::injector_valve, false);
-  default_states.set_actuator(ActuatorID::ignition, false);
-
-  safe_states.set_actuator(ActuatorID::fill_valve, false);
-  safe_states.set_actuator(ActuatorID::vent_valve, true);
-  safe_states.set_actuator(ActuatorID::injector_valve, false);
-  safe_states.set_actuator(ActuatorID::ignition, false);
-
-  sensors[SensorID::rlcs_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 3, 1, 0);
-  sensors[SensorID::rlcs_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 3, 1, 0);
-  sensors[SensorID::healthy_actuators] = new Sensor::HealthyActuators(actuators);
-  sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition], 0);
-  sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition], 1);
-  sensors[SensorID::fill_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::fill_valve]);
-  sensors[SensorID::vent_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::vent_valve]);
-  sensors[SensorID::injector_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::injector_valve]);
+  channels[SensorID::rlcs_main_batt_mv] = new Channel::Numeric("TM", 1, 10);
+  channels[SensorID::rlcs_actuator_batt_mv] = new Channel::Numeric("TA", 1, 10);
+  channels[SensorID::healthy_actuators] = new Channel::Numeric("HA", 1, 1);
+  channels[SensorID::ignition_primary_ma] = new Channel::Numeric("IP", 1, 1);
+  channels[SensorID::ignition_secondary_ma] = new Channel::Numeric("IS", 1, 1);
+  channels[SensorID::fill_valve_state] = new Channel::Numeric("FL", 1, 1);
+  channels[SensorID::vent_valve_state] = new Channel::Numeric("VN", 1, 1);
+  channels[SensorID::injector_valve_state] = new Channel::Numeric("IJ", 1, 1);
 }
 
-Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id) {
+Switch::Switch *get_switch(ActuatorID::ActuatorID id) {
   if (id >= NUM_ACTUATORS) return nullptr;
-  return actuators[id];
+  return switches[id];
 }
 
-Sensor::Sensor *get_sensor(SensorID::SensorID id) {
+Channel::Channel *get_channel(SensorID::SensorID id) {
   if (id > NUM_SENSORS) return nullptr;
-  return sensors[id];
-}
-
-const ActuatorCommand &get_default_states() {
-  return default_states;
-}
-
-const ActuatorCommand &get_safe_states() {
-  return safe_states;
+  return channels[id];
 }
 
 }

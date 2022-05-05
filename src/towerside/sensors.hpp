@@ -14,6 +14,7 @@ class Sensor {
     virtual uint16_t get_value() = 0; // Return the value of the sensor, always a uint16_t for simplicity
 };
 
+// Get the position of an actuator (since the actuator interface exposes get_position)
 class ActuatorPosition: public Sensor {
   Actuator::Actuator *actuator;
   public:
@@ -23,6 +24,7 @@ class ActuatorPosition: public Sensor {
     }
 };
 
+// Get the primary or secondary current of an actuator
 class ActuatorCurrent: public Sensor {
   Actuator::Actuator *actuator;
   uint8_t index;
@@ -33,6 +35,7 @@ class ActuatorCurrent: public Sensor {
     }
 };
 
+// Count the number of healthy actuators
 class HealthyActuators: public Sensor {
   Actuator::Actuator *(&actuators)[NUM_ACTUATORS];
   public:
@@ -48,6 +51,7 @@ class HealthyActuators: public Sensor {
     }
 };
 
+// Read an analog input pin. Uses a moving average and also applies a linear calibration (mx + b) to the value
 class Analog: public Sensor, Tickable {
   uint8_t pin;
   uint16_t m_num;
@@ -56,7 +60,7 @@ class Analog: public Sensor, Tickable {
   uint8_t rolling_avg_width;
   uint16_t *rolling_avg;
   uint8_t rolling_avg_index = 0;
-  uint16_t rolling_sum = 0;
+  uint16_t rolling_sum = 0; // keep a rolling sum so we don't need to sum over the list whenever the value is requested
   public:
     // Allow specifying numerator and denomincator of slope separately
     // to avoid loss in precision and floating point math.
@@ -66,10 +70,11 @@ class Analog: public Sensor, Tickable {
       for (uint8_t i = 0; i < rolling_avg_width; i++) {
         rolling_avg[i] = 0;
       }
-      digitalWrite(pin, false);
       pinMode(pin, INPUT);
+      digitalWrite(pin, false); // turn off any pullup
     }
     uint16_t get_value() override {
+      // analog input values are in multiples of ~5 mV (technically 5/1024), so multiply by 5
       return rolling_sum / rolling_avg_width * 5 * m_num / m_den + b;
     }
     void tick() override {

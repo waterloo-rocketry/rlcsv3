@@ -3,6 +3,7 @@
 
 namespace Hardware {
 
+// Do any hardware-specific setup that doesn't have a good place elsewhere.
 void setup() {
   Serial.begin(115200);
   Wire.begin();

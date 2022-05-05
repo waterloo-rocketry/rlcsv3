@@ -7,6 +7,7 @@
 
 namespace Config {
 
+// All config variables defined in the .cpp
 extern const uint16_t SEND_STATUS_INTERVAL_MS;
 extern const uint16_t TIME_TO_SAFE_STATE_S;
 extern const uint16_t ACTUATOR_DISPATCH_INTERVAL_MS;

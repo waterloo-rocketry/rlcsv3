@@ -14,9 +14,10 @@ enum class ActuatorPosition {
   error = 3
 };
 
+// Store requested positions of each actuator. Clientside builds these to send to towerside.
 class ActuatorCommand: Communication::Serializable {
-  const static uint8_t SIZE = (NUM_ACTUATORS + 7) / 8;
-  uint8_t actuator_states[SIZE]; // pack the actuators in a bit field
+  const static uint8_t SIZE = (NUM_ACTUATORS + 7) / 8; // ceiling division
+  uint8_t actuator_states[SIZE] = {0}; // pack the actuators in a bit field
   public:
     void set_actuator(ActuatorID::ActuatorID id, bool value) {
       uint8_t i = id / 8;
@@ -45,6 +46,7 @@ class ActuatorCommand: Communication::Serializable {
       return true;
     }
 
+    // Serialization functions. We serialize as the packed bit array.
     static const uint8_t DATA_LENGTH = SIZE;
     bool decode(const uint8_t *buf) override {
       for (uint8_t i = 0; i < SIZE; i++) {
@@ -58,19 +60,15 @@ class ActuatorCommand: Communication::Serializable {
       }
       return true;
     }
-
-#ifndef ARDUINO
-    // TODO remove me
-    friend std::ostream &operator<<(std::ostream &os, ActuatorCommand const &cmd) {
-      return os << (int)(cmd.actuator_states[0]);
-    }
-#endif
 };
 
+// Put this value in a sensor data field to signify an error.
 const uint16_t SENSOR_ERR_VAL = 0xFFFF;
 
+// Store a bunch of sensor data (actuator positions and currents, DAQ data) as 16-bit values.
+// This is sent from towerside to clientside.
 class SensorData: Communication::Serializable {
-  uint16_t sensor_vals[NUM_SENSORS];
+  uint16_t sensor_vals[NUM_SENSORS] {SENSOR_ERR_VAL};
   public:
     void set_sensor(SensorID::SensorID id, uint16_t val) {
       sensor_vals[id] = val;
@@ -79,7 +77,8 @@ class SensorData: Communication::Serializable {
       return sensor_vals[id];
     }
 
-    static const uint8_t DATA_LENGTH = NUM_SENSORS * 2;
+    // Serialization functions. Encode as the sensor_vals array, most significant byte first.
+    static const uint8_t DATA_LENGTH = NUM_SENSORS * 2; // two bytes per sensor
     bool decode(const uint8_t *buf) override {
       for (uint8_t i = 0; i < NUM_SENSORS; i++) {
         sensor_vals[i] = buf[i * 2] << 8;

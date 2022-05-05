@@ -5,7 +5,7 @@
 
 namespace DAQ {
 
-SensorData get_sensor_message();
+ActuatorCommand get_switch_positions();
 
 }
 

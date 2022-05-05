@@ -1,5 +1,5 @@
-#ifndef COMMAND_HANDLER_H
-#define COMMAND_HANDLER_H
+#ifndef DATA_HANDLER_H
+#define DATA_HANDLER_H
 
 #include "common/mock_arduino.hpp"
 #include "common/communication/receiver.hpp"
@@ -7,72 +7,42 @@
 #include "config.hpp"
 #include "pinout.hpp"
 
-namespace CommandHandler {
+namespace DataHandler {
 
-class DoubleCommandHandler: public Communication::MessageHandler<ActuatorCommand> {
-  ActuatorCommand last_command;
+class LCDDisplay: public Communication::MessageHandler<SensorData> {
+  LiquidCrystal lcd {Pinout::LCD_RS, Pinout::LCD_EN, Pinout::LCD_D4, Pinout::LCD_D5, Pinout::LCD_D6, Pinout::LCD_D7};
+  uint8_t n;
+  SensorID::SensorID *sensors;
   public:
-    DoubleCommandHandler(const ActuatorCommand &initial_states): last_command{initial_states} {}
-    void handle(const ActuatorCommand &cmd) override {
-      if (cmd == last_command) {
-        apply(cmd);
-      }
-      last_command = cmd;
+    template <typename... Sensors>
+    LCDDisplay(Sensors... sensors):
+        n{sizeof...(sensors)}, sensors{new SensorID::SensorID[n]{sensors...}} {
+      lcd.begin(20, 4);
+      lcd.clear();
     }
-    virtual void apply(const ActuatorCommand &cmd) = 0;
-};
+    void handle(const SensorData &msg) override {
+      uint8_t row = 0;
+      char line[21];
+      char *cursor = line;
+      for (uint8_t i = 0; i < n; i++) {
+        SensorID::SensorID sensor = sensors[i];
+        Channel::Channel *channel = Config::get_channel(sensor);
+        strncpy(cursor, channel->get_id(), 2); cursor += 2;
+        cursor[0] = ':'; cursor += 1;
+        cursor += channel->format(msg.get_sensor(sensor), cursor); // return value is length written
+        
+        if (cursor - line > 20 - 6 || i == n - 1) { // no space left on this line, or this is the last value
+          cursor[0] = '\0';
+          lcd.setCursor(0, row);
+          lcd.print(line);
+          row++;
+          memset(line, '\0', 21);
+          cursor = line;
+        } else {
+          cursor[0] = ' '; cursor += 1;
+        }
+      }
 
-class Actuators: public DoubleCommandHandler {
-  uint8_t disarm_pin;
-  public:
-    Actuators(const ActuatorCommand &initial_states, uint8_t disarm_pin, uint8_t gnd_pin):
-        DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
-      pinMode(disarm_pin, INPUT_PULLUP);
-      pinMode(gnd_pin, OUTPUT);
-      digitalWrite(gnd_pin, false);
-      apply(initial_states);
-    }
-    void apply(const ActuatorCommand &cmd) override {
-      if (!digitalRead(disarm_pin)) {
-        return; // we are disarmed (pin is pulled low), don't do anything
-      }
-      for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
-        ActuatorID::ActuatorID id = static_cast<ActuatorID::ActuatorID>(i);
-        Config::get_actuator(id)->set(cmd.get_actuator(id));
-      }
-    }
-};
-
-class SevenSeg: public DoubleCommandHandler, public Tickable {
-  //array of segements that must be displayed to display the correct number
-  const static uint8_t digitMap[];
-  const static uint8_t pinoutMap[];
-  void set_digit(uint8_t digit, uint8_t value) {
-    digitalWrite(Pinout::SEVENSEG_D1, digit == 0);
-    digitalWrite(Pinout::SEVENSEG_D2, digit == 1);
-    for (uint8_t i = 0; i < 7; i++) {
-      digitalWrite(pinoutMap[i], digitMap[value] & (1 << i));
-    }
-    digitalWrite(Pinout::SEVENSEG_DP, !has_contact);
-  }
-  bool has_contact = true;
-  uint8_t current_digit = 0;
-  uint8_t digit_values[2] = {0, 0};
-  public:
-    SevenSeg(const ActuatorCommand &initial_states): DoubleCommandHandler{initial_states} {
-      apply(initial_states);
-    }
-    void apply(const ActuatorCommand &cmd) override {
-      uint8_t byte = cmd.get_byte();
-      digit_values[0] = byte & 0xF;
-      digit_values[1] = byte >> 4;
-    }
-    void set_contact(bool val) {
-      has_contact = val;
-    }
-    void tick() override {
-      current_digit = (current_digit + 1) % 2;
-      set_digit(current_digit, digit_values[current_digit]);
     }
 };
 

@@ -5,12 +5,14 @@
 
 namespace Communication {
 
+// A decoder takes a Serializable type T that provides T::DATA_LENGTH, and tries to listen
+// to a stream of characters for a message of that length.
 template <typename T>
 class Decoder {
   public:
-    virtual void push_char(char c) = 0;
-    virtual const uint8_t *get_data() = 0;
-    virtual bool message_available() = 0;
+    virtual void push_char(char c) = 0; // Give the decoder a new character
+    virtual const uint8_t *get_data() = 0; // Get a pointer to an array of length T::DATA_LENGTH holding the decoded message
+    virtual bool message_available() = 0; // Check if a complete message has been received
 };
 
 // A HexDecoder gets templated by the length of message to look for
@@ -20,7 +22,7 @@ class Decoder {
 template <typename T>
 class HexDecoder: public Decoder<T> {
   uint8_t buf[T::DATA_LENGTH];
-  bool message_in_progress = false;
+  bool message_in_progress = false; // if we are currently decoding a message
   uint8_t i = 0; // index of the next nibble to decode
   bool valid_hex_char(char c) {
     return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F');
@@ -37,7 +39,6 @@ class HexDecoder: public Decoder<T> {
   public:
     HexDecoder() {}
     void push_char(char c) {
-      // DEBUG(message_in_progress << " " << (int)i << " " << c << " " << (int)(buf[0]));
       if (c == 'W') {
         // start of a new message, drop everything and follow it
         i = 0;
@@ -74,6 +75,7 @@ class HexDecoder: public Decoder<T> {
       i++;
     }
     const uint8_t *get_data() {
+      // don't report the same message more than once, clear message_available once it's been receieved
       message_in_progress = false;
       i = 0;
       return buf;

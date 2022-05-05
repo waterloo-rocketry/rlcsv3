@@ -3,8 +3,11 @@
 
 namespace Config {
 
+// How often to send our status (valve states, currents, DAQ data) to clientside
 const uint16_t SEND_STATUS_INTERVAL_MS = 300;
+// Go to safe state if we haven't heard from clientside in this long
 const uint16_t TIME_TO_SAFE_STATE_S = 10;
+// How often to send commands to the actuators
 const uint16_t ACTUATOR_DISPATCH_INTERVAL_MS = 10;
 
 Actuator::Actuator *actuators[NUM_ACTUATORS];
@@ -12,6 +15,7 @@ Sensor::Sensor *sensors[NUM_SENSORS];
 ActuatorCommand default_states;
 ActuatorCommand safe_states;
 
+// Initialize the actuators and sensors arrays, along with default and safe states.
 void setup() {
   actuators[ActuatorID::fill_valve] = new Actuator::OldI2C(1);
   actuators[ActuatorID::vent_valve] = new Actuator::OldI2C(2);

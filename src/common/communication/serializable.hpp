@@ -5,6 +5,7 @@
 
 namespace Communication {
 
+// Generic interface for serializable message
 class Serializable {
   public:
     static const uint8_t DATA_LENGTH;

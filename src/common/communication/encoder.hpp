@@ -6,9 +6,11 @@
 
 namespace Communication {
 
+// Encode a data array of length T::DATA_LENGTH and send it over a Connection
 template <typename T>
 class Encoder {
   public:
+    // Pass the connection rather than using another buffer to output in to save space
     virtual bool send(const uint8_t (&data)[T::DATA_LENGTH], Connection &connection) = 0;
 };
 
@@ -32,7 +34,7 @@ class HexEncoder: public Encoder<T> {
         success &= connection.push_char(get_nibble(data[i] & 0xF));
       }
       success &= connection.push_char('R');
-      success &= connection.push_char('\n');
+      success &= connection.push_char('\n'); // technically not necessary but makes things readable by humans.
       return success;
     }
 };

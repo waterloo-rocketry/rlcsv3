@@ -12,7 +12,7 @@ enum ActuatorID {
   // linear_actuator,
   injector_valve,
   ignition,
-  NUM_ACTUATORS
+  NUM_ACTUATORS // keep this at the end, its value becomes the number of actuator IDs before it
 };
 
 } // namespace ActuatorID
@@ -49,7 +49,7 @@ enum SensorID {
   canbus_battery_mv,
   vent_battery_mv,
 */
-  NUM_SENSORS
+  NUM_SENSORS // keep this at the end, its value becomes the number of sensor IDs before it
 };
 
 } // namespace SensorID

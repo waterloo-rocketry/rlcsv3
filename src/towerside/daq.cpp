@@ -3,6 +3,7 @@
 
 namespace DAQ {
 
+// Collect data from all of the sensors and put it into a SensorData object
 SensorData get_sensor_message() {
   SensorData msg;
   for (uint8_t i = 0; i < NUM_SENSORS; i++) {

@@ -7,6 +7,7 @@
 
 namespace Communication {
 
+// Encode and send messages over a connection using the specified encoder.
 template <typename T>
 class MessageSender {
   uint8_t buf[T::DATA_LENGTH];

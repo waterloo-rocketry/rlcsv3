@@ -1,5 +1,5 @@
-#ifndef ACTUATORS_H
-#define ACTUATORS_H
+#ifndef SWITCHES_H
+#define SWITCHES_H
 
 #include <stdint.h>
 #include "common/mock_arduino.hpp"
@@ -9,32 +9,36 @@ namespace Switch {
 
 class Switch {
   public:
-    virtual bool is_pressed() = 0;
+    virtual bool is_pressed() const = 0;
 };
 
 class Missile: public Switch {
   uint8_t pin;
+  bool invert;
   public:
-    Missile(uint8_t pin): pin{pin} {
-      pinMode(pin, INPUT);
+    Missile(uint8_t pin, bool invert = false): pin{pin}, invert{invert} {
+      if (invert) {
+        pinMode(pin, INPUT_PULLUP);
+      } else {
+        pinMode(pin, INPUT);
+      }
     }
-    bool is_pressed() override {
-      return digitalRead(pin);
+    bool is_pressed() const override {
+      return invert != digitalRead(pin); // != acts as XOR
     }
 };
 
 class Ignition: public Switch {
-  // Requires pin_a and _b to be pressed, and *not* pin_invert.
-  uint8_t pin_a;
-  uint8_t pin_b;
-  uint8_t pin_invert;
+  // Requires switch_a and switch_b to be pressed, and *not* switch_invert.
+  const Switch &switch_a;
+  const Switch &switch_b;
+  const Switch &switch_invert;
   public:
-    Ignition(uint8_t pin_a, uint8_t pin_b, uint8_t pin_invert):
-        pin_a{pin_a}, pin_b{pin_b}, pin_invert{pin_invert} {
-      pinMode(pin_a, INPUT);
+    Ignition(const Switch &switch_a, const Switch &switch_b, const Switch &switch_invert):
+        switch_a{switch_a}, switch_b{switch_b}, switch_invert{switch_invert} {
     }
-    bool is_pressed() override {
-      return digitalRead(pin_a) && digitalRead(pin_b) && !digitalRead(pin_invert);
+    bool is_pressed() const override {
+      return switch_a.is_pressed() && switch_b.is_pressed() && !switch_invert.is_pressed();
     }
 };
 
