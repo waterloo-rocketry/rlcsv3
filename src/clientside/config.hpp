@@ -7,6 +7,7 @@
 
 namespace Config {
 
+// All config variables defined in the .cpp
 extern const uint16_t SEND_STATUS_INTERVAL_MS;
 extern const uint16_t MESSAGE_WARNING_INTERVAL_S;
 

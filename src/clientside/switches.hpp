@@ -12,6 +12,7 @@ class Switch {
     virtual bool is_pressed() const = 0;
 };
 
+// Read a digital line, optionally invert the value read if the switch pulls the input to ground.
 class Missile: public Switch {
   uint8_t pin;
   bool invert;
@@ -28,8 +29,8 @@ class Missile: public Switch {
     }
 };
 
+// Requires switch_a and switch_b to be pressed, and *not* switch_invert.
 class Ignition: public Switch {
-  // Requires switch_a and switch_b to be pressed, and *not* switch_invert.
   const Switch &switch_a;
   const Switch &switch_b;
   const Switch &switch_invert;

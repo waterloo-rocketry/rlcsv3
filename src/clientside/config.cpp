@@ -10,10 +10,12 @@ const uint16_t MESSAGE_WARNING_INTERVAL_S = 3;
 Switch::Switch *switches[NUM_ACTUATORS];
 Channel::Channel *channels[NUM_SENSORS];
 
+// Define common arming / firing switches since they are reused between primary and secondary ignition
 Switch::Missile primary_arm {Pinout::MISSILE_SWITCH_IGNITION_PRI};
 Switch::Missile secondary_arm {Pinout::MISSILE_SWITCH_IGNITION_SEC};
 Switch::Missile fire {Pinout::MISSILE_SWITCH_IGNITION_FIRE, true};
 
+// Initialize the switches and channels arrays
 void setup() {
   switches[ActuatorID::valve_1] = new Switch::Missile(Pinout::MISSILE_SWITCH_1);
   switches[ActuatorID::valve_2] = new Switch::Missile(Pinout::MISSILE_SWITCH_2);

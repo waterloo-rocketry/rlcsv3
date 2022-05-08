@@ -5,6 +5,7 @@
 
 namespace Pinout {
 
+// Analog input for clientside's (divided) battery voltage
 const uint8_t BATT_VOLTAGE = 0;
 
 const uint8_t KEY_SWITCH_IN = 9;
@@ -30,6 +31,7 @@ const uint8_t LED_RED = 11;
 const uint8_t LED_GREEN = 12;
 const uint8_t LED_BLUE = 13;
 
+// LEDs inside the missile switches to show the armed state
 const uint8_t MISSILE_LEDS[] = {
   69,
   68,
@@ -44,6 +46,7 @@ const uint8_t MISSILE_LEDS[] = {
   59
 };
 
+// Seven segment display on the power board
 const uint8_t SEVENSEG_D1 = 47;
 const uint8_t SEVENSEG_D2 = 46;
 const uint8_t SEVENSEG_A  = 39;

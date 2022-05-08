@@ -8,12 +8,17 @@
 
 namespace Channel {
 
+// A Channel is responsible for formatting a specific sensor's data
 class Channel {
   public:
     virtual const char *get_id() = 0;
+    // Write the formatted version of val into buf, and return the number of characters written.
+    // Do not write a null terminating character and do not count it in the number of characters.
     virtual uint8_t format(uint16_t val, char *buf) = 0;
 };
 
+// Format a sensor as a number, optionally scaling it beforehand. Also shows `ERR` for fields equal
+// to SENSOR_ERR_VAL and `BIG` for numbers over 999 (post scaling)
 class Numeric: public Channel {
   const char *id;
   uint16_t scaling_num;
@@ -30,7 +35,7 @@ class Numeric: public Channel {
         return 3;
       }
       val = val * scaling_num / scaling_den;
-      if (val > 999) {
+      if (val > 999) { // too big to fit in 3 characters
         strncpy(buf, "BIG", 3);
         return 3;
       }
@@ -42,6 +47,7 @@ class Numeric: public Channel {
     }
 };
 
+// Show the string corresponding to an actuator position, or ERR if out of range.
 class ActuatorState: public Channel {
   const char *id;
   public:
