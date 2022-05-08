@@ -21,10 +21,11 @@ class Connection {
       return _push_char(c);
     }
     uint16_t seconds_since_contact() {
-      if (last_recv_timestamp > 65535*1000) {
+      unsigned long delta = (millis() - last_recv_timestamp) / 1000;
+      if (delta > 65535) {
         return 65535;
       }
-      return (millis() - last_recv_timestamp) / 1000;
+      return delta;
     }
   private:
     // to be overridden by subclasses

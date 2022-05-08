@@ -20,9 +20,16 @@ class Actuator {
 class I2C: public Actuator {
   protected: // TODO: get rid of OldI2C and make these private
     uint8_t slave_address; // slave address we are controlling
+    bool active_off; // whether power should be set when select is 0
     bool healthy = true; // was the last communication with the slave successful
   public:
-    I2C(uint8_t slave_address): slave_address{slave_address} {}
+    // active_off determines whether we turn on power when select is off
+    // This is necessary because comp requires that at least two components must fail in order for ignition to
+    // happen inadvertently. This means we must use two relay boards with the two ignition channels each wired to
+    // the 'on' set of each board, so that if the power relay fails we don't trigger an ignition coil connected to the
+    // 'off' position.
+    I2C(uint8_t slave_address, bool active_off = true):
+      slave_address{slave_address}, active_off{active_off} {}
     bool health_check() override {
       return healthy;
     }
@@ -31,8 +38,9 @@ class I2C: public Actuator {
       Wire.beginTransmission(slave_address);
       // Relay boards have two relays. One turns on power, and the other selects which direction to apply power to.
       // LSB is power, next bit is select.
-      // TODO: This means power is always on, which isn't desirable for something like ignition.
-      healthy &= Wire.write((value << 1) | 1) == 1; // returns the number of bytes written, should be 1
+      // TODO: active_off is ugly, come up with a better abstraction between ActuatorCommand bits and power/select
+      bool select = value || active_off;
+      healthy &= Wire.write((value << 1) | select) == 1; // returns the number of bytes written, should be 1
       healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
       healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
       Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
@@ -77,7 +85,8 @@ class OldI2C: public I2C {
       Wire.beginTransmission(slave_address);
       // The old I2C protocol only sets either power or select at a time.
       // LSB is 0 for power, 1 for select. The next bit is the value.
-      healthy &= Wire.write((1 << 1) | 0) == 1;
+      bool select = value || active_off;
+      healthy &= Wire.write((select << 1) | 0) == 1;
       healthy &= Wire.endTransmission() == 0;
       healthy &= !Wire.getWireTimeoutFlag();
       Wire.beginTransmission(slave_address);

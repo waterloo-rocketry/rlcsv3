@@ -60,6 +60,9 @@ class LiquidCrystal {
     void print(char *s) {
       std::cout << s << std::endl;
     }
+    void print(const char *s) {
+      std::cout << s << std::endl;
+    }
     void setCursor(uint8_t, uint8_t) {}
 };
 

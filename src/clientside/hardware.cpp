@@ -13,6 +13,10 @@ void setup() {
   pinMode(Pinout::KEY_SWITCH_GND, OUTPUT);
   digitalWrite(Pinout::KEY_SWITCH_GND, false);
 
+  pinMode(Pinout::LED_RED, OUTPUT);
+  pinMode(Pinout::LED_GREEN, OUTPUT);
+  pinMode(Pinout::LED_BLUE, OUTPUT);
+
   for (uint8_t i = 0; i < sizeof(Pinout::MISSILE_LEDS) / sizeof(Pinout::MISSILE_LEDS[0]); i++) {
     pinMode(Pinout::MISSILE_LEDS[i], OUTPUT);
   }

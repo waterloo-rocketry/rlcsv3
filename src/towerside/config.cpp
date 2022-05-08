@@ -17,28 +17,35 @@ ActuatorCommand safe_states;
 
 // Initialize the actuators and sensors arrays, along with default and safe states.
 void setup() {
-  actuators[ActuatorID::fill_valve] = new Actuator::OldI2C(1);
-  actuators[ActuatorID::vent_valve] = new Actuator::OldI2C(2);
-  actuators[ActuatorID::injector_valve] = new Actuator::OldI2C(3);
-  actuators[ActuatorID::ignition] = new Actuator::OldI2C(4);
+  actuators[ActuatorID::valve_1] = new Actuator::I2C(1);
+  actuators[ActuatorID::valve_2] = new Actuator::I2C(2);
+  actuators[ActuatorID::valve_3] = new Actuator::I2C(3);
+  actuators[ActuatorID::injector_valve] = new Actuator::I2C(4);
+  actuators[ActuatorID::ignition_primary] = new Actuator::I2C(5, false);
+  actuators[ActuatorID::ignition_secondary] = new Actuator::I2C(6, false);
 
-  default_states.set_actuator(ActuatorID::fill_valve, false);
-  default_states.set_actuator(ActuatorID::vent_valve, false);
+  default_states.set_actuator(ActuatorID::valve_1, false);
+  default_states.set_actuator(ActuatorID::valve_2, false);
+  default_states.set_actuator(ActuatorID::valve_3, false);
   default_states.set_actuator(ActuatorID::injector_valve, false);
-  default_states.set_actuator(ActuatorID::ignition, false);
+  default_states.set_actuator(ActuatorID::ignition_primary, false);
+  default_states.set_actuator(ActuatorID::ignition_secondary, false);
 
-  safe_states.set_actuator(ActuatorID::fill_valve, false);
-  safe_states.set_actuator(ActuatorID::vent_valve, true);
+  safe_states.set_actuator(ActuatorID::valve_1, false);
+  safe_states.set_actuator(ActuatorID::valve_2, true);
+  safe_states.set_actuator(ActuatorID::valve_3, true);
   safe_states.set_actuator(ActuatorID::injector_valve, false);
-  safe_states.set_actuator(ActuatorID::ignition, false);
+  safe_states.set_actuator(ActuatorID::ignition_primary, false);
+  safe_states.set_actuator(ActuatorID::ignition_secondary, false);
 
-  sensors[SensorID::rlcs_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 3, 1, 0);
-  sensors[SensorID::rlcs_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 3, 1, 0);
-  sensors[SensorID::healthy_actuators] = new Sensor::HealthyActuators(actuators);
-  sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition], 0);
-  sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition], 1);
-  sensors[SensorID::fill_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::fill_valve]);
-  sensors[SensorID::vent_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::vent_valve]);
+  sensors[SensorID::towerside_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 3, 1, 0);
+  sensors[SensorID::towerside_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 3, 1, 0);
+  sensors[SensorID::healthy_actuators_count] = new Sensor::HealthyActuators(actuators);
+  sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_primary], 1);
+  sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_secondary], 1);
+  sensors[SensorID::valve_1_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_1]);
+  sensors[SensorID::valve_2_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_2]);
+  sensors[SensorID::valve_3_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_3]);
   sensors[SensorID::injector_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::injector_valve]);
 }
 

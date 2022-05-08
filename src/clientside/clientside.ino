@@ -10,24 +10,31 @@
 
 void setup() {
   Hardware::setup();
+  // blue LED to show we are starting up
+  digitalWrite(Pinout::LED_BLUE, true);
   Config::setup();
   auto connection = Communication::SerialConnection(Serial);
-  auto lcd_handler = DataHandler::LCDDisplay(SensorID::rlcs_main_batt_mv,
-                                             SensorID::rlcs_actuator_batt_mv,
-                                             SensorID::healthy_actuators,
-                                             SensorID::fill_valve_state,
-                                             SensorID::vent_valve_state,
-                                             SensorID::injector_valve_state,
-                                             SensorID::ignition_primary_ma,
-                                             SensorID::ignition_secondary_ma);
+  auto lcd_handler = DataHandler::LCDDisplay(
+    SensorID::valve_1_state,
+    SensorID::valve_2_state,
+    // SensorID::valve_3_state,
+    SensorID::injector_valve_state,
+    SensorID::ignition_primary_ma,
+    SensorID::ignition_secondary_ma,
+    SensorID::healthy_actuators_count,
+    SensorID::towerside_main_batt_mv,
+    SensorID::towerside_actuator_batt_mv
+  );
   auto encoder = Communication::HexEncoder<ActuatorCommand>();
   auto decoder = Communication::HexDecoder<SensorData>();
   auto receiver = Communication::MessageReceiver<SensorData>(decoder, connection,
-                                                            &lcd_handler);
+    &lcd_handler
+  );
   auto sender = Communication::MessageSender<ActuatorCommand>(encoder, connection);
 
   unsigned long last_message_sent = 0;
   ActuatorCommand last_switch_positions = DAQ::get_switch_positions();
+  digitalWrite(Pinout::LED_BLUE, false); // startup finished
   while (true) {
     Tickable::trigger_tick();
     if (millis() - last_message_sent > Config::SEND_STATUS_INTERVAL_MS) {
@@ -43,6 +50,9 @@ void setup() {
 
       sender.send(last_switch_positions);
     }
+    bool towerside_alive = connection.seconds_since_contact() < Config::MESSAGE_WARNING_INTERVAL_S;
+    digitalWrite(Pinout::LED_GREEN, towerside_alive);
+    digitalWrite(Pinout::LED_RED, !towerside_alive);
   }
 }
 

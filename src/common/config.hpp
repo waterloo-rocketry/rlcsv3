@@ -7,11 +7,13 @@ namespace ActuatorID {
 
 // not an enum class so we can use them to index arrays easily
 enum ActuatorID {
-  fill_valve,
-  vent_valve,
+  valve_1,
+  valve_2,
+  valve_3,
   // linear_actuator,
   injector_valve,
-  ignition,
+  ignition_primary,
+  ignition_secondary,
   NUM_ACTUATORS // keep this at the end, its value becomes the number of actuator IDs before it
 };
 
@@ -24,17 +26,17 @@ namespace SensorID {
 // not an enum class so we can use them to index arrays easily
 enum SensorID {
   // Battery voltages
-  rlcs_main_batt_mv,
-  rlcs_actuator_batt_mv,
+  towerside_main_batt_mv,
+  towerside_actuator_batt_mv,
   // Actuator health
-  healthy_actuators,
+  healthy_actuators_count,
   // Ignition currents
   ignition_primary_ma,
   ignition_secondary_ma,
   // Actuator states
-  fill_valve_state,
-  vent_valve_state,
-  // linear_actuator_state
+  valve_1_state,
+  valve_2_state,
+  valve_3_state,
   injector_valve_state,
 /*
   // Comp DAQ values
@@ -49,11 +51,12 @@ enum SensorID {
   canbus_battery_mv,
   vent_battery_mv,
 */
-  NUM_SENSORS // keep this at the end, its value becomes the number of sensor IDs before it
+
+  NUM_SENSORS // keep this at the end, it stores the total number of sensors
 };
 
 } // namespace SensorID
 
-using SensorID::NUM_SENSORS; // Bring into the global scope
+using SensorID::NUM_SENSORS;
 
 #endif

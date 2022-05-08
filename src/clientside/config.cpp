@@ -3,29 +3,34 @@
 
 namespace Config {
 
-const uint16_t SEND_STATUS_INTERVAL_MS = 300;
+const uint16_t SEND_STATUS_INTERVAL_MS = 100;
+// if it has been this long since we heard from towerside show a warning
+const uint16_t MESSAGE_WARNING_INTERVAL_S = 3;
 
 Switch::Switch *switches[NUM_ACTUATORS];
 Channel::Channel *channels[NUM_SENSORS];
 
-Switch::Missile primary_arm {32};
-Switch::Missile secondary_arm {31};
-Switch::Missile fire {30, true};
+Switch::Missile primary_arm {Pinout::MISSILE_SWITCH_IGNITION_PRI};
+Switch::Missile secondary_arm {Pinout::MISSILE_SWITCH_IGNITION_SEC};
+Switch::Missile fire {Pinout::MISSILE_SWITCH_IGNITION_FIRE, true};
 
 void setup() {
-  switches[ActuatorID::fill_valve] = new Switch::Missile(33);
-  switches[ActuatorID::vent_valve] = new Switch::Missile(37);
-  switches[ActuatorID::injector_valve] = new Switch::Missile(35);
-  switches[ActuatorID::ignition] = new Switch::Ignition(primary_arm, fire, secondary_arm);
+  switches[ActuatorID::valve_1] = new Switch::Missile(Pinout::MISSILE_SWITCH_1);
+  switches[ActuatorID::valve_2] = new Switch::Missile(Pinout::MISSILE_SWITCH_2);
+  switches[ActuatorID::valve_3] = new Switch::Missile(Pinout::MISSILE_SWITCH_3);
+  switches[ActuatorID::injector_valve] = new Switch::Missile(Pinout::MISSILE_SWITCH_INJECTOR);
+  switches[ActuatorID::ignition_primary] = new Switch::Ignition(primary_arm, fire, secondary_arm);
+  switches[ActuatorID::ignition_secondary] = new Switch::Ignition(secondary_arm, fire, primary_arm);
 
-  channels[SensorID::rlcs_main_batt_mv] = new Channel::Numeric("TM", 1, 10);
-  channels[SensorID::rlcs_actuator_batt_mv] = new Channel::Numeric("TA", 1, 10);
-  channels[SensorID::healthy_actuators] = new Channel::Numeric("HA", 1, 1);
-  channels[SensorID::ignition_primary_ma] = new Channel::Numeric("IP", 1, 1);
-  channels[SensorID::ignition_secondary_ma] = new Channel::Numeric("IS", 1, 1);
-  channels[SensorID::fill_valve_state] = new Channel::Numeric("FL", 1, 1);
-  channels[SensorID::vent_valve_state] = new Channel::Numeric("VN", 1, 1);
-  channels[SensorID::injector_valve_state] = new Channel::Numeric("IJ", 1, 1);
+  channels[SensorID::towerside_main_batt_mv] = new Channel::Numeric("TM", 1, 100);
+  channels[SensorID::towerside_actuator_batt_mv] = new Channel::Numeric("TA", 1, 100);
+  channels[SensorID::healthy_actuators_count] = new Channel::Numeric("HA", 1, 1);
+  channels[SensorID::ignition_primary_ma] = new Channel::Numeric("IP", 1, 10);
+  channels[SensorID::ignition_secondary_ma] = new Channel::Numeric("IS", 1, 10);
+  channels[SensorID::valve_1_state] = new Channel::ActuatorState("V1");
+  channels[SensorID::valve_2_state] = new Channel::ActuatorState("V2");
+  channels[SensorID::valve_3_state] = new Channel::ActuatorState("V3");
+  channels[SensorID::injector_valve_state] = new Channel::ActuatorState("IJ");
 }
 
 Switch::Switch *get_switch(ActuatorID::ActuatorID id) {
