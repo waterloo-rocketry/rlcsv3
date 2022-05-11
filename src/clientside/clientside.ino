@@ -55,7 +55,7 @@ void setup() {
       }
       // Light up the switch LEDs if we are armed
       for (uint8_t i = 0; i < sizeof(Pinout::MISSILE_LEDS) / sizeof(Pinout::MISSILE_LEDS[0]); i++) {
-        digitalWrite(Pinout::MISSILE_LEDS[i], !armed);
+        digitalWrite(Pinout::MISSILE_LEDS[i], !armed); // active low
       }
 
       sender.send(last_switch_positions);
