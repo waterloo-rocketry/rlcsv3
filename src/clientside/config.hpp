@@ -11,6 +11,9 @@ namespace Config {
 extern const uint16_t SEND_STATUS_INTERVAL_MS;
 extern const uint16_t MESSAGE_WARNING_INTERVAL_S;
 
+extern const uint16_t BATT_SCALE_NUM;
+extern const uint16_t BATT_SCALE_DEN;
+
 void setup();
 Switch::Switch *get_switch(ActuatorID::ActuatorID id);
 Channel::Channel *get_channel(SensorID::SensorID id);

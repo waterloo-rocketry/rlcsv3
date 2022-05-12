@@ -16,8 +16,7 @@ ActuatorCommand get_switch_positions () {
 
 // get clientside battery voltage in 10ths of a volt for displaying
 uint8_t get_batt_dv() {
-  // 6.2k and 10k resistor divider plus arduino's analog read being on a scale of 2^10 = 5V gives these magic scaling numbers
-  return analogRead(Pinout::BATT_VOLTAGE) * 4 / 31;
+  return analogRead(Pinout::BATT_VOLTAGE) * Config::BATT_SCALE_NUM / Config::BATT_SCALE_DEN;
 }
 
 }

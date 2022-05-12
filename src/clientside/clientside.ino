@@ -67,5 +67,6 @@ void setup() {
   }
 }
 
+// We should never get here but arduino makes us include it.
 void loop() {
 }

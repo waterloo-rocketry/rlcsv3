@@ -31,7 +31,7 @@ class ActuatorCommand: Communication::Serializable {
     bool get_actuator(ActuatorID::ActuatorID id) const {
       uint8_t i = id / 8;
       uint8_t bit = 1 << (id % 8);
-      return actuator_states[i] & bit;
+      return actuator_states[i] & bit ? true : false;
     }
     // Get the first 8 actuator states as a byte, useful for the 7-segment display and debugging.
     uint8_t get_byte() const {
