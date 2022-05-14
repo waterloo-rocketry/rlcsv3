@@ -15,14 +15,16 @@ Sensor::Sensor *sensors[NUM_SENSORS];
 ActuatorCommand default_states;
 ActuatorCommand safe_states;
 
+Actuator::Ignition ignition {5};
+
 // Initialize the actuators and sensors arrays, along with default and safe states.
 void setup() {
   actuators[ActuatorID::valve_1] = new Actuator::I2C(1);
   actuators[ActuatorID::valve_2] = new Actuator::I2C(2);
   actuators[ActuatorID::valve_3] = new Actuator::I2C(3);
   actuators[ActuatorID::injector_valve] = new Actuator::I2C(4);
-  actuators[ActuatorID::ignition_primary] = new Actuator::I2C(5, false);
-  actuators[ActuatorID::ignition_secondary] = new Actuator::I2C(6, false);
+  actuators[ActuatorID::ignition_primary] = ignition.primary_actuator();
+  actuators[ActuatorID::ignition_secondary] = ignition.secondary_actuator();
 
   default_states.set_actuator(ActuatorID::valve_1, false);
   default_states.set_actuator(ActuatorID::valve_2, false);
@@ -33,7 +35,7 @@ void setup() {
 
   safe_states.set_actuator(ActuatorID::valve_1, false);
   safe_states.set_actuator(ActuatorID::valve_2, true);
-  safe_states.set_actuator(ActuatorID::valve_3, true);
+  safe_states.set_actuator(ActuatorID::valve_3, false);
   safe_states.set_actuator(ActuatorID::injector_valve, false);
   safe_states.set_actuator(ActuatorID::ignition_primary, false);
   safe_states.set_actuator(ActuatorID::ignition_secondary, false);
@@ -47,6 +49,8 @@ void setup() {
   sensors[SensorID::valve_2_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_2]);
   sensors[SensorID::valve_3_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_3]);
   sensors[SensorID::injector_valve_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::injector_valve]);
+  sensors[SensorID::valve_1_p_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::valve_1], 0);
+  sensors[SensorID::valve_1_s_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::valve_1], 1);
 }
 
 Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id) {

@@ -3,7 +3,7 @@
 
 namespace Config {
 
-const uint16_t SEND_STATUS_INTERVAL_MS = 100;
+const uint16_t SEND_STATUS_INTERVAL_MS = 200;
 // if it has been this long since we heard from towerside show a warning
 const uint16_t MESSAGE_WARNING_INTERVAL_S = 3;
 
@@ -37,6 +37,8 @@ void setup() {
   channels[SensorID::valve_2_state] = new Channel::ActuatorState("V2");
   channels[SensorID::valve_3_state] = new Channel::ActuatorState("V3");
   channels[SensorID::injector_valve_state] = new Channel::ActuatorState("IJ");
+  channels[SensorID::valve_1_p_ma] = new Channel::Numeric("VP", 1, 10);
+  channels[SensorID::valve_1_s_ma] = new Channel::Numeric("VS", 1, 10);
 }
 
 Switch::Switch *get_switch(ActuatorID::ActuatorID id) {

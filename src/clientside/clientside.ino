@@ -15,7 +15,7 @@ void setup() {
   // initialize configuration arrays (switches, channels)
   Config::setup();
   // connect to towerside on the Serial port
-  auto connection = Communication::SerialConnection(Serial);
+  auto connection = Communication::SerialConnection(Serial3);
   // Define the fields to be shown on the LCD. Right now these are just shown in order, 3 per line.
   auto lcd_handler = DataHandler::LCDDisplay(
     SensorID::valve_1_state,
@@ -26,7 +26,9 @@ void setup() {
     SensorID::ignition_secondary_ma,
     SensorID::healthy_actuators_count,
     SensorID::towerside_main_batt_mv,
-    SensorID::towerside_actuator_batt_mv
+    SensorID::towerside_actuator_batt_mv,
+    SensorID::valve_1_p_ma,
+    SensorID::valve_1_s_ma
   );
   // Define how we will encode and decode messages to/from towerside
   auto encoder = Communication::HexEncoder<ActuatorCommand>();

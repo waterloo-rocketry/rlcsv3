@@ -14,7 +14,7 @@ void setup() {
   // Initialize configuration arrays (actuators, sensors, default + safe states)
   Config::setup();
   // Connect to client side of the Serial port
-  auto connection = Communication::SerialConnection(Serial);
+  auto connection = Communication::SerialConnection(Serial2);
   // Define handles for commands from client side
   auto actuators_handler = CommandHandler::Actuators(Config::get_default_states(), Pinout::KEY_SWITCH_IN, Pinout::KEY_SWITCH_GND);
   auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_default_states(), Pinout::KEY_SWITCH_IN); // TODO: Make a generic arming class to pass around

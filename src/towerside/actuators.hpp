@@ -18,18 +18,17 @@ class Actuator {
 
 // I2C relay board actuator
 class I2C: public Actuator {
-  protected: // TODO: get rid of OldI2C and make these private
-    uint8_t slave_address; // slave address we are controlling
-    bool active_off; // whether power should be set when select is 0
-    bool healthy = true; // was the last communication with the slave successful
+  uint8_t slave_address; // slave address we are controlling
+  bool healthy = true; // was the last communication with the slave successful
+  virtual bool get_power(bool value) {
+    return true;
+  }
+  virtual bool get_select(bool value) {
+    return !value; // Valves are wired up such that select being off means the valve is open
+  }
   public:
-    // active_off determines whether we turn on power when select is off
-    // This is necessary because comp requires that at least two components must fail in order for ignition to
-    // happen inadvertently. This means we must use two relay boards with the two ignition channels each wired to
-    // the 'on' set of each board, so that if the power relay fails we don't trigger an ignition coil connected to the
-    // 'off' position.
-    I2C(uint8_t slave_address, bool active_off = true):
-      slave_address{slave_address}, active_off{active_off} {}
+    I2C(uint8_t slave_address):
+      slave_address{slave_address} {}
     bool health_check() override {
       return healthy;
     }
@@ -38,9 +37,9 @@ class I2C: public Actuator {
       Wire.beginTransmission(slave_address);
       // Relay boards have two relays. One turns on power, and the other selects which direction to apply power to.
       // LSB is power, next bit is select.
-      // TODO: active_off is ugly, come up with a better abstraction between ActuatorCommand bits and power/select
-      bool select = value || active_off;
-      healthy &= Wire.write((value << 1) | select) == 1; // returns the number of bytes written, should be 1
+      bool power = get_power(value);
+      bool select = get_select(value);
+      healthy &= Wire.write((select << 1) | power) == 1; // returns the number of bytes written, should be 1
       healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
       healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
       Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
@@ -66,37 +65,63 @@ class I2C: public Actuator {
       if (!healthy) {
         return SENSOR_ERR_VAL;
       }
-      Wire.read(); // limit switch values, ignore
+      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
       if (index == 1) { // if we want the secondary current
-        Wire.read(); Wire.read(); // ignore the first (primary) current value (2 bytes)
+      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
+      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
+      //  Wire.read(); Wire.read(); // ignore the first (primary) current value (2 bytes)
       }
       uint16_t adcl = Wire.read(); // get the 16-bit current reading
       uint16_t adch = Wire.read();
-      return ((adch << 8) | adcl) * 2; // the current is reported in multiples of 2 mA, scale it.
+      Serial.print(adcl); Serial.print(" "); Serial.print(adch); Serial.print(" ");
+      if (index == 0) {
+        Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
+        Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
+      }
+      Serial.println();
+      return ((adch << 8) | adcl) * 5; // intervals of 2mV, 20V/V scaling, 0.02R sense
     }
 };
 
-// Actuator that uses the old I2C protocol (to be compatible with the old towerside relay board code)
-class OldI2C: public I2C {
+class Ignition: public I2C {
+  bool primary_on;
+  bool secondary_on;
+  void set_primary(bool value) { primary_on = value; }
+  void set_secondary(bool value) { secondary_on = value; set(false); } // actually trigger the I2C parent
+  bool get_power(bool) override {
+    return primary_on != secondary_on; // turn on power if exactly one of primary and secondary are set
+  }
+  bool get_select(bool) override {
+    return secondary_on && !primary_on; // only set select if secondary is on and primary is off
+  }
   public:
-    OldI2C(uint8_t slave_address): I2C(slave_address) {}
-    void set(bool value) override {
-      healthy = true;
-      Wire.beginTransmission(slave_address);
-      // The old I2C protocol only sets either power or select at a time.
-      // LSB is 0 for power, 1 for select. The next bit is the value.
-      bool select = value || active_off;
-      healthy &= Wire.write((select << 1) | 0) == 1;
-      healthy &= Wire.endTransmission() == 0;
-      healthy &= !Wire.getWireTimeoutFlag();
-      Wire.beginTransmission(slave_address);
-      healthy &= Wire.write((value << 1) | 1) == 1;
-      healthy &= Wire.endTransmission() == 0;
-      healthy &= !Wire.getWireTimeoutFlag();
-      Wire.clearWireTimeoutFlag();
-    }
-};
+    Ignition(uint8_t slave_address): I2C(slave_address) {}
+    class Primary: public Actuator {
+      Ignition *ignition;
+      Primary(Ignition *ignition): ignition{ignition} {}
 
+      public:
+        bool health_check() { return ignition->health_check(); }
+        void set(bool value) { ignition->set_primary(value); }
+        ActuatorPosition get_position() { return ignition->get_position(); }
+        uint16_t get_current(uint8_t index) { return ignition->get_current(0); }
+      friend class Ignition;
+    };
+    class Secondary: public Actuator {
+      Ignition *ignition;
+      Secondary(Ignition *ignition): ignition{ignition} {}
+
+      public:
+        bool health_check() { return ignition->health_check(); }
+        void set(bool value) { ignition->set_secondary(value); }
+        ActuatorPosition get_position() { return ignition->get_position(); }
+        uint16_t get_current(uint8_t index) { return ignition->get_current(1); }
+      friend class Ignition;
+    };
+    Primary *primary_actuator() { return new Primary{this}; }
+    Secondary *secondary_actuator() { return new Secondary{this}; }
+  
+};
 
 // TODO: Support for talking to actuator boards over live telemetry
 /*

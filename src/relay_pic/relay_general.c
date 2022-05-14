@@ -1,7 +1,8 @@
 #include <xc.h>
 #include "relay_general.h"
 
-uint16_t analog_inputs[2];
+uint16_t curr_sense_1 = 0;
+uint16_t curr_sense_2 = 0;
 uint16_t read_analog_inputs(uint8_t port) {
     ADCON0 = 0x01 | (port << 2); // Turn ADC on, select port to read from
     ADCON0 |= 1 << 1; // set b[1] "go" bit
@@ -10,8 +11,12 @@ uint16_t read_analog_inputs(uint8_t port) {
         done_bit = ADCON0 & (1 << 1);
     } while (done_bit); //while go bit is on (AD conversion in progress)
 
-    uint16_t adc_result = (ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
-    analog_inputs[port] = adc_result;
+    uint16_t adc_result = ((uint16_t)ADRESH << 8) | ADRESL; //combine two 8bit values into a 16bit value
+    if (port == CURR_SENSE_1) {
+        curr_sense_1 = adc_result;
+    } else {
+        curr_sense_2 = adc_result;
+    }
 
     ADCON0 = 0x00; //Turn ADC off return;
 
@@ -19,7 +24,11 @@ uint16_t read_analog_inputs(uint8_t port) {
 }
 
 uint16_t get_analog_inputs(uint8_t port) {
-    return analog_inputs[port];
+    if (port == CURR_SENSE_1) {
+        return curr_sense_1;
+    } else {
+        return curr_sense_2;
+    }
 }
 
 void set_power_on(void) {

@@ -15,6 +15,7 @@ class Connection {
     char get_char() {
       char c = _get_char();
       last_recv_timestamp = millis();
+      Serial.write(c);
       return c;
     }
     bool push_char(char c) { // wrapper for symmetry

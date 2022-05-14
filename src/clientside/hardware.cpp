@@ -6,7 +6,8 @@ namespace Hardware {
 
 // Do any hardware-specific setup that doesn't have a good place elsewhere.
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200); // Computer connection
+  Serial3.begin(9600); // XBee connection
   Wire.begin();
   Wire.setWireTimeout(1000, true); // 1000uS = 1mS timeout, true = reset the bus in this case.
 

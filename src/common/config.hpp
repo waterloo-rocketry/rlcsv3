@@ -38,6 +38,10 @@ enum SensorID {
   valve_2_state,
   valve_3_state,
   injector_valve_state,
+
+  // testing
+  valve_1_p_ma,
+  valve_1_s_ma,
 /*
   // Comp DAQ values
   fill_tank_psi,
