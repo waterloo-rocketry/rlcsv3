@@ -40,8 +40,9 @@ void setup() {
   safe_states.set_actuator(ActuatorID::ignition_primary, false);
   safe_states.set_actuator(ActuatorID::ignition_secondary, false);
 
-  sensors[SensorID::towerside_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 3, 1, 0);
-  sensors[SensorID::towerside_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 3, 1, 0);
+  // analog scaling numbers come from ramping through battery voltages and making a line of best fit
+  sensors[SensorID::towerside_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 48, 17, 127);
+  sensors[SensorID::towerside_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 48, 17, 0);
   sensors[SensorID::healthy_actuators_count] = new Sensor::HealthyActuators(actuators);
   sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_primary], 1);
   sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_secondary], 1);

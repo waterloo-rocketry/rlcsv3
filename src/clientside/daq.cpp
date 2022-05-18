@@ -16,7 +16,7 @@ ActuatorCommand get_switch_positions () {
 
 // get clientside battery voltage in 10ths of a volt for displaying
 uint8_t get_batt_dv() {
-  return analogRead(Pinout::BATT_VOLTAGE) * Config::BATT_SCALE_NUM / Config::BATT_SCALE_DEN;
+  return (analogRead(Pinout::BATT_VOLTAGE) + Config::BATT_SCALE_PRE_OFFSET) * Config::BATT_SCALE_NUM / Config::BATT_SCALE_DEN;
 }
 
 }

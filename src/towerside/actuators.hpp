@@ -65,21 +65,13 @@ class I2C: public Actuator {
       if (!healthy) {
         return SENSOR_ERR_VAL;
       }
-      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
+      Wire.read(); // limit switch values, ignore
       if (index == 1) { // if we want the secondary current
-      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
-      Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
-      //  Wire.read(); Wire.read(); // ignore the first (primary) current value (2 bytes)
+        Wire.read(); Wire.read(); // ignore the first (primary) current value (2 bytes)
       }
       uint16_t adcl = Wire.read(); // get the 16-bit current reading
       uint16_t adch = Wire.read();
-      Serial.print(adcl); Serial.print(" "); Serial.print(adch); Serial.print(" ");
-      if (index == 0) {
-        Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
-        Serial.print(Wire.read()); Serial.print(" "); // limit switch values, ignore
-      }
-      Serial.println();
-      return ((adch << 8) | adcl) * 5; // intervals of 2mV, 20V/V scaling, 0.02R sense
+      return ((adch << 8) | adcl) * 2; // intervals of 4mV, 100V/V scaling, 0.02R sense
     }
 };
 

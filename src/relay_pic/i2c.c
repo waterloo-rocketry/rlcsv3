@@ -17,7 +17,7 @@ void i2c_slave_init(uint16_t address) {
     SSP1IE = 1;
 }
 
-#define TIMEOUT 400
+#define TIMEOUT 200
 void i2c_handle_interrupt(void) {
     uint16_t temp;
     uint16_t timeout = 0;
@@ -62,10 +62,10 @@ void i2c_handle_interrupt(void) {
     }
     // If this is a read
     else if (SSPSTATbits.R_nW) {
-        for (uint8_t read_pointer = 0; read_pointer < 4; read_pointer++) {
+        for (uint8_t read_pointer = 0; read_pointer < 5; read_pointer++) {
             temp = SSPBUF;
             if (read_pointer == 0) {
-            SSPBUF = (get_lim2() << 1) | get_lim1();
+                SSPBUF = (get_lim2() << 1) | get_lim1();
             } else if (read_pointer == 1) {
                 SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) & 0xFF);
             } else if (read_pointer == 2) {

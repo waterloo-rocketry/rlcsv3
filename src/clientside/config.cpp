@@ -7,9 +7,10 @@ const uint16_t SEND_STATUS_INTERVAL_MS = 200;
 // if it has been this long since we heard from towerside show a warning
 const uint16_t MESSAGE_WARNING_INTERVAL_S = 3;
 
-// 6.2k and 10k resistor divider plus arduino's analog read being on a scale of 2^10 = 5V gives these magic scaling numbers
-const uint16_t BATT_SCALE_NUM = 4;
-const uint16_t BATT_SCALE_DEN = 31;
+// Experimentally verified
+const uint16_t BATT_SCALE_NUM = 1;
+const uint16_t BATT_SCALE_DEN = 7;
+const uint16_t BATT_SCALE_PRE_OFFSET = -11; // pre-scaling offset (for better precision)
 
 Switch::Switch *switches[NUM_ACTUATORS];
 Channel::Channel *channels[NUM_SENSORS];
