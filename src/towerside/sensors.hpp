@@ -75,7 +75,8 @@ class Analog: public Sensor, Tickable {
     }
     uint16_t get_value() override {
       // analog input values are in multiples of ~5 mV (technically 5/1024), so multiply by 5
-      return rolling_sum / rolling_avg_width * m_num / m_den * 5 + b;
+      uint16_t avg = rolling_sum / rolling_avg_width;
+      return avg * m_num / m_den * 5 + b;
     }
     void tick() override {
       rolling_avg_index += 1;
