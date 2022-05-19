@@ -1,7 +1,11 @@
 *.o
 *.a
+*.d
 *.hex
 *.elf
+
+src/clientside/clientside
+src/towerside/towerside
 
 *.dwl
 *.dwl2

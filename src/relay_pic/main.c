@@ -5,10 +5,7 @@
 #include "relay_general.h"
 #include "timer.h"
 
-#define MAX_LOOP_TIME_DIFF_CONST 100
-
-#define CURR_SENSE_1 1
-#define CURR_SENSE_2 0
+#define MAX_LOOP_TIME_DIFF_CONST 500
 
 uint16_t dip_inputs;
 
@@ -38,6 +35,8 @@ void read_dip_inputs(void) {
 }
 
 void setup(void) {
+    OSCCONbits.IRCF = 0b1101; // Set internal oscillator clock speed to 4 mhz (default is 500k)
+    
     TRISAbits.TRISA0 = 1;   //CURR_SENSE_2
     TRISAbits.TRISA1 = 1;   //CURR_SENSE_1
     TRISAbits.TRISA2 = 0;   //POWER
