@@ -25,9 +25,12 @@ void setup() {
   switches[ActuatorID::valve_1] = new Switch::Missile(Pinout::MISSILE_SWITCH_1);
   switches[ActuatorID::valve_2] = new Switch::Missile(Pinout::MISSILE_SWITCH_2);
   switches[ActuatorID::valve_3] = new Switch::Missile(Pinout::MISSILE_SWITCH_3);
+  switches[ActuatorID::linear_actuator] = new Switch::Missile(Pinout::MISSILE_SWITCH_4);
   switches[ActuatorID::injector_valve] = new Switch::Missile(Pinout::MISSILE_SWITCH_INJECTOR);
   switches[ActuatorID::ignition_primary] = new Switch::Ignition(primary_arm, fire, secondary_arm);
   switches[ActuatorID::ignition_secondary] = new Switch::Ignition(secondary_arm, fire, primary_arm);
+  switches[ActuatorID::remote_arming] = new Switch::Missile(Pinout::MISSILE_SWITCH_5);
+  switches[ActuatorID::remote_disarming] = new Switch::Missile(Pinout::MISSILE_SWITCH_6);
 
   channels[SensorID::towerside_main_batt_mv] = new Channel::Numeric("TM", 1, 100);
   channels[SensorID::towerside_actuator_batt_mv] = new Channel::Numeric("TA", 1, 100);
@@ -37,9 +40,8 @@ void setup() {
   channels[SensorID::valve_1_state] = new Channel::ActuatorState("V1");
   channels[SensorID::valve_2_state] = new Channel::ActuatorState("V2");
   channels[SensorID::valve_3_state] = new Channel::ActuatorState("V3");
+  channels[SensorID::linear_actuator_state] = new Channel::ActuatorState("LN");
   channels[SensorID::injector_valve_state] = new Channel::ActuatorState("IJ");
-  channels[SensorID::valve_1_p_ma] = new Channel::Numeric("VP", 1, 10);
-  channels[SensorID::valve_1_s_ma] = new Channel::Numeric("VS", 1, 10);
 }
 
 Switch::Switch *get_switch(ActuatorID::ActuatorID id) {

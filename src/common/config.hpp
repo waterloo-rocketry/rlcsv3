@@ -10,10 +10,12 @@ enum ActuatorID {
   valve_1,
   valve_2,
   valve_3,
-  // linear_actuator,
+  linear_actuator,
   injector_valve,
   ignition_primary,
   ignition_secondary,
+  remote_arming,
+  remote_disarming,
   NUM_ACTUATORS // keep this at the end, its value becomes the number of actuator IDs before it
 };
 
@@ -37,11 +39,8 @@ enum SensorID {
   valve_1_state,
   valve_2_state,
   valve_3_state,
+  linear_actuator_state,
   injector_valve_state,
-
-  // testing
-  valve_1_p_ma,
-  valve_1_s_ma,
 /*
   // Comp DAQ values
   fill_tank_psi,

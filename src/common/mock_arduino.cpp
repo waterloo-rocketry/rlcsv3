@@ -6,6 +6,8 @@ extern void setup();
 extern void loop();
 
 MockSerial Serial;
+MockSerial Serial2;
+MockSerial Serial3;
 TwoWire Wire;
 
 unsigned long millis() {
