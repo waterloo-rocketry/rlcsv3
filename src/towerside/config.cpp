@@ -46,13 +46,12 @@ void setup() {
   sensors[SensorID::towerside_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 48, 17, 127);
   sensors[SensorID::towerside_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 48, 17, 0);
   sensors[SensorID::healthy_actuators_count] = new Sensor::HealthyActuators(actuators);
+  sensors[SensorID::towerside_state] = new Sensor::TowersideState(Pinout::KEY_SWITCH_IN);
   sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_primary], 1);
   sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_secondary], 1);
   sensors[SensorID::valve_1_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_1]);
   sensors[SensorID::valve_2_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_2]);
-  sensors[SensorID::valve_3_state] = new Telemetry::ActuatorStateListener(0);
   sensors[SensorID::linear_actuator_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::linear_actuator]);
-  sensors[SensorID::injector_valve_state] = new Telemetry::ActuatorStateListener(1);
 }
 
 Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id) {

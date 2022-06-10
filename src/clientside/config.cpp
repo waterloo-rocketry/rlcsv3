@@ -35,13 +35,12 @@ void setup() {
   channels[SensorID::towerside_main_batt_mv] = new Channel::Numeric("TM", 1, 100);
   channels[SensorID::towerside_actuator_batt_mv] = new Channel::Numeric("TA", 1, 100);
   channels[SensorID::healthy_actuators_count] = new Channel::Numeric("HA", 1, 1);
+  channels[SensorID::towerside_state] = new Channel::Numeric("TS", 1, 1);
   channels[SensorID::ignition_primary_ma] = new Channel::Numeric("IP", 1, 10);
   channels[SensorID::ignition_secondary_ma] = new Channel::Numeric("IS", 1, 10);
   channels[SensorID::valve_1_state] = new Channel::ActuatorState("V1");
   channels[SensorID::valve_2_state] = new Channel::ActuatorState("V2");
-  channels[SensorID::valve_3_state] = new Channel::ActuatorState("V3");
   channels[SensorID::linear_actuator_state] = new Channel::ActuatorState("LN");
-  channels[SensorID::injector_valve_state] = new Channel::ActuatorState("IJ");
 }
 
 Switch::Switch *get_switch(ActuatorID::ActuatorID id) {

@@ -32,15 +32,16 @@ enum SensorID {
   towerside_actuator_batt_mv,
   // Actuator health
   healthy_actuators_count,
+  towerside_state,
   // Ignition currents
   ignition_primary_ma,
   ignition_secondary_ma,
   // Actuator states
   valve_1_state,
   valve_2_state,
-  valve_3_state,
+  //valve_3_state,
   linear_actuator_state,
-  injector_valve_state,
+  //injector_valve_state,
 /*
   // Comp DAQ values
   fill_tank_psi,

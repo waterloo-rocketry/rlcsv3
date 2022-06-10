@@ -20,12 +20,11 @@ void setup() {
   auto lcd_handler = DataHandler::LCDDisplay(
     SensorID::valve_1_state,
     SensorID::valve_2_state,
-    SensorID::valve_3_state,
     SensorID::linear_actuator_state,
-    SensorID::injector_valve_state,
     SensorID::ignition_primary_ma,
     SensorID::ignition_secondary_ma,
     SensorID::healthy_actuators_count,
+    SensorID::towerside_state,
     SensorID::towerside_main_batt_mv,
     SensorID::towerside_actuator_batt_mv
   );

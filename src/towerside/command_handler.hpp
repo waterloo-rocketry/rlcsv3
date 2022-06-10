@@ -33,6 +33,7 @@ class Actuators: public DoubleCommandHandler, public Tickable {
   uint8_t disarm_pin;
   ActuatorCommand last_command;
   unsigned long last_command_dispatch_timestamp = 0;
+  bool has_contact = true;
   public:
     Actuators(const ActuatorCommand &initial_states, uint8_t disarm_pin, uint8_t gnd_pin):
         DoubleCommandHandler{initial_states}, disarm_pin{disarm_pin} {
@@ -45,9 +46,13 @@ class Actuators: public DoubleCommandHandler, public Tickable {
     void apply(const ActuatorCommand &cmd) override {
       last_command = cmd;
     }
+    // The main loop tells us whether we have contact with clientside
+    void set_contact(bool val) {
+      has_contact = val;
+    }
     void dispatch() {
-      if (digitalRead(disarm_pin)) {
-        return; // we are disarmed (pin is not pulled low), don't do anything
+      if (digitalRead(disarm_pin) && has_contact) {
+        return; // we are disarmed (pin is not pulled low) but not trying to get to safe states, don't do anything
       }
       if (millis() - last_command_dispatch_timestamp < Config::ACTUATOR_DISPATCH_INTERVAL_MS) {
         return;

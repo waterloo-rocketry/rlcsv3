@@ -31,12 +31,8 @@ void setup() {
   auto canConnection = Communication::SerialConnection(Serial3);
   auto canEncoder = Communication::CANEncoder();
   auto canSender = Communication::MessageSender<Communication::CANMessage>(canEncoder, canConnection);
-  auto canDecoder = Communication::CANDecoder();
-  auto canVentListener = static_cast<Telemetry::ActuatorStateListener*>(Config::get_sensor(SensorID::valve_3_state));
-  auto canInjectorListener = static_cast<Telemetry::ActuatorStateListener*>(Config::get_sensor(SensorID::injector_valve_state));
-  auto canReceiver = Communication::MessageReceiver<Communication::CANMessage>(canDecoder, canConnection,
-                                                                               canVentListener,
-                                                                               canInjectorListener);
+
+  auto towerside_state_sensor = static_cast<Sensor::TowersideState*>(Config::get_sensor(SensorID::towerside_state));
 
   unsigned long last_message_sent = 0;
   unsigned long last_can_message_dispatch = 0;
@@ -48,10 +44,14 @@ void setup() {
       // Go to safe states
       receiver.force(Config::get_safe_states());
       // Show that we can't contact client side on the 7-segment
+      actuators_handler.set_contact(false);
       seven_seg_handler.set_contact(false);
+      towerside_state_sensor->set_contact(false);
     } else {
       // Show our connection to client side is fine on the 7-segment
+      actuators_handler.set_contact(true);
       seven_seg_handler.set_contact(true);
+      towerside_state_sensor->set_contact(true);
     }
     // If we need to send our status (actuator states, currents, DAQ data) to client side
     if (millis() - last_message_sent > Config::SEND_STATUS_INTERVAL_MS) {

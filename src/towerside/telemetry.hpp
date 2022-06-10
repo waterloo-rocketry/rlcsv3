@@ -6,7 +6,7 @@
 #include "sensors.hpp"
 
 namespace Telemetry {
-
+/*
 class ActuatorStateListener: public Communication::MessageHandler<Communication::CANMessage>, public Sensor::Sensor {
   uint8_t actuator_id;
   uint8_t cur_state = 0;
@@ -26,7 +26,7 @@ class ActuatorStateListener: public Communication::MessageHandler<Communication:
       if (cur_state == 2) { return 0; }
       return 3;
     }
-};
+};*/
   
 }
 
