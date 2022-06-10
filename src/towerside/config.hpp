@@ -17,8 +17,6 @@ void setup();
 Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id);
 Sensor::Sensor *get_sensor(SensorID::SensorID id);
 
-const ActuatorCommand &get_default_states(ActuatorCommand last_state);
-const ActuatorCommand &get_default_states();
 const ActuatorCommand &get_safe_states();
 
 }

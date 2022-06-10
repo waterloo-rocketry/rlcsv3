@@ -104,7 +104,6 @@ class CANDecoder: public Decoder<CANMessage> {
   }
   public:
     void push_char(char c) override {
-      Serial.print(c);
       if (c == '$') {
         i = 0;
         message_in_progress = true;

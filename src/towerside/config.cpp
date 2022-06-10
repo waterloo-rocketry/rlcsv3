@@ -16,7 +16,6 @@ const uint16_t CAN_DISPATCH_INTERVAL_MS = 300;
 
 Actuator::Actuator *actuators[NUM_ACTUATORS];
 Sensor::Sensor *sensors[NUM_SENSORS];
-ActuatorCommand default_states;
 ActuatorCommand safe_states;
 
 Actuator::Ignition ignition {5};
@@ -25,23 +24,13 @@ Actuator::Ignition ignition {5};
 void setup() {
   actuators[ActuatorID::valve_1] = new Actuator::I2C(1);
   actuators[ActuatorID::valve_2] = new Actuator::I2C(2);
-  actuators[ActuatorID::valve_3] = new Actuator::RocketActuator(0, true);
-  actuators[ActuatorID::linear_actuator] = new Actuator::I2C(2);
+  actuators[ActuatorID::valve_3] = new Actuator::RocketActuator(0);
+  actuators[ActuatorID::linear_actuator] = new Actuator::I2C(3);
   actuators[ActuatorID::injector_valve] = new Actuator::RocketActuator(1);
   actuators[ActuatorID::ignition_primary] = ignition.primary_actuator();
   actuators[ActuatorID::ignition_secondary] = ignition.secondary_actuator();
   actuators[ActuatorID::remote_arming] = new Actuator::RemoteArming(false);
   actuators[ActuatorID::remote_disarming] = new Actuator::RemoteArming(true);
-
-  default_states.set_actuator(ActuatorID::valve_1, false);
-  default_states.set_actuator(ActuatorID::valve_2, false);
-  default_states.set_actuator(ActuatorID::valve_3, false);
-  default_states.set_actuator(ActuatorID::linear_actuator, false);
-  default_states.set_actuator(ActuatorID::injector_valve, false);
-  default_states.set_actuator(ActuatorID::ignition_primary, false);
-  default_states.set_actuator(ActuatorID::ignition_secondary, false);
-  default_states.set_actuator(ActuatorID::remote_arming, false);
-  default_states.set_actuator(ActuatorID::remote_disarming, false);
 
   safe_states.set_actuator(ActuatorID::valve_1, false);
   safe_states.set_actuator(ActuatorID::valve_2, true);
@@ -74,10 +63,6 @@ Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id) {
 Sensor::Sensor *get_sensor(SensorID::SensorID id) {
   if (id > NUM_SENSORS) return nullptr;
   return sensors[id];
-}
-
-const ActuatorCommand &get_default_states() {
-  return default_states;
 }
 
 const ActuatorCommand &get_safe_states() {

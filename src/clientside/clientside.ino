@@ -15,7 +15,7 @@ void setup() {
   // initialize configuration arrays (switches, channels)
   Config::setup();
   // connect to towerside on the Serial port
-  auto connection = Communication::SerialConnection(Serial); // 3
+  auto connection = Communication::SerialConnection(Serial3); // 3
   // Define the fields to be shown on the LCD. Right now these are just shown in order, 3 per line.
   auto lcd_handler = DataHandler::LCDDisplay(
     SensorID::valve_1_state,

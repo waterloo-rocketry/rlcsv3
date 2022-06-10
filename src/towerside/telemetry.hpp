@@ -17,7 +17,6 @@ class ActuatorStateListener: public Communication::MessageHandler<Communication:
       if ((msg.sid & 0x7E0) == 0x460 && msg.data[3] == actuator_id) {
         cur_state = msg.data[4];
         req_state = msg.data[5];
-        Serial.println(cur_state);
       }
     }
     uint16_t get_value() override {
