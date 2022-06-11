@@ -58,6 +58,7 @@ class I2C: public Actuator {
       if (lims == 2) return ActuatorPosition::closed;
       return ActuatorPosition::error;
     }
+    // unit is centiamp
     uint16_t get_current(uint8_t index) override {
       if (index > 1) { // Index must be 0 or 1 for primary or secondary
         return SENSOR_ERR_VAL;
@@ -73,7 +74,7 @@ class I2C: public Actuator {
       }
       uint16_t adcl = Wire.read(); // get the 16-bit current reading
       uint16_t adch = Wire.read();
-      return ((adch << 8) | adcl) * 2; // intervals of 4mV, 100V/V scaling, 0.02R sense
+      return ((adch << 8) | adcl) * 10; // adc / 1024 (10bit) * 4096mV (vref) / 4mohm / 100 adc scaler * 1000 mV/V
     }
 };
 
