@@ -18,8 +18,6 @@ Actuator::Actuator *actuators[NUM_ACTUATORS];
 Sensor::Sensor *sensors[NUM_SENSORS];
 ActuatorCommand safe_states;
 
-Actuator::Ignition ignition {5};
-
 // Initialize the actuators and sensors arrays, along with default and safe states.
 void setup() {
   actuators[ActuatorID::valve_1] = new Actuator::I2C(1);
@@ -27,8 +25,8 @@ void setup() {
   actuators[ActuatorID::valve_3] = new Actuator::RocketActuator(0);
   actuators[ActuatorID::linear_actuator] = new Actuator::I2C(3);
   actuators[ActuatorID::injector_valve] = new Actuator::RocketActuator(1);
-  actuators[ActuatorID::ignition_primary] = ignition.primary_actuator();
-  actuators[ActuatorID::ignition_secondary] = ignition.secondary_actuator();
+  actuators[ActuatorID::ignition_primary] = new Actuator::SingleIgnition(4);
+  actuators[ActuatorID::ignition_secondary] = new Actuator::SingleIgnition(5);
   actuators[ActuatorID::remote_arming] = new Actuator::RemoteArming(false);
   actuators[ActuatorID::remote_disarming] = new Actuator::RemoteArming(true);
 

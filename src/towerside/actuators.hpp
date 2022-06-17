@@ -78,6 +78,17 @@ class I2C: public Actuator {
     }
 };
 
+class SingleIgnition: public I2C {
+  bool get_select(bool value) override {
+    return value;
+  }
+  bool get_power(bool value) override {
+    return value;
+  }
+  public:
+    SingleIgnition(uint8_t slave_address): I2C(slave_address) {}
+};
+
 class Ignition: public I2C {
   bool primary_on;
   bool secondary_on;
