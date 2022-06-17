@@ -169,8 +169,8 @@ class BooleanRadio: public RocketRadio {
 class RocketActuator: public BooleanRadio {
   public:
     RocketActuator(uint8_t actuator_id, bool invert = false): BooleanRadio(
-      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 1 : 0),
-      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 0 : 1)) {}
+      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 0 : 1),
+      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 1 : 0)) {}
 };
 
 class RemoteArming: public RocketRadio {
