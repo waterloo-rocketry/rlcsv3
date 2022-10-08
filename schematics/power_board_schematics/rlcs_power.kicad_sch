@@ -1446,7 +1446,7 @@
     (effects (font (size 1.524 1.524)) (justify left bottom))
     (uuid 0fdc6f30-77bc-4e9b-8665-c8aa9acf5bf9)
   )
-  (text "100ohm\nresistors\n" (at 55.88 121.92 0)
+  (text "150ohm\nresistors\n" (at 55.88 121.92 0)
     (effects (font (size 1.524 1.524)) (justify left bottom))
     (uuid fc4ad874-c922-4070-89f9-7262080469d8)
   )
