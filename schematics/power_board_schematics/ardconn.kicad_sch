@@ -6,7 +6,7 @@
 
   (title_block
     (title "RLCS power board")
-    (date "2022-10-10")
+    (date "2022-10-11")
     (rev "A")
     (company "Waterloo Rocketry")
   )
@@ -745,6 +745,7 @@
       )
     )
   )
+
 
   (junction (at 58.42 147.32) (diameter 0) (color 0 0 0 0)
     (uuid 37f6eb77-6007-4851-b6b1-76555a7247f3)
