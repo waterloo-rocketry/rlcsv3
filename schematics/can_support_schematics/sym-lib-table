@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "MCU CAN Support")(type "KiCad")(uri "C:/Users/domen/OneDrive/Documents/TestCircuit/Tutorial Rocketry/MCU CAN Support.kicad_sym")(options "")(descr ""))
+  (lib (name "Hardwired CAN supp")(type "KiCad")(uri "C:/Users/domen/OneDrive/Documents/TestCircuit/Tutorial Rocketry/Hardwired CAN supp.kicad_sym")(options "")(descr ""))
+)
