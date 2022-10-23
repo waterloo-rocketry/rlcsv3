@@ -1,4 +1,4 @@
 (fp_lib_table
-  (lib (name "custom")(type "KiCad")(uri "C:/Users/domen/OneDrive/Desktop/relay_board_v2_schematics/custom.pretty")(options "")(descr ""))
-  (lib (name "canhw_footprints")(type "KiCad")(uri "C:/Users/domen/OneDrive/Documents/GitHub/canhw/lib/canhw_footprints.pretty")(options "")(descr ""))
+  (lib (name "canhw_footprints")(type "KiCad")(uri "${KIPRJMOD}/../../../canhw/lib/canhw_footprints.pretty")(options "")(descr ""))
+  (lib (name "custom")(type "KiCad")(uri "${KIPRJMOD}/../relay_board_v2_schematics/custom.pretty")(options "")(descr ""))
 )
