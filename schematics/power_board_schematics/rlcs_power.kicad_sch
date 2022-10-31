@@ -2143,7 +2143,7 @@
     (property "Value" "Keylock Switch Conn" (id 1) (at 170.815 26.6699 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" (id 2) (at 168.275 24.13 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" (id 2) (at 168.275 24.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 168.275 24.13 0)
@@ -2188,7 +2188,7 @@
   (symbol (lib_id "power:+12V") (at 203.2 120.015 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 12616afa-dfb4-4b4e-9b6f-97657970d284)
-    (property "Reference" "#PWR?" (id 0) (at 203.2 123.825 0)
+    (property "Reference" "#PWR0111" (id 0) (at 203.2 123.825 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (id 1) (at 203.2 115.57 0))
@@ -2239,7 +2239,7 @@
   (symbol (lib_id "power:+5V") (at 198.12 120.015 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 217cf45e-9355-4e89-a3c7-f8cb8390dc44)
-    (property "Reference" "#PWR?" (id 0) (at 198.12 123.825 0)
+    (property "Reference" "#PWR0112" (id 0) (at 198.12 123.825 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (id 1) (at 198.12 115.57 0))
@@ -2271,7 +2271,7 @@
   (symbol (lib_id "power:GND") (at 111.76 49.53 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 37f50b8d-196b-45a8-a1d4-556725fa2187)
-    (property "Reference" "#PWR?" (id 0) (at 111.76 55.88 0)
+    (property "Reference" "#PWR0110" (id 0) (at 111.76 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 111.76 53.975 0))
@@ -2340,7 +2340,7 @@
   (symbol (lib_id "power:GND") (at 99.06 174.625 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 44c7b2ec-4fac-4872-a721-0860585c2f35)
-    (property "Reference" "#PWR?" (id 0) (at 99.06 180.975 0)
+    (property "Reference" "#PWR0107" (id 0) (at 99.06 180.975 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 99.06 179.07 0))
@@ -2545,7 +2545,7 @@
   (symbol (lib_id "power:+12V") (at 186.69 147.955 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid b69512f0-5aac-4ca4-bd36-1612ac1577c8)
-    (property "Reference" "#PWR?" (id 0) (at 186.69 151.765 0)
+    (property "Reference" "#PWR0105" (id 0) (at 186.69 151.765 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (id 1) (at 186.69 144.145 0))
@@ -2577,7 +2577,7 @@
   (symbol (lib_id "power:+5V") (at 181.61 147.955 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid c762348e-1a19-4831-b4a6-db76f55aa092)
-    (property "Reference" "#PWR?" (id 0) (at 181.61 151.765 0)
+    (property "Reference" "#PWR0104" (id 0) (at 181.61 151.765 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (id 1) (at 181.61 144.145 0))
@@ -2609,7 +2609,7 @@
   (symbol (lib_id "power:+5V") (at 109.22 166.37 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d1f415fb-da4c-446f-b604-1af2fc5e6939)
-    (property "Reference" "#PWR?" (id 0) (at 109.22 170.18 0)
+    (property "Reference" "#PWR0108" (id 0) (at 109.22 170.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (id 1) (at 109.22 161.29 0))
@@ -2646,7 +2646,7 @@
     (uuid dd654b78-9c0d-41b7-ad5c-a9ae8bc2ff19)
     (property "Reference" "J3" (id 0) (at 143.51 45.72 0))
     (property "Value" "UART Conn" (id 1) (at 143.51 47.625 0))
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" (id 2) (at 143.51 50.165 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal" (id 2) (at 143.51 50.165 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 143.51 50.165 0)
@@ -2694,7 +2694,7 @@
   (symbol (lib_id "power:GND") (at 178.435 156.21 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid e1ea2902-f8a3-4ff9-8f98-ba6e63555add)
-    (property "Reference" "#PWR?" (id 0) (at 178.435 162.56 0)
+    (property "Reference" "#PWR0106" (id 0) (at 178.435 162.56 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 178.435 160.02 0))
@@ -2712,7 +2712,7 @@
     (uuid e3210621-2453-4b97-995b-7e62372fc5ce)
     (property "Reference" "J4" (id 0) (at 37.465 33.02 0))
     (property "Value" "Power Board Power Input" (id 1) (at 37.465 35.56 0))
-    (property "Footprint" "" (id 2) (at 37.465 39.37 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (id 2) (at 37.465 39.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 37.465 39.37 0)
@@ -2725,7 +2725,7 @@
   (symbol (lib_id "power:GND") (at 81.28 49.53 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid e54daa95-192c-496f-afed-65172035ee0d)
-    (property "Reference" "#PWR?" (id 0) (at 81.28 55.88 0)
+    (property "Reference" "#PWR0109" (id 0) (at 81.28 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 81.28 53.975 0))
@@ -2891,32 +2891,32 @@
     (path "/4bfab255-ee88-4eab-b699-95f5ad07b9fb"
       (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
     )
-    (path "/12616afa-dfb4-4b4e-9b6f-97657970d284"
-      (reference "#PWR?") (unit 1) (value "+12V") (footprint "")
-    )
-    (path "/217cf45e-9355-4e89-a3c7-f8cb8390dc44"
-      (reference "#PWR?") (unit 1) (value "+5V") (footprint "")
-    )
-    (path "/37f50b8d-196b-45a8-a1d4-556725fa2187"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/44c7b2ec-4fac-4872-a721-0860585c2f35"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/c762348e-1a19-4831-b4a6-db76f55aa092"
+      (reference "#PWR0104") (unit 1) (value "+5V") (footprint "")
     )
     (path "/b69512f0-5aac-4ca4-bd36-1612ac1577c8"
-      (reference "#PWR?") (unit 1) (value "+12V") (footprint "")
-    )
-    (path "/c762348e-1a19-4831-b4a6-db76f55aa092"
-      (reference "#PWR?") (unit 1) (value "+5V") (footprint "")
-    )
-    (path "/d1f415fb-da4c-446f-b604-1af2fc5e6939"
-      (reference "#PWR?") (unit 1) (value "+5V") (footprint "")
+      (reference "#PWR0105") (unit 1) (value "+12V") (footprint "")
     )
     (path "/e1ea2902-f8a3-4ff9-8f98-ba6e63555add"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/44c7b2ec-4fac-4872-a721-0860585c2f35"
+      (reference "#PWR0107") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/d1f415fb-da4c-446f-b604-1af2fc5e6939"
+      (reference "#PWR0108") (unit 1) (value "+5V") (footprint "")
     )
     (path "/e54daa95-192c-496f-afed-65172035ee0d"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0109") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/37f50b8d-196b-45a8-a1d4-556725fa2187"
+      (reference "#PWR0110") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/12616afa-dfb4-4b4e-9b6f-97657970d284"
+      (reference "#PWR0111") (unit 1) (value "+12V") (footprint "")
+    )
+    (path "/217cf45e-9355-4e89-a3c7-f8cb8390dc44"
+      (reference "#PWR0112") (unit 1) (value "+5V") (footprint "")
     )
     (path "/00000000-0000-0000-0000-000059c5bada"
       (reference "AFF1") (unit 1) (value "LTD-4608JR") (footprint "rlcs_power:LTD-4608JR")
@@ -2943,10 +2943,10 @@
       (reference "J2") (unit 1) (value "Conn_01x05_Male") (footprint "Connector_JST:JST_EH_B5B-EH-A_1x05_P2.50mm_Vertical")
     )
     (path "/dd654b78-9c0d-41b7-ad5c-a9ae8bc2ff19"
-      (reference "J3") (unit 1) (value "UART Conn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal")
+      (reference "J3") (unit 1) (value "UART Conn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal")
     )
     (path "/e3210621-2453-4b97-995b-7e62372fc5ce"
-      (reference "J4") (unit 1) (value "Power Board Power Input") (footprint "")
+      (reference "J4") (unit 1) (value "Power Board Power Input") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
     )
     (path "/b66cf642-a1dc-4e74-85e6-669f964b45aa"
       (reference "J5") (unit 1) (value "Actuator Battery Conn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
@@ -2958,7 +2958,7 @@
       (reference "J7") (unit 1) (value "5v Output") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal")
     )
     (path "/0a81f968-d32d-4e4d-acbd-0519aedcf51c"
-      (reference "J8") (unit 1) (value "Keylock Switch Conn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal")
+      (reference "J8") (unit 1) (value "Keylock Switch Conn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000059ca1e66"
       (reference "Q1") (unit 1) (value "Q_NPN_BEC") (footprint "Package_TO_SOT_SMD:SOT-523")
