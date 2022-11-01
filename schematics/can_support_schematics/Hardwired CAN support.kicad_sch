@@ -2639,7 +2639,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 51834992-4e36-4810-91ec-776d460d8f8b)
     (property "Reference" "U3" (id 0) (at 235.585 80.01 0))
-    (property "Value" "MCP2562" (id 1) (at 235.585 82.55 0))
+    (property "Value" "TCAN1042" (id 1) (at 235.585 82.55 0))
     (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (id 2) (at 236.22 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -3577,7 +3577,7 @@
       (reference "U2") (unit 1) (value "PIC18F26K83") (footprint "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm")
     )
     (path "/51834992-4e36-4810-91ec-776d460d8f8b"
-      (reference "U3") (unit 1) (value "MCP2562") (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
+      (reference "U3") (unit 1) (value "TCAN1042") (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
     )
     (path "/cda475d1-1c23-4980-8804-c9de5ce42a7e"
       (reference "Y1") (unit 1) (value "Crystal") (footprint "Crystal:Crystal_HC49-4H_Vertical")
