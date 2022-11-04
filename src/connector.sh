@@ -9,8 +9,8 @@ killgroup() {
 }
 
 stty 115200 -F /dev/ttyACM* raw
-stty 115200 -F /dev/ttyUSB* raw
+stty 115200 -F /dev/ttyUSB1 raw
 
-cat /dev/ttyACM* | tee /dev/ttyUSB* &
-cat /dev/ttyUSB* | tee /dev/ttyACM* &
+cat /dev/ttyACM* > /dev/ttyUSB1 &
+cat /dev/ttyUSB1 | tee /dev/ttyACM* &
 wait

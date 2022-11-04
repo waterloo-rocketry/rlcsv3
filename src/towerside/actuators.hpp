@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "common/mock_arduino.hpp"
 #include "common/shared_types.hpp"
+#include "common/communication/can.hpp"
+#include "common/communication/sender.hpp"
 
 namespace Actuator {
 
@@ -56,6 +58,7 @@ class I2C: public Actuator {
       if (lims == 2) return ActuatorPosition::closed;
       return ActuatorPosition::error;
     }
+    // unit is centiamp
     uint16_t get_current(uint8_t index) override {
       if (index > 1) { // Index must be 0 or 1 for primary or secondary
         return SENSOR_ERR_VAL;
@@ -71,8 +74,19 @@ class I2C: public Actuator {
       }
       uint16_t adcl = Wire.read(); // get the 16-bit current reading
       uint16_t adch = Wire.read();
-      return ((adch << 8) | adcl) * 2; // intervals of 4mV, 100V/V scaling, 0.02R sense
+      return ((adch << 8) | adcl) * 10; // adc / 1024 (10bit) * 4096mV (vref) / 4mohm / 100 adc scaler * 1000 mV/V
     }
+};
+
+class SingleIgnition: public I2C {
+  bool get_select(bool value) override {
+    return value;
+  }
+  bool get_power(bool value) override {
+    return value;
+  }
+  public:
+    SingleIgnition(uint8_t slave_address): I2C(slave_address) {}
 };
 
 class Ignition: public I2C {
@@ -115,16 +129,34 @@ class Ignition: public I2C {
   
 };
 
-// TODO: Support for talking to actuator boards over live telemetry
-/*
 class RocketRadio: public Actuator {
-  uint8_t actuator_id;
+  bool healthy = false;
   public:
-    RocketRadio(uint8_t actuator_id): actuator_id{actuator_id} {}
     bool health_check() override {
-      return false;
+      return healthy;
     }
+    void set_healthy(bool val) {
+      healthy = val;
+    }
+    virtual const Communication::CANMessage *build_message() = 0;
+};
+
+class BooleanRadio: public RocketRadio {
+  Communication::CANMessage *on;
+  Communication::CANMessage *off;
+  bool state = false;
+  public:
+    BooleanRadio(Communication::CANMessage *on, Communication::CANMessage *off):
+      on{on}, off{off} {}
     void set(bool value) override {
+      state = value;
+    }
+    const Communication::CANMessage *build_message() override {
+      if (state) {
+        return on;
+      } else {
+        return off;
+      }
     }
     ActuatorPosition get_position() override {
       return ActuatorPosition::unknown;
@@ -132,7 +164,46 @@ class RocketRadio: public Actuator {
     uint16_t get_current(uint8_t index) override {
       return SENSOR_ERR_VAL;
     }
-};*/
+};
+
+class RocketActuator: public BooleanRadio {
+  public:
+    RocketActuator(uint8_t actuator_id, bool invert = false): BooleanRadio(
+      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 0 : 1),
+      new Communication::CANMessage(0x0C0, 0, 0, 0, actuator_id, invert ? 1 : 0)) {}
+};
+
+class RemoteArming: public RocketRadio {
+  Communication::CANMessage disarm1 {0x140, 0, 0, 0, 0x01};
+  Communication::CANMessage disarm2 {0x140, 0, 0, 0, 0x02};
+  Communication::CANMessage arm1 {0x140, 0, 0, 0, 0x11};
+  Communication::CANMessage arm2 {0x140, 0, 0, 0, 0x12};
+  bool disarming;
+  bool state = false;
+  bool alternate = false;
+  public:
+    RemoteArming(bool disarming): disarming{disarming} {}
+    void set(bool value) override {
+      state = value;
+    }
+    const Communication::CANMessage *build_message() override {
+      if (state) {
+        alternate = !alternate;
+        if (disarming) {
+          return alternate ? &disarm1 : &disarm2;
+        } else {
+          return alternate ? &arm1 : &arm2;
+        }
+      }
+      return nullptr;
+    }
+    ActuatorPosition get_position() override {
+      return ActuatorPosition::unknown;
+    }
+    uint16_t get_current(uint8_t index) override {
+      return SENSOR_ERR_VAL;
+    }
+};
 
 }
 

@@ -6,7 +6,7 @@ ALLCPP = ${SOURCES:.ino=.cpp}
 OBJECTS = ${ALLCPP:.cpp=.o}
 DEPENDS = ${OBJECTS:.o=.d}
 ARDUINO_FQBN = arduino:avr:mega:cpu=atmega2560
-ARDUINO_PORT = /dev/ttyUSB*
+ARDUINO_PORT = /dev/ttyUSB0
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${OBJECTS} -o ${EXEC}

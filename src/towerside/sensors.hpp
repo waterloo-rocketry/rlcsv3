@@ -90,6 +90,20 @@ class Analog: public Sensor, Tickable {
     }
 };
 
+class TowersideState: public Sensor {
+  uint8_t disarm_pin;
+  bool has_contact = false;
+  public:
+    TowersideState(uint8_t disarm_pin): disarm_pin{disarm_pin} {}
+    uint16_t get_value() override {
+      bool disarmed = digitalRead(disarm_pin);
+      return disarmed * 10 + (!has_contact);
+    }
+    void set_contact(bool value) {
+      has_contact = value;
+    }
+};
+
 }
 
 #endif

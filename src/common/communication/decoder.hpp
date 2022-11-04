@@ -2,6 +2,7 @@
 #define DECODER_H
 
 #include <stdint.h>
+#include "can.hpp"
 
 namespace Communication {
 
@@ -82,6 +83,82 @@ class HexDecoder: public Decoder<T> {
     }
     bool message_available() {
       return i == T::DATA_LENGTH * 2 && !message_in_progress;
+    }
+};
+
+class CANDecoder: public Decoder<CANMessage> {
+  uint8_t buf[CANMessage::DATA_LENGTH];
+  bool message_in_progress = false; // if we are currently decoding a message
+  uint8_t i = 0; // index of the next nibble to decode
+  bool valid_hex_char(char c) {
+    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F');
+  }
+  uint8_t get_nibble(char c) {
+    if (c >= '0' && c <= '9') {
+      return c - '0';
+    } else if (c >= 'A' && c <= 'F') {
+      return 10 + c - 'A';
+    } else {
+      return 0;
+    }
+  }
+  public:
+    void push_char(char c) override {
+      if (c == '$') {
+        i = 0;
+        message_in_progress = true;
+        return;
+      }
+      if (!message_in_progress) {
+        return;
+      }
+      if (i <= 3) {
+        if (!valid_hex_char(c)) {
+          i = 0;
+          message_in_progress = false;
+          return;
+        }
+        if (i == 1) {
+          buf[0] = get_nibble(c);
+        } else if (i == 2) {
+          buf[1] = get_nibble(c) << 4;
+        } else {
+          buf[1] |= get_nibble(c);
+        }
+        i += 1;
+        return;
+      }
+      if (i % 3 == 1) {
+        if (c == ',') {
+          i += 1;
+          buf[i / 3 - 1] = 0;
+          return;
+        }
+        if (c == ';') {
+          for (uint8_t j = i / 3 - 1; j < 8; j++) {
+            buf[j] = 0;
+          }
+          message_in_progress = false;
+          return;
+        }
+        i = 0;
+        message_in_progress = false;
+      }
+      if (!valid_hex_char(c)) {
+        i = 0;
+        message_in_progress = false;
+        return;
+      }
+      buf[(i - 1) / 3] |= get_nibble(c) << ((i % 3) * 2);
+    }
+    const uint8_t *get_data() override {
+      // don't report the same message more than once, clear message_available once it's been receieved
+      message_in_progress = false;
+      i = 0;
+      return buf;
+    }
+    bool message_available() override {
+      return i > 0 && !message_in_progress;
     }
 };
 

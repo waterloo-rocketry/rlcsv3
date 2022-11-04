@@ -62,25 +62,27 @@ void i2c_handle_interrupt(void) {
     }
     // If this is a read
     else if (SSPSTATbits.R_nW) {
-        for (uint8_t read_pointer = 0; read_pointer < 5; read_pointer++) {
-            temp = SSPBUF;
-            if (read_pointer == 0) {
-                SSPBUF = (get_lim2() << 1) | get_lim1();
-            } else if (read_pointer == 1) {
-                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) & 0xFF);
-            } else if (read_pointer == 2) {
-                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
-            } else if (read_pointer == 3) {
-                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) & 0xFF);
-            } else if (read_pointer == 4) {
-                SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
-            }
-            SSPCONbits.CKP = 1;
-            while(SSPSTATbits.BF && timeout < TIMEOUT) timeout++;
-            if (SSP1CON2bits.ACKSTAT) {
-                break;
-            }
+        static uint8_t read_pointer;
+        // If this is the first byte in a read
+        if (!SSPSTATbits.D_nA) {
+            read_pointer = 0;
         }
+        temp = SSPBUF;
+        
+        if (read_pointer == 0) {
+            SSPBUF = (get_lim2() << 1) | get_lim1();
+        } else if (read_pointer == 1) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) & 0xFF);
+        } else if (read_pointer == 2) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
+        } else if (read_pointer == 3) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) & 0xFF);
+        } else if (read_pointer == 4) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
+        }
+        
+        read_pointer++;
+        SSPCONbits.CKP = 1;
     }
     SSPCONbits.CKP = 1;
 }
