@@ -45,11 +45,11 @@
       )
     )
   )
-  (symbol "+12V-rlcsv3_modular-rescue" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+  (symbol "+12V-rlcs_relay_board" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
     (property "Reference" "#PWR" (id 0) (at 0 -3.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "+12V-rlcsv3_modular-rescue" (id 1) (at 0 3.556 0)
+    (property "Value" "+12V-rlcs_relay_board" (id 1) (at 0 3.556 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -58,7 +58,7 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "+12V-rlcsv3_modular-rescue_0_1"
+    (symbol "+12V-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy -0.762 1.27)
@@ -84,7 +84,7 @@
         (fill (type none))
       )
     )
-    (symbol "+12V-rlcsv3_modular-rescue_1_1"
+    (symbol "+12V-rlcs_relay_board_1_1"
       (pin power_in line (at 0 0 90) (length 0) hide
         (name "+12V" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -137,11 +137,11 @@
       )
     )
   )
-  (symbol "+5V-rlcsv3_modular-rescue" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+  (symbol "+5V-rlcs_relay_board" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
     (property "Reference" "#PWR" (id 0) (at 0 -3.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "+5V-rlcsv3_modular-rescue" (id 1) (at 0 3.556 0)
+    (property "Value" "+5V-rlcs_relay_board" (id 1) (at 0 3.556 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -150,7 +150,7 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "+5V-rlcsv3_modular-rescue_0_1"
+    (symbol "+5V-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy -0.762 1.27)
@@ -176,7 +176,7 @@
         (fill (type none))
       )
     )
-    (symbol "+5V-rlcsv3_modular-rescue_1_1"
+    (symbol "+5V-rlcs_relay_board_1_1"
       (pin power_in line (at 0 0 90) (length 0) hide
         (name "+5V" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -228,11 +228,11 @@
       )
     )
   )
-  (symbol "C-rlcsv3_modular-rescue" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+  (symbol "C-rlcs_relay_board" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
     (property "Reference" "C" (id 0) (at 0.635 2.54 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "C-rlcsv3_modular-rescue" (id 1) (at 0.635 -2.54 0)
+    (property "Value" "C-rlcs_relay_board" (id 1) (at 0.635 -2.54 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)
@@ -244,7 +244,7 @@
     (property "ki_fp_filters" "C_*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "C-rlcsv3_modular-rescue_0_1"
+    (symbol "C-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy -2.032 -0.762)
@@ -262,7 +262,7 @@
         (fill (type none))
       )
     )
-    (symbol "C-rlcsv3_modular-rescue_1_1"
+    (symbol "C-rlcs_relay_board_1_1"
       (pin passive line (at 0 3.81 270) (length 2.794)
         (name "~" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -314,11 +314,11 @@
       )
     )
   )
-  (symbol "CONN_01X02-rlcsv3_modular-rescue" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+  (symbol "CONN_01X02-rlcs_relay_board" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
     (property "Reference" "J" (id 0) (at 0 3.81 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "CONN_01X02-rlcsv3_modular-rescue" (id 1) (at 2.54 0 90)
+    (property "Value" "CONN_01X02-rlcs_relay_board" (id 1) (at 2.54 0 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -330,7 +330,7 @@
     (property "ki_fp_filters" "Pin_Header_Straight_1X* Pin_Header_Angled_1X* Socket_Strip_Straight_1X* Socket_Strip_Angled_1X*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "CONN_01X02-rlcsv3_modular-rescue_0_1"
+    (symbol "CONN_01X02-rlcs_relay_board_0_1"
       (rectangle (start -1.27 -1.143) (end 0.254 -1.397)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
@@ -344,7 +344,7 @@
         (fill (type none))
       )
     )
-    (symbol "CONN_01X02-rlcsv3_modular-rescue_1_1"
+    (symbol "CONN_01X02-rlcs_relay_board_1_1"
       (pin passive line (at -5.08 1.27 0) (length 3.81)
         (name "P1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -428,11 +428,11 @@
       )
     )
   )
-  (symbol "CONN_01X06-rlcsv3_modular-rescue" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+  (symbol "CONN_01X06-rlcs_relay_board" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
     (property "Reference" "J" (id 0) (at 0 8.89 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "CONN_01X06-rlcsv3_modular-rescue" (id 1) (at 2.54 0 90)
+    (property "Value" "CONN_01X06-rlcs_relay_board" (id 1) (at 2.54 0 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -444,7 +444,7 @@
     (property "ki_fp_filters" "Pin_Header_Straight_1X* Pin_Header_Angled_1X* Socket_Strip_Straight_1X* Socket_Strip_Angled_1X*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "CONN_01X06-rlcsv3_modular-rescue_0_1"
+    (symbol "CONN_01X06-rlcs_relay_board_0_1"
       (rectangle (start -1.27 -6.223) (end 0.254 -6.477)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
@@ -474,7 +474,7 @@
         (fill (type none))
       )
     )
-    (symbol "CONN_01X06-rlcsv3_modular-rescue_1_1"
+    (symbol "CONN_01X06-rlcs_relay_board_1_1"
       (pin passive line (at -5.08 6.35 0) (length 3.81)
         (name "P1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -654,11 +654,11 @@
       )
     )
   )
-  (symbol "CONN_01x05-rlcsv3_modular-rescue" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "CONN_01x05-rlcs_relay_board" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 0 2.54 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Value" "CONN_01x05-rlcsv3_modular-rescue" (id 1) (at 3.81 -3.81 90)
+    (property "Value" "CONN_01x05-rlcs_relay_board" (id 1) (at 3.81 -3.81 90)
       (effects (font (size 1.524 1.524)))
     )
     (property "Footprint" "" (id 2) (at 0 2.54 0)
@@ -667,7 +667,7 @@
     (property "Datasheet" "" (id 3) (at 0 2.54 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (symbol "CONN_01x05-rlcsv3_modular-rescue_1_1"
+    (symbol "CONN_01x05-rlcs_relay_board_1_1"
       (rectangle (start 0 -10.033) (end 1.524 -10.287)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
@@ -765,11 +765,11 @@
       )
     )
   )
-  (symbol "D-rlcsv3_modular-rescue" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+  (symbol "D-rlcs_relay_board" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
     (property "Reference" "D" (id 0) (at 0 2.54 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "D-rlcsv3_modular-rescue" (id 1) (at 0 -2.54 0)
+    (property "Value" "D-rlcs_relay_board" (id 1) (at 0 -2.54 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -781,7 +781,7 @@
     (property "ki_fp_filters" "TO-???* *SingleDiode *_Diode_* *SingleDiode* D_*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "D-rlcsv3_modular-rescue_0_1"
+    (symbol "D-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy -1.27 1.27)
@@ -809,7 +809,7 @@
         (fill (type none))
       )
     )
-    (symbol "D-rlcsv3_modular-rescue_1_1"
+    (symbol "D-rlcs_relay_board_1_1"
       (pin passive line (at -3.81 0 0) (length 2.54)
         (name "K" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -854,11 +854,11 @@
       )
     )
   )
-  (symbol "FUSE-rlcsv3_modular-rescue" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+  (symbol "FUSE-rlcs_relay_board" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
     (property "Reference" "F" (id 0) (at 2.54 1.27 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "FUSE-rlcsv3_modular-rescue" (id 1) (at -2.54 -1.27 0)
+    (property "Value" "FUSE-rlcs_relay_board" (id 1) (at -2.54 -1.27 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -867,7 +867,7 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27)))
     )
-    (symbol "FUSE-rlcsv3_modular-rescue_0_1"
+    (symbol "FUSE-rlcs_relay_board_0_1"
       (arc (start 0 0) (mid -1.905 1.905) (end -3.81 0)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
@@ -877,7 +877,7 @@
         (fill (type none))
       )
     )
-    (symbol "FUSE-rlcsv3_modular-rescue_1_1"
+    (symbol "FUSE-rlcs_relay_board_1_1"
       (pin input line (at -6.35 0 0) (length 2.54)
         (name "~" (effects (font (size 1.016 1.016))))
         (number "1" (effects (font (size 1.016 1.016))))
@@ -922,11 +922,11 @@
       )
     )
   )
-  (symbol "GND-rlcsv3_modular-rescue" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+  (symbol "GND-rlcs_relay_board" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
     (property "Reference" "#PWR" (id 0) (at 0 -6.35 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "GND-rlcsv3_modular-rescue" (id 1) (at 0 -3.81 0)
+    (property "Value" "GND-rlcs_relay_board" (id 1) (at 0 -3.81 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -935,7 +935,7 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "GND-rlcsv3_modular-rescue_0_1"
+    (symbol "GND-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy 0 0)
@@ -949,7 +949,7 @@
         (fill (type none))
       )
     )
-    (symbol "GND-rlcsv3_modular-rescue_1_1"
+    (symbol "GND-rlcs_relay_board_1_1"
       (pin power_in line (at 0 0 270) (length 0) hide
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1004,11 +1004,11 @@
       )
     )
   )
-  (symbol "MCP601-rlcsv3_modular-rescue" (in_bom yes) (on_board yes)
+  (symbol "MCP601-rlcs_relay_board" (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 1.27 5.08 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "MCP601-rlcsv3_modular-rescue" (id 1) (at 5.08 -5.08 0)
+    (property "Value" "MCP601-rlcs_relay_board" (id 1) (at 5.08 -5.08 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at -1.27 2.54 0)
@@ -1017,7 +1017,7 @@
     (property "Datasheet" "" (id 3) (at 1.27 5.08 0)
       (effects (font (size 1.27 1.27)))
     )
-    (symbol "MCP601-rlcsv3_modular-rescue_0_1"
+    (symbol "MCP601-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy -5.08 5.08)
@@ -1029,7 +1029,7 @@
         (fill (type background))
       )
     )
-    (symbol "MCP601-rlcsv3_modular-rescue_1_1"
+    (symbol "MCP601-rlcs_relay_board_1_1"
       (pin output line (at 7.62 0 180) (length 2.54)
         (name "~" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1217,11 +1217,11 @@
       )
     )
   )
-  (symbol "MMBF170-rlcsv3_modular-rescue" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+  (symbol "MMBF170-rlcs_relay_board" (pin_names (offset 0)) (in_bom yes) (on_board yes)
     (property "Reference" "Q" (id 0) (at 5.08 1.905 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "MMBF170-rlcsv3_modular-rescue" (id 1) (at 5.08 0 0)
+    (property "Value" "MMBF170-rlcs_relay_board" (id 1) (at 5.08 0 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "TO_SOT_Packages_SMD:SOT-23" (id 2) (at 5.08 -1.905 0)
@@ -1233,7 +1233,7 @@
     (property "ki_fp_filters" "SOT-23*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "MMBF170-rlcsv3_modular-rescue_0_1"
+    (symbol "MMBF170-rlcs_relay_board_0_1"
       (polyline
         (pts
           (xy 0.635 -1.016)
@@ -1367,7 +1367,7 @@
         (fill (type none))
       )
     )
-    (symbol "MMBF170-rlcsv3_modular-rescue_1_1"
+    (symbol "MMBF170-rlcs_relay_board_1_1"
       (pin input line (at -5.08 -1.27 0) (length 5.08)
         (name "G" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1476,11 +1476,11 @@
       )
     )
   )
-  (symbol "PIC16F1826-ISO-rlcsv3_modular-rescue" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "PIC16F1826-ISO-rlcs_relay_board" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 0 11.43 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Value" "PIC16F1826-ISO-rlcsv3_modular-rescue" (id 1) (at 0 13.97 0)
+    (property "Value" "PIC16F1826-ISO-rlcs_relay_board" (id 1) (at 0 13.97 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Footprint" "" (id 2) (at 0 11.43 0)
@@ -1489,13 +1489,13 @@
     (property "Datasheet" "" (id 3) (at 0 11.43 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (symbol "PIC16F1826-ISO-rlcsv3_modular-rescue_0_1"
+    (symbol "PIC16F1826-ISO-rlcs_relay_board_0_1"
       (rectangle (start -10.16 10.16) (end 10.16 -27.94)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
       )
     )
-    (symbol "PIC16F1826-ISO-rlcsv3_modular-rescue_1_1"
+    (symbol "PIC16F1826-ISO-rlcs_relay_board_1_1"
       (pin input line (at -12.7 6.35 0) (length 2.54)
         (name "RA2" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1603,11 +1603,11 @@
       )
     )
   )
-  (symbol "R-rlcsv3_modular-rescue" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+  (symbol "R-rlcs_relay_board" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
     (property "Reference" "R" (id 0) (at 2.032 0 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "R-rlcsv3_modular-rescue" (id 1) (at 0 0 90)
+    (property "Value" "R-rlcs_relay_board" (id 1) (at 0 0 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at -1.778 0 90)
@@ -1619,13 +1619,13 @@
     (property "ki_fp_filters" "R_* R_*" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "R-rlcsv3_modular-rescue_0_1"
+    (symbol "R-rlcs_relay_board_0_1"
       (rectangle (start -1.016 -2.54) (end 1.016 2.54)
         (stroke (width 0.254) (type default) (color 0 0 0 0))
         (fill (type none))
       )
     )
-    (symbol "R-rlcsv3_modular-rescue_1_1"
+    (symbol "R-rlcs_relay_board_1_1"
       (pin passive line (at 0 3.81 270) (length 1.27)
         (name "~" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1674,11 +1674,11 @@
       )
     )
   )
-  (symbol "SPST_POWER_RELAY-rlcsv3_modular-rescue" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "SPST_POWER_RELAY-rlcs_relay_board" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 5.08 -13.97 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Value" "SPST_POWER_RELAY-rlcsv3_modular-rescue" (id 1) (at 0 0 0)
+    (property "Value" "SPST_POWER_RELAY-rlcs_relay_board" (id 1) (at 0 0 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -1687,13 +1687,13 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (symbol "SPST_POWER_RELAY-rlcsv3_modular-rescue_0_1"
+    (symbol "SPST_POWER_RELAY-rlcs_relay_board_0_1"
       (rectangle (start -7.62 -2.54) (end 6.35 -12.7)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
       )
     )
-    (symbol "SPST_POWER_RELAY-rlcsv3_modular-rescue_1_1"
+    (symbol "SPST_POWER_RELAY-rlcs_relay_board_1_1"
       (pin input line (at -12.7 -5.08 0) (length 5.08)
         (name "CIN" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1738,11 +1738,11 @@
       )
     )
   )
-  (symbol "TEST_1P-rlcsv3_modular-rescue" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+  (symbol "TEST_1P-rlcs_relay_board" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
     (property "Reference" "J" (id 0) (at 0 6.858 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "TEST_1P-rlcsv3_modular-rescue" (id 1) (at 0 5.08 0)
+    (property "Value" "TEST_1P-rlcs_relay_board" (id 1) (at 0 5.08 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (id 2) (at 5.08 0 0)
@@ -1751,13 +1751,13 @@
     (property "Datasheet" "" (id 3) (at 5.08 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "TEST_1P-rlcsv3_modular-rescue_0_1"
+    (symbol "TEST_1P-rlcs_relay_board_0_1"
       (circle (center 0 3.302) (radius 0.762)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
       )
     )
-    (symbol "TEST_1P-rlcsv3_modular-rescue_1_1"
+    (symbol "TEST_1P-rlcs_relay_board_1_1"
       (pin passive line (at 0 0 90) (length 2.54)
         (name "1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1818,11 +1818,11 @@
       )
     )
   )
-  (symbol "dpdt_relay-rlcsv3_modular-rescue" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+  (symbol "dpdt_relay-rlcs_relay_board" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 8.89 -15.24 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Value" "dpdt_relay-rlcsv3_modular-rescue" (id 1) (at 0 0 0)
+    (property "Value" "dpdt_relay-rlcs_relay_board" (id 1) (at 0 0 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Footprint" "" (id 2) (at 0 0 0)
@@ -1831,13 +1831,13 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (symbol "dpdt_relay-rlcsv3_modular-rescue_0_1"
+    (symbol "dpdt_relay-rlcs_relay_board_0_1"
       (rectangle (start -6.35 -2.54) (end 6.35 -20.32)
         (stroke (width 0) (type default) (color 0 0 0 0))
         (fill (type none))
       )
     )
-    (symbol "dpdt_relay-rlcsv3_modular-rescue_1_1"
+    (symbol "dpdt_relay-rlcs_relay_board_1_1"
       (pin input line (at -11.43 -3.81 0) (length 5.08)
         (name "IN1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))

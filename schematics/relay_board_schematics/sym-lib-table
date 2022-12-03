@@ -1,3 +1,3 @@
 (sym_lib_table
-  (lib (name "rlcsv4_modular-rescue")(type "KiCad")(uri "${KIPRJMOD}/rlcsv4_modular-rescue.kicad_sym")(options "")(descr ""))
+  (lib (name "relay_board")(type "KiCad")(uri "${KIPRJMOD}/relay_board.kicad_sym")(options "")(descr ""))
 )
