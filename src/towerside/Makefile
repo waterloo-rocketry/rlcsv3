@@ -1,5 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -MMD -g
+CXXFLAGS = -Wall -Wextra -MMD -g
+ARDUINOFLAGS = --warnings all
 EXEC = towerside
 SOURCES = $(wildcard ./*.cpp ./*.ino ./common/mock_arduino.cpp)
 ALLCPP = ${SOURCES:.ino=.cpp}
@@ -28,10 +29,10 @@ clean:
 	rm ${OBJECTS} ${DEPENDS} ${EXEC}
 
 build:
-	arduino-cli compile --fqbn ${ARDUINO_FQBN}
+	arduino-cli compile --fqbn ${ARDUINO_FQBN} ${ARDUINOFLAGS}
 
 flash: build
-	arduino-cli upload -p ${ARDUINO_PORT} --fqbn ${ARDUINO_FQBN}
+	arduino-cli upload -p ${ARDUINO_PORT} --fqbn ${ARDUINO_FQBN} ${ARDUINOFLAGS}
 
 monitor:
 	arduino-cli monitor -p ${ARDUINO_PORT} -c baudrate=115200

@@ -3,13 +3,15 @@
 
 #ifndef ARDUINO
 
+#define __unused __attribute__((__unused__))
+
 #include <iostream>
 
 class Stream {
 public:
 	virtual bool available() = 0;
 	virtual char read() = 0;
-	virtual bool write(char c) = 0;
+	virtual bool write(char c __unused) = 0;
 };
 
 class MockSerial : public Stream {
@@ -17,7 +19,7 @@ public:
 	MockSerial() {
 		std::cin >> std::noskipws;
 	}
-	void begin(int baud) {}
+	void begin(int baud __unused) {}
 	bool available() override {
 		return true;
 	}
@@ -43,8 +45,8 @@ extern MockSerial Serial3;
 class TwoWire {
 public:
 	void begin(){};
-	void setClock(uint16_t clock) {}
-	void setWireTimeout(uint32_t timeout, bool reset_with_timeout) {}
+	void setClock(uint16_t clock __unused) {}
+	void setWireTimeout(uint32_t timeout __unused, bool reset_with_timeout __unused) {}
 	bool getWireTimeoutFlag() {
 		return false;
 	}
@@ -52,7 +54,7 @@ public:
 	void beginTransmission(uint8_t address) {
 		std::cout << "I2C to " << (int)address << ": ";
 	}
-	uint8_t write(uint8_t byte) {
+	uint8_t write(uint8_t byte __unused) {
 		std::cout << (int)byte << " ";
 		return 1;
 	}
@@ -60,7 +62,7 @@ public:
 		std::cout << std::endl;
 		return 0;
 	}
-	uint8_t requestFrom(uint8_t address, uint8_t length) {
+	uint8_t requestFrom(uint8_t address __unused, uint8_t length) {
 		return length;
 	}
 	uint8_t read() {
@@ -72,16 +74,16 @@ extern TwoWire Wire;
 
 class LiquidCrystal {
 public:
-	LiquidCrystal(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e,
-				  uint8_t f) {}
-	void begin(int rows, int cols) {}
+	LiquidCrystal(uint8_t a __unused, uint8_t b __unused, uint8_t c __unused,
+			uint8_t d __unused, uint8_t e __unused, uint8_t f __unused) {}
+	void begin(int rows __unused, int cols __unused) {}
 	void clear() {}
 
 	template <typename T> void print(T t) {
 		std::cout << t;
 	}
 
-	void setCursor(uint8_t, uint8_t) {}
+	void setCursor(uint8_t col __unused, uint8_t row __unused) {}
 };
 
 unsigned long millis();
