@@ -45,4 +45,10 @@ struct SensorContainer {
   T injector_valve_state;
 };
 
+namespace Config {
+
+uint16_t MAX_DELAY_BETWEEN_BYTES = 300;
+
+}
+
 #endif

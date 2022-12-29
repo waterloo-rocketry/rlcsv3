@@ -2,13 +2,16 @@
 #define COMMUNICATION_H
 
 #include <stdint.h>
+#include <cstring>
 #include "mock_arduino.hpp"
+#include "config.hpp"
 
 template<typename ST, typename RT>
 class Communicator {
 	Stream &stream;
 	uint8_t receive_buffer[sizeof(RT)];
 	int buffer_position = 0;
+	uint16_t time_since_last_byte = 0;
 	public:
 	Communicator(Stream &stream): stream{stream} {}
 
@@ -28,17 +31,22 @@ class Communicator {
 			return nullptr;
 		}
 
-		RT *message = dynamic_cast<RT*>(receive_buffer);
+		memcpy(dest, receive_buffer, sizeof(RT));
 
-		return message;
+		buffer_position = 0;
+		return dest;
 	}
 
 	bool read_byte() {
-		if (!stream.available()) {
-			return false;
+		if (stream.available()) {
+			receive_buffer[buffer_position++] = static_cast<uint8_t>(stream.read());
+			time_since_last_byte = millis();
+			return true;
+		} else if (millis() - time_since_last_byte > Config::MAX_DELAY_BETWEEN_BYTES) {
+			buffer_position = 0;
 		}
-		receive_buffer[buffer_position++] = static_cast<uint8_t>(stream.read());
-		return true;
+
+		return false;
 	}
 };
 
