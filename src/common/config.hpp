@@ -52,10 +52,4 @@ struct SensorContainer {
 };
 #pragma pack(pop)
 
-namespace Config {
-
-uint16_t MAX_DELAY_BETWEEN_BYTES = 300;
-
-}
-
 #endif
