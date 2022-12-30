@@ -13,6 +13,8 @@
 //    };
 // When we compile with -Wextra, gcc will warn us about missing members.
 
+// Disable struct field padding
+#pragma pack(push, 1)
 template<typename T>
 struct ActuatorContainer {
   T valve_1;
@@ -21,9 +23,13 @@ struct ActuatorContainer {
   T injector_valve;
   T ignition_primary;
   T ignition_secondary;
-  T linear_actuator;
-  T remote_arming;
-  T remote_disarming;
+  //T linear_actuator;
+  //T remote_arming;
+  //T remote_disarming;
+
+  bool operator==(const ActuatorContainer<T> &other) const {
+    return memcmp(this, &other, sizeof(ActuatorContainer<T>));
+  }
 };
 
 template<typename T>
@@ -32,7 +38,7 @@ struct SensorContainer {
   T towerside_main_batt_mv;
   T towerside_actuator_batt_mv;
   // Actuator health
-  T healthy_actuators_count;
+  T error_code;
   T towerside_state;
   // Ignition currents
   T ignition_primary_ma;
@@ -41,9 +47,10 @@ struct SensorContainer {
   T valve_1_state;
   T valve_2_state;
   T valve_3_state;
-  T linear_actuator_state;
   T injector_valve_state;
+  //T linear_actuator_state;
 };
+#pragma pack(pop)
 
 namespace Config {
 
