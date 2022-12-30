@@ -10,7 +10,7 @@ void setup() {}
 void loop() {
 	bool b = comm.read_byte();
 	if (comm.get_message(&data)) {
-		comm.send(&data);
+		comm.send(data);
 		std::cout << '\n';
 	}
 }

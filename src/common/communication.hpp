@@ -17,17 +17,21 @@ class Communicator {
 	uint8_t receive_buffer[BUFF_SIZE];
 
 	int buffer_position = 0;
-	unsigned long time_since_last_byte = 0;
+	unsigned long time_of_last_byte = 0;
+	const uint16_t max_delay_between_bytes;
 	public:
-	Communicator(Stream &stream): stream{stream} {}
+	Communicator(Stream &stream, uint16_t max_delay_between_bytes = 300):
+		stream{stream},
+		max_delay_between_bytes{max_delay_between_bytes} {}
 
 	// loops through send_data and sends each byte
-	bool send(ST *send_data) {
+	bool send(ST &send_data) {
 		bool status = true;
-		uint8_t *byte = reinterpret_cast<uint8_t*>(send_data);
+		uint8_t *byte = reinterpret_cast<uint8_t*>(&send_data);
 
 		/*
-		Note, encoding protocol may varry
+		Note, if you ever wanna send data with different encoding 
+		and decoding protocols, just specalize this template.
 		*/
 
 		stream.write('W');
@@ -39,35 +43,30 @@ class Communicator {
 	}
 
 	// returns nullptr on failure, 
-	const RT *get_message(RT *dest) {
+	bool get_message(RT *dest) {
 		if (buffer_position < BUFF_SIZE) {
-			return nullptr;
+			return false;
 		}
-
-		/*
-		Note, error checking and decoding protocal may varry
-		*/
 
 		if (receive_buffer[0] != 'W' || receive_buffer[sizeof(RT) + 1] != 'R') {
 			buffer_position = 0;
-			return nullptr;
+			return false;
 		}
 
 		memcpy(dest, receive_buffer + 1, sizeof(RT));
 
 		buffer_position = 0;
-		return dest;
+		return true;
 	}
 
 	bool read_byte() {
 		if (stream.available()) {
 			if (buffer_position < BUFF_SIZE) {
-				char c = static_cast<uint8_t>(stream.read());
-				receive_buffer[buffer_position++] = c;
+				receive_buffer[buffer_position++] = static_cast<uint8_t>(stream.read());
 			}
-			time_since_last_byte = millis();
+			time_of_last_byte = millis();
 			return true;
-		} else if (millis() - time_since_last_byte > Config::MAX_DELAY_BETWEEN_BYTES) {
+		} else if (millis() - time_of_last_byte > max_delay_between_bytes) {
 			buffer_position = 0;
 		}
 
