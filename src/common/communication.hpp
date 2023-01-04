@@ -48,6 +48,8 @@ public:
 		return true;
 	}
 
+	inline uint8_t seconds_since_last_contact() {return millis() - time_of_last_byte;}
+
 	bool read_byte() {
 		if (stream.available()) {
 			if (buffer_position < BUFF_SIZE) {
@@ -61,8 +63,6 @@ public:
 
 		return false;
 	}
-
-	inline uint8_t seconds_since_last_contact() {return millis() - time_of_last_byte;}
 };
 
 #endif

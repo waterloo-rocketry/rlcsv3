@@ -6,12 +6,20 @@
 #define __unused __attribute__((__unused__))
 
 #include <iostream>
+#include <stdint.h>
 
 class Stream {
 public:
 	virtual bool available() = 0;
 	virtual char read() = 0;
 	virtual bool write(char c __unused) = 0;
+	bool write(const uint8_t *c, size_t len) {
+		bool output = true;
+		for (size_t i = 0; i < len; ++i) {
+			output &= write(*(c + i));
+		}
+		return output;
+	}
 };
 
 class MockSerial : public Stream {

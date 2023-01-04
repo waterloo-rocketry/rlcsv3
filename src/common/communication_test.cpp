@@ -8,9 +8,10 @@ Communicator<int, int> comm{Serial};
 void setup() {}
 
 void loop() {
-	bool b = comm.read_byte();
+	comm.read_byte();
 	if (comm.get_message(&data)) {
 		comm.send(data);
 		std::cout << '\n';
+		std::cout << (int)comm.seconds_since_last_contact() << '\n';
 	}
 }
