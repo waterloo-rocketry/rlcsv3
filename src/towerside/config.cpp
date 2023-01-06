@@ -47,7 +47,8 @@ SensorContainer<uint16_t> build_sensor_message() {
   };
 }
 
-const uint8_t COMMUNICATION_TIMEOUT_S = 10;
-const uint16_t SENSOR_MSG_INTERVAL_MS = 100;
+const uint8_t COMMUNICATION_TIMEOUT_S = 10; // Go to safe state after this many seconds without contact
+const uint8_t COMMUNICATION_RESET_MS = 50; // maximum time between successive characters in the same message
+const uint16_t SENSOR_MSG_INTERVAL_MS = 100; // Rate to send sensor messages at
 
 } // namespace config

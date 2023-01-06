@@ -1,7 +1,7 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace errors {
 

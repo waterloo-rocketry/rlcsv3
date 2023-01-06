@@ -2,7 +2,6 @@
 #define COMMUNICATION_H
 
 #include <stdint.h>
-#include <cstring>
 #include "mock_arduino.hpp"
 
 template<typename ST, typename RT>
@@ -21,13 +20,14 @@ public:
     stream{stream},
     reset_interval_ms{reset_interval_ms} {}
 
-  bool send(ST &send_data) {
+  bool send(const ST &send_data) {
     bool status = true;
-    uint8_t *send_data_uint8 = reinterpret_cast<uint8_t*>(&send_data);
+    const uint8_t *send_data_uint8 = reinterpret_cast<const uint8_t*>(&send_data);
 
     stream.write('W');
     stream.write(send_data_uint8, sizeof(ST));
     stream.write('R');
+    stream.write('\n');
     return status;
   }
 
@@ -47,7 +47,7 @@ public:
     return true;
 	}
 
-  inline uint8_t seconds_since_last_contact() {return (millis() - time_of_last_byte)/1000;}
+  uint8_t seconds_since_last_contact() {return (millis() - time_of_last_byte)/1000;}
 
   bool read_byte() {
     if (stream.available()) {

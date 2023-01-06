@@ -1,9 +1,9 @@
 #ifndef MOCK_ARDUINO_H
 #define MOCK_ARDUINO_H
 
-#ifndef ARDUINO
-
 #define __unused __attribute__((__unused__))
+
+#ifndef ARDUINO
 
 #include <iostream>
 #include <stdint.h>

@@ -1,7 +1,7 @@
 #ifndef ACTUATORS_H
 #define ACTUATORS_H
 
-#include <cstdint>
+#include <stdint.h>
 
 #include "common/mock_arduino.hpp"
 #include "common/shared_types.hpp"
