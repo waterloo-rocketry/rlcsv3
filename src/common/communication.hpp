@@ -45,7 +45,7 @@ public:
 
     buffer_position = 0;
     return true;
-	}
+  }
 
   inline uint8_t seconds_since_last_contact() {return (millis() - time_of_last_byte)/1000;}
 
