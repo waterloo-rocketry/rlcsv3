@@ -9,7 +9,7 @@ namespace config {
 
 void apply(const ActuatorContainer<bool> &command);
 
-void apply_safe_state();
+ActuatorContainer<bool> build_safe_state(const ActuatorContainer<bool> &current_state);
 
 SensorContainer<uint16_t> build_sensor_message();
 

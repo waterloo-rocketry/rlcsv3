@@ -79,6 +79,17 @@ public:
   }
 };
 
+class Ignition: public I2C {
+  virtual bool get_power(bool value) override {
+    return value;
+  }
+  virtual bool get_select(bool value) override {
+    return value;
+  }
+public:
+  Ignition(uint8_t slave_address): I2C(slave_address) {}
+};
+
 } // namespace actuator
 
 #endif

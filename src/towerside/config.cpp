@@ -9,9 +9,9 @@ struct Actuators {
   actuator::I2C valve_1 {1};
   actuator::I2C valve_2 {2};
   actuator::I2C valve_3 {3};
-  actuator::I2C injector_valve {4};
-  actuator::I2C ignition_primary {5};
-  actuator::I2C ignition_secondary {6};
+  actuator::I2C injector_valve {6};
+  actuator::Ignition ignition_primary {4};
+  actuator::Ignition ignition_secondary {5};
 } ACTUATORS;
 
 void apply(const ActuatorContainer<bool> &command) {
@@ -23,13 +23,15 @@ void apply(const ActuatorContainer<bool> &command) {
   ACTUATORS.ignition_secondary.set(command.ignition_secondary);
 }
 
-void apply_safe_state() {
-  ACTUATORS.valve_1.set(false);
-  ACTUATORS.valve_2.set(true);
-  ACTUATORS.valve_3.set(false);
-  // leave injector valve unchanged
-  ACTUATORS.ignition_primary.set(false);
-  ACTUATORS.ignition_secondary.set(false);
+ActuatorContainer<bool> build_safe_state(const ActuatorContainer<bool> &current_state) {
+  return ActuatorContainer<bool> {
+    .valve_1 = false,
+    .valve_2 = true,
+    .valve_3 = false,
+    .injector_valve = current_state.injector_valve,
+    .ignition_primary = false,
+    .ignition_secondary = false,
+  };
 }
 
 SensorContainer<uint16_t> build_sensor_message() {
