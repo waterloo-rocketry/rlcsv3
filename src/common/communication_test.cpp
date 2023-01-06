@@ -3,7 +3,7 @@
 #include <iostream>
 
 int data = 1145258561;
-Communicator<int, int> comm{Serial};
+Communicator<int, int> comm{Serial, 300};
 
 void setup() {}
 
