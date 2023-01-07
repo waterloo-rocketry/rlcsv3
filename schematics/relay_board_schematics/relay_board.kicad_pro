@@ -387,6 +387,8 @@
         "microvia_drill": 0.1,
         "name": "Actuators",
         "nets": [
+          "/G1",
+          "/G2",
           "Net-(F1-Pad1)",
           "Net-(U1-Pad4)"
         ],
