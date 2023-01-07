@@ -47,7 +47,9 @@ public:
     return true;
   }
 
-  uint8_t seconds_since_last_contact() {return (millis() - time_of_last_byte)/1000;}
+  uint8_t seconds_since_last_contact() {
+    return (millis() - time_of_last_byte)/1000;
+  }
 
   bool read_byte() {
     if (stream.available()) {

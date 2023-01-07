@@ -32,7 +32,7 @@ build:
 	arduino-cli compile --fqbn ${ARDUINO_FQBN} ${ARDUINOFLAGS}
 
 flash: build
-	arduino-cli upload -p ${ARDUINO_PORT} --fqbn ${ARDUINO_FQBN} ${ARDUINOFLAGS}
+	arduino-cli upload -p ${ARDUINO_PORT} --fqbn ${ARDUINO_FQBN}
 
 monitor:
 	arduino-cli monitor -p ${ARDUINO_PORT} -c baudrate=115200

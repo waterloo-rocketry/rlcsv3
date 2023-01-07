@@ -5,13 +5,14 @@
 
 void setup() {
   Serial.begin(115200);
+  Serial2.begin(9600);
   Wire.begin();
   Wire.setClock(10000);
   Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
   seven_seg::setup();
   sensors::setup();
 
-  Communicator<SensorContainer<uint16_t>, ActuatorContainer<bool>> communicator {Serial, config::COMMUNICATION_RESET_MS};
+  Communicator<SensorContainer<uint16_t>, ActuatorContainer<bool>> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
   // The current towerside state. Each tick we command all actuators to take the action specified by it
   ActuatorContainer<bool> current_cmd = config::build_safe_state(ActuatorContainer<bool>());
