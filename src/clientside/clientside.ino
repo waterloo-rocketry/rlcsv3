@@ -1,49 +1,52 @@
 #include "common/communication.hpp"
 #include "config.hpp"
 #include "hardware.hpp"
+#include "lcd.hpp"
 
 void setup() {
-  hardware::set_status_startup();
-  Serial.begin(115200); // USB connection
-  Serial3.begin(9600); // Towerside connection
+	hardware::set_status_startup();
+	Serial.begin(115200); // USB connection
+	Serial3.begin(9600); // Towerside connection
 
-  hardware::setup();
+	hardware::setup();
 
-  Communicator<ActuatorContainer<bool>, SensorContainer<uint16_t>> communicator {Serial3, config::COMMUNICATION_RESET_MS};
-  unsigned long last_sent_time = 0;
-  ActuatorContainer<bool> last_switch_positions;
+	Communicator<ActuatorContainer<bool>, SensorContainer<uint16_t>>
+		communicator{Serial3, config::COMMUNICATION_RESET_MS};
+	unsigned long last_sent_time = 0;
+	ActuatorContainer<bool> last_switch_positions;
 
-  hardware::set_status_disconnected();
-  // Avoid the status showing as connected for the first few seconds on startup if we aren't really
-  bool any_messages_received = false;
+	hardware::set_status_disconnected();
+	// Avoid the status showing as connected for the first few seconds on
+	// startup if we aren't really
+	bool any_messages_received = false;
 
-  while (true) {
-    communicator.read_byte();
-    SensorContainer<uint16_t> msg;
-    if (communicator.get_message(&msg)) {
-      any_messages_received = true;
-      // LCD code
-    }
+	while (true) {
+		communicator.read_byte();
+		SensorContainer<uint16_t> msg;
+		if (communicator.get_message(&msg)) {
+			any_messages_received = true;
+			LCDUpdate(msg);
+		}
 
-    bool has_contact = communicator.seconds_since_last_contact() < config::COMMUNICATION_TIMEOUT_S;
-    if (has_contact && any_messages_received) {
-      hardware::set_status_connected();
-    } else {
-      hardware::set_status_disconnected();
-    }
+		bool has_contact = communicator.seconds_since_last_contact()
+						   < config::COMMUNICATION_TIMEOUT_S;
+		if (has_contact && any_messages_received) {
+			hardware::set_status_connected();
+		} else {
+			hardware::set_status_disconnected();
+		}
 
-    bool armed = hardware::is_armed();
-    hardware::set_missile_leds(armed);
-    if (armed) {
-      last_switch_positions = config::build_command_message();
-    }
+		bool armed = hardware::is_armed();
+		hardware::set_missile_leds(armed);
+		if (armed) {
+			last_switch_positions = config::build_command_message();
+		}
 
-    if (millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS) {
-      last_sent_time = millis();
-      communicator.send(last_switch_positions);
-    }
-  }
+		if (millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS) {
+			last_sent_time = millis();
+			communicator.send(last_switch_positions);
+		}
+	}
 }
 
-void loop() {
-}
+void loop() {}
