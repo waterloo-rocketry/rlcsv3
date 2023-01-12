@@ -14,7 +14,7 @@ struct Actuators {
   actuator::Ignition ignition_secondary {5};
 } ACTUATORS;
 
-void apply(const ActuatorContainer<bool> &command) {
+void apply(const ActuatorMessage &command) {
   ACTUATORS.valve_1.set(command.valve_1);
   ACTUATORS.valve_2.set(command.valve_2);
   ACTUATORS.valve_3.set(command.valve_3);
@@ -23,8 +23,8 @@ void apply(const ActuatorContainer<bool> &command) {
   ACTUATORS.ignition_secondary.set(command.ignition_secondary);
 }
 
-ActuatorContainer<bool> build_safe_state(const ActuatorContainer<bool> &current_state) {
-  return ActuatorContainer<bool> {
+ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
+  return ActuatorMessage {
     .valve_1 = false,
     .valve_2 = true,
     .valve_3 = false,
@@ -34,12 +34,13 @@ ActuatorContainer<bool> build_safe_state(const ActuatorContainer<bool> &current_
   };
 }
 
-SensorContainer<uint16_t> build_sensor_message() {
-  return SensorContainer<uint16_t> {
+SensorMessage build_sensor_message() {
+  return SensorMessage {
     .towerside_main_batt_mv = sensors::get_main_batt_mv(),
     .towerside_actuator_batt_mv = sensors::get_actuator_batt_mv(),
     .error_code = errors::pop(),
-    .towerside_state = sensors::get_towerside_state(),
+    .towerside_armed = sensors::is_armed(),
+    .has_contact = sensors::has_contact(),
     .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(1),
     .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(1),
     .valve_1_state = ACTUATORS.valve_1.get_state(),

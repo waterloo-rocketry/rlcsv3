@@ -40,7 +40,7 @@ public:
     healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
     healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
-      errors::push(slave_address, errors::I2CWriteError);
+      errors::push(slave_address, ErrorCode::I2CWriteError);
     }
     Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
@@ -49,7 +49,7 @@ public:
     // Cast to uint8_t to avoid warning about ambiguous overload
     uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(1)); // returns number of bytes receieved
     if (received != 1) {
-      errors::push(slave_address, errors::I2CReadError);
+      errors::push(slave_address, ErrorCode::I2CReadError);
       return ActuatorPosition::error;
     }
     uint8_t lims = Wire.read(); // first byte returned is the limit switch values
@@ -66,7 +66,7 @@ public:
     // Cast to uint8_t to avoid warning about ambiguous overload
     uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(5)); // returns number of bytes received
     if (received != 5) {
-      errors::push(slave_address, errors::I2CReadError);
+      errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
     Wire.read(); // limit switch values, ignore

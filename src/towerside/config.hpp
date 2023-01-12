@@ -7,11 +7,11 @@
 
 namespace config {
 
-void apply(const ActuatorContainer<bool> &command);
+void apply(const ActuatorMessage &command);
 
-ActuatorContainer<bool> build_safe_state(const ActuatorContainer<bool> &current_state);
+ActuatorMessage build_safe_state(const ActuatorMessage &current_state);
 
-SensorContainer<uint16_t> build_sensor_message();
+SensorMessage build_sensor_message();
 
 extern const uint8_t COMMUNICATION_TIMEOUT_S;
 extern const uint8_t COMMUNICATION_RESET_MS;

@@ -12,16 +12,16 @@ void setup() {
   seven_seg::setup();
   sensors::setup();
 
-  Communicator<SensorContainer<uint16_t>, ActuatorContainer<bool>> communicator {Serial2, config::COMMUNICATION_RESET_MS};
+  Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
   // The current towerside state. Each tick we command all actuators to take the action specified by it
-  ActuatorContainer<bool> current_cmd = config::build_safe_state(ActuatorContainer<bool>());
-  ActuatorContainer<bool> last_cmd; // The last received message from clientside, used for error detection
+  ActuatorMessage current_cmd = config::build_safe_state(ActuatorMessage());
+  ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
   
   // We loop here so that the variables defined above are in scope
   while (true) {
     communicator.read_byte();
-    ActuatorContainer<bool> new_cmd;
+    ActuatorMessage new_cmd;
     if (communicator.get_message(&new_cmd)) { // If we have a new message from clientside
       // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
       if (new_cmd == last_cmd && sensors::is_armed()) {

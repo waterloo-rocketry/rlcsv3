@@ -40,7 +40,7 @@ static void num_prettyprint(char *buf, unsigned int num) {
   snprintf(buf, 4, "%03d", num);
 }
 
-void LCDUpdate(SensorContainer<uint16_t> msg) {
+void LCDUpdate(SensorMessage msg) {
   char buf[4];
 
   lcd.setCursor(0, 0);
@@ -68,9 +68,10 @@ void LCDUpdate(SensorContainer<uint16_t> msg) {
 
   lcd.setCursor(0, 2);
   lcd.print("TS:");
-  lcd.print((msg.towerside_state & 2) ? '1' : '0');
-  lcd.print((msg.towerside_state & 1) ? '1' : '0');
-  lcd.print((msg.towerside_state & 0) ? '1' : '0');
+  // TODO: use new boolean values in the container
+  //lcd.print((msg.towerside_state & 2) ? '1' : '0');
+  //lcd.print((msg.towerside_state & 1) ? '1' : '0');
+  //lcd.print((msg.towerside_state & 0) ? '1' : '0');
 
   lcd.print(" TM:");
   num_prettyprint(buf, msg.towerside_main_batt_mv / 100);

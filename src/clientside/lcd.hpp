@@ -5,6 +5,6 @@
 
 void LCDInit();
 
-void LCDUpdate(SensorContainer<uint16_t> msg);
+void LCDUpdate(SensorMessage msg);
 
 #endif

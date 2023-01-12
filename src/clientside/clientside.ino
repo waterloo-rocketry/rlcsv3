@@ -10,10 +10,10 @@ void setup() {
 
   hardware::setup();
 
-  Communicator<ActuatorContainer<bool>, SensorContainer<uint16_t>>
+  Communicator<ActuatorMessage, SensorMessage>
     communicator{Serial3, config::COMMUNICATION_RESET_MS};
   unsigned long last_sent_time = 0;
-  ActuatorContainer<bool> last_switch_positions;
+  ActuatorMessage last_switch_positions;
 
   hardware::set_status_disconnected();
   // Avoid the status showing as connected for the first few seconds on
@@ -22,7 +22,7 @@ void setup() {
 
   while (true) {
     communicator.read_byte();
-    SensorContainer<uint16_t> msg;
+    SensorMessage msg;
     if (communicator.get_message(&msg)) {
       any_messages_received = true;
       LCDUpdate(msg);

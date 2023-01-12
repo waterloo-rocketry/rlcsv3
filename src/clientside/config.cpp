@@ -4,8 +4,8 @@
 
 namespace config {
 
-ActuatorContainer<bool> build_command_message() {
-  return ActuatorContainer<bool> {
+ActuatorMessage build_command_message() {
+  return ActuatorMessage {
     .valve_1 = digitalRead(pinout::MISSILE_SWITCH_1),
     .valve_2 = digitalRead(pinout::MISSILE_SWITCH_2),
     .valve_3 = digitalRead(pinout::MISSILE_SWITCH_3),

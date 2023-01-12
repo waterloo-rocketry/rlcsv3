@@ -38,9 +38,4 @@ uint16_t get_actuator_batt_mv() {
   return static_cast<uint16_t>(analogRead(pinout::ACTUATOR_BATT_VOLTAGE)) * 48 / 17 * 5;
 }
 
-uint16_t get_towerside_state() {
-  return static_cast<uint8_t>(!has_contact()) << 0 | \
-         static_cast<uint8_t>(!is_armed())    << 1;
-}
-
 } // namespace sensors

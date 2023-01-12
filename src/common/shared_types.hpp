@@ -2,10 +2,9 @@
 #define SHARED_TYPES_H
 
 #include <stdint.h>
-#include "config.hpp"
 
 namespace ActuatorPosition {
-enum ActuatorPosition : uint16_t {
+enum ActuatorPosition : uint8_t {
   // Ordered this way so that position = open_lim + 2 * close_lim
   unknown = 0,
   open = 1,
@@ -13,6 +12,13 @@ enum ActuatorPosition : uint16_t {
   error = 3
 };
 } // namespace ActuatorPosition
+
+namespace ErrorCode {
+enum ErrorCode: uint8_t {
+  I2CWriteError,
+  I2CReadError,
+};
+} // namespace ErrorCode
 
 // Put this value in a sensor data field to signify an error.
 const uint16_t SENSOR_ERR_VAL = 0xFFFF;

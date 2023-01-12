@@ -1,12 +1,15 @@
 #ifndef COMMON_CONFIG_H
 #define COMMON_CONFIG_H
 
+#include "mock_arduino.hpp"
+#include "shared_types.hpp"
+
 // These types act as generic containers for actuators and sensors respectively. This forces
 // code to expicitely refer to actuators and sensor by their names rather than generic indexes,
 // which then lets the compiler ensure that there are no mismatches.
 //
 // Note: The reason these are structs and not classes (and don't have constructors) is so we can use named struct initialization, ie:
-//    ActuatorContainer<bool> command = {
+//    ActuatorMessage<bool> command = {
 //        .valve_1 = true,
 //        .valve_2 = false,
 //        ...etc
@@ -14,41 +17,40 @@
 // When we compile with -Wextra, gcc will warn us about missing members.
 
 // Disable struct field padding
+; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
-template<typename T>
-struct ActuatorContainer {
-  T valve_1;
-  T valve_2;
-  T valve_3;
-  T injector_valve;
-  T ignition_primary;
-  T ignition_secondary;
-  //T linear_actuator;
-  //T remote_arming;
-  //T remote_disarming;
+struct ActuatorMessage {
+  bool valve_1;
+  bool valve_2;
+  bool valve_3;
+  bool injector_valve;
+  bool ignition_primary;
+  bool ignition_secondary;
+  //bool linear_actuator;
+  //<custom remote arming enum> remote_arming;
 
-  bool operator==(const ActuatorContainer<T> &other) const {
-    return memcmp(this, &other, sizeof(ActuatorContainer<T>));
+  bool operator==(const ActuatorMessage &other) const {
+    return memcmp(this, &other, sizeof(ActuatorMessage));
   }
 };
 
-template<typename T>
-struct SensorContainer {
+struct SensorMessage {
   // Battery Voltages
-  T towerside_main_batt_mv;
-  T towerside_actuator_batt_mv;
+  uint16_t towerside_main_batt_mv;
+  uint16_t towerside_actuator_batt_mv;
   // Actuator health
-  T error_code;
-  T towerside_state;
+  uint16_t error_code;
+  bool towerside_armed;
+  bool has_contact;
   // Ignition currents
-  T ignition_primary_ma;
-  T ignition_secondary_ma;
+  uint16_t ignition_primary_ma;
+  uint16_t ignition_secondary_ma;
   // Actuator states
-  T valve_1_state;
-  T valve_2_state;
-  T valve_3_state;
-  T injector_valve_state;
-  //T linear_actuator_state;
+  ActuatorPosition::ActuatorPosition valve_1_state;
+  ActuatorPosition::ActuatorPosition valve_2_state;
+  ActuatorPosition::ActuatorPosition valve_3_state;
+  ActuatorPosition::ActuatorPosition injector_valve_state;
+  //ActuatorPosition::ActuatorPosition linear_actuator_state;
 };
 #pragma pack(pop)
 

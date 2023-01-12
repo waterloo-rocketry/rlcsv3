@@ -65,7 +65,7 @@ void setup() {
   pinMode(pinout::SEVENSEG_DP, OUTPUT);
 }
 
-void display(const ActuatorContainer<bool> &state) {
+void display(const ActuatorMessage &state) {
   digit_values[0] = static_cast<uint8_t>(state.valve_1)        << 0 | \
                     static_cast<uint8_t>(state.valve_2)        << 1 | \
                     static_cast<uint8_t>(state.valve_3)        << 2 | \
