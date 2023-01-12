@@ -13,9 +13,7 @@ namespace hardware {
 
     pinMode(pinout::MISSILE_SWITCH_IGNITION_FIRE, INPUT_PULLUP);
 
-    for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS)
-                    / sizeof(pinout::MISSILE_LEDS[0]));
-       i++) {
+    for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS) / sizeof(pinout::MISSILE_LEDS[0])); i++) {
       pinMode(pinout::MISSILE_LEDS[i], OUTPUT);
     }
 
@@ -27,10 +25,8 @@ namespace hardware {
   }
 
   void set_missile_leds(bool value) {
-    for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS)
-                    / sizeof(pinout::MISSILE_LEDS[0]));
-       i++) {
-      digitalWrite(pinout::MISSILE_LEDS[i], !value);
+    for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS) / sizeof(pinout::MISSILE_LEDS[0])); i++) {
+      digitalWrite(pinout::MISSILE_LEDS[i], !value); // Active low
     }
   }
 
