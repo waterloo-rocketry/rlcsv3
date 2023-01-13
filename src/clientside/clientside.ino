@@ -6,12 +6,12 @@
 void setup() {
   hardware::set_status_startup();
   Serial.begin(115200); // USB connection
-  Serial3.begin(9600); // Towerside connection
+  Serial3.begin(9600);  // Towerside connection
 
   hardware::setup();
 
-  Communicator<ActuatorMessage, SensorMessage>
-    communicator{Serial3, config::COMMUNICATION_RESET_MS};
+  Communicator<ActuatorMessage, SensorMessage> communicator{
+      Serial3, config::COMMUNICATION_RESET_MS};
   unsigned long last_sent_time = 0;
   ActuatorMessage last_switch_positions;
 
@@ -25,11 +25,11 @@ void setup() {
     SensorMessage msg;
     if (communicator.get_message(&msg)) {
       any_messages_received = true;
-      LCDUpdate(msg);
+      lcd::lcd_update(msg);
     }
 
-    bool has_contact = communicator.seconds_since_last_contact()
-               < config::COMMUNICATION_TIMEOUT_S;
+    bool has_contact = communicator.seconds_since_last_contact() <
+                       config::COMMUNICATION_TIMEOUT_S;
     if (has_contact && any_messages_received) {
       hardware::set_status_connected();
     } else {

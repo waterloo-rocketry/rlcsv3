@@ -21,7 +21,7 @@ void setup() {
   pinMode(pinout::LED_GREEN, OUTPUT);
   pinMode(pinout::LED_BLUE, OUTPUT);
 
-  LCDInit();
+  lcd::lcd_init();
 }
 
 void set_missile_leds(bool value) {
