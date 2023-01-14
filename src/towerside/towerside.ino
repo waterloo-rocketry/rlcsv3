@@ -23,6 +23,12 @@ void setup() {
     communicator.read_byte();
     ActuatorMessage new_cmd;
     if (communicator.get_message(&new_cmd)) { // If we have a new message from clientside
+      /*Serial.println("new: ");
+      Serial.write((uint8_t*)(&new_cmd), sizeof(ActuatorMessage));
+      Serial.println("last:");
+      Serial.write((uint8_t*)(&last_cmd), sizeof(ActuatorMessage));
+      Serial.println(new_cmd == last_cmd);
+      Serial.print("          ");*/
       // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
       if (new_cmd == last_cmd && sensors::is_armed()) {
         current_cmd = new_cmd;

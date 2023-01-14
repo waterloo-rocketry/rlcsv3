@@ -9,15 +9,17 @@ struct Actuators {
   actuator::I2C valve_1 {1};
   actuator::I2C valve_2 {2};
   actuator::I2C valve_3 {3};
-  actuator::I2C injector_valve {6};
-  actuator::Ignition ignition_primary {4};
-  actuator::Ignition ignition_secondary {5};
+  actuator::I2C vent_valve {4};
+  actuator::I2C injector_valve {5};
+  actuator::Ignition ignition_primary {6};
+  actuator::Ignition ignition_secondary {7};
 } ACTUATORS;
 
 void apply(const ActuatorMessage &command) {
   ACTUATORS.valve_1.set(command.valve_1);
   ACTUATORS.valve_2.set(command.valve_2);
-  ACTUATORS.valve_3.set(command.valve_3);
+  ACTUATORS.valve_3.set(!command.valve_3); // inverted, idle open
+  ACTUATORS.vent_valve.set(command.vent_valve);
   ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_secondary);
@@ -26,8 +28,9 @@ void apply(const ActuatorMessage &command) {
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
   return ActuatorMessage {
     .valve_1 = false,
-    .valve_2 = true,
-    .valve_3 = false,
+    .valve_2 = false,
+    .valve_3 = false, // natural state open
+    .vent_valve = false, // no power, open
     .injector_valve = current_state.injector_valve,
     .ignition_primary = false,
     .ignition_secondary = false,

@@ -57,8 +57,9 @@ void lcd::lcd_update(SensorMessage msg) {
   liquid_crystal.print(" V2:");
   print_valve_position(msg.valve_2_state);
 
-  liquid_crystal.print(" ARM:");
-  liquid_crystal.print(msg.towerside_armed ? "Y" : "N");
+  liquid_crystal.print(" V3:");
+  print_valve_position(msg.valve_3_state);
+
 
   liquid_crystal.setCursor(0, 1);
   liquid_crystal.print("IP:");
@@ -67,20 +68,23 @@ void lcd::lcd_update(SensorMessage msg) {
   liquid_crystal.print(" IS:");
   print_decimal_value(msg.ignition_secondary_ma / 10);
 
-  liquid_crystal.print(" EC:");
+  liquid_crystal.setCursor(0, 2);
+  liquid_crystal.print("EC:");
   print_decimal_value(msg.error_code);
 
-  liquid_crystal.setCursor(0, 2);
-  liquid_crystal.print("TCOM:");
+  liquid_crystal.print(" CON:");
   liquid_crystal.print(msg.has_contact ? "Y" : "N");
 
-  liquid_crystal.print(" TM:");
+  liquid_crystal.print(" ARM:");
+  liquid_crystal.print(msg.towerside_armed ? "Y" : "N");
+
+  liquid_crystal.setCursor(0, 3);
+  liquid_crystal.print("TM:");
   print_decimal_value(msg.towerside_main_batt_mv / 100);
 
   liquid_crystal.print(" TA:");
   print_decimal_value(msg.towerside_actuator_batt_mv / 100);
 
-  liquid_crystal.setCursor(0, 3);
-  liquid_crystal.print("CB:");
+  liquid_crystal.print(" CB:");
   print_decimal_value(get_batt_dv());
 }

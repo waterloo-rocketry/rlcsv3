@@ -69,9 +69,10 @@ void display(const ActuatorMessage &state) {
   digit_values[0] = static_cast<uint8_t>(state.valve_1)        << 0 | \
                     static_cast<uint8_t>(state.valve_2)        << 1 | \
                     static_cast<uint8_t>(state.valve_3)        << 2 | \
-                    static_cast<uint8_t>(state.injector_valve) << 3;
-  digit_values[1] = static_cast<uint8_t>(state.ignition_primary)   << 0 | \
-                    static_cast<uint8_t>(state.ignition_secondary) << 1;
+                    static_cast<uint8_t>(state.vent_valve)     << 3;
+  digit_values[1] = static_cast<uint8_t>(state.injector_valve)     << 0 | \
+                    static_cast<uint8_t>(state.ignition_primary)   << 1 | \
+                    static_cast<uint8_t>(state.ignition_secondary) << 2;
 }
 
 void tick() {

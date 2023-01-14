@@ -23,6 +23,7 @@ struct ActuatorMessage {
   bool valve_1;
   bool valve_2;
   bool valve_3;
+  bool vent_valve;
   bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
@@ -30,7 +31,7 @@ struct ActuatorMessage {
   //<custom remote arming enum> remote_arming;
 
   bool operator==(const ActuatorMessage &other) const {
-    return memcmp(this, &other, sizeof(ActuatorMessage));
+    return !memcmp(this, &other, sizeof(ActuatorMessage));
   }
 };
 
