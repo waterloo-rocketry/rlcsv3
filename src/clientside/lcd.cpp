@@ -60,13 +60,15 @@ void lcd::lcd_update(SensorMessage msg) {
   liquid_crystal.print(" V3:");
   print_valve_position(msg.valve_3_state);
 
-
   liquid_crystal.setCursor(0, 1);
   liquid_crystal.print("IP:");
   print_decimal_value(msg.ignition_primary_ma / 10);
 
   liquid_crystal.print(" IS:");
   print_decimal_value(msg.ignition_secondary_ma / 10);
+
+  liquid_crystal.print(" VV:");
+  print_valve_position(msg.vent_valve_state);
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("EC:");

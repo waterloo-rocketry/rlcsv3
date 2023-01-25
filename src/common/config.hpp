@@ -51,6 +51,7 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition valve_2_state;
   ActuatorPosition::ActuatorPosition valve_3_state;
   ActuatorPosition::ActuatorPosition injector_valve_state;
+  ActuatorPosition::ActuatorPosition vent_valve_state;
   //ActuatorPosition::ActuatorPosition linear_actuator_state;
 };
 #pragma pack(pop)

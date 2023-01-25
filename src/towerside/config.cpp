@@ -22,7 +22,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.vent_valve.set(command.vent_valve);
   ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
-  ACTUATORS.ignition_secondary.set(command.ignition_secondary);
+  ACTUATORS.ignition_secondary.set(command.ignition_primary);
 }
 
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
@@ -50,6 +50,7 @@ SensorMessage build_sensor_message() {
     .valve_2_state = ACTUATORS.valve_2.get_state(),
     .valve_3_state = ACTUATORS.valve_3.get_state(),
     .injector_valve_state = ACTUATORS.injector_valve.get_state(),
+    .vent_valve_state = ACTUATORS.vent_valve.get_state(),
   };
 }
 
