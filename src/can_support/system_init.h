@@ -12,7 +12,5 @@ void PMD_Initialize(void);
 void OSCILLATOR_Initialize(void);
 
 
-
-
 #endif	/* SYSTEM_INIT_H */
 
