@@ -4,11 +4,12 @@
 #include "lcd.hpp"
 
 void setup() {
+  hardware::setup();
   hardware::set_status_startup();
+  lcd::setup();
+
   Serial.begin(115200); // USB connection
   Serial3.begin(9600);  // Towerside connection
-
-  hardware::setup();
 
   Communicator<ActuatorMessage, SensorMessage> communicator{
       Serial3, config::COMMUNICATION_RESET_MS};

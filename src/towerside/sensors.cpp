@@ -26,15 +26,12 @@ void set_contact(bool value) {
   contact = value;
 }
 
+// The math at the end of these scales the arduino's 0-1023 analog value to a voltage based on
+// the resistor divider, without overflowing a uint16_t
 uint16_t get_main_batt_mv() {
-  // The math at the end scales the arduino's 0-1023 analog value to a voltage based on the resistor divider,
-  // without overflowing a uint16_t
   return static_cast<uint16_t>(analogRead(pinout::MAIN_BATT_VOLTAGE)) * 48 / 17 * 5;
 }
-
 uint16_t get_actuator_batt_mv() {
-  // The math at the end scales the arduino's 0-1023 analog value to a voltage based on the resistor divider,
-  // without overflowing a uint16_t
   return static_cast<uint16_t>(analogRead(pinout::ACTUATOR_BATT_VOLTAGE)) * 48 / 17 * 5;
 }
 

@@ -6,9 +6,7 @@
 namespace seven_seg {
 
 void setup();
-
 void display(const ActuatorMessage &state);
-
 void tick();
 
 } // namespace seven_seg

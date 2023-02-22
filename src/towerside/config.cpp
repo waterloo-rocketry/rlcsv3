@@ -18,11 +18,11 @@ struct Actuators {
 void apply(const ActuatorMessage &command) {
   ACTUATORS.valve_1.set(command.valve_1);
   ACTUATORS.valve_2.set(command.valve_2);
-  ACTUATORS.valve_3.set(!command.valve_3); // inverted, idle open
+  ACTUATORS.valve_3.set(!command.valve_3); // inverted in software, idle open
   ACTUATORS.vent_valve.set(command.vent_valve);
   ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
-  ACTUATORS.ignition_secondary.set(command.ignition_primary);
+  ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
 }
 
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
@@ -53,9 +53,5 @@ SensorMessage build_sensor_message() {
     .vent_valve_state = ACTUATORS.vent_valve.get_state(),
   };
 }
-
-const uint8_t COMMUNICATION_TIMEOUT_S = 10; // Go to safe state after this many seconds without contact
-const uint8_t COMMUNICATION_RESET_MS = 50; // maximum time between successive characters in the same message
-const uint16_t SENSOR_MSG_INTERVAL_MS = 100; // Rate to send sensor messages at
 
 } // namespace config

@@ -1,38 +1,38 @@
+#include "lcd.hpp"
+#include "common/mock_arduino.hpp"
+
 #include <stdio.h>
 
-#include "common/mock_arduino.hpp"
 #include "common/shared_types.hpp"
 #include "config.hpp"
-#include "lcd.hpp"
+#include "hardware.hpp"
 #include "pinout.hpp"
 
-namespace {
+namespace lcd {
 
 LiquidCrystal liquid_crystal{pinout::LCD_RS, pinout::LCD_EN, pinout::LCD_D4,
                              pinout::LCD_D5, pinout::LCD_D6, pinout::LCD_D7};
 
 void print_valve_position(uint16_t pos) {
-  const char *s;
   switch (pos) {
   case ActuatorPosition::ActuatorPosition::error:
-    s = "ERR";
+    liquid_crystal.print("ERR");
     break;
   case ActuatorPosition::ActuatorPosition::closed:
-    s = "CLS";
+    liquid_crystal.print("CLS");
     break;
   case ActuatorPosition::ActuatorPosition::open:
-    s = "OPN";
+    liquid_crystal.print("OPN");
+    break;
+  case ActuatorPosition::ActuatorPosition::unknown:
+    liquid_crystal.print("UNK");
     break;
   default:
-    s = "UNK";
+    liquid_crystal.print("???");
+    break;
   }
-  liquid_crystal.print(s);
 };
 
-uint8_t get_batt_dv() {
-  return (analogRead(pinout::BATT_VOLTAGE) + config::BATT_SCALE_PRE_OFFSET) *
-         config::BATT_SCALE_NUM / config::BATT_SCALE_DEN;
-}
 
 void print_decimal_value(unsigned int num) {
   char buf[4];
@@ -40,16 +40,17 @@ void print_decimal_value(unsigned int num) {
   liquid_crystal.print(buf);
 }
 
-} // namespace
-
-void lcd::lcd_init() {
+void setup() {
   liquid_crystal.begin(20, 4);
   liquid_crystal.clear();
-  liquid_crystal.setCursor(2, 2);
+  liquid_crystal.setCursor(2, 1);
   liquid_crystal.print("Waiting for data");
+  liquid_crystal.setCursor(14, 3);
+  liquid_crystal.print("CB:");
+  print_decimal_value(hardware::get_batt_dv());
 }
 
-void lcd::lcd_update(SensorMessage msg) {
+void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
   liquid_crystal.print("V1:");
   print_valve_position(msg.valve_1_state);
@@ -88,5 +89,7 @@ void lcd::lcd_update(SensorMessage msg) {
   print_decimal_value(msg.towerside_actuator_batt_mv / 100);
 
   liquid_crystal.print(" CB:");
-  print_decimal_value(get_batt_dv());
+  print_decimal_value(hardware::get_batt_dv());
 }
+
+} // namespace lcd

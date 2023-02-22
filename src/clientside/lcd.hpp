@@ -4,8 +4,10 @@
 #include "config.hpp"
 
 namespace lcd {
-void lcd_init();
-void lcd_update(SensorMessage msg);
+
+void setup();
+void update(SensorMessage msg);
+
 }; // namespace lcd
 
 #endif

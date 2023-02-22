@@ -7,8 +7,6 @@
 template<typename ST, typename RT>
 class Communicator {
   Stream &stream;
-  // Note, buffer size will depend on 
-  // the encoding and decoding protocol used
   static const size_t BUFF_SIZE = sizeof(RT) + 2;
   uint8_t receive_buffer[BUFF_SIZE];
 
@@ -20,15 +18,13 @@ public:
     stream{stream},
     reset_interval_ms{reset_interval_ms} {}
 
-  bool send(const ST &send_data) {
-    bool status = true;
+  void send(const ST &send_data) {
     const uint8_t *send_data_uint8 = reinterpret_cast<const uint8_t*>(&send_data);
 
     stream.write('W');
     stream.write(send_data_uint8, sizeof(ST));
     stream.write('R');
     stream.write('\n');
-    return status;
   }
 
   bool get_message(RT *dest) {
@@ -42,23 +38,23 @@ public:
     }
 
     memcpy(dest, receive_buffer + 1, sizeof(RT));
-
     buffer_position = 0;
     return true;
   }
 
   uint8_t seconds_since_last_contact() {
-    return (millis() - time_of_last_byte)/1000;
+    return (millis() - time_of_last_byte) / 1000;
   }
 
   bool read_byte() {
     if (stream.available()) {
       if (buffer_position < BUFF_SIZE) {
         receive_buffer[buffer_position++] = static_cast<uint8_t>(stream.read());
-    }
+      }
       time_of_last_byte = millis();
       return true;
-    } else if (millis() - time_of_last_byte > reset_interval_ms) {
+    }
+    if (millis() - time_of_last_byte > reset_interval_ms) {
       buffer_position = 0;
     }
 

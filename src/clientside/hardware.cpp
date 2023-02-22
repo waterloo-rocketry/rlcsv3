@@ -1,7 +1,7 @@
 #include "hardware.hpp"
 #include "common/mock_arduino.hpp"
 
-#include "lcd.hpp"
+#include "config.hpp"
 #include "pinout.hpp"
 
 namespace hardware {
@@ -20,8 +20,6 @@ void setup() {
   pinMode(pinout::LED_RED, OUTPUT);
   pinMode(pinout::LED_GREEN, OUTPUT);
   pinMode(pinout::LED_BLUE, OUTPUT);
-
-  lcd::lcd_init();
 }
 
 void set_missile_leds(bool value) {
@@ -51,6 +49,11 @@ void set_status_disconnected() {
 bool is_armed() {
   // Key switch pin gets pulled down to ground when the switch is active
   return !digitalRead(pinout::KEY_SWITCH_IN);
+}
+
+uint8_t get_batt_dv() {
+  return (analogRead(pinout::BATT_VOLTAGE) + config::BATT_SCALE_PRE_OFFSET) *
+         config::BATT_SCALE_NUM / config::BATT_SCALE_DEN;
 }
 
 } // namespace hardware

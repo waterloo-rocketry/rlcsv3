@@ -20,8 +20,4 @@ ActuatorMessage build_command_message() {
   };
 }
 
-const uint8_t COMMUNICATION_RESET_MS = 50;
-const uint8_t COMMUNICATION_TIMEOUT_S = 3;
-const uint8_t COMMAND_MESSAGE_INTERVAL_MS = 100;
-
 } // namespace config
