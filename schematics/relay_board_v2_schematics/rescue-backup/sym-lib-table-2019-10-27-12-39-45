@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name rlcsv3_modular-rescue)(type Legacy)(uri ${KIPRJMOD}/rlcsv3_modular-rescue.lib)(options "")(descr ""))
-  (lib (name custom)(type Legacy)(uri ${KIPRJMOD}/custom.lib)(options "")(descr ""))
-)
