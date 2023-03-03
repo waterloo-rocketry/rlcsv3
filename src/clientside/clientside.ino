@@ -26,7 +26,7 @@ void setup() {
     SensorMessage msg;
     if (communicator.get_message(&msg)) {
       any_messages_received = true;
-      lcd::lcd_update(msg);
+      lcd::update(msg);
     }
 
     bool has_contact = communicator.seconds_since_last_contact() <

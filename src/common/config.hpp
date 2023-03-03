@@ -23,7 +23,7 @@ struct ActuatorMessage {
   bool valve_1;
   bool valve_2;
   bool valve_3;
-  bool vent_valve;
+  bool valve_4;
   bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
@@ -50,9 +50,8 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition valve_1_state;
   ActuatorPosition::ActuatorPosition valve_2_state;
   ActuatorPosition::ActuatorPosition valve_3_state;
+  ActuatorPosition::ActuatorPosition valve_4_state;
   ActuatorPosition::ActuatorPosition injector_valve_state;
-  ActuatorPosition::ActuatorPosition vent_valve_state;
-  //ActuatorPosition::ActuatorPosition linear_actuator_state;
 };
 #pragma pack(pop)
 
