@@ -1,5 +1,6 @@
 #include "common/communication.hpp"
 #include "config.hpp"
+#include "pinout.hpp"
 #include "seven_seg.hpp"
 #include "sensors.hpp"
 
@@ -11,6 +12,11 @@ void setup() {
   Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
   seven_seg::setup();
   sensors::setup();
+
+  pinMode(pinout::COMM_STATUS_LED,OUTPUT);
+  pinMode(pinout::ARM_STATUS_LED,OUTPUT);
+  digitalWrite(pinout::COMM_STATUS_LED,false);
+  digitalWrite(pinout::ARM_STATUS_LED,false);
 
   Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
@@ -33,6 +39,8 @@ void setup() {
     // If we have got a message from clientside recently
     bool has_contact = communicator.seconds_since_last_contact() < config::COMMUNICATION_TIMEOUT_S;
     sensors::set_contact(has_contact);
+	digitalWrite(pinout::COMM_STATUS_LED,has_contact);
+	digitalWrite(pinout::ARM_STATUS_LED,sensors::is_armed());
     if (!has_contact) {
       // Override clientside's command and go to safe state
       current_cmd = config::build_safe_state(current_cmd);

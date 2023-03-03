@@ -21,6 +21,9 @@ const uint8_t SEVENSEG_F  = 46;
 const uint8_t SEVENSEG_G  = 40;
 const uint8_t SEVENSEG_DP = 44;
 
+const uint8_t COMM_STATUS_LED = 35;
+const uint8_t ARM_STATUS_LED = 36;
+
 } // namespace pinout
 
 #endif
