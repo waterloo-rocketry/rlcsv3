@@ -47,11 +47,7 @@ void set_digit(uint8_t digit, uint8_t value) {
   for (uint8_t i = 0; i < 7; i++) {
     digitalWrite(pinoutMap[i], !(digitMap[value] & (1 << i))); // segments active low
   }
-  if (digit == 0) {
-    digitalWrite(pinout::SEVENSEG_DP, sensors::has_contact()); // show point if there is a connection issue, active low
-  } else {
-    digitalWrite(pinout::SEVENSEG_DP, sensors::is_armed()); // show point if disarmed, active low
-  }
+  digitalWrite(pinout::SEVENSEG_DP, true);
   digitalWrite(pinout::SEVENSEG_D1, digit == 0); // select which digit to write to
   digitalWrite(pinout::SEVENSEG_D2, digit == 1);
 }

@@ -9,13 +9,10 @@ void setup() {
   pinMode(pinout::MAIN_BATT_VOLTAGE, INPUT);
   pinMode(pinout::ACTUATOR_BATT_VOLTAGE, INPUT);
   pinMode(pinout::KEY_SWITCH_IN, INPUT_PULLUP);
-  pinMode(pinout::KEY_SWITCH_GND, OUTPUT); // the other side of the key switch is just a digital pin
-  digitalWrite(pinout::KEY_SWITCH_GND, false);
 }
 
 bool is_armed() {
-  // Key switch pin gets pulled down to GND when the key is removed, aka we are armed
-  return !digitalRead(pinout::KEY_SWITCH_IN);
+  return digitalRead(pinout::KEY_SWITCH_IN);
 }
 
 bool contact;

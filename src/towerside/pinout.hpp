@@ -7,8 +7,7 @@ namespace pinout {
 
 const uint8_t MAIN_BATT_VOLTAGE = 4;
 const uint8_t ACTUATOR_BATT_VOLTAGE = 3;
-const uint8_t KEY_SWITCH_IN = 18;
-const uint8_t KEY_SWITCH_GND = 19;
+const uint8_t KEY_SWITCH_IN = 34;
 
 const uint8_t SEVENSEG_D1 = 43;
 const uint8_t SEVENSEG_D2 = 39;

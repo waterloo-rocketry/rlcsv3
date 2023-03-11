@@ -39,7 +39,7 @@ void setup() {
     // If we have got a message from clientside recently
     bool has_contact = communicator.seconds_since_last_contact() < config::COMMUNICATION_TIMEOUT_S;
     sensors::set_contact(has_contact);
-	digitalWrite(pinout::COMM_STATUS_LED,has_contact);
+	digitalWrite(pinout::COMM_STATUS_LED,sensors::has_contact());
 	digitalWrite(pinout::ARM_STATUS_LED,sensors::is_armed());
     if (!has_contact) {
       // Override clientside's command and go to safe state
