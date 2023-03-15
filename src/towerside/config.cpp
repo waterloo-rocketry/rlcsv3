@@ -49,7 +49,7 @@ SensorMessage build_sensor_message() {
     .valve_1_state = ACTUATORS.valve_1.get_state(),
     .valve_2_state = ACTUATORS.valve_2.get_state(),
     .valve_3_state = ACTUATORS.valve_3.get_state(),
-	.valve_4_state = ACTUATORS.valve_4.get_state(),
+    .valve_4_state = ACTUATORS.valve_4.get_state(),
     .injector_valve_state = ACTUATORS.injector_valve.get_state(),
   };
 }

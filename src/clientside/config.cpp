@@ -9,7 +9,7 @@ ActuatorMessage build_command_message() {
     .valve_1 = digitalRead(pinout::MISSILE_SWITCH_1),
     .valve_2 = digitalRead(pinout::MISSILE_SWITCH_2),
     .valve_3 = digitalRead(pinout::MISSILE_SWITCH_3),
-	.valve_4 = digitalRead(pinout::MISSILE_SWITCH_4),
+    .valve_4 = digitalRead(pinout::MISSILE_SWITCH_4),
     .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
     .ignition_primary = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) && \
                         !digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) && \
