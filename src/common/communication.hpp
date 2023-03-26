@@ -1,11 +1,10 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
-#include <stdint.h>
 #include "mock_arduino.hpp"
+#include <stdint.h>
 
-template<typename ST, typename RT>
-class Communicator {
+template <typename ST, typename RT> class Communicator {
   Stream &stream;
   static const size_t BUFF_SIZE = sizeof(RT) + 2;
   uint8_t receive_buffer[BUFF_SIZE];
@@ -13,13 +12,14 @@ class Communicator {
   size_t buffer_position = 0;
   unsigned long time_of_last_byte = 0;
   const unsigned long reset_interval_ms;
+
 public:
-  Communicator(Stream &stream, unsigned long reset_interval_ms):
-    stream{stream},
-    reset_interval_ms{reset_interval_ms} {}
+  Communicator(Stream &stream, unsigned long reset_interval_ms)
+      : stream{stream}, reset_interval_ms{reset_interval_ms} {}
 
   void send(const ST &send_data) {
-    const uint8_t *send_data_uint8 = reinterpret_cast<const uint8_t*>(&send_data);
+    const uint8_t *send_data_uint8 =
+        reinterpret_cast<const uint8_t *>(&send_data);
 
     stream.write('W');
     stream.write(send_data_uint8, sizeof(ST));
@@ -42,7 +42,7 @@ public:
     return true;
   }
 
-  uint8_t seconds_since_last_contact() {
+  uint16_t seconds_since_last_contact() {
     return (millis() - time_of_last_byte) / 1000;
   }
 
