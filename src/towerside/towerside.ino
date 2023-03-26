@@ -1,76 +1,59 @@
-#include "common/mock_arduino.hpp"
-#include "common/communication/receiver.hpp"
-#include "common/communication/sender.hpp"
-#include "common/tickable.hpp"
+#include "common/communication.hpp"
 #include "config.hpp"
-#include "command_handler.hpp"
-#include "daq.hpp"
-#include "hardware.hpp"
 #include "pinout.hpp"
-#include "telemetry.hpp"
+#include "seven_seg.hpp"
+#include "sensors.hpp"
 
 void setup() {
-  // Set up hardware
-  Hardware::setup();
-  // Initialize configuration arrays (actuators, sensors, safe states)
-  Config::setup();
-  // Connect to client side of the Serial port
-  Serial.println("I'm alive");
-  auto connection = Communication::SerialConnection(Serial2); // 2
-  // Define handles for commands from client side
-  auto actuators_handler = CommandHandler::Actuators(Config::get_safe_states(), Pinout::KEY_SWITCH_IN, Pinout::KEY_SWITCH_GND);
-  auto seven_seg_handler = CommandHandler::SevenSeg(Config::get_safe_states(), Pinout::KEY_SWITCH_IN); // TODO: Make a generic arming class to pass around
-  // Define how we will encode and decode messages to/from clientside
-  auto encoder = Communication::HexEncoder<SensorData>();
-  auto decoder = Communication::HexDecoder<ActuatorCommand>();
-  auto receiver = Communication::MessageReceiver<ActuatorCommand>(decoder, connection,
-                                                                  &actuators_handler,
-                                                                  &seven_seg_handler);
-  auto sender = Communication::MessageSender<SensorData>(encoder, connection);
+  Serial.begin(115200);
+  Serial2.begin(9600);
+  Wire.begin();
+  Wire.setClock(10000);
+  Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
+  seven_seg::setup();
+  sensors::setup();
 
-  auto canConnection = Communication::SerialConnection(Serial3);
-  auto canEncoder = Communication::CANEncoder();
-  auto canSender = Communication::MessageSender<Communication::CANMessage>(canEncoder, canConnection);
+  pinMode(pinout::COMM_STATUS_LED,OUTPUT);
+  pinMode(pinout::ARM_STATUS_LED,OUTPUT);
+  digitalWrite(pinout::COMM_STATUS_LED,false);
+  digitalWrite(pinout::ARM_STATUS_LED,false);
 
-  auto towerside_state_sensor = static_cast<Sensor::TowersideState*>(Config::get_sensor(SensorID::towerside_state));
-
-  unsigned long last_message_sent = 0;
-  unsigned long last_can_message_dispatch = 0;
+  Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
+  unsigned long last_sensor_msg_time = 0;
+  // The current towerside state. Each tick we command all actuators to take the action specified by it
+  ActuatorMessage current_cmd = config::build_safe_state(ActuatorMessage());
+  ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
+  
+  // We loop here so that the variables defined above are in scope
   while (true) {
-    // Call the tick() methods on anything that inherits from Tickable
-    Tickable::trigger_tick();
-    // If we haven't heard from client side in a while
-    if (connection.seconds_since_contact() >= Config::TIME_TO_SAFE_STATE_S) {
-      // Go to safe states
-      receiver.force(Config::get_safe_states());
-      // Show that we can't contact client side on the 7-segment
-      actuators_handler.set_contact(false);
-      seven_seg_handler.set_contact(false);
-      towerside_state_sensor->set_contact(false);
-    } else {
-      // Show our connection to client side is fine on the 7-segment
-      actuators_handler.set_contact(true);
-      seven_seg_handler.set_contact(true);
-      towerside_state_sensor->set_contact(true);
+    communicator.read_byte();
+    ActuatorMessage new_cmd;
+    if (communicator.get_message(&new_cmd)) { // If we have a new message from clientside
+      // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
+      if (new_cmd == last_cmd && sensors::is_armed()) {
+        current_cmd = new_cmd;
+      }
+      last_cmd = new_cmd;
     }
-    // If we need to send our status (actuator states, currents, DAQ data) to client side
-    if (millis() - last_message_sent > Config::SEND_STATUS_INTERVAL_MS) {
-      last_message_sent = millis();
-      // Send stuff along
-      sender.send(DAQ::get_sensor_message());
-    }
-    if (millis() - last_can_message_dispatch > Config::CAN_DISPATCH_INTERVAL_MS) {
-      last_can_message_dispatch = millis();
 
-      const Communication::CANMessage *msg;
-      msg = static_cast<Actuator::RocketRadio*>(Config::get_actuator(ActuatorID::valve_3))->build_message();
-      if (msg != nullptr) { canSender.send(*msg); }
-      msg = static_cast<Actuator::RocketRadio*>(Config::get_actuator(ActuatorID::injector_valve))->build_message();
-      if (msg != nullptr) { canSender.send(*msg); }
-      msg = static_cast<Actuator::RocketRadio*>(Config::get_actuator(ActuatorID::remote_arming))->build_message();
-      if (msg != nullptr) { canSender.send(*msg); }
-      msg = static_cast<Actuator::RocketRadio*>(Config::get_actuator(ActuatorID::remote_disarming))->build_message();
-      if (msg != nullptr) { canSender.send(*msg); }
+    // If we have got a message from clientside recently
+    bool has_contact = communicator.seconds_since_last_contact() < config::COMMUNICATION_TIMEOUT_S;
+    sensors::set_contact(has_contact);
+    digitalWrite(pinout::COMM_STATUS_LED,sensors::has_contact());
+    digitalWrite(pinout::ARM_STATUS_LED,sensors::is_armed());
+    if (!has_contact) {
+      // Override clientside's command and go to safe state
+      current_cmd = config::build_safe_state(current_cmd);
+    }
+
+    config::apply(current_cmd);
+    seven_seg::display(current_cmd);
+    seven_seg::tick();
+
+    // Periodically send back our status
+    if (millis() > last_sensor_msg_time + config::SENSOR_MSG_INTERVAL_MS) {
+      last_sensor_msg_time = millis();
+      communicator.send(config::build_sensor_message());
     }
   }
 }

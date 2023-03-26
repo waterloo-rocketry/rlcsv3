@@ -16,10 +16,10 @@ unsigned long millis() {
   n += 80;
   return n;
 }
-uint16_t analogRead(uint8_t pin) {
+uint16_t analogRead(uint8_t pin __unused) {
   return 512;
 }
-bool digitalRead(uint8_t pin) {
+bool digitalRead(uint8_t pin __unused) {
   return false;
 }
 void digitalWrite(uint8_t pin, bool value) {

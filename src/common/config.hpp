@@ -1,66 +1,58 @@
 #ifndef COMMON_CONFIG_H
 #define COMMON_CONFIG_H
 
-#include <stdint.h>
+#include "mock_arduino.hpp"
+#include "shared_types.hpp"
 
-namespace ActuatorID {
+// These types act as generic containers for actuators and sensors respectively. This forces
+// code to expicitely refer to actuators and sensor by their names rather than generic indexes,
+// which then lets the compiler ensure that there are no mismatches.
+//
+// Note: The reason these are structs and not classes (and don't have constructors) is so we can use named struct initialization, ie:
+//    ActuatorMessage<bool> command = {
+//        .valve_1 = true,
+//        .valve_2 = false,
+//        ...etc
+//    };
+// When we compile with -Wextra, gcc will warn us about missing members.
 
-// not an enum class so we can use them to index arrays easily
-enum ActuatorID {
-  valve_1,
-  valve_2,
-  valve_3,
-  linear_actuator,
-  injector_valve,
-  ignition_primary,
-  ignition_secondary,
-  remote_arming,
-  remote_disarming,
-  NUM_ACTUATORS // keep this at the end, its value becomes the number of actuator IDs before it
+// Disable struct field padding
+; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
+#pragma pack(push, 1)
+struct ActuatorMessage {
+  bool valve_1;
+  bool valve_2;
+  bool valve_3;
+  bool valve_4;
+  bool injector_valve;
+  bool ignition_primary;
+  bool ignition_secondary;
+  //bool linear_actuator;
+  //<custom remote arming enum> remote_arming;
+
+  bool operator==(const ActuatorMessage &other) const {
+    return !memcmp(this, &other, sizeof(ActuatorMessage));
+  }
 };
 
-} // namespace ActuatorID
-
-using ActuatorID::NUM_ACTUATORS; // Bring into the global scope
-
-namespace SensorID {
-
-// not an enum class so we can use them to index arrays easily
-enum SensorID {
-  // Battery voltages
-  towerside_main_batt_mv,
-  towerside_actuator_batt_mv,
+struct SensorMessage {
+  // Battery Voltages
+  uint16_t towerside_main_batt_mv;
+  uint16_t towerside_actuator_batt_mv;
   // Actuator health
-  healthy_actuators_count,
-  towerside_state,
+  uint16_t error_code;
+  bool towerside_armed;
+  bool has_contact;
   // Ignition currents
-  ignition_primary_ma,
-  ignition_secondary_ma,
+  uint16_t ignition_primary_ma;
+  uint16_t ignition_secondary_ma;
   // Actuator states
-  valve_1_state,
-  valve_2_state,
-  //valve_3_state,
-  linear_actuator_state,
-  //injector_valve_state,
-/*
-  // Comp DAQ values
-  fill_tank_psi,
-  fill_line_psi,
-  rocket_tank_psi,
-  rocket_mass_kg,
-  // RocketCAN data
-  canbus_boards_connected,
-  canbus_is_powered,
-  canbus_errors_detected,
-  canbus_battery_mv,
-  vent_battery_mv,
-*/
-
-  NUM_SENSORS // keep this at the end, it stores the total number of sensors
+  ActuatorPosition::ActuatorPosition valve_1_state;
+  ActuatorPosition::ActuatorPosition valve_2_state;
+  ActuatorPosition::ActuatorPosition valve_3_state;
+  ActuatorPosition::ActuatorPosition valve_4_state;
+  ActuatorPosition::ActuatorPosition injector_valve_state;
 };
-
-} // namespace SensorID
-
-using SensorID::NUM_SENSORS;
+#pragma pack(pop)
 
 #endif

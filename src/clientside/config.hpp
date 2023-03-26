@@ -1,24 +1,21 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "switches.hpp"
-#include "channels.hpp"
 #include "common/config.hpp"
+#include <stdint.h>
 
-namespace Config {
+namespace config {
 
-// All config variables defined in the .cpp
-extern const uint16_t SEND_STATUS_INTERVAL_MS;
-extern const uint16_t MESSAGE_WARNING_INTERVAL_S;
-extern const uint16_t BATT_SCALE_PRE_OFFSET;
+ActuatorMessage build_command_message();
 
-extern const uint16_t BATT_SCALE_NUM;
-extern const uint16_t BATT_SCALE_DEN;
+constexpr unsigned long COMMAND_MESSAGE_INTERVAL_MS = 100;
+constexpr unsigned long COMMUNICATION_RESET_MS = 50;
+constexpr uint16_t COMMUNICATION_TIMEOUT_S = 3;
 
-void setup();
-Switch::Switch *get_switch(ActuatorID::ActuatorID id);
-Channel::Channel *get_channel(SensorID::SensorID id);
+constexpr uint16_t BATT_SCALE_PRE_OFFSET = -11;
+constexpr uint16_t BATT_SCALE_NUM = 1;
+constexpr uint16_t BATT_SCALE_DEN = 7;
 
-}
+} // namespace config
 
 #endif

@@ -1,24 +1,20 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "actuators.hpp"
-#include "sensors.hpp"
+#include <stdint.h>
+
 #include "common/config.hpp"
 
-namespace Config {
+namespace config {
 
-// All config variables defined in the .cpp
-extern const uint16_t SEND_STATUS_INTERVAL_MS;
-extern const uint16_t TIME_TO_SAFE_STATE_S;
-extern const uint16_t ACTUATOR_DISPATCH_INTERVAL_MS;
-extern const uint16_t CAN_DISPATCH_INTERVAL_MS;
+void apply(const ActuatorMessage &command);
+ActuatorMessage build_safe_state(const ActuatorMessage &current_state);
+SensorMessage build_sensor_message();
 
-void setup();
-Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id);
-Sensor::Sensor *get_sensor(SensorID::SensorID id);
+constexpr uint16_t COMMUNICATION_TIMEOUT_S = 10; // Go to safe state after this many seconds without contact
+constexpr unsigned long SENSOR_MSG_INTERVAL_MS = 100; // Rate to send sensor messages at
+constexpr unsigned long COMMUNICATION_RESET_MS = 50; // maximum time between successive characters in the same message
 
-const ActuatorCommand &get_safe_states();
-
-}
+} // namespace config
 
 #endif

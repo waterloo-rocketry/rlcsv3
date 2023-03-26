@@ -1,69 +1,57 @@
-#include "common/mock_arduino.hpp"
+#include "actuators.hpp"
 #include "config.hpp"
-#include "pinout.hpp"
-#include "telemetry.hpp"
+#include "errors.hpp"
+#include "sensors.hpp"
 
-namespace Config {
+namespace config {
 
-// How often to send our status (valve states, currents, DAQ data) to clientside
-const uint16_t SEND_STATUS_INTERVAL_MS = 300;
-// Go to safe state if we haven't heard from clientside in this long
-const uint16_t TIME_TO_SAFE_STATE_S = 10;
-// How often to send commands to the actuators
-const uint16_t ACTUATOR_DISPATCH_INTERVAL_MS = 100;
-// How often to send commands over the CAN bus
-const uint16_t CAN_DISPATCH_INTERVAL_MS = 300;
+struct Actuators {
+  actuator::I2C valve_1 {1};
+  actuator::I2C valve_2 {2};
+  actuator::I2C valve_3 {3};
+  actuator::I2C valve_4 {4};
+  actuator::I2C injector_valve {5};
+  actuator::Ignition ignition_primary {6};
+  actuator::Ignition ignition_secondary {7};
+} ACTUATORS;
 
-Actuator::Actuator *actuators[NUM_ACTUATORS];
-Sensor::Sensor *sensors[NUM_SENSORS];
-ActuatorCommand safe_states;
-
-// Initialize the actuators and sensors arrays, along with default and safe states.
-void setup() {
-  actuators[ActuatorID::valve_1] = new Actuator::I2C(1);
-  actuators[ActuatorID::valve_2] = new Actuator::I2C(2);
-  actuators[ActuatorID::valve_3] = new Actuator::RocketActuator(0);
-  actuators[ActuatorID::linear_actuator] = new Actuator::I2C(3);
-  actuators[ActuatorID::injector_valve] = new Actuator::RocketActuator(1);
-  actuators[ActuatorID::ignition_primary] = new Actuator::SingleIgnition(4);
-  actuators[ActuatorID::ignition_secondary] = new Actuator::SingleIgnition(5);
-  actuators[ActuatorID::remote_arming] = new Actuator::RemoteArming(false);
-  actuators[ActuatorID::remote_disarming] = new Actuator::RemoteArming(true);
-
-  safe_states.set_actuator(ActuatorID::valve_1, false);
-  safe_states.set_actuator(ActuatorID::valve_2, true);
-  safe_states.set_actuator(ActuatorID::valve_3, false);
-  safe_states.set_actuator(ActuatorID::linear_actuator, false);
-  safe_states.set_actuator(ActuatorID::injector_valve, false);
-  safe_states.set_actuator(ActuatorID::ignition_primary, false);
-  safe_states.set_actuator(ActuatorID::ignition_secondary, false);
-  safe_states.set_actuator(ActuatorID::remote_arming, false);
-  safe_states.set_actuator(ActuatorID::remote_disarming, false);
-
-  // analog scaling numbers come from ramping through battery voltages and making a line of best fit
-  sensors[SensorID::towerside_main_batt_mv] = new Sensor::Analog(Pinout::MAIN_BATT_VOLTAGE, 48, 17, 127);
-  sensors[SensorID::towerside_actuator_batt_mv] = new Sensor::Analog(Pinout::ACTUATOR_BATT_VOLTAGE, 48, 17, 0);
-  sensors[SensorID::healthy_actuators_count] = new Sensor::HealthyActuators(actuators);
-  sensors[SensorID::towerside_state] = new Sensor::TowersideState(Pinout::KEY_SWITCH_IN);
-  sensors[SensorID::ignition_primary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_primary], 1);
-  sensors[SensorID::ignition_secondary_ma] = new Sensor::ActuatorCurrent(actuators[ActuatorID::ignition_secondary], 1);
-  sensors[SensorID::valve_1_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_1]);
-  sensors[SensorID::valve_2_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::valve_2]);
-  sensors[SensorID::linear_actuator_state] = new Sensor::ActuatorPosition(actuators[ActuatorID::linear_actuator]);
+void apply(const ActuatorMessage &command) {
+  ACTUATORS.valve_1.set(command.valve_1);
+  ACTUATORS.valve_2.set(!command.valve_2);
+  ACTUATORS.valve_3.set(!command.valve_3);
+  ACTUATORS.valve_4.set(command.valve_4);
+  ACTUATORS.injector_valve.set(command.injector_valve);
+  ACTUATORS.ignition_primary.set(command.ignition_primary);
+  ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
 }
 
-Actuator::Actuator *get_actuator(ActuatorID::ActuatorID id) {
-  if (id >= NUM_ACTUATORS) return nullptr;
-  return actuators[id];
+ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
+  return ActuatorMessage {
+    .valve_1 = false,
+    .valve_2 = false,
+    .valve_3 = false,
+    .valve_4 = false,
+    .injector_valve = current_state.injector_valve,
+    .ignition_primary = false,
+    .ignition_secondary = false,
+  };
 }
 
-Sensor::Sensor *get_sensor(SensorID::SensorID id) {
-  if (id > NUM_SENSORS) return nullptr;
-  return sensors[id];
+SensorMessage build_sensor_message() {
+  return SensorMessage {
+    .towerside_main_batt_mv = sensors::get_main_batt_mv(),
+    .towerside_actuator_batt_mv = sensors::get_actuator_batt_mv(),
+    .error_code = errors::pop(),
+    .towerside_armed = sensors::is_armed(),
+    .has_contact = sensors::has_contact(),
+    .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(1),
+    .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(1),
+    .valve_1_state = ACTUATORS.valve_1.get_state(),
+    .valve_2_state = ACTUATORS.valve_2.get_state(),
+    .valve_3_state = ACTUATORS.valve_3.get_state(),
+    .valve_4_state = ACTUATORS.valve_4.get_state(),
+    .injector_valve_state = ACTUATORS.injector_valve.get_state(),
+  };
 }
 
-const ActuatorCommand &get_safe_states() {
-  return safe_states;
-}
-
-}
+} // namespace config

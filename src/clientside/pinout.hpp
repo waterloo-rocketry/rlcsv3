@@ -1,9 +1,9 @@
-#ifndef PINOUT_H
-#define PINOUT_H
+#ifndef PINOUT_HPP
+#define PINOUT_HPP
 
 #include <stdint.h>
 
-namespace Pinout {
+namespace pinout {
 
 // Analog input for clientside's (divided) battery voltage
 const uint8_t BATT_VOLTAGE = 0;
@@ -36,32 +36,20 @@ const uint8_t LED_GREEN = 12;
 const uint8_t LED_BLUE = 13;
 
 // LEDs inside the missile switches to show the armed state
-const uint8_t MISSILE_LEDS[] = {
-  69,
-  68,
-  67,
-  66,
-  65,
-  64,
-  63,
-  62,
-  61,
-  60,
-  59
-};
+const uint8_t MISSILE_LEDS[] = {69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59};
 
 // Seven segment display on the power board
 const uint8_t SEVENSEG_D1 = 47;
 const uint8_t SEVENSEG_D2 = 46;
-const uint8_t SEVENSEG_A  = 39;
-const uint8_t SEVENSEG_B  = 40;
-const uint8_t SEVENSEG_C  = 42;
-const uint8_t SEVENSEG_D  = 44;
-const uint8_t SEVENSEG_E  = 43;
-const uint8_t SEVENSEG_F  = 41;
-const uint8_t SEVENSEG_G  = 38;
+const uint8_t SEVENSEG_A = 39;
+const uint8_t SEVENSEG_B = 40;
+const uint8_t SEVENSEG_C = 42;
+const uint8_t SEVENSEG_D = 44;
+const uint8_t SEVENSEG_E = 43;
+const uint8_t SEVENSEG_F = 41;
+const uint8_t SEVENSEG_G = 38;
 const uint8_t SEVENSEG_DP = 45;
 
-}
+} // namespace pinout
 
 #endif

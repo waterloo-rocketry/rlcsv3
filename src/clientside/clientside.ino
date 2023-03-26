@@ -1,72 +1,55 @@
-#include "common/mock_arduino.hpp"
-#include "common/communication/receiver.hpp"
-#include "common/communication/sender.hpp"
-#include "common/tickable.hpp"
+#include "common/communication.hpp"
 #include "config.hpp"
-#include "data_handlers.hpp"
-#include "daq.hpp"
 #include "hardware.hpp"
-#include "pinout.hpp"
+#include "lcd.hpp"
 
 void setup() {
-  Hardware::setup(); // set up hardware
-  // blue LED to show we are starting up
-  digitalWrite(Pinout::LED_BLUE, true);
-  // initialize configuration arrays (switches, channels)
-  Config::setup();
-  // connect to towerside on the Serial port
-  auto connection = Communication::SerialConnection(Serial3); // 3
-  // Define the fields to be shown on the LCD. Right now these are just shown in order, 3 per line.
-  auto lcd_handler = DataHandler::LCDDisplay(
-    SensorID::valve_1_state,
-    SensorID::valve_2_state,
-    SensorID::linear_actuator_state,
-    SensorID::ignition_primary_ma,
-    SensorID::ignition_secondary_ma,
-    SensorID::healthy_actuators_count,
-    SensorID::towerside_state,
-    SensorID::towerside_main_batt_mv,
-    SensorID::towerside_actuator_batt_mv
-  );
-  // Define how we will encode and decode messages to/from towerside
-  auto encoder = Communication::HexEncoder<ActuatorCommand>();
-  auto decoder = Communication::HexDecoder<SensorData>();
-  auto receiver = Communication::MessageReceiver<SensorData>(decoder, connection,
-    &lcd_handler
-  );
-  auto sender = Communication::MessageSender<ActuatorCommand>(encoder, connection);
+  hardware::setup();
+  hardware::set_status_startup();
+  lcd::setup();
 
-  unsigned long last_message_sent = 0;
-  // store the latest armed switch positions so that we can keep commanding towerside if we get disarmed
-  ActuatorCommand last_switch_positions;
-  digitalWrite(Pinout::LED_BLUE, false); // startup finished
+  Serial.begin(115200); // USB connection
+  Serial3.begin(9600);  // Towerside connection
 
+  Communicator<ActuatorMessage, SensorMessage> communicator{
+      Serial3, config::COMMUNICATION_RESET_MS};
+  unsigned long last_sent_time = 0;
+  ActuatorMessage last_switch_positions;
+
+  hardware::set_status_disconnected();
+  // Avoid the status showing as connected for the first few seconds on
+  // startup if we aren't really
+  bool any_messages_received = false;
+  bool has_been_armed = false;
   while (true) {
-    // Call the tick() methods on anything that inherits from Tickable
-    Tickable::trigger_tick();
-    // Time to send a command to towerside?
-    if (millis() - last_message_sent > Config::SEND_STATUS_INTERVAL_MS) {
-      last_message_sent = millis();
-
-      // If we are armed, read the state of the switches. Otherwise just send the most recent state when we were armed
-      bool armed = !digitalRead(Pinout::KEY_SWITCH_IN);
-      if (armed) {
-        last_switch_positions = DAQ::get_switch_positions();
-      }
-      // Light up the switch LEDs if we are armed
-      for (uint8_t i = 0; i < sizeof(Pinout::MISSILE_LEDS) / sizeof(Pinout::MISSILE_LEDS[0]); i++) {
-        digitalWrite(Pinout::MISSILE_LEDS[i], !armed); // active low
-      }
-
-      sender.send(last_switch_positions);
+    communicator.read_byte();
+    SensorMessage msg;
+    if (communicator.get_message(&msg)) {
+      any_messages_received = true;
+      lcd::update(msg);
     }
-    // Make the LED red if we haven't heard from towerside recently. Green otherwise.
-    bool towerside_alive = connection.seconds_since_contact() < Config::MESSAGE_WARNING_INTERVAL_S;
-    digitalWrite(Pinout::LED_GREEN, towerside_alive);
-    digitalWrite(Pinout::LED_RED, !towerside_alive);
+
+    bool has_contact = communicator.seconds_since_last_contact() <
+                       config::COMMUNICATION_TIMEOUT_S;
+    if (has_contact && any_messages_received) {
+      hardware::set_status_connected();
+    } else {
+      hardware::set_status_disconnected();
+    }
+
+    bool armed = hardware::is_armed();
+    hardware::set_missile_leds(armed);
+    if (armed) {
+      last_switch_positions = config::build_command_message();
+      has_been_armed = true;
+    }
+
+    if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS) && has_been_armed) {
+      // condition: passed COMMAND_MESSAGE_INTERVAL_MS since last time sent message AND client side has been armed before
+      last_sent_time = millis();
+      communicator.send(last_switch_positions);
+    }
   }
 }
 
-// We should never get here but arduino makes us include it.
-void loop() {
-}
+void loop() {}
