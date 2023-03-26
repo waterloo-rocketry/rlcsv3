@@ -1142,7 +1142,7 @@
     (property "Value" "Arduino_Mega2560_Shield" (id 1) (at 146.05 153.67 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Footprint" "" (id 2) (at 163.83 18.415 0)
+    (property "Footprint" "rlcs_power_footprints:Arduino_Mega2560_Shield" (id 2) (at 163.83 18.415 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (property "Datasheet" "" (id 3) (at 163.83 18.415 0)
