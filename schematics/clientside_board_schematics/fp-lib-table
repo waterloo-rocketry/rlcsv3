@@ -1,3 +1,5 @@
 (fp_lib_table
+  (version 7)
   (lib (name "rlcs_power_footprints")(type "KiCad")(uri "${KIPRJMOD}/rlcs_power_footprints.pretty")(options "")(descr ""))
+  (lib (name "clientside_footprints")(type "KiCad")(uri "${KIPRJMOD}/clientside_footprints.pretty")(options "")(descr ""))
 )
