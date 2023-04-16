@@ -991,7 +991,6 @@
     )
   )
 
-
   (junction (at 92.71 105.41) (diameter 0) (color 0 0 0 0)
     (uuid 036e48f3-43b3-4dc2-a3ad-a443a926f9fc)
   )
@@ -1659,7 +1658,7 @@
     (property "Value" "LCD Connector" (at 233.045 80.645 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x16_P2.54mm_Vertical" (at 242.57 102.87 0)
+    (property "Footprint" "clientside_footprints:NHD-0420DZ-FSW-FBW" (at 242.57 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 242.57 102.87 0)
