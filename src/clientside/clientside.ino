@@ -42,10 +42,13 @@ void setup() {
     if (armed) {
       last_switch_positions = config::build_command_message();
       has_been_armed = true;
+    } else if (!has_been_armed) {
+      last_switch_positions = config::build_default_message();
     }
 
-    if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS) && has_been_armed) {
-      // condition: passed COMMAND_MESSAGE_INTERVAL_MS since last time sent message AND client side has been armed before
+    if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS)) {
+      // condition: passed COMMAND_MESSAGE_INTERVAL_MS since last time sent
+      // message AND client side has been armed before
       last_sent_time = millis();
       communicator.send(last_switch_positions);
     }
