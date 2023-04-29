@@ -31,7 +31,7 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .valve_2 = false,
       .valve_3 = false,
       .vent_valve_2 = false,
-      .injector_valve = false,
+      .injector_valve = current_state.injector_valve,
       .ignition_primary = false,
       .ignition_secondary = false,
   };
