@@ -4,3 +4,6 @@
 [submodule "src/tower_arduino_ide/serialization_lib"]
 	path = src/tower_arduino_ide/serialization_lib
 	url = git@github.com:waterloo-rocketry/serialization_lib.git
+[submodule "schematics/clientside_board_schematics/team_logo"]
+	path = schematics/clientside_board_schematics/team_logo
+	url = https://github.com/waterloo-rocketry/kicad-footprints.git
