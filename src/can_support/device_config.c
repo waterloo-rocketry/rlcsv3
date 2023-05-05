@@ -1,6 +1,6 @@
 // CONFIG1L
 #pragma config FEXTOSC = HS     // External Oscillator Selection (HS (crystal oscillator) above 8 MHz; PFM set to high power)
-#pragma config RSTOSC = HFINTOSC_1MHZ    // Reset Oscillator Selection->HFINTOSC with HFFRQ = 4 MHz and CDIV = 4:1
+#pragma config RSTOSC = EXTOSC    // Reset Oscillator Selection->HFINTOSC with HFFRQ = 4 MHz and CDIV = 4:1
 
 // CONFIG1H
 #pragma config CLKOUTEN = OFF    // Clock out Enable bit->CLKOUT function is disabled

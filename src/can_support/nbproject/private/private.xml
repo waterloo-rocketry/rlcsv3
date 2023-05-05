@@ -4,13 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/main.c</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/system_init.c</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/nbproject/Makefile-default.mk</file>
+            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/i2c.c</file>
+            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/canlib/util/safe_ring_buffer.c</file>
             <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/timer.c</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/nbproject/Makefile-impl.mk</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/device_config.c</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/system_init.h</file>
-            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/canlib/util/timing_util.h</file>
+            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/i2c.h</file>
+            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/canlib/util/can_tx_buffer.c</file>
+            <file>file:/C:/Users/domen/MPLABXProjects/code_can_support.X/canlib/pic18f26k83/pic18f26k83_can.c</file>
         </group>
     </open-files>
 </project-private>

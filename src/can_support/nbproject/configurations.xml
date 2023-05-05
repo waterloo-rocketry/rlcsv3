@@ -1,12 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="65">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="canlib" displayName="canlib" projectFiles="true">
+      <logicalFolder name="dspic33epxxxgp50x"
+                     displayName="dspic33epxxxgp50x"
+                     projectFiles="true">
+        <itemPath>canlib/dspic33epxxxgp50x/dspic33epxxxgp50x_can.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="mcp2515" displayName="mcp2515" projectFiles="true">
+        <itemPath>canlib/mcp2515/mcp_2515.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="pic18f26k83" displayName="pic18f26k83" projectFiles="true">
+        <itemPath>canlib/pic18f26k83/pic18f26k83_can.h</itemPath>
+        <itemPath>canlib/pic18f26k83/pic18f26k83_timer.h</itemPath>
+        <itemPath>canlib/pic18f26k83/pic18f26k83_can.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="tests" displayName="tests" projectFiles="true">
+        <logicalFolder name="dspic33ep256gp502.X"
+                       displayName="dspic33ep256gp502.X"
+                       projectFiles="true">
+        </logicalFolder>
+        <logicalFolder name="mcp2515_picdev.X"
+                       displayName="mcp2515_picdev.X"
+                       projectFiles="true">
+          <logicalFolder name="mcc_generated_files"
+                         displayName="mcc_generated_files"
+                         projectFiles="true">
+            <logicalFolder name="usb" displayName="usb" projectFiles="true">
+              <logicalFolder name="utilities" displayName="utilities" projectFiles="true">
+              </logicalFolder>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/fixed_address_memory.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_ch9.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_common.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_device.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_device_cdc.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_device_config.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_device_local.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_hal.h</itemPath>
+              <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/usb/usb_hal_pic16f1.h</itemPath>
+            </logicalFolder>
+            <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/device_config.h</itemPath>
+            <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/interrupt_manager.h</itemPath>
+            <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/mcc.h</itemPath>
+            <itemPath>canlib/tests/mcp2515_picdev.X/mcc_generated_files/pin_manager.h</itemPath>
+          </logicalFolder>
+          <itemPath>canlib/tests/mcp2515_picdev.X/spi.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="pic18f26k83_picdev.X"
+                       displayName="pic18f26k83_picdev.X"
+                       projectFiles="true">
+        </logicalFolder>
+        <logicalFolder name="unit" displayName="unit" projectFiles="true">
+          <logicalFolder name="target_pic18.X"
+                         displayName="target_pic18.X"
+                         projectFiles="true">
+          </logicalFolder>
+          <itemPath>canlib/tests/unit/build_can_message.h</itemPath>
+          <itemPath>canlib/tests/unit/can_buffering_layer.h</itemPath>
+          <itemPath>canlib/tests/unit/can_common_tests.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="util" displayName="util" projectFiles="true">
+        <itemPath>canlib/util/can_rcv_buffer.h</itemPath>
+        <itemPath>canlib/util/can_tx_buffer.h</itemPath>
+        <itemPath>canlib/util/safe_ring_buffer.h</itemPath>
+        <itemPath>canlib/util/timing_util.h</itemPath>
+        <itemPath>canlib/util/can_rcv_buffer.c</itemPath>
+        <itemPath>canlib/util/can_tx_buffer.c</itemPath>
+        <itemPath>canlib/util/safe_ring_buffer.c</itemPath>
+        <itemPath>canlib/util/timing_util.c</itemPath>
+      </logicalFolder>
+      <itemPath>canlib/can.h</itemPath>
+      <itemPath>canlib/canlib.h</itemPath>
+      <itemPath>canlib/can_common.h</itemPath>
+      <itemPath>canlib/message_types.h</itemPath>
+      <itemPath>canlib/can_common.c</itemPath>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>system_init.h</itemPath>
       <itemPath>timer.h</itemPath>
       <itemPath>pin_manager.h</itemPath>
+      <itemPath>i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,6 +96,7 @@
       <itemPath>main.c</itemPath>
       <itemPath>device_config.c</itemPath>
       <itemPath>timer.c</itemPath>
+      <itemPath>i2c.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -26,6 +104,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -34,7 +115,7 @@
         <targetDevice>PIC18F26K83</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.35</languageToolchainVersion>
         <platform>3</platform>
@@ -75,7 +156,7 @@
         <property key="call-prologues" value="false"/>
         <property key="default-bitfield-type" value="true"/>
         <property key="default-char-type" value="true"/>
-        <property key="define-macros" value=""/>
+        <property key="define-macros" value="BOARD_UNIQUE_ID=BOARD_ID_RLCS"/>
         <property key="disable-optimizations" value="true"/>
         <property key="extra-include-directories" value=""/>
         <property key="favor-optimization-for" value="-speed,+space"/>
@@ -149,6 +230,95 @@
         <property key="program-the-device-with-default-config-words" value="true"/>
         <property key="remove-unused-sections" value="true"/>
       </HI-TECH-LINK>
+      <PICkit3PlatformTool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-ffff"/>
+        <property key="poweroptions.powerenable" value="true"/>
+        <property key="programmertogo.imagename" value=""/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmspeed" value="2"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value="310000-3103ff"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="5.0"/>
+      </PICkit3PlatformTool>
+      <Tool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-ffff"/>
+        <property key="poweroptions.powerenable" value="true"/>
+        <property key="programmertogo.imagename" value=""/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmspeed" value="2"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value="310000-3103ff"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="5.0"/>
+      </Tool>
       <XC8-CO>
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>

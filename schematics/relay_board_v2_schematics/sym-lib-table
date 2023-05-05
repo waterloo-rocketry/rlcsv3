@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "rlcsv3_modular-rescue")(type "Legacy")(uri "${KIPRJMOD}/rlcsv3_modular-rescue.lib")(options "")(descr ""))
+)
