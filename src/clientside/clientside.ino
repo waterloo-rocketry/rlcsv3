@@ -14,13 +14,12 @@ void setup() {
   Communicator<ActuatorMessage, SensorMessage> communicator{
       Serial3, config::COMMUNICATION_RESET_MS};
   unsigned long last_sent_time = 0;
-  ActuatorMessage last_switch_positions;
+  ActuatorMessage last_switch_positions = config::build_default_message();
 
   hardware::set_status_disconnected();
   // Avoid the status showing as connected for the first few seconds on
   // startup if we aren't really
   bool any_messages_received = false;
-  bool has_been_armed = false;
   while (true) {
     communicator.read_byte();
     SensorMessage msg;
@@ -41,11 +40,10 @@ void setup() {
     hardware::set_missile_leds(armed);
     if (armed) {
       last_switch_positions = config::build_command_message();
-      has_been_armed = true;
     }
 
-    if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS) && has_been_armed) {
-      // condition: passed COMMAND_MESSAGE_INTERVAL_MS since last time sent message AND client side has been armed before
+    if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS)) {
+      // condition: passed COMMAND_MESSAGE_INTERVAL_MS since last time sent message
       last_sent_time = millis();
       communicator.send(last_switch_positions);
     }

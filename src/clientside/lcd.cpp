@@ -68,8 +68,7 @@ void update(SensorMessage msg) {
   liquid_crystal.print(" IS:");
   print_decimal_value(msg.ignition_secondary_ma / 10);
 
-  liquid_crystal.print(" V4:");
-  print_valve_position(msg.valve_4_state);
+  liquid_crystal.print("     ");
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("EC:");

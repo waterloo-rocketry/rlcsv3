@@ -7,6 +7,7 @@
 namespace config {
 
 ActuatorMessage build_command_message();
+ActuatorMessage build_default_message();
 
 constexpr unsigned long COMMAND_MESSAGE_INTERVAL_MS = 100;
 constexpr unsigned long COMMUNICATION_RESET_MS = 50;
