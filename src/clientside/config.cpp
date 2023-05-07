@@ -19,6 +19,7 @@ ActuatorMessage build_command_message() {
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
+      .rocket_power = digitalRead(pinout::MISSILE_SWITCH_5),
   };
 }
 
@@ -31,6 +32,7 @@ ActuatorMessage build_default_message() {
       .injector_valve = false,
       .ignition_primary = false,
       .ignition_secondary = false,
+      .rocket_power = false,
   };
 }
 

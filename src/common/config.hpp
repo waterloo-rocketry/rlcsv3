@@ -27,6 +27,7 @@ struct ActuatorMessage {
   bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
+  bool rocket_power;
   //bool linear_actuator;
   //<custom remote arming enum> remote_arming;
 

@@ -58,5 +58,5 @@ build
 debug
 dist
 # nbproject
-src/relay_pic/nbproject/Makefile-*
-src/relay_pic/nbproject/private
+**/nbproject/Makefile-*
+**/nbproject/private

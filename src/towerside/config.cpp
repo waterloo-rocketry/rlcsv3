@@ -13,6 +13,7 @@ struct Actuators {
   actuator::I2C injector_valve{5};
   actuator::Ignition ignition_primary{6};
   actuator::Ignition ignition_secondary{7};
+  actuator::I2C rocket_power {8};
 } ACTUATORS;
 
 void apply(const ActuatorMessage &command) {
@@ -23,6 +24,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
+  ACTUATORS.rocket_power.set(command.rocket_power);
 }
 
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
@@ -34,6 +36,7 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .injector_valve = current_state.injector_valve,
       .ignition_primary = false,
       .ignition_secondary = false,
+      .rocket_power = false,
   };
 }
 
