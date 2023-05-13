@@ -24,7 +24,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
-  ACTUATORS.rocket_power.set(command.rocket_power);
+  ACTUATORS.rocket_power.set(!command.rocket_power); // the firmware inverts the command, so un-invert it ("vert" it) here
 }
 
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
