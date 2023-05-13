@@ -23,12 +23,12 @@ struct ActuatorMessage {
   bool valve_1;
   bool valve_2;
   bool valve_3;
-  bool vent_valve_2;
-  bool injector_valve;
+  bool valve_4;
+  //bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
   bool rocket_power;
-  //bool linear_actuator;
+  bool fill_disconnect;
   //<custom remote arming enum> remote_arming;
 
   bool operator==(const ActuatorMessage &other) const {
@@ -51,7 +51,8 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition valve_1_state;
   ActuatorPosition::ActuatorPosition valve_2_state;
   ActuatorPosition::ActuatorPosition valve_3_state;
-  ActuatorPosition::ActuatorPosition injector_valve_state;
+  ActuatorPosition::ActuatorPosition valve_4_state;
+  ActuatorPosition::ActuatorPosition fill_disconnect_state;
 };
 #pragma pack(pop)
 

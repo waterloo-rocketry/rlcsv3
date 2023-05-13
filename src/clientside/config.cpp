@@ -9,8 +9,8 @@ ActuatorMessage build_command_message() {
       .valve_1 = digitalRead(pinout::MISSILE_SWITCH_1),
       .valve_2 = digitalRead(pinout::MISSILE_SWITCH_2),
       .valve_3 = digitalRead(pinout::MISSILE_SWITCH_3),
-      .vent_valve_2 = digitalRead(pinout::MISSILE_SWITCH_4),
-      .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
+      .valve_4 = digitalRead(pinout::MISSILE_SWITCH_4),
+      //.injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .ignition_primary =
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
@@ -20,6 +20,7 @@ ActuatorMessage build_command_message() {
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
       .rocket_power = digitalRead(pinout::MISSILE_SWITCH_5),
+      .fill_disconnect = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
   };
 }
 
@@ -28,11 +29,12 @@ ActuatorMessage build_default_message() {
       .valve_1 = false,
       .valve_2 = false,
       .valve_3 = false,
-      .vent_valve_2 = false,
-      .injector_valve = false,
+      .valve_4 = false,
+      //.injector_valve = false,
       .ignition_primary = false,
       .ignition_secondary = false,
       .rocket_power = false,
+      .fill_disconnect = false,
   };
 }
 
