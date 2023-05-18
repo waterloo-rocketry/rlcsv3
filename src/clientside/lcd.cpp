@@ -68,7 +68,8 @@ void update(SensorMessage msg) {
   liquid_crystal.print(" IS:");
   print_decimal_value(msg.ignition_secondary_ma / 10);
 
-  liquid_crystal.print("     ");
+  liquid_crystal.print(" FD:");
+  print_valve_position(msg.fill_disconnect_state);
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("EC:");
