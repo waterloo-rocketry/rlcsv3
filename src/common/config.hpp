@@ -36,6 +36,8 @@ struct ActuatorMessage {
   }
 };
 
+ActuatorMessage build_safe_state(const ActuatorMessage &current_state);
+
 struct SensorMessage {
   // Battery Voltages
   uint16_t towerside_main_batt_mv;

@@ -8,7 +8,6 @@
 namespace config {
 
 void apply(const ActuatorMessage &command);
-ActuatorMessage build_safe_state(const ActuatorMessage &current_state);
 SensorMessage build_sensor_message();
 
 constexpr uint16_t COMMUNICATION_TIMEOUT_S = 10; // Go to safe state after this many seconds without contact
