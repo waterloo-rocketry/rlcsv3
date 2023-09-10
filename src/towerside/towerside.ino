@@ -1,3 +1,4 @@
+#include "common/config.cpp" // cursed subfolder compile
 #include "common/communication.hpp"
 #include "config.hpp"
 #include "pinout.hpp"
@@ -21,7 +22,7 @@ void setup() {
   Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
   // The current towerside state. Each tick we command all actuators to take the action specified by it
-  ActuatorMessage current_cmd = config::build_safe_state(ActuatorMessage());
+  ActuatorMessage current_cmd = build_safe_state(ActuatorMessage());
   ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
   
   // We loop here so that the variables defined above are in scope
@@ -43,7 +44,7 @@ void setup() {
     digitalWrite(pinout::ARM_STATUS_LED,sensors::is_armed());
     if (!has_contact) {
       // Override clientside's command and go to safe state
-      current_cmd = config::build_safe_state(current_cmd);
+      current_cmd = build_safe_state(current_cmd);
     }
 
     config::apply(current_cmd);

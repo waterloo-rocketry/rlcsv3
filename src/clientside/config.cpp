@@ -24,18 +24,4 @@ ActuatorMessage build_command_message() {
   };
 }
 
-ActuatorMessage build_default_message() {
-  return ActuatorMessage{
-      .valve_1 = false,
-      .valve_2 = false,
-      .valve_3 = false,
-      .valve_4 = false,
-      //.injector_valve = false,
-      .ignition_primary = false,
-      .ignition_secondary = false,
-      .rocket_power = false,
-      .fill_disconnect = false,
-  };
-}
-
 } // namespace config

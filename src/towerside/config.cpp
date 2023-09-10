@@ -19,28 +19,14 @@ struct Actuators {
 
 void apply(const ActuatorMessage &command) {
   ACTUATORS.valve_1.set(command.valve_1);
-  ACTUATORS.valve_2.set(!command.valve_2);
+  ACTUATORS.valve_2.set(command.valve_2);
   ACTUATORS.valve_3.set(command.valve_3);
-  ACTUATORS.valve_4.set(command.valve_4);
+  ACTUATORS.valve_4.set(!command.valve_4); // inverted solenoid
   //ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
   ACTUATORS.fill_disconnect.set(command.fill_disconnect);
-  ACTUATORS.rocket_power.set(!command.rocket_power); // the firmware inverts the command, so un-invert it ("vert" it) here
-}
-
-ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
-  return ActuatorMessage{
-      .valve_1 = false,
-      .valve_2 = false,
-      .valve_3 = false,
-      .valve_4 = false,
-      //.injector_valve = current_state.injector_valve,
-      .ignition_primary = false,
-      .ignition_secondary = false,
-      .rocket_power = false,
-      .fill_disconnect = false,
-  };
+  ACTUATORS.rocket_power.set(!command.rocket_power); // the firmware inverts the command, so un-invert it here
 }
 
 SensorMessage build_sensor_message() {
