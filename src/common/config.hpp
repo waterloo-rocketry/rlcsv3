@@ -24,7 +24,8 @@ struct ActuatorMessage {
   bool valve_2;
   bool valve_3;
   bool valve_4;
-  //bool injector_valve;
+  bool vent_valve;
+  bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
   bool rocket_power;

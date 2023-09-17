@@ -21,7 +21,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.valve_1.set(command.valve_1);
   ACTUATORS.valve_2.set(command.valve_2);
   ACTUATORS.valve_3.set(command.valve_3);
-  ACTUATORS.valve_4.set(!command.valve_4); // inverted solenoid
+  ACTUATORS.valve_4.set(command.valve_4);
   //ACTUATORS.injector_valve.set(command.injector_valve);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
