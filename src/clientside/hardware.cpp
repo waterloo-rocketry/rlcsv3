@@ -8,14 +8,10 @@ namespace hardware {
 
 void setup() {
   pinMode(pinout::KEY_SWITCH_IN, INPUT_PULLUP);
-  pinMode(pinout::KEY_SWITCH_GND, OUTPUT);
-  digitalWrite(pinout::KEY_SWITCH_GND, false);
 
   pinMode(pinout::MISSILE_SWITCH_IGNITION_FIRE, INPUT_PULLUP);
 
-  for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS) / sizeof(pinout::MISSILE_LEDS[0])); i++) {
-    pinMode(pinout::MISSILE_LEDS[i], OUTPUT);
-  }
+  pinMode(pinout::MISSILE_LED, OUTPUT);
 
   pinMode(pinout::LED_RED, OUTPUT);
   pinMode(pinout::LED_GREEN, OUTPUT);
@@ -23,9 +19,7 @@ void setup() {
 }
 
 void set_missile_leds(bool value) {
-  for (unsigned int i = 0; i < (sizeof(pinout::MISSILE_LEDS) / sizeof(pinout::MISSILE_LEDS[0])); i++) {
-    digitalWrite(pinout::MISSILE_LEDS[i], !value); // Active low
-  }
+  digitalWrite(pinout::MISSILE_LED, value); // Active high
 }
 
 void set_status_startup() {
