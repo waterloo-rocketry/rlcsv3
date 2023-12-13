@@ -36,10 +36,21 @@ void print_valve_position(uint16_t pos) {
 
 void print_decimal_value(unsigned int num) {
   char buf[4];
-  snprintf(buf, 4, "%03d", num);
+  snprintf(buf, 4, "%03u", num);
   liquid_crystal.print(buf);
 }
 
+void print_decimal_value_wide(unsigned int num) {
+  char buf[7];
+  snprintf(buf, 7, "%05u", num);
+  buf[5] = buf[4];
+  buf[4] = buf[3];
+  buf[3] = buf[2];
+  buf[2] = '.';
+  buf[6] = '\0';
+  liquid_crystal.print(buf);
+}
+	
 void setup() {
   liquid_crystal.begin(20, 4);
   liquid_crystal.clear();
@@ -63,13 +74,12 @@ void update(SensorMessage msg) {
 
   liquid_crystal.setCursor(0, 1);
   liquid_crystal.print("IP:");
-  print_decimal_value(msg.ignition_primary_ma / 10);
-
+  print_decimal_value_wide(msg.ignition_primary_ma);
+ 
   liquid_crystal.print(" IS:");
-  print_decimal_value(msg.ignition_secondary_ma / 10);
+  print_decimal_value_wide(msg.ignition_secondary_ma);
 
-  liquid_crystal.print(" FD:");
-  print_valve_position(msg.fill_disconnect_state);
+  liquid_crystal.print(" ");
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("EC:");

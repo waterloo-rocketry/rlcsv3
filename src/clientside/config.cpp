@@ -9,8 +9,7 @@ ActuatorMessage build_command_message() {
       .valve_1 = digitalRead(pinout::MISSILE_SWITCH_1),
       .valve_2 = digitalRead(pinout::MISSILE_SWITCH_2),
       .valve_3 = digitalRead(pinout::MISSILE_SWITCH_3),
-      .valve_4 = digitalRead(pinout::MISSILE_SWITCH_4),
-      .vent_valve = digitalRead(pinout::MISSILE_SWITCH_5),
+      .vent_valve = digitalRead(pinout::MISSILE_SWITCH_4),
       .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .ignition_primary =
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
@@ -20,8 +19,6 @@ ActuatorMessage build_command_message() {
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
-      .rocket_power = digitalRead(pinout::MISSILE_SWITCH_7),
-      .fill_disconnect = digitalRead(pinout::MISSILE_SWITCH_6),
   };
 }
 
