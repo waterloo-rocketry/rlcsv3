@@ -20,10 +20,11 @@
 ; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
 struct ActuatorMessage {
-  bool valve_1;
-  bool valve_2;
-  bool valve_3;
-  bool vent_valve;
+  bool ov101; // Ox fill
+  bool ov102; // Ox drain
+  bool nv101; // N2 Fill
+  bool ov201; // Vent MV
+  bool ov202; // Vent Solenoid
   bool injector_valve;
   bool ignition_primary;
   bool ignition_secondary;
@@ -47,9 +48,10 @@ struct SensorMessage {
   uint16_t ignition_primary_ma;
   uint16_t ignition_secondary_ma;
   // Actuator states
-  ActuatorPosition::ActuatorPosition valve_1_state;
-  ActuatorPosition::ActuatorPosition valve_2_state;
-  ActuatorPosition::ActuatorPosition valve_3_state;
+  ActuatorPosition::ActuatorPosition ov101_state;
+  ActuatorPosition::ActuatorPosition ov102_state;
+  ActuatorPosition::ActuatorPosition nv101_state;
+  ActuatorPosition::ActuatorPosition ov201_state;
 };
 #pragma pack(pop)
 

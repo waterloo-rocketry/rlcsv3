@@ -39,17 +39,6 @@ void print_decimal_value(unsigned int num) {
   snprintf(buf, 4, "%03u", num);
   liquid_crystal.print(buf);
 }
-
-void print_decimal_value_wide(unsigned int num) {
-  char buf[7];
-  snprintf(buf, 7, "%05u", num);
-  buf[5] = buf[4];
-  buf[4] = buf[3];
-  buf[3] = buf[2];
-  buf[2] = '.';
-  buf[6] = '\0';
-  liquid_crystal.print(buf);
-}
 	
 void setup() {
   liquid_crystal.begin(20, 4);
@@ -61,25 +50,35 @@ void setup() {
   print_decimal_value(hardware::get_batt_dv());
 }
 
+/* Layout:
+   ----------------------
+   |O1:OPN O2:CLS N1:UNK|
+   |V1:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
+   |EC:000 CON:Y ARM:Y  |
+   |TM:123 TA:118 CB:126| Those voltage are in tenth(increment 0.1)
+   ----------------------
+*/
+
 void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
-  liquid_crystal.print("V1:");
-  print_valve_position(msg.valve_1_state);
+  liquid_crystal.print("O1:");
+  print_valve_position(msg.ov101_state);
 
-  liquid_crystal.print(" V2:");
-  print_valve_position(msg.valve_2_state);
+  liquid_crystal.print(" O2:");
+  print_valve_position(msg.ov102_state);
 
-  liquid_crystal.print(" V3:");
-  print_valve_position(msg.valve_3_state);
+  liquid_crystal.print(" N1:");
+  print_valve_position(msg.nv101_state);
 
   liquid_crystal.setCursor(0, 1);
-  liquid_crystal.print("IP:");
-  print_decimal_value_wide(msg.ignition_primary_ma);
+  liquid_crystal.print("V1:");
+  print_valve_position(msg.ov201_state);
+
+  liquid_crystal.print(" IP:");
+  print_decimal_value(msg.ignition_primary_ma / 10);
  
   liquid_crystal.print(" IS:");
-  print_decimal_value_wide(msg.ignition_secondary_ma);
-
-  liquid_crystal.print(" ");
+  print_decimal_value(msg.ignition_secondary_ma / 10);
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("EC:");
