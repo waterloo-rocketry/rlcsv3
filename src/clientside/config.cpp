@@ -10,7 +10,7 @@ ActuatorMessage build_command_message() {
       .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),
       .nv101 = digitalRead(pinout::MISSILE_SWITCH_3),
       .ov201 = digitalRead(pinout::MISSILE_SWITCH_4),
-	  .ov202 = digitalRead(pinout::MISSILE_SWITCH_5),
+      .ov202 = digitalRead(pinout::MISSILE_SWITCH_5),
       .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .ignition_primary =
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&

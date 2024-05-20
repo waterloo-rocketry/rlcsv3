@@ -39,7 +39,7 @@ SensorMessage build_sensor_message() {
       .ov101_state = ACTUATORS.ov101.get_state(),
       .ov102_state = ACTUATORS.ov102.get_state(),
       .nv101_state = ACTUATORS.nv101.get_state(),
-	  .ov201_state = ACTUATORS.ov201.get_state(),
+      .ov201_state = ACTUATORS.ov201.get_state(),
   };
 }
 
