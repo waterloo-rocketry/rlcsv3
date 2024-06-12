@@ -544,7 +544,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "rlcsv3_modular.net",
-      "plot": "",
+      "plot": "../../gerbers/heating_control_gerbers/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
