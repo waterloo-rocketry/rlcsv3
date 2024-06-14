@@ -6,7 +6,7 @@ uint16_t i2cSlaveSend; // Data to be sent on i2c
 
 void i2c_slave_init(uint16_t address) {
     SSPSTAT = 0x80;
-    SSPADDbits.SSPADD = address << 1; //7 bit addressing, LSB is unused
+    SSPADDbits.SSPADD = address << 1; // 7 bit addressing, LSB is unused
     SSPCON = 0x36;
     SSPCON2 = 0x01;
     TRISB1 = 1; // SDA
@@ -29,18 +29,22 @@ void i2c_handle_interrupt(void) {
     if ((SSPCONbits.SSPOV) || (SSPCONbits.WCOL)) {
         temp = SSPBUF; // Read the previous value to clear the buffer
         SSPCONbits.SSPOV = 0; // Clear the overflow flag
-        SSPCONbits.WCOL = 0;   // Clear the collision bit
+        SSPCONbits.WCOL = 0; // Clear the collision bit
         SSPCONbits.CKP = 1;
         return;
     }
 
     // If last byte was Address + write
     if (!SSPSTATbits.D_nA && !SSPSTATbits.R_nW) {
-        while(!BF && timeout < TIMEOUT) timeout++;
+        while (!BF && timeout < TIMEOUT) {
+            timeout++;
+        }
         temp = SSP1BUF;
         BF = 0;
         SSPCONbits.CKP = 1;
-        while(!BF && timeout < TIMEOUT) timeout++;
+        while (!BF && timeout < TIMEOUT) {
+            timeout++;
+        }
         i2cSlaveRecv = SSP1BUF;
         if (timeout < TIMEOUT) {
             // LSB is power
@@ -63,19 +67,29 @@ void i2c_handle_interrupt(void) {
             read_pointer = 0;
         }
         temp = SSPBUF;
-        
+
         if (read_pointer == 0) {
-            SSPBUF = (get_lim2() << 1) | get_lim1();
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) & 0xFF);
         } else if (read_pointer == 1) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) & 0xFF);
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) >> 8);
         } else if (read_pointer == 2) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_1) >> 8);
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) & 0xFF);
         } else if (read_pointer == 3) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) & 0xFF);
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) >> 8);
         } else if (read_pointer == 4) {
-            SSPBUF = (uint8_t)(get_analog_inputs(CURR_SENSE_2) >> 8);
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) & 0xFF);
+        } else if (read_pointer == 5) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) >> 8);
+        } else if (read_pointer == 6) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) & 0xFF);
+        } else if (read_pointer == 7) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) >> 8);
+        } else if (read_pointer == 8) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) & 0xFF);
+        } else if (read_pointer == 9) {
+            SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) >> 8);
         }
-        
+
         read_pointer++;
         SSPCONbits.CKP = 1;
     }
