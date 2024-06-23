@@ -5,9 +5,9 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .ov101 = false,
       .ov102 = false,
       .nv101 = false,
-      .ov201 = true,
-      .ov202 = true,
-      .injector_valve = current_state.injector_valve,
+      .nv102 = true,
+	  .fill_disconnect = current_state.fill_disconnect,
+	  .rocket_power = current_state.rocket_power,
       .ignition_primary = false,
       .ignition_secondary = false,
   };

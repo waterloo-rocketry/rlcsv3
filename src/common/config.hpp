@@ -23,9 +23,9 @@ struct ActuatorMessage {
   bool ov101; // Ox Fill
   bool ov102; // Ox Drain
   bool nv101; // N2 Purge
-  bool ov201; // Vent Isolation
-  bool ov202; // Vent Solenoid
-  bool injector_valve;
+  bool nv102; // N2 Drain (Solenoid)
+  bool fill_disconnect;
+  bool rocket_power;
   bool ignition_primary;
   bool ignition_secondary;
 
@@ -51,7 +51,6 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition ov101_state;
   ActuatorPosition::ActuatorPosition ov102_state;
   ActuatorPosition::ActuatorPosition nv101_state;
-  ActuatorPosition::ActuatorPosition ov201_state;
 };
 #pragma pack(pop)
 
