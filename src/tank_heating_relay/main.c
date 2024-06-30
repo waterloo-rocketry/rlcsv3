@@ -26,10 +26,8 @@ static void __interrupt() interrupt_handler(void) {
 void read_dip_inputs(void) {
     uint16_t new_dip = 0;
     // RB2 and RB3 used for voltage sensing
-    // new_dip |= (!PORTBbits.RB3) ? (1) : 0;       //LSB
-    // new_dip |= (!PORTBbits.RB2) ? (1 << 1) : 0;
-    new_dip |= (!PORTBbits.RB0) ? (1 << 2) : 0;
-    new_dip |= (!PORTAbits.RA4) ? (1 << 3) : 0; // MSB
+    new_dip |= (!PORTAbits.RA4) ? (1) : 0;
+    new_dip |= (!PORTBbits.RB0) ? (1 << 1) : 0; // MSB
     new_dip |= (1 << 4);
     if (dip_inputs != new_dip) {
         dip_inputs = new_dip;
