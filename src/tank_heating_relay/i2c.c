@@ -55,8 +55,8 @@ void i2c_handle_interrupt(void) {
             } else {
                 set_power_off();
             }
-			// Bit 1-3 are register select
-			i2c_reg_select = (i2cSlaveRecv >> 1) & 7;
+            // Bit 1-3 are register select
+            i2c_reg_select = (i2cSlaveRecv >> 1) & 7;
         }
         SSPCONbits.CKP = 1;
         BF = 0;
@@ -72,47 +72,47 @@ void i2c_handle_interrupt(void) {
         }
         temp = SSPBUF;
 
-		if(read_pointer == 0) {
-			switch(i2c_reg_select) {
-			case 0:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) & 0xFF);
-				break;
-			case 1:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) & 0xFF);
-				break;
-			case 2:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) & 0xFF);
-				break;
-			case 3:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) & 0xFF);
-				break;
-			case 4:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) & 0xFF);
-				break;
+        if(read_pointer == 0) {
+            switch(i2c_reg_select) {
+            case 0:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) & 0xFF);
+                break;
+            case 1:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) & 0xFF);
+                break;
+            case 2:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) & 0xFF);
+                break;
+            case 3:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) & 0xFF);
+                break;
+            case 4:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) & 0xFF);
+                break;
                 default:
-			    SSPBUF = 0;
-			}
-		} else if (read_pointer == 1) {
-			switch(i2c_reg_select) {
-			case 0:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) >> 8);
-				break;
-			case 1:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) >> 8);
-				break;
-			case 2:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) >> 8);
-				break;
-			case 3:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) >> 8);
-				break;
-			case 4:
-				SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) >> 8);
-				break;
+                SSPBUF = 0;
+            }
+        } else if (read_pointer == 1) {
+            switch(i2c_reg_select) {
+            case 0:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_THERMISTOR) >> 8);
+                break;
+            case 1:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_CURR_SENSE) >> 8);
+                break;
+            case 2:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_24V_SENSE) >> 8);
+                break;
+            case 3:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_N) >> 8);
+                break;
+            case 4:
+                SSPBUF = (uint8_t)(get_analog_inputs(CHANNEL_KELVIN_P) >> 8);
+                break;
             default:
-			    SSPBUF = 0;
-			}
-		}
+                SSPBUF = 0;
+            }
+        }
 
         read_pointer++;
         SSPCONbits.CKP = 1;

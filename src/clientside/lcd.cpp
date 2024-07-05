@@ -33,13 +33,12 @@ void print_valve_position(uint16_t pos) {
   }
 };
 
-
 void print_decimal_value(unsigned int num) {
   char buf[4];
   snprintf(buf, 4, "%03u", num);
   liquid_crystal.print(buf);
 }
-	
+
 void setup() {
   liquid_crystal.begin(20, 4);
   liquid_crystal.clear();

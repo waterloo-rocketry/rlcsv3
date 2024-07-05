@@ -54,9 +54,9 @@ void setup(void) {
     ANSELAbits.ANSA3 = 1; // Thermistor
 
     ANSELB = 0; // DISABLE ANALOG INPUT ON PORT B
-	ANSELBbits.ANSB2 = 1; // Kelvin Sense
-	ANSELBbits.ANSB3 = 1; // Kelvin Sense
-	
+    ANSELBbits.ANSB2 = 1; // Kelvin Sense
+    ANSELBbits.ANSB3 = 1; // Kelvin Sense
+
     // Configure FVR module
     // b[7] enables FVR
     // b[1:0] sets the reference to 4.096
@@ -90,9 +90,9 @@ int main(int argc, char **argv) {
 
         read_analog_inputs(CHANNEL_THERMISTOR);
         read_analog_inputs(CHANNEL_CURR_SENSE);
-		read_analog_inputs(CHANNEL_24V_SENSE);
-		read_analog_inputs(CHANNEL_KELVIN_N);
-		read_analog_inputs(CHANNEL_KELVIN_P);
+        read_analog_inputs(CHANNEL_24V_SENSE);
+        read_analog_inputs(CHANNEL_KELVIN_N);
+        read_analog_inputs(CHANNEL_KELVIN_P);
 
         read_dip_inputs(); // Check if dip switch input has changed, re-init i2c if so
     }

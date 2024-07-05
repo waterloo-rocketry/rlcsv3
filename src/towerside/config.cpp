@@ -13,7 +13,6 @@ struct Actuators {
   actuator::I2C fill_disconnect{5};
   actuator::Ignition ignition_primary{6};
   actuator::Ignition ignition_secondary{7};
-  actuator::I2C rocket_power{8};
   actuator::Heater heater_1{16};
   actuator::Heater heater_2{17};
 } ACTUATORS;
@@ -26,7 +25,6 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.fill_disconnect.set(command.fill_disconnect);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
-  ACTUATORS.rocket_power.set(!command.rocket_power); // inverted
   ACTUATORS.heater_1.set(command.tank_heating_1);
   ACTUATORS.heater_2.set(command.tank_heating_2);
 }
@@ -43,18 +41,18 @@ SensorMessage build_sensor_message() {
       .ov101_state = ACTUATORS.ov101.get_state(),
       .ov102_state = ACTUATORS.ov102.get_state(),
       .nv201_state = ACTUATORS.nv201.get_state(),
-	  .nv202_state = ACTUATORS.nv202.get_state(),
-	  .heater_thermistor_1 = ACTUATORS.heater_1.get_thermistor(),
-	  .heater_thermistor_2 = ACTUATORS.heater_2.get_thermistor(),
-	  .heater_current_ma_1 = ACTUATORS.heater_1.get_current_ma(),
-	  .heater_current_ma_2 = ACTUATORS.heater_2.get_current_ma(),
-	  .heater_batt_mv_1 = ACTUATORS.heater_1.get_batt_voltage(),
-	  .heater_batt_mv_2 = ACTUATORS.heater_2.get_batt_voltage(),
-	  .heater_kelvin_low_mv_1 = ACTUATORS.heater_1.get_kelvin_low_voltage(),
-	  .heater_kelvin_low_mv_2 = ACTUATORS.heater_2.get_kelvin_low_voltage(),
-	  .heater_kelvin_high_mv_1 = ACTUATORS.heater_1.get_kelvin_high_voltage(),
-	  .heater_kelvin_high_mv_2 = ACTUATORS.heater_2.get_kelvin_high_voltage()
-	  };
+      .nv202_state = ACTUATORS.nv202.get_state(),
+      .heater_thermistor_1 = ACTUATORS.heater_1.get_thermistor(),
+      .heater_thermistor_2 = ACTUATORS.heater_2.get_thermistor(),
+      .heater_current_ma_1 = ACTUATORS.heater_1.get_current_ma(),
+      .heater_current_ma_2 = ACTUATORS.heater_2.get_current_ma(),
+      .heater_batt_mv_1 = ACTUATORS.heater_1.get_batt_voltage(),
+      .heater_batt_mv_2 = ACTUATORS.heater_2.get_batt_voltage(),
+      .heater_kelvin_low_mv_1 = ACTUATORS.heater_1.get_kelvin_low_voltage(),
+      .heater_kelvin_low_mv_2 = ACTUATORS.heater_2.get_kelvin_low_voltage(),
+      .heater_kelvin_high_mv_1 = ACTUATORS.heater_1.get_kelvin_high_voltage(),
+      .heater_kelvin_high_mv_2 = ACTUATORS.heater_2.get_kelvin_high_voltage()
+  };
 }
 
 } // namespace config

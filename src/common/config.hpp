@@ -22,13 +22,12 @@
 struct ActuatorMessage {
   bool ov101; // Ox Fill
   bool ov102; // Ox Drain
-  bool nv201; // N2 Purge
-  bool nv202; // N2 Drain (Solenoid)
+  bool nv201; // N2 Fill
+  bool nv202; // N2 Drain
   bool vent_valve; // To DAQ laptop only
   bool injector_valve; // To DAQ laptop only
   bool fill_dump_valve; // To DAQ laptop only
   bool fill_disconnect;
-  bool rocket_power;
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
