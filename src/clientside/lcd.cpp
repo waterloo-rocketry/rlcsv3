@@ -52,8 +52,8 @@ void setup() {
 /* Layout:
    ----------------------
    |O1:OPN O2:CLS N1:UNK|
-   |V1:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
-   |EC:000 CON:Y ARM:Y  |
+   |N2:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
+   |E:000 CON:Y ARM:Y tH|
    |TM:123 TA:118 CB:126| Those voltage are in tenth(increment 0.1)
    ----------------------
 */
@@ -80,7 +80,7 @@ void update(SensorMessage msg) {
   print_decimal_value(msg.ignition_secondary_ma / 10);
 
   liquid_crystal.setCursor(0, 2);
-  liquid_crystal.print("EC:");
+  liquid_crystal.print("E:");
   print_decimal_value(msg.error_code);
 
   liquid_crystal.print(" CON:");
@@ -88,6 +88,18 @@ void update(SensorMessage msg) {
 
   liquid_crystal.print(" ARM:");
   liquid_crystal.print(msg.towerside_armed ? "Y" : "N");
+
+  if(msg.heater_kelvin_high_mv_1 >= 16000) {
+    liquid_crystal.print(" T");
+  }else{
+    liquid_crystal.print(" t");
+  }
+
+  if(msg.heater_kelvin_high_mv_2 >= 16000) {
+    liquid_crystal.print("H");
+  }else{
+    liquid_crystal.print("h");
+  }
 
   liquid_crystal.setCursor(0, 3);
   liquid_crystal.print("TM:");

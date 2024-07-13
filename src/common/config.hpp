@@ -24,9 +24,9 @@ struct ActuatorMessage {
   bool ov102; // Ox Drain
   bool nv201; // N2 Fill
   bool nv202; // N2 Drain
-  bool vent_valve; // To DAQ laptop only
-  bool injector_valve; // To DAQ laptop only
-  bool fill_dump_valve; // To DAQ laptop only
+  bool vent_valve; // OV-302, To DAQ laptop only
+  bool injector_valve; // IJV-301, To DAQ laptop only
+  bool fill_dump_valve; // OV-301, To DAQ laptop only
   bool fill_disconnect;
   bool tank_heating_1;
   bool tank_heating_2;
