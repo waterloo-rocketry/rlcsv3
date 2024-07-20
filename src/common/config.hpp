@@ -57,8 +57,10 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition nv201_state;
   ActuatorPosition::ActuatorPosition nv202_state;
   // Tank Heating
-  uint16_t heater_thermistor_1;
-  uint16_t heater_thermistor_2;
+  uint16_t heater_thermistor_1_vltg;
+  uint16_t heater_thermistor_2_vltg;
+  uint16_t heater_thermistor_1_temp;
+  uint16_t heater_thermistor_2_temp;
   uint16_t heater_current_ma_1;
   uint16_t heater_current_ma_2;
   uint16_t heater_batt_mv_1;
