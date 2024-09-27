@@ -20,14 +20,10 @@
 ; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
 struct ActuatorMessage {
-  bool ov101; // Ox Fill
-  bool ov102; // Ox Drain
-  bool nv201; // N2 Fill
-  bool nv202; // N2 Drain
-  bool vent_valve; // OV-302, To DAQ laptop only
+  bool ov101; // OV-101 Ox Fill
+  bool ov102; // OV-102 Ox Drain
+  bool ov103; // OV-103 Ox Vent
   bool injector_valve; // IJV-301, To DAQ laptop only
-  bool fill_dump_valve; // OV-301, To DAQ laptop only
-  bool fill_disconnect;
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
@@ -54,8 +50,7 @@ struct SensorMessage {
   // Actuator states
   ActuatorPosition::ActuatorPosition ov101_state;
   ActuatorPosition::ActuatorPosition ov102_state;
-  ActuatorPosition::ActuatorPosition nv201_state;
-  ActuatorPosition::ActuatorPosition nv202_state;
+  ActuatorPosition::ActuatorPosition ov103_state;
   // Tank Heating
   uint16_t heater_thermistor_1;
   uint16_t heater_thermistor_2;
