@@ -8,7 +8,8 @@ ActuatorMessage build_command_message() {
   return ActuatorMessage{
       .ov101 = digitalRead(pinout::MISSILE_SWITCH_1),
       .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),
-      .ov103 = digitalRead(pinout::MISSILE_SWITCH_6),
+      .ov103 = digitalRead(pinout::MISSILE_SWITCH_3),
+      .nv201 = digitalRead(pinout::MISSILE_SWITCH_4),
       .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
