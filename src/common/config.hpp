@@ -28,6 +28,7 @@ struct ActuatorMessage {
   bool tank_heating_2;
   bool ignition_primary;
   bool ignition_secondary;
+  bool ignition_fire;
 
   bool operator==(const ActuatorMessage &other) const {
     return !memcmp(this, &other, sizeof(ActuatorMessage));

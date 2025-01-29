@@ -21,8 +21,8 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.ov102.set(command.ov102);
   ACTUATORS.ov103.set(command.ov103);
   ACTUATORS.injector_value.set(command.injector_valve);
-  ACTUATORS.ignition_primary.set(command.ignition_primary);
-  ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
+  ACTUATORS.ignition_primary.set(command.ignition_primary && !command.ignition_secondary && !command.ignition_fire);
+  ACTUATORS.ignition_secondary.set(command.ignition_secondary && !command.ignition_primary && !command.ignition_fire);
   ACTUATORS.heater_1.set(command.tank_heating_1);
   ACTUATORS.heater_2.set(command.tank_heating_2);
 }

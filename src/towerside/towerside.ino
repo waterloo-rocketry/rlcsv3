@@ -24,7 +24,7 @@ void setup() {
   // The current towerside state. Each tick we command all actuators to take the action specified by it
   ActuatorMessage current_cmd = build_safe_state(ActuatorMessage());
   ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
-  
+
   // We loop here so that the variables defined above are in scope
   while (true) {
     communicator.read_byte();

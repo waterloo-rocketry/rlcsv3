@@ -10,5 +10,6 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .tank_heating_2 = false,
       .ignition_primary = false,
       .ignition_secondary = false,
+      .ignition_fire = false,
   };
 }
