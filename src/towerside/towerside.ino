@@ -4,6 +4,7 @@
 #include "pinout.hpp"
 #include "seven_seg.hpp"
 #include "sensors.hpp"
+#include "sequence.hpp"
 
 void setup() {
   Serial.begin(115200);
@@ -21,9 +22,12 @@ void setup() {
 
   Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
+  unsigned long config_start_time = 0;
   // The current towerside state. Each tick we command all actuators to take the action specified by it
   ActuatorMessage current_cmd = build_safe_state(ActuatorMessage());
   ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
+
+  enum sequence::State state = sequence::State::MANUAL;
 
   // We loop here so that the variables defined above are in scope
   while (true) {
@@ -47,9 +51,31 @@ void setup() {
       current_cmd = build_safe_state(current_cmd);
     }
 
-    config::apply(current_cmd);
-    seven_seg::display(current_cmd);
-    seven_seg::tick();
+    sequence::set_state(state, current_cmd, config_start_time);
+
+    switch (state) {
+        case sequence::State::MANUAL: {
+            config::apply(current_cmd);
+            seven_seg::display(current_cmd);
+            seven_seg::tick();
+
+        }
+        case sequence::State::AUTOMATIC: {
+            // Noting
+        }
+        case sequence::State::SEQUENCE1: {
+            if (sequence::apply_sequence_one(millis() - config_start_time)) {
+                state = sequence::State::MANUAL;
+            }
+        }
+        case sequence::State::SEQUENCE2: {
+            if (sequence::apply_sequence_two(millis() - config_start_time)) {
+                state = sequence::State::MANUAL;
+            }
+        }
+
+    }
+
 
     // Periodically send back our status
     if (millis() > last_sensor_msg_time + config::SENSOR_MSG_INTERVAL_MS) {
