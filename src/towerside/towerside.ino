@@ -55,9 +55,19 @@ void setup() {
 
     switch (state) {
         case sequence::State::MANUAL: {
-            config::apply(current_cmd);
-            seven_seg::display(current_cmd);
-            seven_seg::tick();
+          Serial.write("command.ignition_primary:");
+          Serial.write(current_cmd.ignition_primary ? "1" : "0");
+          Serial.write("\n");
+          Serial.write("command.ignition_secondary:");
+          Serial.write(current_cmd.ignition_secondary ? "1" : "0");
+          Serial.write("\n");
+          Serial.write("command.ignition_fire:");
+          Serial.write(current_cmd.ignition_fire ? "1" : "0");
+          Serial.write("\n");
+          
+          config::apply(current_cmd);
+          seven_seg::display(current_cmd);
+          seven_seg::tick();
 
         }
         case sequence::State::AUTOMATIC: {
