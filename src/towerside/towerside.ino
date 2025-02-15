@@ -55,6 +55,7 @@ void setup() {
 
     switch (state) {
         case sequence::State::MANUAL: {
+          Serial.write("Manual\n");
           config::apply(current_cmd);
           seven_seg::display(current_cmd);
           seven_seg::tick();
@@ -62,15 +63,18 @@ void setup() {
           break;
         }
         case sequence::State::AUTOMATIC: {
+          Serial.write("AUTOMATIC\n");
           break;
         }
         case sequence::State::SEQUENCE1: {
+          Serial.write("config 1");
           if (sequence::apply_sequence_one(millis() - config_start_time)) {
             state = sequence::State::MANUAL;
           }
           break;
         }
         case sequence::State::SEQUENCE2: {
+          Serial.write("config 2");
           if (sequence::apply_sequence_two(millis() - config_start_time)) {
             state = sequence::State::MANUAL;
           }

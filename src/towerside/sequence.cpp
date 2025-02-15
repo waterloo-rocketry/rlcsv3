@@ -41,6 +41,13 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
       }
     case SEQUENCE1:
       {
+        if (current_cmd.ignition_fire ||  // active low
+          !current_cmd.ignition_primary ||
+          current_cmd.ignition_secondary) {
+
+          state = AUTOMATIC;
+        }
+
         // If any thing changes, go to manual
         if (!current_cmd.injector_valve) {
           state = MANUAL;
@@ -49,6 +56,13 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
       }
     case SEQUENCE2:
       {
+        if (current_cmd.ignition_fire ||  // active low
+          current_cmd.ignition_primary ||
+          !current_cmd.ignition_secondary) {
+
+          state = AUTOMATIC;
+        }
+
         // If any thing changes, go to manual
         if (!current_cmd.injector_valve) {
           state = MANUAL;
@@ -58,9 +72,32 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
   }
 }
 
-const int len1 = 10;
-const int times1[] = { 0, 100, 200, 300, 400, 500, 600, 700, 800, 900 };
-const ActuatorMessage sequence1[] = {};  // SHould be the same length as above
+const int len1 = 3;
+const int times1[] = { 0, 5000, 6000};
+const ActuatorMessage sequence1[] = {
+  ActuatorMessage{
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  },
+  ActuatorMessage{
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  }
+};  // SHould be the same length as above
 
 bool apply_sequence_one(unsigned long delta_time) {
   int idx = 0;
@@ -74,9 +111,32 @@ bool apply_sequence_one(unsigned long delta_time) {
   return false;
 }
 
-const int len2 = 10;
-const int times2[] = { 0, 100, 200, 300, 400, 500, 600, 700, 800, 900 };
-const ActuatorMessage sequence2[] = {};  // SHould be the same length as above
+const int len2 = 3;
+const int times2[] = { 0, 3000, 4000};
+const ActuatorMessage sequence2[] = {
+  ActuatorMessage{
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  },
+  ActuatorMessage{
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  }
+};  // SHould be the same length as above
 
 bool apply_sequence_two(unsigned long delta_time) {
   int idx = 0;
