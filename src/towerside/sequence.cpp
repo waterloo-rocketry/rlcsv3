@@ -77,10 +77,12 @@ const ActuatorMessage sequence1[] = {
     false,
     false,
     false,
+    false,
     false
   },
   ActuatorMessage{
     true,
+    false,
     false,
     false,
     false,
@@ -104,6 +106,7 @@ const ActuatorMessage sequence2[] = {
     false,
     false,
     false,
+    false,
     false
   },
   ActuatorMessage{
@@ -115,7 +118,8 @@ const ActuatorMessage sequence2[] = {
     false,
     false,
     false,
-    false
+    false,
+    false,
   }
 };  // SHould be the same length as above
 

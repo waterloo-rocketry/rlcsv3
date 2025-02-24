@@ -14,6 +14,7 @@ struct Actuators {
   actuator::I2C FV102{7};
   actuator::I2C OV101v{16};
   actuator::I2C FV101v{17};
+  actuator::Ignition ignition{12};
 } ACTUATORS;
 
 void apply(const ActuatorMessage &command) {
@@ -25,6 +26,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.FV102.set(command.FV102);
   ACTUATORS.OV101v.set(command.OV101v);
   ACTUATORS.FV101v.set(command.FV101v);
+  ACTUATORS.ignition.set(command.ignition);
 }
 
 SensorMessage build_sensor_message() {
@@ -34,21 +36,15 @@ SensorMessage build_sensor_message() {
       .error_code = errors::pop(),
       .towerside_armed = sensors::is_armed(),
       .has_contact = sensors::has_contact(),
-      .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(1),
-      .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(1),
-      .ov101_state = ACTUATORS.ov101.get_state(),
-      .ov102_state = ACTUATORS.ov102.get_state(),
-      .ov103_state = ACTUATORS.ov103.get_state(),
-      .heater_thermistor_1 = ACTUATORS.heater_1.get_thermistor(),
-      .heater_thermistor_2 = ACTUATORS.heater_2.get_thermistor(),
-      .heater_current_ma_1 = ACTUATORS.heater_1.get_current_ma(),
-      .heater_current_ma_2 = ACTUATORS.heater_2.get_current_ma(),
-      .heater_batt_mv_1 = ACTUATORS.heater_1.get_batt_voltage(),
-      .heater_batt_mv_2 = ACTUATORS.heater_2.get_batt_voltage(),
-      .heater_kelvin_low_mv_1 = ACTUATORS.heater_1.get_kelvin_low_voltage(),
-      .heater_kelvin_low_mv_2 = ACTUATORS.heater_2.get_kelvin_low_voltage(),
-      .heater_kelvin_high_mv_1 = ACTUATORS.heater_1.get_kelvin_high_voltage(),
-      .heater_kelvin_high_mv_2 = ACTUATORS.heater_2.get_kelvin_high_voltage()
+      .ignition_ma = ACTUATORS.ignition.get_current_ma(0),
+      .NV102_state = ACTUATORS.NV102.get_state(),
+      .NV103_state = ACTUATORS.NV103.get_state(),
+      .NV104_state = ACTUATORS.NV104.get_state(),
+      .NV105_state = ACTUATORS.NV105.get_state(),
+      .OV102_state = ACTUATORS.NV105.get_state(),
+      .FV102_state = ACTUATORS.NV105.get_state(),
+      .OV101v_state = ACTUATORS.NV105.get_state(),
+      .FV101v_state = ACTUATORS.NV105.get_state()
   };
 }
 

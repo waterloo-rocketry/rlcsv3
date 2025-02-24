@@ -34,6 +34,7 @@ struct ActuatorMessage {
   bool sequence_a;
   bool sequence_b;
   bool start_sequence;
+  bool ignition;
 
   bool operator==(const ActuatorMessage &other) const {
     return !memcmp(this, &other, sizeof(ActuatorMessage));
@@ -51,23 +52,16 @@ struct SensorMessage {
   bool towerside_armed;
   bool has_contact;
   // Ignition currents
-  uint16_t ignition_primary_ma;
-  uint16_t ignition_secondary_ma;
+  uint16_t ignition_ma;
   // Actuator states
-  ActuatorPosition::ActuatorPosition ov101_state;
-  ActuatorPosition::ActuatorPosition ov102_state;
-  ActuatorPosition::ActuatorPosition ov103_state;
-  // Tank Heating
-  uint16_t heater_thermistor_1;
-  uint16_t heater_thermistor_2;
-  uint16_t heater_current_ma_1;
-  uint16_t heater_current_ma_2;
-  uint16_t heater_batt_mv_1;
-  uint16_t heater_batt_mv_2;
-  uint16_t heater_kelvin_low_mv_1;
-  uint16_t heater_kelvin_low_mv_2;
-  uint16_t heater_kelvin_high_mv_1;
-  uint16_t heater_kelvin_high_mv_2;
+  ActuatorPosition::ActuatorPosition NV102_state;
+  ActuatorPosition::ActuatorPosition NV103_state;
+  ActuatorPosition::ActuatorPosition NV104_state;
+  ActuatorPosition::ActuatorPosition NV105_state;
+  ActuatorPosition::ActuatorPosition OV102_state;
+  ActuatorPosition::ActuatorPosition FV102_state;
+  ActuatorPosition::ActuatorPosition OV101v_state;
+  ActuatorPosition::ActuatorPosition FV101v_state;
 };
 #pragma pack(pop)
 
