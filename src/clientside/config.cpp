@@ -9,17 +9,12 @@ ActuatorMessage build_command_message() {
       .ov101 = digitalRead(pinout::MISSILE_SWITCH_1),
       .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),
       .ov103 = digitalRead(pinout::MISSILE_SWITCH_6),
-      .injector_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
+      .automatic_mode = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
-      .ignition_primary =
-          digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-          !digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
-          !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
-      .ignition_secondary =
-          digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
-          !digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-          !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
+      .sequence_a = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI),
+      .sequence_b = digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC),
+      .start_sequence = !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE)
   };
 }
 
