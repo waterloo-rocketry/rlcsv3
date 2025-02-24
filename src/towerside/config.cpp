@@ -6,25 +6,25 @@
 namespace config {
 
 struct Actuators {
-  actuator::I2C ov101{1};
-  actuator::I2C ov102{2};
-  actuator::I2C ov103{3};
-  actuator::I2C injector_value{4};
-  actuator::Ignition ignition_primary{6};
-  actuator::Ignition ignition_secondary{7};
-  actuator::Heater heater_1{16};
-  actuator::Heater heater_2{17};
+  actuator::I2C NV102{1};
+  actuator::I2C NV103{2};
+  actuator::I2C NV104{3};
+  actuator::I2C NV105{4};
+  actuator::I2C OV102{6};
+  actuator::I2C FV102{7};
+  actuator::I2C OV101v{16};
+  actuator::I2C FV101v{17};
 } ACTUATORS;
 
 void apply(const ActuatorMessage &command) {
-  ACTUATORS.ov101.set(command.ov101);
-  ACTUATORS.ov102.set(command.ov102);
-  ACTUATORS.ov103.set(command.ov103);
-  // ACTUATORS.injector_value.set(command.injector_valve);
-  // ACTUATORS.ignition_primary.set(command.ignition_primary && !command.ignition_secondary && command.ignition_fire);
-  // ACTUATORS.ignition_secondary.set(command.ignition_secondary && !command.ignition_primary && command.ignition_fire);
-  ACTUATORS.heater_1.set(command.tank_heating_1);
-  ACTUATORS.heater_2.set(command.tank_heating_2);
+  ACTUATORS.NV102.set(command.NV102);
+  ACTUATORS.NV103.set(command.NV103);
+  ACTUATORS.NV104.set(command.NV104);
+  ACTUATORS.NV105.set(command.NV105);
+  ACTUATORS.OV102.set(command.OV102);
+  ACTUATORS.FV102.set(command.FV102);
+  ACTUATORS.OV101v.set(command.OV101v);
+  ACTUATORS.FV101v.set(command.FV101v);
 }
 
 SensorMessage build_sensor_message() {

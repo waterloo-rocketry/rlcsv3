@@ -20,10 +20,15 @@
 ; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
 struct ActuatorMessage {
-  bool ov101; // OV-101 Ox Fill
-  bool ov102; // OV-102 Ox Drain
-  bool ov103; // OV-103 Ox Vent
-  bool injector_valve; // IJV-301, To DAQ laptop only
+  bool NV102; // NV-102 Fuel purge
+  bool NV103; // NV-103 Fuel press
+  bool NV104; // NV-104 Lox press
+  bool NV105; // NV-105 Lox purge
+  bool OV102;
+  bool FV102;
+  bool OV101v;
+  bool FV101v;
+  bool automatic_mode;
   bool tank_heating_1;
   bool tank_heating_2;
   bool sequence_a;

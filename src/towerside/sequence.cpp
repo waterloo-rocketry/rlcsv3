@@ -10,7 +10,7 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
   switch (state) {
     case MANUAL:
       {
-        if (current_cmd.injector_valve) {
+        if (current_cmd.automatic_mode) {
           state = AUTOMATIC;
         }
         break;
@@ -27,7 +27,7 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
           state = SEQUENCE2;
           start_time = millis();
         }
-        if (!current_cmd.injector_valve) {
+        if (!current_cmd.automatic_mode) {
           state = MANUAL;
         }
         break;
@@ -42,7 +42,7 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
         }
 
         // If any thing changes, go to manual
-        if (!current_cmd.injector_valve) {
+        if (!current_cmd.automatic_mode) {
           state = MANUAL;
         }
         break;
@@ -57,7 +57,7 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
         }
 
         // If any thing changes, go to manual
-        if (!current_cmd.injector_valve) {
+        if (!current_cmd.automatic_mode) {
           state = MANUAL;
         }
         break;
