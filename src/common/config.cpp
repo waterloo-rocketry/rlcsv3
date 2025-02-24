@@ -8,8 +8,8 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .injector_valve = current_state.injector_valve,
       .tank_heating_1 = false,
       .tank_heating_2 = false,
-      .ignition_primary = false,
-      .ignition_secondary = false,
-      .ignition_fire = true,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
   };
 }

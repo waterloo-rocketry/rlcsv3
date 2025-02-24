@@ -18,22 +18,15 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
     case AUTOMATIC:
       {
         // If any thing changes, go to manual
-        if (
-          !current_cmd.ignition_fire &&  // active low
-          current_cmd.ignition_primary && !current_cmd.ignition_secondary) {
-
+        if (current_cmd.start_sequence && current_cmd.sequence_a && !current_cmd.sequence_b) {
           state = SEQUENCE1;
           start_time = millis();
         }
 
-        if (
-          !current_cmd.ignition_fire &&  // active low
-          !current_cmd.ignition_primary && current_cmd.ignition_secondary) {
-
+        if (current_cmd.start_sequence && !current_cmd.sequence_a && current_cmd.sequence_b) {
           state = SEQUENCE2;
           start_time = millis();
         }
-
         if (!current_cmd.injector_valve) {
           state = MANUAL;
         }
@@ -41,9 +34,9 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
       }
     case SEQUENCE1:
       {
-        if (current_cmd.ignition_fire ||  // active low
-          !current_cmd.ignition_primary ||
-          current_cmd.ignition_secondary) {
+        if (current_cmd.start_sequence ||  // active low
+          !current_cmd.sequence_a ||
+          current_cmd.sequence_b) {
 
           state = AUTOMATIC;
         }
@@ -56,9 +49,9 @@ void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_
       }
     case SEQUENCE2:
       {
-        if (current_cmd.ignition_fire ||  // active low
-          current_cmd.ignition_primary ||
-          !current_cmd.ignition_secondary) {
+        if (current_cmd.start_sequence ||  // active low
+          current_cmd.sequence_a ||
+          !current_cmd.sequence_b) {
 
           state = AUTOMATIC;
         }
@@ -99,18 +92,6 @@ const ActuatorMessage sequence1[] = {
   }
 };  // SHould be the same length as above
 
-bool apply_sequence_one(unsigned long delta_time) {
-  int idx = 0;
-
-  while (idx < len1 && times1[idx + 1] <= delta_time) ++idx;
-  // at this point, TIME[idx] <= delta_time < TIME[idx]
-
-  if (idx == len1 - 1) return true;
-
-  config::apply(sequence1[idx]);
-  return false;
-}
-
 const int len2 = 3;
 const int times2[] = { 0, 3000, 4000};
 const ActuatorMessage sequence2[] = {
@@ -138,15 +119,23 @@ const ActuatorMessage sequence2[] = {
   }
 };  // SHould be the same length as above
 
-bool apply_sequence_two(unsigned long delta_time) {
+bool apply_sequence(unsigned long delta_time, const int &len, const int times[], const ActuatorMessage sequence[]) {
   int idx = 0;
 
-  while (idx < len2 && times2[idx + 1] <= delta_time) { ++idx; }
+  while (idx < len && times[idx + 1] <= delta_time) { ++idx; }
   // at this point, TIME[idx] <= delta_time < TIME[idx]
 
-  if (idx == len2 - 1) return true;
+  if (idx == len - 1) return true;
 
-  config::apply(sequence2[idx]);
+  config::apply(sequence[idx]);
   return false;
+}
+
+bool apply_sequence(int seq, unsigned long delta_time) {
+    if (seq == 1) {
+        return apply_sequence(delta_time, len1, times1, sequence1);
+    } else if (seq == 2) {
+        return apply_sequence(delta_time, len2, times2, sequence2);
+    }
 }
 }

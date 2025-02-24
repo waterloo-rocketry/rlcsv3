@@ -7,7 +7,6 @@
 #include "sequence.hpp"
 
 void setup() {
-  Serial.begin(115200);
   Serial2.begin(9600);
   Wire.begin();
   Wire.setClock(10000);
@@ -55,33 +54,29 @@ void setup() {
 
     switch (state) {
         case sequence::State::MANUAL: {
-          Serial.write("Manual\n");
           config::apply(current_cmd);
-          seven_seg::display(current_cmd);
-          seven_seg::tick();
-
           break;
         }
         case sequence::State::AUTOMATIC: {
-          Serial.write("AUTOMATIC\n");
           break;
         }
         case sequence::State::SEQUENCE1: {
-          Serial.write("config 1");
-          if (sequence::apply_sequence_one(millis() - config_start_time)) {
+          if (sequence::apply_sequence(1, millis() - config_start_time)) {
             state = sequence::State::MANUAL;
           }
           break;
         }
         case sequence::State::SEQUENCE2: {
-          Serial.write("config 2");
-          if (sequence::apply_sequence_two(millis() - config_start_time)) {
+          if (sequence::apply_sequence(2, millis() - config_start_time)) {
             state = sequence::State::MANUAL;
           }
           break;
         }
 
     }
+
+    seven_seg::display(current_cmd);
+    seven_seg::tick();
 
 
     // Periodically send back our status

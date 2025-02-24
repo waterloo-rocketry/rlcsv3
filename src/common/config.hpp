@@ -26,9 +26,9 @@ struct ActuatorMessage {
   bool injector_valve; // IJV-301, To DAQ laptop only
   bool tank_heating_1;
   bool tank_heating_2;
-  bool ignition_primary;
-  bool ignition_secondary;
-  bool ignition_fire;
+  bool sequence_a;
+  bool sequence_b;
+  bool start_sequence;
 
   bool operator==(const ActuatorMessage &other) const {
     return !memcmp(this, &other, sizeof(ActuatorMessage));
