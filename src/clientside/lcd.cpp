@@ -61,6 +61,7 @@ void setup() {
 void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
   liquid_crystal.print("O1:");
+    /* TODO: fix this
   print_valve_position(msg.ov101_state);
 
   liquid_crystal.print(" O2:");
@@ -110,6 +111,7 @@ void update(SensorMessage msg) {
 
   liquid_crystal.print(" CB:");
   print_decimal_value(hardware::get_batt_dv());
+  */
 }
 
 } // namespace lcd

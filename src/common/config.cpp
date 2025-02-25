@@ -11,8 +11,6 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
     .OV101v = false,
     .FV101v = false,
     .automatic_mode = current_state.automatic_mode,
-    .tank_heating_1 = false,
-    .tank_heating_2 = false,
     .sequence_a = false,
     .sequence_b = false,
     .start_sequence = false,

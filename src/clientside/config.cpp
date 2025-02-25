@@ -6,15 +6,19 @@ namespace config {
 
 ActuatorMessage build_command_message() {
   return ActuatorMessage{
-      .ov101 = digitalRead(pinout::MISSILE_SWITCH_1),
-      .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),
-      .ov103 = digitalRead(pinout::MISSILE_SWITCH_6),
+      .NV102 = digitalRead(pinout::MISSILE_SWITCH_1),
+      .NV103 = digitalRead(pinout::MISSILE_SWITCH_2),
+      .NV104 = digitalRead(pinout::MISSILE_SWITCH_3),
+      .NV105 = digitalRead(pinout::MISSILE_SWITCH_4),
+      .OV102 = digitalRead(pinout::MISSILE_SWITCH_5),
+      .FV102 = digitalRead(pinout::MISSILE_SWITCH_6),
+      .OV101v = digitalRead(pinout::MISSILE_SWITCH_7),
+      .FV101v = digitalRead(pinout::MISSILE_SWITCH_8),
       .automatic_mode = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
-      .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
-      .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
       .sequence_a = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI),
       .sequence_b = digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC),
-      .start_sequence = !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE)
+      .start_sequence = !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE),
+      .ignition = false
   };
 }
 

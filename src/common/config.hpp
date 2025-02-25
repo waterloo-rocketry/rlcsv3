@@ -29,8 +29,6 @@ struct ActuatorMessage {
   bool OV101v;
   bool FV101v;
   bool automatic_mode;
-  bool tank_heating_1;
-  bool tank_heating_2;
   bool sequence_a;
   bool sequence_b;
   bool start_sequence;
