@@ -31,6 +31,7 @@ void print_valve_position(uint16_t pos) {
     liquid_crystal.print("???");
     break;
   }
+  liquid_crystal.print(" ");
 };
 
 void print_decimal_value(unsigned int num) {
@@ -60,25 +61,25 @@ void setup() {
 
 void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
-  liquid_crystal.print("O1:");
-    /* TODO: fix this
-  print_valve_position(msg.ov101_state);
 
-  liquid_crystal.print(" O2:");
-  print_valve_position(msg.ov102_state);
-
-  liquid_crystal.print(" O3:");
-  print_valve_position(msg.ov103_state);
-
-  liquid_crystal.setCursor(0, 1);
-
-  liquid_crystal.print("IP:");
-  print_decimal_value(msg.ignition_primary_ma / 10);
- 
-  liquid_crystal.print(" IS:");
-  print_decimal_value(msg.ignition_secondary_ma / 10);
-
-  liquid_crystal.print("       ");
+  /*
+  liquid_crystal.print("NV102:");
+  print_valve_position(msg.NV102_state);
+  liquid_crystal.print("NV103:");
+  print_valve_position(msg.NV103_state);
+  liquid_crystal.print("NV104:");
+  print_valve_position(msg.NV103_state);
+  liquid_crystal.print("NV105:");
+  print_valve_position(msg.NV103_state);
+  liquid_crystal.print("OV102:");
+  print_valve_position(msg.OV102_state);
+  liquid_crystal.print("FV102:");
+  print_valve_position(msg.FV102_state);
+  liquid_crystal.print("OV101:");
+  print_valve_position(msg.OV101v_state);
+  liquid_crystal.print("FV101:");
+  print_valve_position(msg.FV101v_state);
+  */
 
   liquid_crystal.setCursor(0, 2);
   liquid_crystal.print("E:");
@@ -90,6 +91,7 @@ void update(SensorMessage msg) {
   liquid_crystal.print(" ARM:");
   liquid_crystal.print(msg.towerside_armed ? "Y" : "N");
 
+  /*
   if(msg.heater_kelvin_high_mv_1 >= 16000) {
     liquid_crystal.print(" T");
   }else{
@@ -101,6 +103,7 @@ void update(SensorMessage msg) {
   }else{
     liquid_crystal.print("h");
   }
+  */
 
   liquid_crystal.setCursor(0, 3);
   liquid_crystal.print("TM:");
@@ -111,6 +114,22 @@ void update(SensorMessage msg) {
 
   liquid_crystal.print(" CB:");
   print_decimal_value(hardware::get_batt_dv());
+
+
+
+    /* TODO: fix this
+
+  liquid_crystal.setCursor(0, 1);
+
+  liquid_crystal.print("IP:");
+  print_decimal_value(msg.ignition_primary_ma / 10);
+ 
+  liquid_crystal.print(" IS:");
+  print_decimal_value(msg.ignition_secondary_ma / 10);
+
+  liquid_crystal.print("       ");
+
+  
   */
 }
 

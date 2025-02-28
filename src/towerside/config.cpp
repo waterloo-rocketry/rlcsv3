@@ -2,19 +2,20 @@
 #include "config.hpp"
 #include "errors.hpp"
 #include "sensors.hpp"
+#include "sequence.hpp"
 
 namespace config {
 
 struct Actuators {
-  actuator::I2C NV102{1};
+  actuator::I2C NV102{11};
   actuator::I2C NV103{2};
-  actuator::I2C NV104{3};
-  actuator::I2C NV105{4};
+  actuator::I2C NV104{1};
+  actuator::I2C NV105{10};
   actuator::I2C OV102{6};
   actuator::I2C FV102{7};
-  actuator::I2C OV101v{16};
-  actuator::I2C FV101v{17};
-  actuator::Ignition ignition{12};
+  actuator::I2C OV101v{3};
+  actuator::I2C FV101v{4};
+  actuator::Ignition ignition{5};
 } ACTUATORS;
 
 void apply(const ActuatorMessage &command) {
@@ -37,14 +38,7 @@ SensorMessage build_sensor_message() {
       .towerside_armed = sensors::is_armed(),
       .has_contact = sensors::has_contact(),
       .ignition_ma = ACTUATORS.ignition.get_current_ma(0),
-      .NV102_state = ACTUATORS.NV102.get_state(),
-      .NV103_state = ACTUATORS.NV103.get_state(),
-      .NV104_state = ACTUATORS.NV104.get_state(),
-      .NV105_state = ACTUATORS.NV105.get_state(),
-      .OV102_state = ACTUATORS.NV105.get_state(),
-      .FV102_state = ACTUATORS.NV105.get_state(),
-      .OV101v_state = ACTUATORS.NV105.get_state(),
-      .FV101v_state = ACTUATORS.NV105.get_state()
+      .state = sequence::state,
   };
 }
 

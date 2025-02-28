@@ -16,3 +16,4 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
     .start_sequence = false,
   };
 }
+

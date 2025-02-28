@@ -4,7 +4,10 @@
 
 namespace sequence {
 
-void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_time) {
+enum sequence::State state = sequence::State::MANUAL;
+unsigned long start_time;
+
+void set_state(ActuatorMessage &current_cmd) {
   enum State old_state = state;
 
   if (state == MANUAL) {
@@ -154,7 +157,6 @@ bool apply_sequence(unsigned long delta_time, const int &len, const int times[],
   int idx = 0;
 
   while (idx < len && times[idx + 1] <= delta_time) { ++idx; }
-  // at this point, TIME[idx] <= delta_time < TIME[idx]
 
   Serial.write(idx + '0');
 
@@ -168,9 +170,9 @@ bool apply_sequence(unsigned long delta_time, const int &len, const int times[],
 
 bool apply_sequence(int seq, unsigned long delta_time) {
   if (seq == 1) {
-    return apply_sequence(delta_time, len1, times1, sequence1);
+    return apply_sequence(millis() - start_time, len1, times1, sequence1);
   } else if (seq == 2) {
-    return apply_sequence(delta_time, len2, times2, sequence2);
+    return apply_sequence(millis() - start_time, len2, times2, sequence2);
   }
 }
 }

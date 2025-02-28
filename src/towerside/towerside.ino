@@ -22,12 +22,9 @@ void setup() {
 
   Communicator<SensorMessage, ActuatorMessage> communicator {Serial2, config::COMMUNICATION_RESET_MS};
   unsigned long last_sensor_msg_time = 0;
-  unsigned long config_start_time = 0;
   // The current towerside state. Each tick we command all actuators to take the action specified by it
   ActuatorMessage current_cmd = build_safe_state(ActuatorMessage());
   ActuatorMessage last_cmd; // The last received message from clientside, used for error detection
-
-  enum sequence::State state = sequence::State::MANUAL;
 
   // We loop here so that the variables defined above are in scope
   while (true) {
@@ -51,30 +48,26 @@ void setup() {
       current_cmd = build_safe_state(current_cmd);
     }
 
-    sequence::set_state(state, current_cmd, config_start_time);
+    sequence::set_state(current_cmd, config_start_time);
 
-    switch (state) {
+    switch (sequence::state) {
         case sequence::State::MANUAL: {
-          Serial.write("manual\n");
           config::apply(current_cmd);
           break;
         }
         case sequence::State::AUTOMATIC: {
-          Serial.write("automatic\n");
           break;
         }
         case sequence::State::SEQUENCE1: {
-          Serial.write("seq1\n");
-          if (sequence::apply_sequence(1, millis() - config_start_time)) {
+          if (sequence::apply_sequence(1) {
             Serial.write("revert\n");
-            state = sequence::State::AUTOMATIC;
+            sequence::state = sequence::State::AUTOMATIC;
           }
           break;
         }
         case sequence::State::SEQUENCE2: {
-          Serial.write("seq2\n");
-          if (sequence::apply_sequence(2, millis() - config_start_time)) {
-            state = sequence::State::AUTOMATIC;
+          if (sequence::apply_sequence(2) {
+            sequence::state = sequence::State::AUTOMATIC;
           }
           break;
         }

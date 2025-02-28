@@ -51,15 +51,9 @@ struct SensorMessage {
   bool has_contact;
   // Ignition currents
   uint16_t ignition_ma;
-  // Actuator states
-  ActuatorPosition::ActuatorPosition NV102_state;
-  ActuatorPosition::ActuatorPosition NV103_state;
-  ActuatorPosition::ActuatorPosition NV104_state;
-  ActuatorPosition::ActuatorPosition NV105_state;
-  ActuatorPosition::ActuatorPosition OV102_state;
-  ActuatorPosition::ActuatorPosition FV102_state;
-  ActuatorPosition::ActuatorPosition OV101v_state;
-  ActuatorPosition::ActuatorPosition FV101v_state;
+  // states
+  sequence::State state;
+  int sequence_idx;
 };
 #pragma pack(pop)
 
