@@ -62,14 +62,14 @@ void setup() {
 }
 
 void display(const ActuatorMessage &state) {
-  digit_values[0] = static_cast<uint8_t>(state.NV102) << 0 |
-                    static_cast<uint8_t>(state.NV103) << 1 |
-                    static_cast<uint8_t>(state.NV104) << 2 |
-                    static_cast<uint8_t>(state.NV105) << 3;
-  digit_values[1] = static_cast<uint8_t>(state.OV102) << 0 |
-                    static_cast<uint8_t>(state.FV102) << 1 |
+  digit_values[0] = static_cast<uint8_t>(state.NV105) << 0 |
+                    static_cast<uint8_t>(state.NV102) << 1 |
                     static_cast<uint8_t>(state.OV101v) << 2 |
                     static_cast<uint8_t>(state.FV101v) << 3;
+  digit_values[1] = static_cast<uint8_t>(state.NV104) << 0 |
+                    static_cast<uint8_t>(state.NV103) << 1 |
+                    static_cast<uint8_t>(state.OV102) << 2 |
+                    static_cast<uint8_t>(state.FV102) << 3;
 }
 
 void tick() {
