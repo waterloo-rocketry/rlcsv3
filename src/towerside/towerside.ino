@@ -48,9 +48,9 @@ void setup() {
       current_cmd = build_safe_state(current_cmd);
     }
 
-    sequence::set_state(current_cmd, config_start_time);
+    sequence::find_state(current_cmd);
 
-    switch (sequence::state) {
+    switch (sequence::get_state()) {
         case sequence::State::MANUAL: {
           config::apply(current_cmd);
           break;
@@ -59,15 +59,15 @@ void setup() {
           break;
         }
         case sequence::State::SEQUENCE1: {
-          if (sequence::apply_sequence(1) {
+          if (sequence::apply_sequence(1)) {
             Serial.write("revert\n");
-            sequence::state = sequence::State::AUTOMATIC;
+            sequence::set_state(sequence::State::AUTOMATIC);
           }
           break;
         }
         case sequence::State::SEQUENCE2: {
-          if (sequence::apply_sequence(2) {
-            sequence::state = sequence::State::AUTOMATIC;
+          if (sequence::apply_sequence(2)) {
+            sequence::set_state(sequence::State::AUTOMATIC);
           }
           break;
         }

@@ -5,9 +5,12 @@
 
 namespace sequence {
 
-void set_state(State &state, ActuatorMessage &current_cmd, unsigned long &start_time);
+enum sequence::State get_state();
+void set_state(enum sequence::State s);
 
-bool apply_sequence(int i, unsigned long delta_time);
+void find_state(ActuatorMessage &current_cmd);
+
+bool apply_sequence(int i);
 
 }
 

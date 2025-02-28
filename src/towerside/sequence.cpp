@@ -7,8 +7,16 @@ namespace sequence {
 enum sequence::State state = sequence::State::MANUAL;
 unsigned long start_time;
 
-void set_state(ActuatorMessage &current_cmd) {
-  enum State old_state = state;
+enum sequence::State get_state() {
+  return state;
+}
+
+void set_state(enum sequence::State s) {
+  state = s;
+}
+
+void find_state(ActuatorMessage &current_cmd) {
+  enum State old_state = sequence::get_state();
 
   if (state == MANUAL) {
     if (current_cmd.automatic_mode) {
@@ -109,27 +117,12 @@ const ActuatorMessage sequence2[] = {
   ActuatorMessage{
     true,
     false,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
     false,
     false,
     false,
     false,
-    false
-  },
-  ActuatorMessage{
     false,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
+    false,
     false,
     false,
     false,
@@ -139,12 +132,27 @@ const ActuatorMessage sequence2[] = {
   ActuatorMessage{
     false,
     false,
+    false,
     true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  },
+  ActuatorMessage{
     true,
+    false,
+    false,
     true,
-    true,
-    true,
-    true,
+    false,
+    false,
+    false,
+    false,
     false,
     false,
     false,
@@ -168,7 +176,7 @@ bool apply_sequence(unsigned long delta_time, const int &len, const int times[],
   return false;
 }
 
-bool apply_sequence(int seq, unsigned long delta_time) {
+bool apply_sequence(int seq) {
   if (seq == 1) {
     return apply_sequence(millis() - start_time, len1, times1, sequence1);
   } else if (seq == 2) {
