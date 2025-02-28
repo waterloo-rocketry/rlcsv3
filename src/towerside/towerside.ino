@@ -49,32 +49,8 @@ void setup() {
     }
 
     sequence::find_state(current_cmd);
+    sequence::act_on_state(current_cmd);
 
-    switch (sequence::get_state()) {
-        case sequence::State::MANUAL: {
-          config::apply(current_cmd);
-          break;
-        }
-        case sequence::State::AUTOMATIC: {
-          break;
-        }
-        case sequence::State::SEQUENCE1: {
-          if (sequence::apply_sequence(1)) {
-            Serial.write("revert\n");
-            sequence::set_state(sequence::State::AUTOMATIC);
-          }
-          break;
-        }
-        case sequence::State::SEQUENCE2: {
-          if (sequence::apply_sequence(2)) {
-            sequence::set_state(sequence::State::AUTOMATIC);
-          }
-          break;
-        }
-
-    }
-
-    seven_seg::display(current_cmd);
     seven_seg::tick();
 
     // Periodically send back our status

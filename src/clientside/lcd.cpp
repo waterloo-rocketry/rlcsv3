@@ -34,6 +34,27 @@ void print_valve_position(uint16_t pos) {
   liquid_crystal.print(" ");
 };
 
+void print_towerside_state(sequence::State state) {
+  switch (state) {
+    case sequence::State::MANUAL:
+      liquid_crystal.print("MAN");
+      break;
+    case sequence::State::AUTOMATIC:
+      liquid_crystal.print("AUT");
+      break;
+    case sequence::State::SEQUENCE1:
+      liquid_crystal.print("AS1");
+      break;
+    case sequence::State::SEQUENCE2:
+      liquid_crystal.print("AS2");
+      break;
+    default:
+      liquid_crystal.print("???");
+      break;
+  }
+  liquid_crystal.print(" ");
+}
+
 void print_decimal_value(unsigned int num) {
   char buf[4];
   snprintf(buf, 4, "%03u", num);
@@ -60,7 +81,17 @@ void setup() {
 */
 
 void update(SensorMessage msg) {
+  //liquid_crystal.clear();
   liquid_crystal.setCursor(0, 0);
+  liquid_crystal.print("STE:");
+  print_towerside_state(msg.state);
+  liquid_crystal.print("S-IDX:");
+  char str[8];
+  itoa( msg.sequence_idx, str, 10 );
+  liquid_crystal.print(str);
+
+  liquid_crystal.setCursor(0, 1);
+  liquid_crystal.print("KAVIN WAS HERE ;D ");
 
   /*
   liquid_crystal.print("NV102:");

@@ -3,6 +3,7 @@
 #include "errors.hpp"
 #include "sensors.hpp"
 #include "sequence.hpp"
+#include "seven_seg.hpp"
 
 namespace config {
 
@@ -28,6 +29,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.OV101v.set(!command.OV101v);
   ACTUATORS.FV101v.set(!command.FV101v);
   ACTUATORS.ignition.set(command.ignition);
+  seven_seg::display(command);
 }
 
 SensorMessage build_sensor_message() {
@@ -39,6 +41,7 @@ SensorMessage build_sensor_message() {
       .has_contact = sensors::has_contact(),
       .ignition_ma = ACTUATORS.ignition.get_current_ma(0),
       .state = sequence::get_state(),
+      .sequence_idx = sequence::get_idx()
   };
 }
 

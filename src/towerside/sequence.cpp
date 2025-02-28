@@ -6,6 +6,7 @@ namespace sequence {
 
 enum sequence::State state = sequence::State::MANUAL;
 unsigned long start_time;
+int idx;
 
 enum sequence::State get_state() {
   return state;
@@ -13,6 +14,10 @@ enum sequence::State get_state() {
 
 void set_state(enum sequence::State s) {
   state = s;
+}
+
+int get_idx() {
+  return idx;
 }
 
 void find_state(ActuatorMessage &current_cmd) {
@@ -57,6 +62,32 @@ void find_state(ActuatorMessage &current_cmd) {
     // If any thing changes, go to manual
     if (!current_cmd.automatic_mode) {
       state = MANUAL;
+    }
+  }
+}
+
+void act_on_state(ActuatorMessage &current_cmd) {
+  switch (sequence::get_state()) {
+    idx = 0;
+    case sequence::State::MANUAL: {
+      config::apply(current_cmd);
+      break;
+    }
+    case sequence::State::AUTOMATIC: {
+      idx = 0;
+      break;
+    }
+    case sequence::State::SEQUENCE1: {
+      if (sequence::apply_sequence(1)) {
+        sequence::set_state(sequence::State::AUTOMATIC);
+      }
+      break;
+    }
+    case sequence::State::SEQUENCE2: {
+      if (sequence::apply_sequence(2)) {
+        sequence::set_state(sequence::State::AUTOMATIC);
+      }
+      break;
     }
   }
 }
@@ -161,12 +192,18 @@ const ActuatorMessage sequence2[] = {
   }
 };  // SHould be the same length as above
 
-bool apply_sequence(unsigned long delta_time, const int &len, const int times[], const ActuatorMessage sequence[]) {
-  int idx = 0;
+int find_idx(const int &len, const int times[]) {
+  unsigned long delta_time = millis() - start_time;
+
+  idx = 0;
 
   while (idx < len && times[idx + 1] <= delta_time) { ++idx; }
 
-  Serial.write(idx + '0');
+  return idx;
+}
+
+bool apply_sequence(unsigned long delta_time, const int &len, const int times[], const ActuatorMessage sequence[]) {
+  int idx = find_idx(len, times);
 
   if (idx == len) {
     return true;
