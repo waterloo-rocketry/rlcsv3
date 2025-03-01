@@ -33,16 +33,16 @@ void apply(const ActuatorMessage &command) {
 }
 
 SensorMessage build_sensor_message() {
-  return SensorMessage{
+  SensorMessage msg = SensorMessage{
       .towerside_main_batt_mv = sensors::get_main_batt_mv(),
       .towerside_actuator_batt_mv = sensors::get_actuator_batt_mv(),
       .error_code = errors::pop(),
       .towerside_armed = sensors::is_armed(),
       .has_contact = sensors::has_contact(),
       .ignition_ma = ACTUATORS.ignition.get_current_ma(0),
-      .state = sequence::get_state(),
-      .sequence_idx = sequence::get_idx()
   };
+  sequence::update_sensor_message(msg);
+  return msg;
 }
 
 } // namespace config

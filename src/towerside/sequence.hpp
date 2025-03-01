@@ -5,13 +5,16 @@
 
 namespace sequence {
 
-enum sequence::State get_state();
-void set_state(enum sequence::State s);
+struct SequenceItem{
+  int time;
+  const char step[4];
+  ActuatorMessage valve_states;
+};
 
 void find_state(ActuatorMessage &current_cmd);
 void act_on_state(ActuatorMessage &current_cmd);
 
-int get_idx();
+void update_sensor_message(SensorMessage &msg);
 
 bool apply_sequence(int i);
 

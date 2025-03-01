@@ -78,7 +78,7 @@ void setup() {
    |E:000 CON:Y ARM:Y tH|
    |TM:123 TA:118 CB:126| Those voltage are in tenth(increment 0.1)
    ----------------------
-*/
+*/ 
 
 void update(SensorMessage msg) {
   //liquid_crystal.clear();
@@ -86,12 +86,31 @@ void update(SensorMessage msg) {
   liquid_crystal.print("STE:");
   print_towerside_state(msg.state);
   liquid_crystal.print("S-IDX:");
-  char str[8];
-  itoa( msg.sequence_idx, str, 10 );
-  liquid_crystal.print(str);
+  if (msg.state == sequence::State::MANUAL || msg.state == sequence::State::AUTOMATIC) {
+    liquid_crystal.print("   ");
+  } else {
+    liquid_crystal.print(msg.seq_step);
+  }
 
   liquid_crystal.setCursor(0, 1);
-  liquid_crystal.print("KAVIN WAS HERE ;D ");
+  liquid_crystal.print("T-NEXT:            ");
+  liquid_crystal.setCursor(7, 1);
+  if (msg.state != sequence::State::MANUAL && msg.state != sequence::State::AUTOMATIC) {
+    char ten_seconds = (msg.time_til_next / 10000) + '0';
+    char seconds = ((msg.time_til_next % 10000) / 1000) + '0';
+    char tenth_seconds = ((msg.time_til_next % 1000) / 100) + '0';
+    liquid_crystal.print(ten_seconds);
+    liquid_crystal.print(seconds);
+    liquid_crystal.print('.');
+    liquid_crystal.print(tenth_seconds);
+    liquid_crystal.print('s');
+  } else {
+    liquid_crystal.print("     ");
+  }
+
+  liquid_crystal.print("  FYDP25");
+
+  
 
   /*
   liquid_crystal.print("NV102:");

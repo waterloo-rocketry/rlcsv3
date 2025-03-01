@@ -53,7 +53,8 @@ struct SensorMessage {
   uint16_t ignition_ma;
   // states
   sequence::State state;
-  int sequence_idx;
+  char seq_step[4];
+  unsigned long time_til_next;
 };
 #pragma pack(pop)
 

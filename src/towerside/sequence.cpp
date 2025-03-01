@@ -4,24 +4,65 @@
 
 namespace sequence {
 
+const int len1 = 2;
+const SequenceItem sequence1[] = {
+  SequenceItem{
+    0, 
+    "S10",
+    ActuatorMessage{false,false,false,false,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    5000, 
+    "S10",
+    ActuatorMessage{true,false,false,false,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    6000,
+    "N/A",
+    ActuatorMessage{}
+  }
+};
+
+const int len2 = 4;
+const SequenceItem sequence2[] = {
+  SequenceItem{
+    0,
+    "S20",
+    ActuatorMessage{false,false,false,false,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    3000,
+    "S21",
+    ActuatorMessage{true,false,false,false,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    6000,
+    "S22",
+    ActuatorMessage{false,false,false,true,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    9000,
+    "S23",
+    ActuatorMessage{true,false,false,true,false,false,false,false,false,false,false,false,false}
+  },
+  SequenceItem{
+    12000,
+    "N/A",
+    ActuatorMessage{}
+  }
+};
+
+const SequenceItem* sequences[] = {sequence1, sequence2};
+
 enum sequence::State state = sequence::State::MANUAL;
 unsigned long start_time;
+
 int idx;
-
-enum sequence::State get_state() {
-  return state;
-}
-
-void set_state(enum sequence::State s) {
-  state = s;
-}
-
-int get_idx() {
-  return idx;
-}
+int seq_id;
+unsigned long time_til_next;
 
 void find_state(ActuatorMessage &current_cmd) {
-  enum State old_state = sequence::get_state();
+  enum State old_state = state;
 
   if (state == MANUAL) {
     if (current_cmd.automatic_mode) {
@@ -67,157 +108,70 @@ void find_state(ActuatorMessage &current_cmd) {
 }
 
 void act_on_state(ActuatorMessage &current_cmd) {
-  switch (sequence::get_state()) {
-    idx = 0;
+  switch (state) {
+    idx = -1;
+    seq_id = 0;
+    time_til_next = 0;
     case sequence::State::MANUAL: {
       config::apply(current_cmd);
       break;
     }
     case sequence::State::AUTOMATIC: {
-      idx = 0;
+      idx = -1;
+      seq_id = 0;
+      time_til_next = 0;
       break;
     }
     case sequence::State::SEQUENCE1: {
       if (sequence::apply_sequence(1)) {
-        sequence::set_state(sequence::State::AUTOMATIC);
+        state = sequence::State::AUTOMATIC;
       }
       break;
     }
     case sequence::State::SEQUENCE2: {
       if (sequence::apply_sequence(2)) {
-        sequence::set_state(sequence::State::AUTOMATIC);
+        state = sequence::State::AUTOMATIC;
       }
       break;
     }
   }
 }
 
-const int len1 = 2;
-const int times1[] = { 0, 5000, 6000};
-const ActuatorMessage sequence1[] = {
-  ActuatorMessage{
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  },
-  ActuatorMessage{
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false
-  }
-};  // SHould be the same length as above
-
-const int len2 = 4;
-const int times2[] = { 0, 3000, 6000, 9000, 12000};
-const ActuatorMessage sequence2[] = {
-  ActuatorMessage{
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  },
-  ActuatorMessage{
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  },
-  ActuatorMessage{
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  },
-  ActuatorMessage{
-    true,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  }
-};  // SHould be the same length as above
-
-int find_idx(const int &len, const int times[]) {
+bool apply_sequence(const int &len, const SequenceItem sequence[]) {
   unsigned long delta_time = millis() - start_time;
 
   idx = 0;
 
-  while (idx < len && times[idx + 1] <= delta_time) { ++idx; }
-
-  return idx;
-}
-
-bool apply_sequence(unsigned long delta_time, const int &len, const int times[], const ActuatorMessage sequence[]) {
-  int idx = find_idx(len, times);
+  while (idx < len && sequence[idx + 1].time <= delta_time) { ++idx; }
 
   if (idx == len) {
     return true;
   }
 
-  config::apply(sequence[idx]);
+  time_til_next = sequence[idx + 1].time - delta_time;
+
+  config::apply(sequence[idx].valve_states);
   return false;
 }
 
 bool apply_sequence(int seq) {
   if (seq == 1) {
-    return apply_sequence(millis() - start_time, len1, times1, sequence1);
+    seq_id = 1;
+    return apply_sequence(len1, sequence1);
   } else if (seq == 2) {
-    return apply_sequence(millis() - start_time, len2, times2, sequence2);
+    seq_id = 2;
+    return apply_sequence(len2, sequence2);
   }
+}
+
+void update_sensor_message(SensorMessage &msg) {
+  msg.state = state;
+  if (state == sequence::State::MANUAL || state == sequence::State::AUTOMATIC) {
+    msg.seq_step[0] = 0;
+  } else {
+    memcpy(&msg.seq_step, sequences[seq_id - 1][idx].step, 4);
+    msg.seq_step[3] = 0;
+  }
+  msg.time_til_next = time_til_next;
 }
 }

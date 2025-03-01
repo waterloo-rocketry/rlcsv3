@@ -10,7 +10,7 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
     .FV102 = false,
     .OV101v = false,
     .FV101v = false,
-    .automatic_mode = current_state.automatic_mode,
+    .automatic_mode = sequence::State::MANUAL,
     .sequence_a = false,
     .sequence_b = false,
     .start_sequence = false,
