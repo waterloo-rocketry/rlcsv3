@@ -23,8 +23,9 @@ struct ActuatorMessage {
   bool ov101; // OV-101 Ox Fill
   bool ov102; // OV-102 Ox Drain
   bool ov103; // OV-103 Ox Vent
-  bool nv201; // NV-201 N2 Purge
-  bool injector_valve; // IJV-301, To DAQ laptop only
+  bool iv301; // IV-301 Injector Isolation Valve
+  bool iv302; // IV-302 Injector Drain Valve
+  bool solenoid_n2_purge;
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
@@ -52,7 +53,8 @@ struct SensorMessage {
   ActuatorPosition::ActuatorPosition ov101_state;
   ActuatorPosition::ActuatorPosition ov102_state;
   ActuatorPosition::ActuatorPosition ov103_state;
-  ActuatorPosition::ActuatorPosition nv201_state;
+  ActuatorPosition::ActuatorPosition iv301_state;
+  ActuatorPosition::ActuatorPosition iv302_state;
   // Tank Heating
   uint16_t heater_thermistor_1;
   uint16_t heater_thermistor_2;
