@@ -71,8 +71,8 @@ void update(SensorMessage msg) {
 
   liquid_crystal.setCursor(0, 1);
 
-  liquid_crystal.print("N1:");
-  print_valve_position(msg.nv201_state);
+  liquid_crystal.print("I1:");
+  print_valve_position(msg.iv301_state);
 
   liquid_crystal.print(" IP:");
   print_decimal_value(msg.ignition_primary_ma / 10);
