@@ -44,7 +44,6 @@ SensorMessage build_sensor_message() {
       .ov102_state = ACTUATORS.ov102.get_state(),
       .ov103_state = ACTUATORS.ov103.get_state(),
       .iv301_state = ACTUATORS.iv301.get_state(),
-      .iv302_state = ACTUATORS.iv302.get_state(),
       .heater_thermistor_1 = ACTUATORS.heater_1.get_thermistor(),
       .heater_thermistor_2 = ACTUATORS.heater_2.get_thermistor(),
       .heater_current_ma_1 = ACTUATORS.heater_1.get_current_ma(),
