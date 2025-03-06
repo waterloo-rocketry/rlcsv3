@@ -38,6 +38,8 @@ void setup() {
       last_cmd = new_cmd;
     }
 
+    sequence::find_state(current_cmd);
+
     // If we have got a message from clientside recently
     bool has_contact = communicator.seconds_since_last_contact() < config::COMMUNICATION_TIMEOUT_S;
     sensors::set_contact(has_contact);
@@ -46,9 +48,9 @@ void setup() {
     if (!has_contact) {
       // Override clientside's command and go to safe state
       current_cmd = build_safe_state(current_cmd);
+      sequence::set_state(sequence::State::MANUAL);
     }
-
-    sequence::find_state(current_cmd);
+    
     sequence::act_on_state(current_cmd);
 
     seven_seg::tick();

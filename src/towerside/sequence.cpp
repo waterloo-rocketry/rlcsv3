@@ -4,20 +4,25 @@
 
 namespace sequence {
 
-const int len1 = 2;
+const int len1 = 3;
 const SequenceItem sequence1[] = {
   SequenceItem{
-    0, 
-    "S10",
-    ActuatorMessage{false,false,false,false,false,false,false,false,false,false,false,false,false}
+    300, 
+    "S11",
+    ActuatorMessage{false,true,true,false,true,true,false,false,false,false,false,false,false}
   },
   SequenceItem{
-    5000, 
-    "S10",
-    ActuatorMessage{true,false,false,false,false,false,false,false,false,false,false,false,false}
+    10300, 
+    "S12",
+    ActuatorMessage{true,false,false,true,false,false,true,true,false,false,false,false,false}
   },
   SequenceItem{
-    6000,
+    13300, 
+    "S13",
+    ActuatorMessage{false,false,false,false,false,false,true,true,false,false,false,false,false}
+  },
+  SequenceItem{
+    15000,
     "N/A",
     ActuatorMessage{}
   }
@@ -60,6 +65,10 @@ unsigned long start_time;
 int idx;
 int seq_id;
 unsigned long time_til_next;
+
+void set_state(enum sequence::State s) {
+  state = s;
+}
 
 void find_state(ActuatorMessage &current_cmd) {
   enum State old_state = state;
