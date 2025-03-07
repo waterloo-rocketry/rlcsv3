@@ -13,7 +13,7 @@ struct Actuators {
   actuator::I2C iv302{8};
   actuator::Ignition ignition_primary{6};
   actuator::Ignition ignition_secondary{7};
-  actuator::I2C solenoid_n2_purge{9};
+  actuator::I2C nv202{9};
   actuator::Heater heater_1{16};
   actuator::Heater heater_2{17};
 } ACTUATORS;
@@ -24,7 +24,7 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.ov103.set(command.ov103);
   ACTUATORS.iv301.set(command.iv301);
   ACTUATORS.iv302.set(!command.iv302);
-  ACTUATORS.solenoid_n2_purge.set(!command.solenoid_n2_purge);
+  ACTUATORS.nv202.set(!command.nv202);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
   ACTUATORS.heater_1.set(command.tank_heating_1);

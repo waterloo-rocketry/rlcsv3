@@ -67,7 +67,7 @@ void display(const ActuatorMessage &state) {
                     static_cast<uint8_t>(state.ov103) << 2 |
                     static_cast<uint8_t>(state.iv301) << 3;
   digit_values[1] = static_cast<uint8_t>(state.iv302) << 0 |
-                    static_cast<uint8_t>(state.solenoid_n2_purge) << 1 |
+                    static_cast<uint8_t>(state.nv202) << 1 |
                     static_cast<uint8_t>(state.tank_heating_1 & state.tank_heating_2) << 2 |
                     static_cast<uint8_t>(state.ignition_primary & state.ignition_secondary) << 3;
 }
