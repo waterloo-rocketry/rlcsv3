@@ -11,7 +11,7 @@ ActuatorMessage build_command_message() {
       .ov103 = digitalRead(pinout::MISSILE_SWITCH_3),
       .iv301 = digitalRead(pinout::MISSILE_SWITCH_4),
       .iv302 = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
-      .nv202 = digitalRead(pinout::MISSILE_SWITCH_5),
+      .nv201 = digitalRead(pinout::MISSILE_SWITCH_5),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
       .ignition_primary =
