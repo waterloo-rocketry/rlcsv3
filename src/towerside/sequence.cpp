@@ -7,22 +7,63 @@ namespace sequence {
 const int len1 = 3;
 const SequenceItem sequence1[] = {
   SequenceItem{
-    300, 
+    0, 
+    "S01",
+    ActuatorMessage{
+      .NV102=false,
+      .NV103=true,
+      .NV104=true,
+      .NV105=false,
+      .OV102=false,
+      .FV102=false,
+      .OV101v=false,
+      .FV101v=false,
+      .ignition = false}
+  },
+  SequenceItem{
+    3000, 
     "S11",
-    ActuatorMessage{false,true,true,false,true,true,false,false,false,false,false,false,false}
+    ActuatorMessage{
+      .NV102=false,
+      .NV103=true,
+      .NV104=true,
+      .NV105=false,
+      .OV102=true,
+      .FV102=true,
+      .OV101v=false,
+      .FV101v=false,
+      .ignition = false}
   },
   SequenceItem{
-    10300, 
+    13000, 
     "S12",
-    ActuatorMessage{true,false,false,true,false,false,true,true,false,false,false,false,false}
+    ActuatorMessage{
+      .NV102=true,
+      .NV103=false,
+      .NV104=false,
+      .NV105=true,
+      .OV102=false,
+      .FV102=false,
+      .OV101v=true,
+      .FV101v=true,
+      .ignition=true}
   },
   SequenceItem{
-    13300, 
+    16000, 
     "S13",
-    ActuatorMessage{false,false,false,false,false,false,true,true,false,false,false,false,false}
+    ActuatorMessage{
+      .NV102=false,
+      .NV103=false,
+      .NV104=false,
+      .NV105=false,
+      .OV102=false,
+      .FV102=false,
+      .OV101v=true,
+      .FV101v=true,
+      .ignition=false}
   },
   SequenceItem{
-    15000,
+    18000,
     "N/A",
     ActuatorMessage{}
   }

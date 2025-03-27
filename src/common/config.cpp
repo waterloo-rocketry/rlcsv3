@@ -14,6 +14,7 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
     .sequence_a = false,
     .sequence_b = false,
     .start_sequence = false,
+    .ignition = false,
   };
 }
 
