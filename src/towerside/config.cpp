@@ -8,10 +8,10 @@
 namespace config {
 
 struct Actuators {
-  actuator::I2C NV102{10};
+  actuator::I2C NV102{8};
   actuator::I2C NV103{2};
   actuator::I2C NV104{1};
-  actuator::I2C NV105{11};
+  actuator::I2C NV105{9};
   actuator::I2C OV102{6};
   actuator::I2C FV102{7};
   actuator::I2C OV101v{3};

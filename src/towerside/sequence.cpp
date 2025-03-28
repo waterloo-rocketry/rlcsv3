@@ -4,11 +4,11 @@
 
 namespace sequence {
 
-const int len1 = 3;
+const int len1 = 4;
 const SequenceItem sequence1[] = {
   SequenceItem{
-    0, 
-    "S01",
+    0,
+    "IGN",
     ActuatorMessage{
       .NV102=false,
       .NV103=true,
@@ -18,11 +18,11 @@ const SequenceItem sequence1[] = {
       .FV102=false,
       .OV101v=false,
       .FV101v=false,
-      .ignition = false}
+      .ignition=true}
   },
   SequenceItem{
     3000, 
-    "S11",
+    "RUN",
     ActuatorMessage{
       .NV102=false,
       .NV103=true,
@@ -32,11 +32,11 @@ const SequenceItem sequence1[] = {
       .FV102=true,
       .OV101v=false,
       .FV101v=false,
-      .ignition = false}
+      .ignition=false}
   },
   SequenceItem{
     13000, 
-    "S12",
+    "PRG",
     ActuatorMessage{
       .NV102=true,
       .NV103=false,
@@ -46,11 +46,11 @@ const SequenceItem sequence1[] = {
       .FV102=false,
       .OV101v=true,
       .FV101v=true,
-      .ignition=true}
+      .ignition=false}
   },
   SequenceItem{
     16000, 
-    "S13",
+    "VNT",
     ActuatorMessage{
       .NV102=false,
       .NV103=false,
