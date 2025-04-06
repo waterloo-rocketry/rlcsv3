@@ -18,6 +18,10 @@ const SequenceItem sequence1[] = {
       .FV102=false,
       .OV101v=false,
       .FV101v=false,
+      .automatic_mode = sequence::State::MANUAL,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
       .ignition=true}
   },
   SequenceItem{
@@ -32,6 +36,10 @@ const SequenceItem sequence1[] = {
       .FV102=true,
       .OV101v=false,
       .FV101v=false,
+      .automatic_mode = sequence::State::MANUAL,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
       .ignition=false}
   },
   SequenceItem{
@@ -46,6 +54,10 @@ const SequenceItem sequence1[] = {
       .FV102=false,
       .OV101v=true,
       .FV101v=true,
+      .automatic_mode = sequence::State::MANUAL,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
       .ignition=false}
   },
   SequenceItem{
@@ -60,6 +72,10 @@ const SequenceItem sequence1[] = {
       .FV102=false,
       .OV101v=true,
       .FV101v=true,
+      .automatic_mode = sequence::State::MANUAL,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
       .ignition=false}
   },
   SequenceItem{
