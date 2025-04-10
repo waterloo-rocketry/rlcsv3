@@ -4,7 +4,7 @@
 
 namespace sequence {
 
-const int len1 = 4;
+const int len1 = 5;
 const SequenceItem sequence1[] = {
   SequenceItem{
     0,
@@ -25,7 +25,25 @@ const SequenceItem sequence1[] = {
       .ignition=true}
   },
   SequenceItem{
-    3000, 
+    400, 
+    "RUN",
+    ActuatorMessage{
+      .NV102=false,
+      .NV103=true,
+      .NV104=true,
+      .NV105=false,
+      .OV102=true,
+      .FV102=false,
+      .OV101v=false,
+      .FV101v=false,
+      .automatic_mode = sequence::State::MANUAL,
+      .sequence_a = false,
+      .sequence_b = false,
+      .start_sequence = false,
+      .ignition=false}
+  },
+  SequenceItem{
+    500, 
     "RUN",
     ActuatorMessage{
       .NV102=false,
@@ -43,7 +61,7 @@ const SequenceItem sequence1[] = {
       .ignition=false}
   },
   SequenceItem{
-    13000, 
+    10500, 
     "PRG",
     ActuatorMessage{
       .NV102=true,
@@ -61,7 +79,7 @@ const SequenceItem sequence1[] = {
       .ignition=false}
   },
   SequenceItem{
-    16000, 
+    20500, 
     "VNT",
     ActuatorMessage{
       .NV102=false,
@@ -79,7 +97,7 @@ const SequenceItem sequence1[] = {
       .ignition=false}
   },
   SequenceItem{
-    18000,
+    22500,
     "N/A",
     ActuatorMessage{}
   }
