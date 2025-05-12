@@ -12,7 +12,11 @@
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
-            <sourceRootList/>
+            <sourceRootList>
+                <sourceRootElem>canlib/message</sourceRootElem>
+                <sourceRootElem>canlib/pic18f26k83</sourceRootElem>
+                <sourceRootElem>canlib/util</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>default</name>

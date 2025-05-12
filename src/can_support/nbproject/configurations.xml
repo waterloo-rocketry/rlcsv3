@@ -9,6 +9,11 @@
       <itemPath>pin_manager.h</itemPath>
       <itemPath>i2c.h</itemPath>
     </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="true">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
@@ -16,18 +21,32 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="canlib" projectFiles="true">
+        <itemPath>canlib/message/msg_actuator.c</itemPath>
+        <itemPath>canlib/message/msg_common.c</itemPath>
+        <itemPath>canlib/message/msg_general.c</itemPath>
+        <itemPath>canlib/message/msg_gps.c</itemPath>
+        <itemPath>canlib/message/msg_recovery.c</itemPath>
+        <itemPath>canlib/message/msg_sensor.c</itemPath>
+        <itemPath>canlib/message/msg_state_est.c</itemPath>
+        <itemPath>canlib/pic18f26k83/pic18f26k83_can.c</itemPath>
+        <itemPath>canlib/util/can_rcv_buffer.c</itemPath>
+        <itemPath>canlib/util/can_tx_buffer.c</itemPath>
+        <itemPath>canlib/util/safe_ring_buffer.c</itemPath>
+        <itemPath>canlib/util/timing_util.c</itemPath>
+      </logicalFolder>
       <itemPath>system_init.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>device_config.c</itemPath>
       <itemPath>timer.c</itemPath>
       <itemPath>i2c.c</itemPath>
     </logicalFolder>
-    <logicalFolder name="ExternalFiles"
-                   displayName="Important Files"
-                   projectFiles="false">
-      <itemPath>Makefile</itemPath>
-    </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>canlib/message</Elem>
+    <Elem>canlib/pic18f26k83</Elem>
+    <Elem>canlib/util</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -36,13 +55,13 @@
         <targetDevice>PIC18F26K83</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.31</languageToolchainVersion>
+        <languageToolchainVersion>3.00</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC18F-K_DFP" vendor="Microchip" version="1.5.114"/>
+        <pack name="PIC18F-K_DFP" vendor="Microchip" version="1.13.292"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -77,9 +96,10 @@
         <property key="call-prologues" value="false"/>
         <property key="default-bitfield-type" value="true"/>
         <property key="default-char-type" value="true"/>
-        <property key="define-macros" value=""/>
+        <property key="define-macros"
+                  value="BOARD_TYPE_UNIQUE_ID=BOARD_TYPE_ID_RLCS_GLS;BOARD_INST_UNIQUE_ID=BOARD_INST_ID_GENERIC"/>
         <property key="disable-optimizations" value="true"/>
-        <property key="extra-include-directories" value=""/>
+        <property key="extra-include-directories" value="canlib"/>
         <property key="favor-optimization-for" value="-speed,+space"/>
         <property key="garbage-collect-data" value="true"/>
         <property key="garbage-collect-functions" value="true"/>
@@ -107,6 +127,7 @@
       </HI-TECH-COMP>
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>
+        <property key="additional-options-checksumAVR" value=""/>
         <property key="additional-options-code-offset" value=""/>
         <property key="additional-options-command-line" value=""/>
         <property key="additional-options-errata" value=""/>
@@ -161,7 +182,11 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
+        <property key="event.recorder.enabled" value="false"/>
+        <property key="event.recorder.scvd.files" value=""/>
         <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -205,7 +230,11 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
+        <property key="event.recorder.enabled" value="false"/>
+        <property key="event.recorder.scvd.files" value=""/>
         <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -245,12 +274,15 @@
       </XC8-CO>
       <XC8-config-global>
         <property key="advanced-elf" value="true"/>
+        <property key="constdata-progmem" value="false"/>
         <property key="gcc-opt-driver-new" value="true"/>
         <property key="gcc-opt-std" value="-std=c99"/>
         <property key="gcc-output-file-format" value="dwarf-3"/>
+        <property key="mapped-progmem" value="false"/>
         <property key="omit-pack-options" value="false"/>
         <property key="omit-pack-options-new" value="1"/>
         <property key="output-file-format" value="-mcof,+elf"/>
+        <property key="smart-io-format" value=""/>
         <property key="stack-size-high" value="auto"/>
         <property key="stack-size-low" value="auto"/>
         <property key="stack-size-main" value="auto"/>
