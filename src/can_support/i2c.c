@@ -1,5 +1,7 @@
-#include "i2c.h"
 #include <xc.h>
+
+#include "i2c.h"
+#include "canlib.h"
 
 void i2c_set_address(uint8_t address) {
     I2C1ADR0 = address << 1;
@@ -29,7 +31,13 @@ void i2c_handle_interrupt() {
     if (I2C1STAT1bits.RXBF) {
         uint8_t cmd = I2C1RXB;
         // we care about the second from last bit
-        LATC2 = (cmd & 0b10) > 0;
+		can_msg_t msg;
+        //if(cmd & 0b10){
+			build_actuator_cmd_msg(PRIO_HIGHEST, 0, ACTUATOR_OX_INJECTOR_VALVE, ACT_STATE_ON, &msg);
+			//}else{
+			//build_actuator_cmd_msg(PRIO_HIGHEST, 0, ACTUATOR_OX_INJECTOR_VALVE, ACT_STATE_OFF, &msg);
+			//}
+		can_send(&msg);
         I2C1CON1bits.ACKDT = 0;
         I2C1PIRbits.WRIF = 0;
     }
