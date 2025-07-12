@@ -7,7 +7,6 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .ov103 = false,
       .nv201 = false,
       .cdv401 = false,
-      // .iv302 = false,
       .qd301 = false,
       .tank_heating_1 = false,
       .tank_heating_2 = false,
