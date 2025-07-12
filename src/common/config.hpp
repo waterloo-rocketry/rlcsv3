@@ -23,9 +23,10 @@ struct ActuatorMessage {
   bool ov101; // OV-101 Ox Fill
   bool ov102; // OV-102 Ox Drain
   bool ov103; // OV-103 Ox Vent
-  bool iv301; // IV-301 Injector Isolation Valve
-  bool iv302; // IV-302 Injector Drain Valve
-  bool nv201; // Nitrogen Isolation Valve
+  bool nv201; // IV-301 Injector Isolation Valve
+  bool cdv401; //CDV-401 Carbon Dioxide Purge Valve
+  // bool iv302; // IV-302 Injector Drain Valve
+  bool qd301; // Nitrogen Isolation Valve
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
@@ -52,8 +53,9 @@ struct SensorMessage {
   // Actuator states
   ActuatorPosition::ActuatorPosition ov101_state;
   ActuatorPosition::ActuatorPosition ov102_state;
-  ActuatorPosition::ActuatorPosition ov103_state;
-  ActuatorPosition::ActuatorPosition iv301_state;
+  ActuatorPosition::ActuatorPosition cdv401_state;
+  ActuatorPosition::ActuatorPosition nv201_state;
+  // ActuatorPosition::ActuatorPosition cdv401_state;
   // Tank Heating
   uint16_t heater_thermistor_1;
   uint16_t heater_thermistor_2;
