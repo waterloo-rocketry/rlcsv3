@@ -4,9 +4,9 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
   return ActuatorMessage{
       .ov101 = false,
       .ov102 = true,
-      .ov103 = true,
-      .nv201 = true,
-      .cdv401 = true,
+      .ov103 = false,
+      .nv201 = false,
+      .cdv401 = false,
       // .iv302 = false,
       .qd301 = false,
       .tank_heating_1 = false,
