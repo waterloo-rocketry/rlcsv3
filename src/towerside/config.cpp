@@ -22,7 +22,7 @@ struct Actuators {
 void apply(const ActuatorMessage &command) {
   ACTUATORS.ov101.set(command.ov101);
   ACTUATORS.ov102.set(command.ov102);
-  ACTUATORS.ov103.set(command.ov103);
+  ACTUATORS.ov103.set(!command.ov103);
   ACTUATORS.nv201.set(command.nv201);
   ACTUATORS.cdv401.set(command.cdv401);
   // ACTUATORS.iv302.set(!command.iv302);
