@@ -1,3 +1,6 @@
 [submodule "schematics/clientside_board_schematics/team_logo"]
 	path = schematics/clientside_board_schematics/team_logo
 	url = https://github.com/waterloo-rocketry/kicad-footprints.git
+[submodule "src/can_support/canlib"]
+	path = src/can_support/canlib
+	url = https://github.com/waterloo-rocketry/canlib.git

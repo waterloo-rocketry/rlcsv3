@@ -1,9 +1,10 @@
 #include <xc.h>
 #include "i2c.h"
 
+#include "canlib.h"
 #include "system_init.h"
 
-#define _XTAL_FREQ 12000000;
+#define _XTAL_FREQ 12000000
 
 uint8_t dip_inputs;
 
@@ -19,12 +20,31 @@ void read_dip_inputs(void) {
     }
 }
 
+void can_msg_handler(const can_msg_t *msg){
+	return;
+}
+
 void main(void) {
     SYSTEM_Initialize(); // calls oscillator init, pin manager init and PMD init
 
     // C2 is the contol pin for the power relay
     LATC2 = 0;
     TRISC2 = 0;
+
+    // Set up CAN TX
+    TRISC1 = 0;
+    RC1PPS = 0x33;
+
+    // Set up CAN RX
+    TRISC0 = 1;
+    ANSELC0 = 0;
+    CANRXPPS = 0x10;
+
+    // set up CAN module
+    can_timing_t can_setup;
+    can_generate_timing_params(_XTAL_FREQ, &can_setup);
+
+    can_init(&can_setup, can_msg_handler);
     
     dip_inputs = 0;
     i2c_set_address(dip_inputs); // Set a "default" address
