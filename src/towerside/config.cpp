@@ -11,10 +11,10 @@ struct Actuators {
   actuator::I2C ov103{8};
   actuator::I2C nv201{4};
   actuator::I2C cdv401{3};
-  // actuator::I2C iv302{8};
   actuator::Ignition ignition_primary{6};
   actuator::Ignition ignition_secondary{7};
   actuator::I2C qd301{9};
+  actuator::I2C can_support{10};
   actuator::Heater heater_1{16};
   actuator::Heater heater_2{17};
 } ACTUATORS;
@@ -25,8 +25,8 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.ov103.set(!command.ov103);
   ACTUATORS.nv201.set(command.nv201);
   ACTUATORS.cdv401.set(command.cdv401);
-  // ACTUATORS.iv302.set(!command.iv302);
   ACTUATORS.qd301.set(!command.qd301);
+  ACTUATORS.can_support.set(!command.qd301);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
   ACTUATORS.heater_1.set(command.tank_heating_1);

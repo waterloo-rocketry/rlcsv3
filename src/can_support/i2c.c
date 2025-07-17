@@ -32,11 +32,11 @@ void i2c_handle_interrupt() {
         uint8_t cmd = I2C1RXB;
         // we care about the second from last bit
 		can_msg_t msg;
-        //if(cmd & 0b10){
+        if(cmd & 0b10){
 			build_actuator_cmd_msg(PRIO_HIGHEST, 0, ACTUATOR_OX_INJECTOR_VALVE, ACT_STATE_ON, &msg);
-			//}else{
-			//build_actuator_cmd_msg(PRIO_HIGHEST, 0, ACTUATOR_OX_INJECTOR_VALVE, ACT_STATE_OFF, &msg);
-			//}
+		}else{
+			build_actuator_cmd_msg(PRIO_HIGHEST, 0, ACTUATOR_OX_INJECTOR_VALVE, ACT_STATE_OFF, &msg);
+		}
 		can_send(&msg);
         I2C1CON1bits.ACKDT = 0;
         I2C1PIRbits.WRIF = 0;
