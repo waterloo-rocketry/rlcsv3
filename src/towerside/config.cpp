@@ -8,12 +8,13 @@ namespace config {
 struct Actuators {
   actuator::I2C ov101{1};
   actuator::I2C ov102{2};
-  actuator::I2C ov103{3};
-  actuator::I2C iv301{4};
-  actuator::I2C iv302{8};
+  actuator::I2C ov103{8};
+  actuator::I2C nv201{4};
+  actuator::I2C cdv401{3};
+  // actuator::I2C iv302{8};
   actuator::Ignition ignition_primary{6};
   actuator::Ignition ignition_secondary{7};
-  actuator::I2C nv201{9};
+  actuator::I2C qd301{9};
   actuator::Heater heater_1{16};
   actuator::Heater heater_2{17};
 } ACTUATORS;
@@ -21,10 +22,11 @@ struct Actuators {
 void apply(const ActuatorMessage &command) {
   ACTUATORS.ov101.set(command.ov101);
   ACTUATORS.ov102.set(command.ov102);
-  ACTUATORS.ov103.set(command.ov103);
-  ACTUATORS.iv301.set(command.iv301);
-  ACTUATORS.iv302.set(command.iv302);
+  ACTUATORS.ov103.set(!command.ov103);
   ACTUATORS.nv201.set(command.nv201);
+  ACTUATORS.cdv401.set(command.cdv401);
+  // ACTUATORS.iv302.set(!command.iv302);
+  ACTUATORS.qd301.set(!command.qd301);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
   ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
   ACTUATORS.heater_1.set(command.tank_heating_1);
@@ -42,8 +44,8 @@ SensorMessage build_sensor_message() {
       .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(1),
       .ov101_state = ACTUATORS.ov101.get_state(),
       .ov102_state = ACTUATORS.ov102.get_state(),
-      .ov103_state = ACTUATORS.ov103.get_state(),
-      .iv301_state = ACTUATORS.iv301.get_state(),
+      .cdv401_state = ACTUATORS.cdv401.get_state(),
+      .nv201_state = ACTUATORS.nv201.get_state(),
       .heater_thermistor_1 = ACTUATORS.heater_1.get_thermistor(),
       .heater_thermistor_2 = ACTUATORS.heater_2.get_thermistor(),
       .heater_current_ma_1 = ACTUATORS.heater_1.get_current_ma(),
