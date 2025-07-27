@@ -8,6 +8,7 @@ ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
       .nv201 = false,
       .cdv401 = false,
       .qd301 = false,
+      .ov302 = false,
       .tank_heating_1 = false,
       .tank_heating_2 = false,
       .ignition_primary = false,
