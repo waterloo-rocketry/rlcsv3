@@ -22,7 +22,7 @@
 struct ActuatorMessage {
   bool ov101; // OV-101 Ox Fill
   bool ov102; // OV-102 Ox Drain
-  bool ov103; // OV-103 Ox Vent
+  bool ov301; // OV-103 Ox Vent
   bool nv201; // IV-301 Injector Isolation Valve
   bool cdv401; //CDV-401 Carbon Dioxide Purge Valve
   bool qd301; // Nitrogen Isolation Valve
