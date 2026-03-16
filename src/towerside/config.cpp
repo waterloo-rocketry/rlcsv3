@@ -6,15 +6,16 @@
 namespace config {
 
 struct Actuators {
-  actuator::I2C ov101{1};
-  actuator::I2C ov102{2};
-  actuator::I2C ov301{8};
-  actuator::I2C nv201{4};
-  actuator::I2C cdv401{3};
-  actuator::I2C ov302{5};
-  actuator::Ignition ignition_primary{6};
-  actuator::Ignition ignition_secondary{7};
-  actuator::I2C qd301{9};
+  actuator::I2C ov101{2};
+  actuator::I2C ov102{3};
+  actuator::I2C ov103{4};
+  actuator::I2C nv201{5};
+  actuator::I2C cdv401{6};
+  // actuator::I2C ov301{7};
+  actuator::I2C qd301{7};
+  actuator::I2C ov302{8};
+  actuator::Ignition ignition_primary{1};
+  // actuator::Ignition ignition_secondary{7};
   actuator::Heater heater_1{16};
   actuator::Heater heater_2{17};
 } ACTUATORS;
@@ -22,13 +23,13 @@ struct Actuators {
 void apply(const ActuatorMessage &command) {
   ACTUATORS.ov101.set(command.ov101);
   ACTUATORS.ov102.set(command.ov102);
-  ACTUATORS.ov301.set(!command.ov301);
+  // ACTUATORS.ov301.set(!command.ov301);
   ACTUATORS.nv201.set(command.nv201);
   ACTUATORS.cdv401.set(command.cdv401);
-  ACTUATORS.qd301.set(!command.qd301);
+  ACTUATORS.qd301.set(command.qd301);
   ACTUATORS.ov302.set(command.ov302);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
-  ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
+  // ACTUATORS.ignition_secondary.set(command.ignition_primary); // fire both ignitions in response to ignition_primary
   ACTUATORS.heater_1.set(command.tank_heating_1);
   ACTUATORS.heater_2.set(command.tank_heating_2);
 }
