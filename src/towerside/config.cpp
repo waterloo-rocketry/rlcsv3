@@ -23,6 +23,7 @@ struct Actuators {
 void apply(const ActuatorMessage &command) {
   ACTUATORS.ov101.set(command.ov101);
   ACTUATORS.ov102.set(command.ov102);
+  ACTUATORS.ov103.set(command.ov103);
   // ACTUATORS.ov301.set(!command.ov301);
   ACTUATORS.nv201.set(command.nv201);
   ACTUATORS.cdv401.set(command.cdv401);
@@ -35,14 +36,15 @@ void apply(const ActuatorMessage &command) {
 }
 
 SensorMessage build_sensor_message() {
+  Serial.println (ACTUATORS.ignition_primary.get_current_ma(0));
   return SensorMessage{
       .towerside_main_batt_mv = sensors::get_main_batt_mv(),
       .towerside_actuator_batt_mv = sensors::get_actuator_batt_mv(),
       .error_code = errors::pop(),
       .towerside_armed = sensors::is_armed(),
       .has_contact = sensors::has_contact(),
-      .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(1),
-      .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(1),
+      .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(0),
+      .ignition_secondary_ma = ACTUATORS.ignition_primary.get_current_ma(0),
       .ov101_state = ACTUATORS.ov101.get_state(),
       .ov102_state = ACTUATORS.ov102.get_state(),
       .cdv401_state = ACTUATORS.cdv401.get_state(),
