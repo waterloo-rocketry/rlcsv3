@@ -64,11 +64,11 @@ void setup() {
 void display(const ActuatorMessage &state) {
   digit_values[0] = static_cast<uint8_t>(state.ov101) << 0 |
                     static_cast<uint8_t>(state.ov102) << 1 |
-                    static_cast<uint8_t>(state.cdv401) << 2 |
+                    static_cast<uint8_t>(state.ov103) << 2 |
                     static_cast<uint8_t>(state.nv201) << 3;
-  digit_values[1] = static_cast<uint8_t>(state.ov301) << 0 |
+  digit_values[1] = static_cast<uint8_t>(state.cdv401) << 0 |
                     static_cast<uint8_t>(state.qd301) << 1 |
-                    static_cast<uint8_t>(state.tank_heating_1 & state.tank_heating_2) << 2 |
+                    static_cast<uint8_t>(state.ov302) << 2 |
                     static_cast<uint8_t>(state.ignition_primary & state.ignition_secondary) << 3;
 }
 
