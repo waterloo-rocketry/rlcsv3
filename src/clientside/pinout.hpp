@@ -10,7 +10,7 @@ const uint8_t BATT_VOLTAGE = 1;
 
 const uint8_t KEY_SWITCH_IN = 7;
 
-const uint8_t MISSILE_SWITCH_1 = 20;
+const uint8_t MISSILE_SWITCH_1 = 32;
 const uint8_t MISSILE_SWITCH_2 = 19;
 const uint8_t MISSILE_SWITCH_3 = 18;
 const uint8_t MISSILE_SWITCH_4 = 17;
