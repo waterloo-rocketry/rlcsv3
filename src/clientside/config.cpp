@@ -14,6 +14,7 @@ ActuatorMessage build_command_message() {
       .qd301 = digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC),
       .ov302 = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
       .pyro_valve = digitalRead(pinout::MISSILE_SWITCH_6),
+      .rocket_charging = digitalRead(pinout::MISSILE_SWITCH_7),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
       .ignition_primary =
