@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(115200);
   Serial2.begin(9600);
   Wire.begin();
-  Wire.setClock(10000);
+  Wire.setClock(15000);
   Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
   seven_seg::setup();
   sensors::setup();
