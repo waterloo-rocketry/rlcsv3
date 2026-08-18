@@ -20,10 +20,9 @@ ActuatorMessage build_command_message() {
       .ignition_primary =
           digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
-    //   .ignition_secondary =
-    //       digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) &&
-    //       !digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-    //       !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
+      .ignition_secondary = // fire secondary ignition with primary ignition switch
+        digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
+        !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE), // active low
   };
 }
 
