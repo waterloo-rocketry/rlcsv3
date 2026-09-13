@@ -51,8 +51,8 @@ void setup() {
 
 /* Layout:
    ----------------------
-   |O1:OPN O2:CLS O3:UNK|
-   |N1:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
+   |V305:OPN V301:CLS   |
+   |45:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
    |E:000 CON:Y ARM:Y tH|
    |TM:123 TA:118 CB:126| Those voltage are in tenth(increment 0.1)
    ----------------------
@@ -60,19 +60,24 @@ void setup() {
 
 void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
-  liquid_crystal.print("O1:");
-  print_valve_position(msg.ov101_state);
+  liquid_crystal.print("V305:");
+  print_valve_position(msg.v305_state);
 
+<<<<<<< HEAD
   liquid_crystal.print(" O2:");
   print_valve_position(msg.ov102_state);
 
   liquid_crystal.print(" C1:");
   print_valve_position(msg.cdv401_state);
+=======
+  liquid_crystal.print(" V301:");
+  print_valve_position(msg.v301_state);
+>>>>>>> 4633435 (Initial E-Pump spin test RLCS config)
 
   liquid_crystal.setCursor(0, 1);
 
-  liquid_crystal.print("NV:");
-  print_valve_position(msg.nv201_state);
+  liquid_crystal.print("45:");
+  print_valve_position(msg.v405_state);
 
   liquid_crystal.print(" IP:");
   print_decimal_value(msg.ignition_primary_ma / 10);
