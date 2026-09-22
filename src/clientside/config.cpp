@@ -6,9 +6,9 @@ namespace config {
 
 ActuatorMessage build_command_message() {
   return ActuatorMessage{
-      .v305 = digitalRead(pinout::MISSILE_SWITCH_1),
-      .v301 = !digitalRead(pinout::MISSILE_SWITCH_2),
-      .v405 = digitalRead(pinout::MISSILE_SWITCH_3),
+      .nv101 = digitalRead(pinout::MISSILE_SWITCH_1),
+      .nv102 = !digitalRead(pinout::MISSILE_SWITCH_2),
+      .iv201 = digitalRead(pinout::MISSILE_SWITCH_3),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
       .ignition_primary =

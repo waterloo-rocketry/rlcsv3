@@ -62,9 +62,9 @@ void setup() {
 }
 
 void display(const ActuatorMessage &state) {
-  digit_values[0] = static_cast<uint8_t>(state.v305) << 0 |
-                    static_cast<uint8_t>(state.v301) << 1 |
-                    static_cast<uint8_t>(state.v405) << 2 |
+  digit_values[0] = static_cast<uint8_t>(state.nv101) << 0 |
+                    static_cast<uint8_t>(state.nv102) << 1 |
+                    static_cast<uint8_t>(state.iv201) << 2 |
                     static_cast<uint8_t>(false) << 3;
   digit_values[1] = static_cast<uint8_t>(false) << 0 |
                     static_cast<uint8_t>(false) << 1 |
