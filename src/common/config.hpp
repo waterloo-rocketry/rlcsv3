@@ -20,21 +20,9 @@
 ; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
 struct ActuatorMessage {
-<<<<<<< HEAD
-  bool ov101; // OV-101 Ox Fill
-  bool ov102; // OV-102 Ox Drain
-  bool ov103; // OV-103 Ox Vent
-  bool nv201; // Nitrogen Valve
-  bool cdv401; //CDV-401 Carbon Dioxide Purge Valve
-  bool cdv402; //CDV-402 Carbon Dioxide Drain Valve
-  bool qd301; // Nitrogen Isolation Valve
-  bool pyro_valve; // pyro valve
-  bool rocket_charging; //rocket charging
-=======
   bool v305; // V-305 N2 Press Valve, solenoid ON(true)/OFF(false)
   bool v301; // V-301 N2 Vent Valve, solenoid ON(true)/OFF(false)
   bool v405; // V-405 Water Fill Valve, solenoid ON(true)/OFF(false)
->>>>>>> 4633435 (Initial E-Pump spin test RLCS config)
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
