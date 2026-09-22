@@ -20,15 +20,9 @@
 ; // random semicolon to fix clangd warning bug, see: https://stackoverflow.com/questions/72456118/why-does-clang-give-a-warning-unterminated-pragma-pack-push-at-end-of-f
 #pragma pack(push, 1)
 struct ActuatorMessage {
-  bool ov101; // OV-101 Ox Fill
-  bool ov102; // OV-102 Ox Drain
-  bool ov103; // OV-103 Ox Vent
-  bool nv201; // Nitrogen Valve
-  bool cdv401; //CDV-401 Carbon Dioxide Purge Valve
-  bool qd301; // Nitrogen Isolation Valve
-  bool ov302; // OV-302 Injector Valves
-  bool pyro_valve; // pyro valve
-  bool rocket_charging; //rocket charging
+  bool nv101; // NV-101 Remote Tank Nitrogen Pressurization Valve, solenoid ON(true)/OFF(false)
+  bool nv102; // NV-102 Remote Tank Nitrogen Vent Valve, solenoid ON(true)/OFF(false)
+  bool iv201; // IV-201 Remote Water Isolation Valve, solenoid ON(true)/OFF(false)
   bool tank_heating_1;
   bool tank_heating_2;
   bool ignition_primary;
@@ -53,11 +47,9 @@ struct SensorMessage {
   uint16_t ignition_primary_ma;
   uint16_t ignition_secondary_ma;
   // Actuator states
-  ActuatorPosition::ActuatorPosition ov101_state;
-  ActuatorPosition::ActuatorPosition ov102_state;
-  ActuatorPosition::ActuatorPosition cdv401_state;
-  ActuatorPosition::ActuatorPosition nv201_state;
-  // ActuatorPosition::ActuatorPosition cdv401_state;
+  ActuatorPosition::ActuatorPosition nv101_state;
+  ActuatorPosition::ActuatorPosition nv102_state;
+  ActuatorPosition::ActuatorPosition iv201_state;
   // Tank Heating
   uint16_t heater_thermistor_1;
   uint16_t heater_thermistor_2;
