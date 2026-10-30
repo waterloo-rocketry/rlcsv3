@@ -11,8 +11,8 @@ struct Actuators {
   actuator::I2C ov103{4};
   actuator::I2C nv201{5};
   actuator::I2C cdv401{6};
-  actuator::I2C qd301{7};
-  actuator::I2C ov302{8};
+  actuator::I2C cdv402{7};
+  actuator::I2C qd301{8};
   actuator::I2C pyro_valve{9};
   actuator::I2C rocket_charging{10};
   actuator::Ignition ignition_primary{1};
@@ -25,11 +25,10 @@ void apply(const ActuatorMessage &command) {
   ACTUATORS.ov101.set(command.ov101);
   ACTUATORS.ov102.set(command.ov102);
   ACTUATORS.ov103.set(command.ov103);
-  // ACTUATORS.ov301.set(!command.ov301);
   ACTUATORS.nv201.set(command.nv201);
   ACTUATORS.cdv401.set(command.cdv401);
+  ACTUATORS.cdv402.set(command.cdv402);
   ACTUATORS.qd301.set(command.qd301);
-  ACTUATORS.ov302.set(command.ov302);
   ACTUATORS.pyro_valve.set(command.pyro_valve);
   ACTUATORS.rocket_charging.set(command.rocket_charging);
   ACTUATORS.ignition_primary.set(command.ignition_primary);
