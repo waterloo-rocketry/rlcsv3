@@ -27,8 +27,8 @@ try:
             state = not state
 
         if state:
-            s.write(b"W\1\1\1\1\1\1R")
+            s.write(b"W\1\1R")  # override QD301 on
         else:
-            s.write(b"W\0\0\0\0\0\0R")
+            s.write(b"W\1\0R")  # override QD301 off (b"W\0\0R" releases it)
 finally:
     s.close()
