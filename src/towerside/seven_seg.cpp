@@ -67,8 +67,8 @@ void display(const ActuatorMessage &state) {
                     static_cast<uint8_t>(state.ov103) << 2 |
                     static_cast<uint8_t>(state.nv201) << 3;
   digit_values[1] = static_cast<uint8_t>(state.cdv401) << 0 |
-                    static_cast<uint8_t>(state.qd301) << 1 |
-                    static_cast<uint8_t>(state.ov302) << 2 |
+                    static_cast<uint8_t>(state.cdv402) << 1 |
+                    static_cast<uint8_t>(state.qd301) << 2 |
                     static_cast<uint8_t>(state.ignition_primary & state.ignition_secondary) << 3;
 }
 

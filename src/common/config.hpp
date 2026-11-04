@@ -25,8 +25,8 @@ struct ActuatorMessage {
   bool ov103; // OV-103 Ox Vent
   bool nv201; // Nitrogen Valve
   bool cdv401; //CDV-401 Carbon Dioxide Purge Valve
+  bool cdv402; //CDV-402 Carbon Dioxide Drain Valve
   bool qd301; // Nitrogen Isolation Valve
-  bool ov302; // OV-302 Injector Valves
   bool pyro_valve; // pyro valve
   bool rocket_charging; //rocket charging
   bool tank_heating_1;

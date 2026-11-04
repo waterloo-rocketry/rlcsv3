@@ -66,7 +66,7 @@ void update(SensorMessage msg) {
   liquid_crystal.print(" O2:");
   print_valve_position(msg.ov102_state);
 
-  liquid_crystal.print(" CD:");
+  liquid_crystal.print(" C1:");
   print_valve_position(msg.cdv401_state);
 
   liquid_crystal.setCursor(0, 1);
