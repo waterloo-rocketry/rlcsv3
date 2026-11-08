@@ -31,15 +31,6 @@ public:
     if (buffer_position < BUFF_SIZE) {
       return false;
     }
-    // --- DEBUG PRINT: Print entire buffer in Hex ---
-    Serial.print("RX Buffer: ");
-    for (size_t i = 0; i < BUFF_SIZE; i++) {
-      if (receive_buffer[i] < 0x10) Serial.print("0");
-      Serial.print(receive_buffer[i], HEX);
-      Serial.print(" ");
-    }
-    Serial.println();
-    // ----------------------------------------------
     if (receive_buffer[0] != 'W' || receive_buffer[sizeof(RT) + 1] != 'R') {
       buffer_position = 0;
       return false;
