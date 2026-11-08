@@ -6,7 +6,7 @@
 
 template <typename ST, typename RT> class Communicator {
   Stream &stream;
-  static const size_t BUFF_SIZE = sizeof(RT) + 2;
+  static const size_t BUFF_SIZE = sizeof(RT) + 3;
   uint8_t receive_buffer[BUFF_SIZE];
 
   size_t buffer_position = 0;
@@ -31,12 +31,20 @@ public:
     if (buffer_position < BUFF_SIZE) {
       return false;
     }
-
+    // --- DEBUG PRINT: Print entire buffer in Hex ---
+    Serial.print("RX Buffer: ");
+    for (size_t i = 0; i < BUFF_SIZE; i++) {
+      if (receive_buffer[i] < 0x10) Serial.print("0");
+      Serial.print(receive_buffer[i], HEX);
+      Serial.print(" ");
+    }
+    Serial.println();
+    // ----------------------------------------------
     if (receive_buffer[0] != 'W' || receive_buffer[sizeof(RT) + 1] != 'R') {
       buffer_position = 0;
       return false;
     }
-
+    Serial.println("PASSED 2");
     memcpy(dest, receive_buffer + 1, sizeof(RT));
     buffer_position = 0;
     return true;

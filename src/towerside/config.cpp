@@ -46,7 +46,7 @@ SensorMessage build_sensor_message() {
       .towerside_armed = sensors::is_armed(),
       .has_contact = sensors::has_contact(),
       .ignition_primary_ma = ACTUATORS.ignition_primary.get_current_ma(0),
-      .ignition_secondary_ma = ACTUATORS.ignition_secondary.get_current_ma(0),
+      .ignition_secondary_ma = ACTUATORS.ignition_primary.get_current_ma(1),
       .ov101_state = ACTUATORS.ov101.get_state(),
       .ov102_state = ACTUATORS.ov102.get_state(),
       .cdv401_state = ACTUATORS.cdv401.get_state(),

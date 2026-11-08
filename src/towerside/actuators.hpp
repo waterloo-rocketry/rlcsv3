@@ -7,6 +7,10 @@
 #include "common/shared_types.hpp"
 #include "errors.hpp"
 
+#include <SoftWire.h>
+extern SoftWire SoftI2C;
+#define Wire SoftI2C
+
 namespace actuator {
 
 class Actuator {
@@ -38,11 +42,11 @@ public:
     bool healthy = true;
     healthy &= Wire.write((select << 1) | power) == 1; // returns the number of bytes written, should be 1
     healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   ActuatorPosition::ActuatorPosition get_state() {
@@ -75,7 +79,7 @@ public:
     }
     uint16_t adcl = Wire.read(); // get the 16-bit current reading
     uint16_t adch = Wire.read();
-    return ((adch << 8) | adcl) * 20; // adc / 1024 (10bit) * 4096mV (vref) / 10mohm / 20 adc scaler * 1000 mV/V
+    return ((adch << 8) | adcl) * 100; // adc / 1024 (10bit) * 4096mV (vref) / 10mohm / 20 adc scaler * 1000 mV/V
   }
 };
 
@@ -106,11 +110,11 @@ public:
     bool healthy = true;
     healthy &= Wire.write(power_set) == 1; // returns the number of bytes written, should be 1
     healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   void select_reg(uint8_t reg){
@@ -119,11 +123,11 @@ public:
     bool healthy = true;
     healthy &= Wire.write(power_set | (reg << 1)) == 1; // returns the number of bytes written, should be 1
     healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   uint16_t get_thermistor() {
