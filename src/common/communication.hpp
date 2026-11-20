@@ -35,7 +35,6 @@ public:
       buffer_position = 0;
       return false;
     }
-    Serial.println("PASSED 2");
     memcpy(dest, receive_buffer + 1, sizeof(RT));
     buffer_position = 0;
     return true;

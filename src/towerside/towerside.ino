@@ -9,7 +9,6 @@
   SoftWire SoftI2C(pinout::SOFT_SDA, pinout::SOFT_SCL);
   uint8_t I2CrxBuffer[32];
   uint8_t I2CtxBuffer[32];
-  #define Wire SoftI2C
 
   void setup() {
     Serial.begin(115200);
@@ -19,7 +18,7 @@
     SoftI2C.setTxBuffer(I2CtxBuffer, sizeof(I2CtxBuffer));
 
     Wire.begin();
-    Wire.setClock(50000);
+    Wire.setClock(50000); //clock is set much faster for software I2C because low frequencies behave unpredictably. Value was chosen through binary search.
     // Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
     seven_seg::setup();
     sensors::setup();
@@ -37,40 +36,44 @@
     
     // We loop here so that the variables defined above are in scope
     while (true) {
-    // Process ALL incoming bytes waiting in the hardware serial buffer
-    while (Serial2.available()) {
-      communicator.read_byte();
+      // Drain all incoming bytes waiting in the hardware serial buffer
+      while (Serial2.available()) {
+        communicator.read_byte();
+      }
+      // Process the message
       ActuatorMessage new_cmd;
       if (communicator.get_message(&new_cmd)) { // If a complete message was decoded
+        // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
         if (new_cmd == last_cmd && sensors::is_armed()) {
           current_cmd = new_cmd;
         }
         last_cmd = new_cmd;
       }
-    }
 
-    // Handle contact timeouts
+    // If we have got a message from clientside recently
     uint16_t seconds_since_contact = communicator.seconds_since_last_contact();
     bool has_contact = seconds_since_contact < config::COMMUNICATION_TIMEOUT_S;
     sensors::set_contact(has_contact);
     digitalWrite(pinout::COMM_STATUS_LED, sensors::has_contact());
     digitalWrite(pinout::ARM_STATUS_LED, sensors::is_armed());
     if (seconds_since_contact >= config::SAFE_STATE_TIMEOUT_S) {
+      // Override clientside's command and go to safe state
       current_cmd = build_safe_state(current_cmd);
     }
 
-    // Execute I2C and display updates
+
     config::apply(current_cmd);
     seven_seg::display(current_cmd);
     seven_seg::tick();
 
-    // Send telemetry
+    // Periodically send back our status
     if (millis() > last_sensor_msg_time + config::SENSOR_MSG_INTERVAL_MS) {
       last_sensor_msg_time = millis();
       communicator.send(config::build_sensor_message());
     }
   }
-  }
+}
 
-  void loop() {
-  }
+void loop() {
+
+}
