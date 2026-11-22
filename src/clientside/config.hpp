@@ -5,7 +5,9 @@
 #include <stdint.h>
 
 namespace config {
-static void update_autosequence(uint16_t ignition_ma = 0);
+
+void reset_autosequence();
+void update_autosequence(uint16_t ignition_ma = 0);
 ActuatorMessage build_command_message();
 
 constexpr unsigned long COMMAND_MESSAGE_INTERVAL_MS = 100;

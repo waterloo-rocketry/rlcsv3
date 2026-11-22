@@ -47,6 +47,8 @@ void setup() {
     if (armed) {
       config::update_autosequence(last_sensor_msg.ignition_primary_ma);
       last_switch_positions = config::build_command_message();
+    } else{
+      config::reset_autosequence();
     }
 
     if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS)) {

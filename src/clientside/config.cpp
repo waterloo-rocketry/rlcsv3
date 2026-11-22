@@ -20,7 +20,7 @@ static unsigned long stage_start = 0;
 static unsigned long current_drop_start = 0;
 static bool current_flowing = false;
 
-static void reset_autosequence() {
+void reset_autosequence() {
   seq_state = SeqState::IDLE;
   fire_press_start = 0;
   stage_start = 0;
@@ -28,7 +28,7 @@ static void reset_autosequence() {
   current_flowing = false;
 }
 
-static void update_autosequence(uint16_t ignition_ma) {
+void update_autosequence(uint16_t ignition_ma) {
   if (!digitalRead(AUTOSEQ_MODE_PIN)) {
     reset_autosequence();
     return;
