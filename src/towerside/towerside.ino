@@ -39,16 +39,17 @@
       // Drain all incoming bytes waiting in the hardware serial buffer
       while (Serial2.available()) {
         communicator.read_byte();
-      }
-      // Process the message
-      ActuatorMessage new_cmd;
-      if (communicator.get_message(&new_cmd)) { // If a complete message was decoded
-        // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
-        if (new_cmd == last_cmd && sensors::is_armed()) {
-          current_cmd = new_cmd;
+        // Process the message
+        ActuatorMessage new_cmd;
+        if (communicator.get_message(&new_cmd)) { // If a complete message was decoded
+          // If we got the same message last time around (aka no RF interference) and we are armed, apply the command
+          if (new_cmd == last_cmd && sensors::is_armed()) {
+            current_cmd = new_cmd;
+          }
+          last_cmd = new_cmd;
         }
-        last_cmd = new_cmd;
       }
+      
 
     // If we have got a message from clientside recently
     uint16_t seconds_since_contact = communicator.seconds_since_last_contact();
