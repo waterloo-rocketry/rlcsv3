@@ -7,6 +7,9 @@
 #include "common/shared_types.hpp"
 #include "errors.hpp"
 
+#include <SoftWire.h>
+extern SoftWire SoftI2C;
+
 namespace actuator {
 
 class Actuator {
@@ -30,29 +33,29 @@ public:
     slave_address{slave_address} {}
 
   void set(bool value) {
-    Wire.beginTransmission(slave_address);
+    SoftI2C.beginTransmission(slave_address);
     // Relay boards have two relays. One turns on power, and the other selects which direction to apply power to.
     // LSB is power, next bit is select.
     bool power = get_power(value);
     bool select = get_select(value);
     bool healthy = true;
-    healthy &= Wire.write((select << 1) | power) == 1; // returns the number of bytes written, should be 1
-    healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    healthy &= SoftI2C.write((select << 1) | power) == 1; // returns the number of bytes written, should be 1
+    healthy &= SoftI2C.endTransmission() == 0; // returns non-zero value if there was an error
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   ActuatorPosition::ActuatorPosition get_state() {
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(1)); // returns number of bytes receieved
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(1)); // returns number of bytes receieved
     if (received != 1) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return ActuatorPosition::error;
     }
-    uint8_t lims = Wire.read(); // first byte returned is the limit switch values
+    uint8_t lims = SoftI2C.read(); // first byte returned is the limit switch values
     if (lims == 0) return ActuatorPosition::unknown;
     if (lims == 1) return ActuatorPosition::open;
     if (lims == 2) return ActuatorPosition::closed;
@@ -64,18 +67,18 @@ public:
       return SENSOR_ERR_VAL;
     }
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(5)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(5)); // returns number of bytes received
     if (received != 5) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    Wire.read(); // limit switch values, ignore
+    SoftI2C.read(); // limit switch values, ignore
     if (channel == 1) { // if we want the secondary current
-      Wire.read(); Wire.read(); // ignore the first (primary) current value (2 bytes)
+      SoftI2C.read(); SoftI2C.read(); // ignore the first (primary) current value (2 bytes)
     }
-    uint16_t adcl = Wire.read(); // get the 16-bit current reading
-    uint16_t adch = Wire.read();
-    return ((adch << 8) | adcl) * 20; // adc / 1024 (10bit) * 4096mV (vref) / 10mohm / 20 adc scaler * 1000 mV/V
+    uint16_t adcl = SoftI2C.read(); // get the 16-bit current reading
+    uint16_t adch = SoftI2C.read();
+    return ((adch << 8) | adcl) * 100; // adc / 1024 (10bit) * 4096mV (vref) / 10mohm / 100 adc scaler (40 if using A1) * 1000 mV/V
   }
 };
 
@@ -101,93 +104,93 @@ public:
 
   void set(bool value) {
     power_set = value;
-    Wire.beginTransmission(slave_address);
+    SoftI2C.beginTransmission(slave_address);
     // LSB is power, bit [3:1] are for register select
     bool healthy = true;
-    healthy &= Wire.write(power_set) == 1; // returns the number of bytes written, should be 1
-    healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    healthy &= SoftI2C.write(power_set) == 1; // returns the number of bytes written, should be 1
+    healthy &= SoftI2C.endTransmission() == 0; // returns non-zero value if there was an error
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   void select_reg(uint8_t reg){
-    Wire.beginTransmission(slave_address);
+    SoftI2C.beginTransmission(slave_address);
     // LSB is power, bit [3:1] are for register select
     bool healthy = true;
-    healthy &= Wire.write(power_set | (reg << 1)) == 1; // returns the number of bytes written, should be 1
-    healthy &= Wire.endTransmission() == 0; // returns non-zero value if there was an error
-    healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
+    healthy &= SoftI2C.write(power_set | (reg << 1)) == 1; // returns the number of bytes written, should be 1
+    healthy &= SoftI2C.endTransmission() == 0; // returns non-zero value if there was an error
+    // healthy &= !Wire.getWireTimeoutFlag(); // make sure timeout flag is not set
     if (!healthy) {
       errors::push(slave_address, ErrorCode::I2CWriteError);
     }
-    Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
+    // Wire.clearWireTimeoutFlag(); // if the flag was set, clear it for next time
   }
 
   uint16_t get_thermistor() {
     select_reg(0);
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
     if (received != 2) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    uint16_t adcl = Wire.read();
-    uint16_t adch = Wire.read();
+    uint16_t adcl = SoftI2C.read();
+    uint16_t adch = SoftI2C.read();
     return ((adch << 8) | adcl); // Return raw ADC values
   }
 
   uint16_t get_current_ma() {
     select_reg(1);
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
     if (received != 2) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    uint16_t adcl = Wire.read();
-    uint16_t adch = Wire.read();
+    uint16_t adcl = SoftI2C.read();
+    uint16_t adch = SoftI2C.read();
     return ((adch << 8) | adcl) * 40; // adc / 1024 (10bit) * 4096mV (vref) / 1mohm / 100 adc scaler * 1000 mV/V
   }
 
   uint16_t get_batt_voltage() {
     select_reg(2);
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
     if (received != 2) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    uint16_t adcl = Wire.read();
-    uint16_t adch = Wire.read();
+    uint16_t adcl = SoftI2C.read();
+    uint16_t adch = SoftI2C.read();
     return ((adch << 8) | adcl) * 28; // adc / 1024 (10bit) * 4096mV (vref) * 7.04
   }
 
   uint16_t get_kelvin_low_voltage() {
     select_reg(3);
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
     if (received != 2) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    uint16_t adcl = Wire.read();
-    uint16_t adch = Wire.read();
+    uint16_t adcl = SoftI2C.read();
+    uint16_t adch = SoftI2C.read();
     return ((adch << 8) | adcl) * 28; // adc / 1024 (10bit) * 4096mV (vref) * 7.04
   }
 
   uint16_t get_kelvin_high_voltage() {
     select_reg(4);
     // Cast to uint8_t to avoid warning about ambiguous overload
-    uint8_t received = Wire.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
+    uint8_t received = SoftI2C.requestFrom(slave_address, static_cast<uint8_t>(2)); // returns number of bytes received
     if (received != 2) {
       errors::push(slave_address, ErrorCode::I2CReadError);
       return SENSOR_ERR_VAL;
     }
-    uint16_t adcl = Wire.read();
-    uint16_t adch = Wire.read();
+    uint16_t adcl = SoftI2C.read();
+    uint16_t adch = SoftI2C.read();
     return ((adch << 8) | adcl) * 28; // adc / 1024 (10bit) * 4096mV (vref) * 7.04
   }
 };
