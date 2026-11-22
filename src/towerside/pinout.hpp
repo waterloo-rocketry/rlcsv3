@@ -23,6 +23,10 @@ const uint8_t SEVENSEG_DP = 44;
 const uint8_t COMM_STATUS_LED = 35;
 const uint8_t ARM_STATUS_LED = 36;
 
+const uint8_t SOFT_SDA = 24;
+const uint8_t SOFT_SCL = 25;
+
+
 } // namespace pinout
 
 #endif
