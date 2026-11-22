@@ -48,9 +48,11 @@ static void update_autosequence(uint16_t ignition_ma) {
 
   // Ensure the autosequencing aborts only if it has been false for 50 ms
   bool fire_held = raw_fire || (seq_state != SeqState::IDLE && (now - last_fire_time < 50));
-  if (!fire_held) {
-    reset_autosequence();
-    return;
+  if (seq_state != SeqState::VALVE_ACTUATED) {
+    if (!fire_held) {
+      reset_autosequence();
+      return;
+    }
   }
 
   switch (seq_state) {
@@ -88,7 +90,7 @@ static void update_autosequence(uint16_t ignition_ma) {
       if(current_drop_start == 0){
         current_drop_start = now;
       } //only start the valve_delay if the current has dropped below 1500 for over 50ms
-      else if (now - current_drop_start >= 50){
+      else if (now - current_drop_start >= 200){
         seq_state = SeqState::WAITING_FOR_VALVE;
             stage_start = now;
         }
@@ -115,11 +117,9 @@ static bool autosequence_valve_active() {
   return seq_state == SeqState::VALVE_ACTUATED;
 }
 
-ActuatorMessage build_command_message(uint16_t ignition_ma) {
+ActuatorMessage build_command_message() {
 
   bool autoseq_mode = digitalRead(AUTOSEQ_MODE_PIN);
-  update_autosequence(ignition_ma);
-  
   return ActuatorMessage{
       .ov101 = digitalRead(pinout::MISSILE_SWITCH_1),
       .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),

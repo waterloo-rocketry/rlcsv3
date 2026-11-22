@@ -41,8 +41,12 @@ void setup() {
 
     bool armed = hardware::is_armed();
     hardware::set_missile_leds(armed);
+
+    
+
     if (armed) {
-      last_switch_positions = config::build_command_message(last_sensor_msg.ignition_primary_ma);
+      config::update_autosequence(last_sensor_msg.ignition_primary_ma);
+      last_switch_positions = config::build_command_message();
     }
 
     if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS)) {
