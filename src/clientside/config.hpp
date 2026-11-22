@@ -22,6 +22,11 @@ struct USBMessage {
   ActuatorMessage actuator_msg;
   SensorMessage sensor_msg;
 };
+
+struct USBCommand {
+  bool qd301_override; // false = use the physical missile switch
+  bool qd301;          // QD301 state while overriding
+};
 #pragma pack(pop)
 
 } // namespace config

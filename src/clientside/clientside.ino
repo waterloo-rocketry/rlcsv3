@@ -14,8 +14,9 @@ void setup() {
 
   Communicator<ActuatorMessage, SensorMessage> towerside_communicator{
       Serial3, config::COMMUNICATION_RESET_MS};
-  Communicator<config::USBMessage, int> usb_communicator{
+  Communicator<config::USBMessage, config::USBCommand> usb_communicator{
       Serial, config::COMMUNICATION_RESET_MS};
+  config::USBCommand usb_command{};
   unsigned long last_sent_time = 0;
   ActuatorMessage last_switch_positions = build_safe_state(ActuatorMessage());
   SensorMessage last_sensor_msg;
@@ -31,6 +32,9 @@ void setup() {
       lcd::update(last_sensor_msg);
     }
 
+    usb_communicator.read_byte();
+    usb_communicator.get_message(&usb_command);
+
     bool has_contact = towerside_communicator.seconds_since_last_contact() <
                        config::COMMUNICATION_TIMEOUT_S;
     if (has_contact && any_messages_received) {
@@ -43,6 +47,12 @@ void setup() {
     hardware::set_missile_leds(armed);
     if (armed) {
       last_switch_positions = config::build_command_message();
+      // The override lapses if the external system stops sending.
+      if (usb_command.qd301_override &&
+          usb_communicator.seconds_since_last_contact() <
+              config::COMMUNICATION_TIMEOUT_S) {
+        last_switch_positions.qd301 = usb_command.qd301;
+      }
     }
 
     if ((millis() > last_sent_time + config::COMMAND_MESSAGE_INTERVAL_MS)) {
