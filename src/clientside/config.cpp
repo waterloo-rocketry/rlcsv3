@@ -4,8 +4,6 @@
 
 namespace config {
 
-const uint8_t AUTOSEQ_MODE_PIN = pinout::MISSILE_SWITCH_7;
-
 enum class SeqState : uint8_t {
   IDLE,
   IGNITING,
@@ -29,16 +27,16 @@ void reset_autosequence() {
 }
 
 void update_autosequence(uint16_t ignition_ma) {
-  if (!digitalRead(AUTOSEQ_MODE_PIN)) {
+  // If ignition is not armed, or if manual QD switch is flipped ON, reset autosequence
+  if (!digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) || digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC)) {
     reset_autosequence();
     return;
   }
 
   unsigned long now = millis();
-  bool raw_fire = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-                  !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE);
+  bool raw_fire = !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE); // Arm is checked above
 
-  //Record the time since pressing the fire button in fire_press_start
+  // Record the time since pressing the fire button in fire_press_start
   if (raw_fire) {
     last_fire_time = now;
     if (fire_press_start == 0) fire_press_start = now;
@@ -46,7 +44,7 @@ void update_autosequence(uint16_t ignition_ma) {
     if (seq_state == SeqState::IDLE) fire_press_start = 0;
   }
 
-  // Ensure the autosequencing aborts only if it has been false for 50 ms
+  // If released before valve actuation, abort and do not open QD301
   bool fire_held = raw_fire || (seq_state != SeqState::IDLE && (now - last_fire_time < 50));
   if (seq_state != SeqState::VALVE_ACTUATED) {
     if (!fire_held) {
@@ -57,7 +55,7 @@ void update_autosequence(uint16_t ignition_ma) {
 
   switch (seq_state) {
     case SeqState::IDLE:
-      // Must hold for at least 50ms before starting to prevent accidental pressed starting the autosequence
+      // Must hold for at least 50ms before starting to prevent accidental presses starting the autosequence
       if (now - fire_press_start >= 50) {
         seq_state = SeqState::IGNITING;
         stage_start = now;
@@ -86,18 +84,17 @@ void update_autosequence(uint16_t ignition_ma) {
       }
       
       // We will only make it here if ignition_ma < 1500 from the above statement
-      // We then check how long the current has been below 1500 for
-      if(current_drop_start == 0){
-        current_drop_start = now;
-      } //only start the valve_delay if the current has dropped below 1500 for over 50ms
-      else if (now - current_drop_start >= 200){
+      // We then check how long the current has been below 1500 for (confirming burn-through)
+      if (current_drop_start == 0) {
+        current_drop_start = now; 
+      } else if (now - current_drop_start >= 200) { //only start the valve_delay if the current has dropped below 1500 for over 50ms
         seq_state = SeqState::WAITING_FOR_VALVE;
-            stage_start = now;
-        }
+        stage_start = now;
+      }
       break;
 
     case SeqState::WAITING_FOR_VALVE:
-      //One second delay after current drop and we have fire
+      // One second delay after current drop and we have fire
       if (now - stage_start >= 1000) {
         seq_state = SeqState::VALVE_ACTUATED;
       }
@@ -105,21 +102,14 @@ void update_autosequence(uint16_t ignition_ma) {
 
     case SeqState::VALVE_ACTUATED:
       break;
-
   }
+}
 
-}
-  
-static bool autosequence_ignition_active() {
-  return seq_state != SeqState::IDLE;
-}
 static bool autosequence_valve_active() {
   return seq_state == SeqState::VALVE_ACTUATED;
 }
 
 ActuatorMessage build_command_message() {
-
-  bool autoseq_mode = digitalRead(AUTOSEQ_MODE_PIN);
   return ActuatorMessage{
       .ov101 = digitalRead(pinout::MISSILE_SWITCH_1),
       .ov102 = digitalRead(pinout::MISSILE_SWITCH_2),
@@ -127,21 +117,16 @@ ActuatorMessage build_command_message() {
       .nv201 = digitalRead(pinout::MISSILE_SWITCH_4),
       .cdv401 = digitalRead(pinout::MISSILE_SWITCH_5),
       .cdv402 = digitalRead(pinout::MISSILE_SWITCH_6),
-      .qd301 =
-          !autoseq_mode ? digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC)
-                        : autosequence_valve_active(),
+      .qd301 = digitalRead(pinout::MISSILE_SWITCH_IGNITION_SEC) ||
+               autosequence_valve_active(),
       .pyro_valve = digitalRead(pinout::MISSILE_SWITCH_INJECTOR),
-      .rocket_charging = 0,
+      .rocket_charging = digitalRead(pinout::MISSILE_SWITCH_7),
       .tank_heating_1 = digitalRead(pinout::MISSILE_SWITCH_8),
       .tank_heating_2 = digitalRead(pinout::MISSILE_SWITCH_8),
-      .ignition_primary =
-          !autoseq_mode ? (digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-                           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE))
-                        : autosequence_ignition_active(),
-      .ignition_secondary = // fire secondary ignition with primary ignition switch
-          !autoseq_mode ? (digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI) &&
-                           !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE))
-                        : autosequence_ignition_active(),
+      .ignition_primary = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI)
+                      && !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE),
+      .ignition_secondary = digitalRead(pinout::MISSILE_SWITCH_IGNITION_PRI)
+                      && !digitalRead(pinout::MISSILE_SWITCH_IGNITION_FIRE),
   };
 }
 
