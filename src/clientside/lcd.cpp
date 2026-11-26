@@ -51,8 +51,8 @@ void setup() {
 
 /* Layout:
    ----------------------
-   |O1:OPN O2:CLS O3:UNK|
-   |N1:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
+   |N1:OPN N2:CLS I1:UNK|
+   |I2:CLS IP:412 IS:456| Those current are in hundredth(increment 0.01)
    |E:000 CON:Y ARM:Y tH|
    |TM:123 TA:118 CB:126| Those voltage are in tenth(increment 0.1)
    ----------------------
@@ -60,19 +60,19 @@ void setup() {
 
 void update(SensorMessage msg) {
   liquid_crystal.setCursor(0, 0);
-  liquid_crystal.print("O1:");
-  print_valve_position(msg.ov101_state);
+  liquid_crystal.print("N1:");
+  print_valve_position(msg.nv101_state);
 
-  liquid_crystal.print(" O2:");
-  print_valve_position(msg.ov102_state);
+  liquid_crystal.print(" N2:");
+  print_valve_position(msg.nv102_state);
 
-  liquid_crystal.print(" C1:");
-  print_valve_position(msg.cdv401_state);
+  liquid_crystal.print(" I1:");
+  print_valve_position(msg.iv201_state);
 
   liquid_crystal.setCursor(0, 1);
 
-  liquid_crystal.print("NV:");
-  print_valve_position(msg.nv201_state);
+  liquid_crystal.print("I2:");
+  print_valve_position(msg.iv202_state);
 
   liquid_crystal.print(" IP:");
   print_decimal_value(msg.ignition_primary_ma / 10);

@@ -2,15 +2,10 @@
 
 ActuatorMessage build_safe_state(const ActuatorMessage &current_state) {
   return ActuatorMessage{
-      .ov101 = false,
-      .ov102 = false,
-      .ov103 = false,
-      .nv201 = false,
-      .cdv401 = false,
-      .cdv402 = false,
-      .qd301 = false,
-      .pyro_valve = false,
-      .rocket_charging = false,
+      .nv101 = false,
+      .nv102 = false,
+      .iv201 = false,
+      .iv202 = false,
       .tank_heating_1 = false,
       .tank_heating_2 = false,
       .ignition_primary = false,
