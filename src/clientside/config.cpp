@@ -70,15 +70,15 @@ void update_autosequence(uint16_t ignition_ma) {
       }
       if (!current_flowing) {
         // Confirm igniter is drawing current (>= 1.5A)
-        if (ignition_ma >= 1500) {
+        if (ignition_ma >= 1000) {
           current_flowing = true;
           current_drop_start = 0;
         }
         break;
       } 
 
-      // Ensure we remain in this state while current is flowing
-      if (ignition_ma >= 1500) {
+      // Ensure we remain in this state while current is flowing, so it fires when it is below 1 amp
+      if (ignition_ma >= 1000) {
         current_drop_start = 0; // Current still high or bounced back up
         break;
       }
@@ -87,15 +87,15 @@ void update_autosequence(uint16_t ignition_ma) {
       // We then check how long the current has been below 1500 for (confirming burn-through)
       if (current_drop_start == 0) {
         current_drop_start = now; 
-      } else if (now - current_drop_start >= 200) { //only start the valve_delay if the current has dropped below 1500 for over 50ms
+      } else if (now - current_drop_start >= 10) { //only start the valve_delay if the current has dropped below 1500 for over 50ms
         seq_state = SeqState::WAITING_FOR_VALVE;
         stage_start = now;
       }
       break;
 
     case SeqState::WAITING_FOR_VALVE:
-      // One second delay after current drop and we have fire
-      if (now - stage_start >= 1000) {
+      // 50 ms delay after current drop and we have fire
+      if (now - stage_start >= 10) {
         seq_state = SeqState::VALVE_ACTUATED;
       }
       break;
