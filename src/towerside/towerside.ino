@@ -17,8 +17,8 @@
     SoftI2C.setRxBuffer(I2CrxBuffer, sizeof(I2CrxBuffer));
     SoftI2C.setTxBuffer(I2CtxBuffer, sizeof(I2CtxBuffer));
 
-    Wire.begin();
-    Wire.setClock(50000); //clock is set much faster for software I2C because low frequencies behave unpredictably. Value was chosen through binary search.
+    SoftI2C.begin();
+    SoftI2C.setClock(50000); //clock is set much faster for software I2C because low frequencies behave unpredictably. Value was chosen through binary search.
     // Wire.setWireTimeout(1000, true); // 1000 uS = 1mS timeout, true = reset the bus in this case
     seven_seg::setup();
     sensors::setup();
